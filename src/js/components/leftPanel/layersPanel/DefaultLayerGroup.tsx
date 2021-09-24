@@ -74,10 +74,7 @@ const NestedLayerGroup = (props: NestedLayerGroupProps): JSX.Element => {
                 checked={activeGroups.includes(lGroup.id)}
                 onChange={() => handleGroupToggle(lGroup.id)}
               />
-              <label
-                className="styled-checkboxlabel"
-                htmlFor={`layer-checkbox-${lGroup.id}`}
-              >
+              <label className="styled-checkboxlabel" htmlFor={`layer-checkbox-${lGroup.id}`}>
                 {'somelayer'}
               </label>
             </div>
@@ -95,12 +92,7 @@ const NestedLayerGroup = (props: NestedLayerGroupProps): JSX.Element => {
       const layers = props.layersInGroup
         .filter((layer: any) => nestedLayerIDs.includes(layer.id))
         .map((layer: any, i: number) => (
-          <GenericLayerControl
-            layer={layer}
-            id={layer.id}
-            key={layer.id}
-            type={'default'}
-          />
+          <GenericLayerControl layer={layer} id={layer.id} key={layer.id} type={'default'} />
         ));
       return (
         <LayerGroup
@@ -167,26 +159,14 @@ interface LayerGroupProps {
 }
 
 const DefaultLayerGroup = (props: LayerGroupProps): React.ReactElement => {
-  const selectedLanguage = useSelector(
-    (store: RootState) => store.appState.selectedLanguage
-  );
-  const openLayerGroup = useSelector(
-    (store: RootState) => store.appState.leftPanel.openLayerGroup
-  );
+  const selectedLanguage = useSelector((store: RootState) => store.appState.selectedLanguage);
+  const openLayerGroup = useSelector((store: RootState) => store.appState.leftPanel.openLayerGroup);
 
-  const allAvailableLayers = useSelector(
-    (store: RootState) => store.mapviewState.allAvailableLayers
-  );
-
+  const allAvailableLayers = useSelector((store: RootState) => store.mapviewState.allAvailableLayers);
   const scale = useSelector((store: RootState) => store.mapviewState.scale);
 
-  const allLayersInScale = allAvailableLayers.filter(l =>
-    layerIsInScale(l, scale)
-  );
-
-  const customColorTheme = useSelector(
-    (store: RootState) => store.appSettings.customColorTheme
-  );
+  const allLayersInScale = allAvailableLayers.filter(l => layerIsInScale(l, scale));
+  const customColorTheme = useSelector((store: RootState) => store.appSettings.customColorTheme);
 
   const dispatch = useDispatch();
   const { layerGroupKey, layerGroupConfig } = props;
@@ -194,21 +174,16 @@ const DefaultLayerGroup = (props: LayerGroupProps): React.ReactElement => {
   let groupLayerIds: string[] = [];
   if (layerGroupConfig.groupType === 'nested') {
     layerGroupConfig.layers.forEach((lg: any) => {
-      groupLayerIds = groupLayerIds.concat(
-        lg.nestedLayers.map((l: any) => l.id)
-      );
+      groupLayerIds = groupLayerIds.concat(lg.nestedLayers.map((l: any) => l.id));
     });
   } else {
     groupLayerIds = layerGroupConfig.layers.map((layer: any) => layer.id);
   }
-  const layerGroupTitle =
-    layerGroupConfig.label?.[selectedLanguage] || 'Untranslated Layer Group';
+  const layerGroupTitle = layerGroupConfig.label?.[selectedLanguage] || 'Untranslated Layer Group';
 
   const groupOpen = openLayerGroup === layerGroupKey;
 
-  const layersInGroup = allLayersInScale.filter(layer =>
-    groupLayerIds.includes(layer.id)
-  );
+  const layersInGroup = allLayersInScale.filter(layer => layer.group === layerGroupKey);
 
   const handleGroupToggle = () => {
     const openGroupKey = groupOpen ? '' : layerGroupKey;
@@ -221,12 +196,7 @@ const DefaultLayerGroup = (props: LayerGroupProps): React.ReactElement => {
         return (
           <>
             {layersInGroup.map(layer => (
-              <GenericLayerControl
-                layer={layer}
-                id={layer.id}
-                key={layer.id}
-                type={layerGroupConfig.groupType}
-              />
+              <GenericLayerControl layer={layer} id={layer.id} key={layer.id} type={layerGroupConfig.groupType} />
             ))}
           </>
         );
@@ -245,12 +215,7 @@ const DefaultLayerGroup = (props: LayerGroupProps): React.ReactElement => {
         return (
           <>
             {layersInGroup.map(layer => (
-              <GenericLayerControl
-                layer={layer}
-                id={layer.id}
-                key={layer.id}
-                type={layerGroupConfig.groupType}
-              />
+              <GenericLayerControl layer={layer} id={layer.id} key={layer.id} type={layerGroupConfig.groupType} />
             ))}
           </>
         );
@@ -271,9 +236,7 @@ const DefaultLayerGroup = (props: LayerGroupProps): React.ReactElement => {
           {groupOpen ? '▼' : '▲'}
         </button>
       </div>
-      <div className={groupOpen ? 'layers-control-container' : 'hidden'}>
-        {renderLayerGroup()}
-      </div>
+      <div className={groupOpen ? 'layers-control-container' : 'hidden'}>{renderLayerGroup()}</div>
     </div>
   );
 };

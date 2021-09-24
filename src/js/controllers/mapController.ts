@@ -2,10 +2,7 @@ import { setDefaultOptions, loadModules } from 'esri-loader';
 import { format, subDays, parse } from 'date-fns';
 import { debounce } from 'lodash-es';
 import { getMaxDateForViirsTiles } from '../../js/helpers/viirsLayerUtil';
-import {
-  landsatBaselayerURL,
-  WRIBasemapConfig
-} from '../../../configs/layer-config';
+import { landsatBaselayerURL, WRIBasemapConfig } from '../../../configs/layer-config';
 import { RefObject } from 'react';
 import { densityEnabledLayers } from '../../../configs/layer-config';
 import store from '../store/index';
@@ -40,26 +37,19 @@ import {
   setGladStart,
   setGladEnd
 } from '../../js/store/appState/actions';
-import {
-  LayerProps,
-  LayerFeatureResult,
-  FeatureResult
-} from '../../js/store/mapview/types';
-import { OptionType } from '../../js/interfaces/measureWidget';
+import { LayerProps, LayerFeatureResult, FeatureResult } from '../../js/store/mapview/types';
+import { OptionType } from '../types/measureWidget';
 import { queryLayersForFeatures } from '../../js/helpers/dataPanel/DataPanel';
 import { setNewGraphic } from '../../js/helpers/MapGraphics';
 
 import { MODISLayerIDs } from '../../../configs/modis-viirs';
-import { allowedLayers } from '../../../configs/layer-config';
-import {
-  parseURLandApplyChanges,
-  getLayerInfoFromURL,
-  LayerInfo
-} from '../../js/helpers/shareFunctionality';
+import { supportedLayers } from '../../../configs/layer-config';
+import { parseURLandApplyChanges, getLayerInfoFromURL, LayerInfo } from '../../js/helpers/shareFunctionality';
 import {
   determineLayerOpacity,
   determineLayerVisibility,
-  extractWebmapLayerObjects
+  extractWebmapLayerObjects,
+  getRemoteAndServiceLayers
 } from '../../js/helpers/mapController/miscLayerHelpers';
 import { fetchLegendInfo } from '../../js/helpers/legendInfo';
 import { parseExtentConfig } from '../../js/helpers/mapController/configParsing';
@@ -85,10 +75,7 @@ export class MapController {
   _mouseClickEventListener: EventListener | any;
   _pointerMoveEventListener: EventListener | any;
   _printTask: __esri.PrintTask | undefined;
-  _selectedWidget:
-    | __esri.DistanceMeasurement2D
-    | __esri.AreaMeasurement2D
-    | undefined;
+  _selectedWidget: __esri.DistanceMeasurement2D | __esri.AreaMeasurement2D | undefined;
   _sketchVMGraphicsLayer: __esri.GraphicsLayer | undefined;
   _domRef: RefObject<any>;
   _imageryOpacity: number;
@@ -119,14 +106,7 @@ export class MapController {
     this._domRef = domRef;
     const { appSettings, appState } = store.getState();
 
-    const [
-      MapView,
-      WebMap,
-      Portal,
-      GraphicsLayer,
-      Polygon,
-      Graphic
-    ] = await loadModules([
+    const [MapView, WebMap, Portal, GraphicsLayer, Polygon, Graphic] = await loadModules([
       'esri/views/MapView',
       'esri/WebMap',
       'esri/portal/Portal',
@@ -140,9 +120,7 @@ export class MapController {
     this._Graphic = Graphic;
 
     const webmapID =
-      appState.selectedLanguage === appSettings.language
-        ? appSettings.webmap
-        : appSettings.alternativeWebmap;
+      appState.selectedLanguage === appSettings.language ? appSettings.webmap : appSettings.alternativeWebmap;
 
     this._map = new WebMap({
       portalItem: {
@@ -225,32 +203,25 @@ export class MapController {
 
           //If user is clicking on the drawn/upload polygon, we should not query all other layers as well, we should just accept that we have clicked on user feature on the map
           const clickGeo = event.mapPoint;
-          const userFeatLayer = this._map?.findLayerById(
-            'user_features'
-          ) as any;
+          const userFeatLayer = this._map?.findLayerById('user_features') as any;
           if (userFeatLayer && userFeatLayer?.graphics?.items.length) {
             const activeOutlineColor = [115, 252, 253];
             const inactiveOutlineColor = [3, 188, 255];
             //In the event of multiple graphics items on the layer (situation with multi polygon uploads) we iterate over then and find if any are intersecting with click
 
             //Go over all graphics on the user_features layer and find which ones we are clicking on (if any)
-            const graphicsWeClickedOn = userFeatLayer.graphics.items.filter(
-              (graphic: __esri.Graphic) => {
-                return geometryEngine.within(clickGeo, graphic.geometry);
-              }
-            );
+            const graphicsWeClickedOn = userFeatLayer.graphics.items.filter((graphic: __esri.Graphic) => {
+              return geometryEngine.within(clickGeo, graphic.geometry);
+            });
 
             if (graphicsWeClickedOn.length !== 0) {
-              const graphicIndex = graphicsWeClickedOn[0].attributes
-                ?.attributeIndex
+              const graphicIndex = graphicsWeClickedOn[0].attributes?.attributeIndex
                 ? graphicsWeClickedOn[0].attributes.attributeIndex
                 : 0;
 
-              const graphicsWeMissed = userFeatLayer.graphics.items.filter(
-                (item: any) => {
-                  return item.attributes.attributeIndex !== graphicIndex;
-                }
-              );
+              const graphicsWeMissed = userFeatLayer.graphics.items.filter((item: any) => {
+                return item.attributes.attributeIndex !== graphicIndex;
+              });
 
               //Update colors on multi poly layer
               const copyGraphicsWeClickedOn = graphicsWeClickedOn[0].clone();
@@ -273,10 +244,7 @@ export class MapController {
                     geometry: graphic.geometry
                   };
                 })
-                .sort(
-                  (a: any, b: any) =>
-                    a.attributes.attributeIndex - b.attributes.attributeIndex
-                );
+                .sort((a: any, b: any) => a.attributes.attributeIndex - b.attributes.attributeIndex);
               const featuresOnMap: LayerFeatureResult = {
                 layerID: 'user_features',
                 layerTitle: 'User Features',
@@ -301,219 +269,165 @@ export class MapController {
         const layerInfosFromURL = getLayerInfoFromURL();
 
         //@ts-ignore -- this ensures that webmap layers are ready on map before the steps get initialized
-        Promise.all(this._map?.layers.items.map(l => l.load())).then(
-          async () => {
-            //Add layers that are already on the map (webmap layers) to redux array
-            const mapLayerObjects: LayerProps[] = await extractWebmapLayerObjects(
-              this._map
-            );
-            store.dispatch(allAvailableLayers(mapLayerObjects));
+        Promise.all(this._map?.layers.items.map(l => l.load())).then(async () => {
+          //Add layers that are already on the map (webmap layers) to redux array
+          const mapLayerObjects: LayerProps[] = await extractWebmapLayerObjects(this._map);
+          store.dispatch(allAvailableLayers(mapLayerObjects));
 
-            //Fetching all other (non webmap) layer information from resources file AND GFW Api for those that are deemed as 'remoteDataLayer' in the config
-            const remoteAndServiceLayersObjects = await this.getRemoteAndServiceLayers();
+          //Fetching all other (non webmap) layer information from resources file AND GFW Api for those that are deemed as 'remoteDataLayer' in the config
+          const remoteAndServiceLayersObjects = await getRemoteAndServiceLayers();
 
-            //Remove those layers that we do not support
-            const allowedRemoteLayersObjects = remoteAndServiceLayersObjects.filter(
-              (layerObject: any) => {
-                const layerType = layerObject.dataLayer
-                  ? layerObject.layer.type
-                  : layerObject.type;
-                return allowedLayers.includes(layerType);
+          //TODO: move this elsewhere
+          //Remove those layers that we do not support,
+          const allowedRemoteLayersObjects = remoteAndServiceLayersObjects.filter((layerObject: any) => {
+            const layerType = layerObject.dataLayer ? layerObject.layer.type : layerObject.type;
+            return supportedLayers.includes(layerType);
+          });
+
+          const remoteLayerObjects: LayerProps[] = [];
+          for (const remoteLayerObject of allowedRemoteLayersObjects) {
+            if (!remoteLayerObject) continue; //remoteLayerObject may be undefined if we failed to retrieve layer data from api for some reason
+
+            //Depending if layer is from GFW API or Resource (config file) construct object appropriately
+            const newRemoteLayerObject = {
+              opacity: determineLayerOpacity(remoteLayerObject, layerInfosFromURL),
+              visible: determineLayerVisibility(remoteLayerObject, layerInfosFromURL)
+            } as LayerProps;
+
+            //dealing with GFW API layers
+            //TODO: This needs a major rethink/rework
+            if (remoteLayerObject.dataLayer) {
+              newRemoteLayerObject.popup = remoteLayerObject.layer.popup;
+              newRemoteLayerObject.sublabel = remoteLayerObject.layer.sublabel;
+              newRemoteLayerObject.id = remoteLayerObject.dataLayer.id;
+              newRemoteLayerObject.title =
+                remoteLayerObject.layer.label[appState.selectedLanguage] ||
+                `Untranslated layer id: ${remoteLayerObject.dataLayer.id}`;
+              newRemoteLayerObject.group = remoteLayerObject.dataLayer.groupId;
+              newRemoteLayerObject.url = remoteLayerObject.layer.url;
+              newRemoteLayerObject.type = remoteLayerObject.layer.type;
+              newRemoteLayerObject.origin = 'remote';
+              newRemoteLayerObject.label = remoteLayerObject.layer.label;
+              newRemoteLayerObject.metadata = remoteLayerObject.layer.metadata;
+              newRemoteLayerObject.metadata.colormap = remoteLayerObject.layer.colormap;
+              newRemoteLayerObject.metadata.inputRange = remoteLayerObject.layer.inputRange;
+              newRemoteLayerObject.metadata.outputRange = remoteLayerObject.layer.outputRange;
+              newRemoteLayerObject.parentID = undefined;
+              newRemoteLayerObject.legendInfo = remoteLayerObject.layer.metadata.legendConfig;
+              newRemoteLayerObject.dashboardURL = remoteLayerObject.dashboardURL;
+              newRemoteLayerObject.popup = remoteLayerObject.popup;
+            } else {
+              if (remoteLayerObject.versions && remoteLayerObject.versions[0].url) {
+                remoteLayerObject.layerIds = remoteLayerObject.versions[0].layerIds;
+                remoteLayerObject.url = remoteLayerObject.versions[0].url;
+                remoteLayerObject.versionIndex = 0;
               }
-            );
 
-            const remoteLayerObjects: any[] = [];
-            for (const remoteLayerObject of allowedRemoteLayersObjects) {
-              if (!remoteLayerObject) continue; //remoteLayerObject may be undefined if we failed to retrieve layer data from api for some reason
+              //Attempt to fetch legend info from layer service
+              const legendInfoObject = await this.retrieveLegendInfo(remoteLayerObject);
+              newRemoteLayerObject.legendInfo = legendInfoObject;
+              newRemoteLayerObject.id = remoteLayerObject.id;
+              newRemoteLayerObject.title = remoteLayerObject.label[appState.selectedLanguage]
+                ? remoteLayerObject.label[appState.selectedLanguage]
+                : 'Untitled Layer';
+              newRemoteLayerObject.group = remoteLayerObject.groupId;
+              newRemoteLayerObject.url = remoteLayerObject.url;
+              newRemoteLayerObject.type = remoteLayerObject.type;
+              newRemoteLayerObject.origin = 'service';
+              newRemoteLayerObject.technicalName = remoteLayerObject.technicalName;
 
-              //Depending if layer is from GFW API or Resource (config file) construct object appropriately
-              const newRemoteLayerObject = {
-                opacity: determineLayerOpacity(
-                  remoteLayerObject,
-                  layerInfosFromURL
-                ),
-                visible: determineLayerVisibility(
-                  remoteLayerObject,
-                  layerInfosFromURL
-                )
-              } as LayerProps;
-
-              //dealing with GFW API layers
-              if (remoteLayerObject.dataLayer) {
-                newRemoteLayerObject.popup = remoteLayerObject.layer.popup;
-                newRemoteLayerObject.sublabel =
-                  remoteLayerObject.layer.sublabel;
-                newRemoteLayerObject.id = remoteLayerObject.dataLayer.id;
-                newRemoteLayerObject.title =
-                  remoteLayerObject.layer.label[appState.selectedLanguage] ||
-                  `Untranslated layer id: ${remoteLayerObject.dataLayer.id}`;
-                newRemoteLayerObject.group =
-                  remoteLayerObject.dataLayer.groupId;
-                newRemoteLayerObject.url = remoteLayerObject.layer.url;
-                newRemoteLayerObject.type = remoteLayerObject.layer.type;
-                newRemoteLayerObject.origin = 'remote';
-                newRemoteLayerObject.label = remoteLayerObject.layer.label;
-                newRemoteLayerObject.metadata =
-                  remoteLayerObject.layer.metadata;
-                newRemoteLayerObject.metadata.colormap =
-                  remoteLayerObject.layer.colormap;
-                newRemoteLayerObject.metadata.inputRange =
-                  remoteLayerObject.layer.inputRange;
-                newRemoteLayerObject.metadata.outputRange =
-                  remoteLayerObject.layer.outputRange;
-                newRemoteLayerObject.parentID = undefined;
-                newRemoteLayerObject.legendInfo =
-                  remoteLayerObject.layer.metadata.legendConfig;
-                newRemoteLayerObject.dashboardURL =
-                  remoteLayerObject.dashboardURL;
-                newRemoteLayerObject.popup = remoteLayerObject.popup;
-              } else {
-                if (
-                  remoteLayerObject.versions &&
-                  remoteLayerObject.versions[0].url
-                ) {
-                  remoteLayerObject.layerIds =
-                    remoteLayerObject.versions[0].layerIds;
-                  remoteLayerObject.url = remoteLayerObject.versions[0].url;
-                  remoteLayerObject.versionIndex = 0;
-                }
-
-                //Attempt to fetch legend info from layer service
-                const legendInfoObject = await this.retrieveLegendInfo(
-                  remoteLayerObject
-                );
-                newRemoteLayerObject.legendInfo = legendInfoObject;
-                newRemoteLayerObject.id = remoteLayerObject.id;
-                newRemoteLayerObject.title = remoteLayerObject.label[
-                  appState.selectedLanguage
-                ]
-                  ? remoteLayerObject.label[appState.selectedLanguage]
-                  : 'Untitled Layer';
-                newRemoteLayerObject.group = remoteLayerObject.groupId;
-                newRemoteLayerObject.url = remoteLayerObject.url;
-                newRemoteLayerObject.type = remoteLayerObject.type;
-                newRemoteLayerObject.origin = 'service';
-                newRemoteLayerObject.technicalName =
-                  remoteLayerObject.technicalName;
-
-                newRemoteLayerObject.layerIds = remoteLayerObject.layerIds;
-                newRemoteLayerObject.label = remoteLayerObject.label;
-                newRemoteLayerObject.sublabel = remoteLayerObject.sublabel;
-                newRemoteLayerObject.parentID = undefined;
-                newRemoteLayerObject.filterLabel =
-                  remoteLayerObject.filterLabel;
-                newRemoteLayerObject.filterField =
-                  remoteLayerObject.filterField;
-                newRemoteLayerObject.versions = remoteLayerObject.versions;
-                newRemoteLayerObject.versionIndex =
-                  remoteLayerObject.versionIndex;
-                newRemoteLayerObject.versionHeaderText =
-                  remoteLayerObject.versionHeaderText;
-                newRemoteLayerObject.dashboardURL =
-                  remoteLayerObject?.dashboardURL;
-                newRemoteLayerObject.popup = remoteLayerObject.popup;
-              }
-              remoteLayerObjects.push(newRemoteLayerObject);
+              newRemoteLayerObject.layerIds = remoteLayerObject.layerIds;
+              newRemoteLayerObject.label = remoteLayerObject.label;
+              newRemoteLayerObject.sublabel = remoteLayerObject.sublabel;
+              newRemoteLayerObject.parentID = undefined;
+              newRemoteLayerObject.filterLabel = remoteLayerObject.filterLabel;
+              newRemoteLayerObject.filterField = remoteLayerObject.filterField;
+              newRemoteLayerObject.versions = remoteLayerObject.versions;
+              newRemoteLayerObject.versionIndex = remoteLayerObject.versionIndex;
+              newRemoteLayerObject.versionHeaderText = remoteLayerObject.versionHeaderText;
+              newRemoteLayerObject.dashboardURL = remoteLayerObject?.dashboardURL;
+              newRemoteLayerObject.popup = remoteLayerObject.popup;
             }
-            const allLayerObjects = [...mapLayerObjects, ...remoteLayerObjects];
+            remoteLayerObjects.push(newRemoteLayerObject);
+          }
+          const allLayerObjects = [...mapLayerObjects, ...remoteLayerObjects];
 
-            parseURLandApplyChanges();
+          parseURLandApplyChanges();
 
-            //Sync the incoming state from URL hash with webmap layers that have been just loaded in the map
-            if (layerInfosFromURL.length) {
-              //Sync visibility with existing layer objects before we push them into redux
-              allLayerObjects.forEach(layerObject => {
-                const urlLayer = layerInfosFromURL.find(l => {
-                  const id = String(l.sublayerID ? l.sublayerID : l.layerID);
-                  return id === String(layerObject.id);
-                });
-                layerObject.visible = urlLayer ? true : false;
+          //Sync the incoming state from URL hash with webmap layers that have been just loaded in the map
+          if (layerInfosFromURL.length) {
+            //Sync visibility with existing layer objects before we push them into redux
+            allLayerObjects.forEach(layerObject => {
+              const urlLayer = layerInfosFromURL.find(l => {
+                const id = String(l.sublayerID ? l.sublayerID : l.layerID);
+                return id === String(layerObject.id);
               });
+              layerObject.visible = urlLayer ? true : false;
+            });
 
-              //Sync esri map visibility
-              this.syncWebmapLayersWithURL(layerInfosFromURL);
-            }
+            //Sync esri map visibility
+            this.syncWebmapLayersWithURL(layerInfosFromURL);
+          }
 
-            store.dispatch(allAvailableLayers(allLayerObjects));
-            const esriRemoteLayersPromises: any = remoteLayerObjects.map(
-              layerObject => {
-                return LayerFactory(this._mapview, layerObject);
+          store.dispatch(allAvailableLayers(allLayerObjects));
+          const esriRemoteLayersPromises: any = remoteLayerObjects.map(layerObject => {
+            return LayerFactory(this._mapview, layerObject);
+          });
+
+          Promise.all(esriRemoteLayersPromises.map((p: any) => p.catch(() => undefined))).then(values => {
+            const esriRemoteLayers = values.filter(v => v);
+            const modisLayers = this.initializeAndSetMODISLayers(MapImageLayer);
+            const allLayers = [...modisLayers, ...esriRemoteLayers];
+            const report = new URL(window.location.href).searchParams.get('report');
+
+            //If we have report active, we need to know when our feature layer has loaded
+            if (report && report === 'true') {
+              const layerID = new URL(window.location.href).searchParams.get('acLayer');
+              if (!layerID) return;
+              const combinedLayers = [...allLayers, ...(this._map as any)?.layers.items];
+              const activeLayer = combinedLayers.find(l => l.id === layerID);
+              if (!activeLayer || activeLayer.loaded === true) {
+                store.dispatch(setLayersLoading(false));
+              } else {
+                watchUtils.once(activeLayer, 'loaded', () => {
+                  store.dispatch(setLayersLoading(false));
+                });
               }
-            );
+            } else {
+              //no report meaning we just want to know when the layers are loaded progressively so we keep updating legend component. There is likely a better way to handle this.
+              //@ts-ignore
+              const combinedLayers = [...allLayers, ...(this._map as any)?.layers.items];
 
-            Promise.all(
-              esriRemoteLayersPromises.map((p: any) => p.catch(() => undefined))
-            ).then(values => {
-              const esriRemoteLayers = values.filter(v => v);
-              const modisLayers = this.initializeAndSetMODISLayers(
-                MapImageLayer
-              );
-              const allLayers = [...modisLayers, ...esriRemoteLayers];
-              const report = new URL(window.location.href).searchParams.get(
-                'report'
-              );
-
-              //If we have report active, we need to know when our feature layer has loaded
-              if (report && report === 'true') {
-                const layerID = new URL(window.location.href).searchParams.get(
-                  'acLayer'
-                );
-                if (!layerID) return;
-                const combinedLayers = [
-                  ...allLayers,
-                  ...(this._map as any)?.layers.items
-                ];
-                const activeLayer = combinedLayers.find(l => l.id === layerID);
-                if (!activeLayer || activeLayer.loaded === true) {
+              combinedLayers.forEach(l => {
+                if (l.loaded === true) {
                   store.dispatch(setLayersLoading(false));
                 } else {
-                  watchUtils.once(activeLayer, 'loaded', () => {
+                  watchUtils.once(l, 'loaded', () => {
                     store.dispatch(setLayersLoading(false));
                   });
                 }
-              } else {
-                //no report meaning we just want to know when the laayers are loaded progressively so we keep updating legend component. There is likely a better way to handle this.
-                //@ts-ignore
-                const combinedLayers = [
-                  ...allLayers,
-                  ...(this._map as any)?.layers.items
-                ];
-
-                combinedLayers.forEach(l => {
-                  if (l.loaded === true) {
-                    store.dispatch(setLayersLoading(false));
-                  } else {
-                    watchUtils.once(l, 'loaded', () => {
-                      store.dispatch(setLayersLoading(false));
-                    });
-                  }
-                });
-              }
-
-              this._map?.addMany(allLayers);
-
-              //Retrieve sorted layer array
-              const mapLayerIDs = getSortedLayers(
-                appSettings.layerPanel,
-                allLayerObjects,
-                this._map
-              );
-
-              //Reorder layers on the map!
-              this._map?.layers.forEach((layer: any) => {
-                const layerIndex = mapLayerIDs!.findIndex(i => i === layer.id);
-                if (layerIndex !== -1) {
-                  this._map?.reorder(layer, layerIndex);
-                }
               });
+            }
 
-              //Extra layer group that acts as a "masked" layers with which you cannot interact
-              this.addExtraLayers();
-              //Sketch view model setup
-              this.initializeAndSetSketch();
+            this._map?.addMany(allLayers);
+
+            //Retrieve sorted layer array
+            const mapLayerIDs = getSortedLayers(appSettings.layerPanel, allLayerObjects, this._map);
+
+            //Reorder layers on the map!
+            this._map?.layers.forEach((layer: any) => {
+              const layerIndex = mapLayerIDs!.findIndex(i => i === layer.id);
+              if (layerIndex !== -1) {
+                this._map?.reorder(layer, layerIndex);
+              }
             });
-          }
-        );
+
+            //Extra layer group that acts as a "masked" layers with which you cannot interact
+            this.addExtraLayers();
+            //Sketch view model setup
+            this.initializeAndSetSketch();
+          });
+        });
       },
       (error: Error) => {
         console.log('error in re-initializeMap()', error);
@@ -525,12 +439,7 @@ export class MapController {
     });
   }
 
-  setPageTitle(
-    currentLanguage: string,
-    defaultLanguage: string,
-    primaryTitle: string,
-    secondaryTitle: string
-  ): void {
+  setPageTitle(currentLanguage: string, defaultLanguage: string, primaryTitle: string, secondaryTitle: string): void {
     if (currentLanguage === defaultLanguage) {
       window.document.title = primaryTitle;
     } else {
@@ -560,125 +469,13 @@ export class MapController {
 
   setGLADDates(): void {
     const { appSettings } = store.getState();
-    if (
-      appSettings.gladAlertDates?.startDate.length &&
-      appSettings.gladAlertDates.endDate.length
-    ) {
+    if (appSettings.gladAlertDates?.startDate.length && appSettings.gladAlertDates.endDate.length) {
       store.dispatch(setGladStart(appSettings.gladAlertDates.startDate));
       store.dispatch(setGladEnd(appSettings.gladAlertDates.endDate));
     }
   }
 
-  getRemoteAndServiceLayers(): Promise<any> {
-    const { appSettings } = store.getState();
-    const { layerPanel } = appSettings;
-    const detailedLayers: any = [];
-    const remoteDataLayers: any = [];
-
-    const layers = Object.keys(layerPanel)
-      .filter(groupName => {
-        return groupName !== 'GROUP_BASEMAP' && groupName !== 'extraLayers';
-      })
-      .reduce((list, groupName, groupIndex) => {
-        let orderedGroups;
-        if (layerPanel[groupName]?.groupType === 'nested') {
-          let allNestedLayers: any[] = [];
-          layerPanel[groupName].layers.forEach((layerG: any) => {
-            allNestedLayers = allNestedLayers.concat(layerG.nestedLayers);
-          });
-          orderedGroups = allNestedLayers.map((layer: any) => {
-            return { groupId: groupName, ...layer };
-          });
-        } else {
-          orderedGroups = layerPanel[groupName].layers.map((layer: any) => {
-            return { groupId: groupName, ...layer };
-          });
-        }
-        return list.concat(orderedGroups);
-      }, []);
-
-    const configLayerFilters = {
-      VIIRS_ACTIVE_FIRES: 'viirsFires',
-      MODIS_ACTIVE_FIRES: 'modisFires',
-      LAND_COVER: 'landCover',
-      AG_BIOMASS: 'aboveGroundBiomass',
-      IFL: 'intactForests',
-      PRIMARY_FORESTS: 'primaryForests',
-      FORMA_ALERTS: 'forma',
-      GLOB_MANGROVE: 'mangroves',
-      IMAZON_SAD: 'sadAlerts',
-      GLAD_ALERTS: 'gladAlerts',
-      RECENT_IMAGERY: 'recentImagery'
-    };
-    const configLayerIDs = Object.keys(configLayerFilters);
-
-    function checkLayerFilterConfig(l: any): boolean {
-      const checkLayer = configLayerIDs.includes(l.id);
-      if (checkLayer) {
-        //Check for settings on that layer
-        const settingID = configLayerFilters[l.id];
-        //If no setting exist for the layer, we default to showing the layer
-        const settingValue = appSettings.hasOwnProperty(settingID)
-          ? appSettings[settingID]
-          : true;
-        return settingValue;
-      } else {
-        return true;
-      }
-    }
-
-    layers
-      .filter((l: any) => checkLayerFilterConfig(l))
-      .forEach((layer: any): void => {
-        if (layer.type === 'remoteDataLayer') {
-          remoteDataLayers.push({
-            order: layer.order,
-            layerGroupId: layer.groupId,
-            dataLayer: layer
-          });
-        } else {
-          detailedLayers.push(layer);
-        }
-      });
-
-    const remoteDataLayerRequests = remoteDataLayers.map((item: any) => {
-      return fetch(
-        `https://production-api.globalforestwatch.org/v1/layer/${item?.dataLayer?.uuid}`
-      )
-        .then(response => response.json())
-        .then(json => json.data)
-        .then(layer =>
-          fetch(layer.attributes.layerConfig.metadata)
-            .then(response => response.json())
-            .then(metadata => {
-              const attributes = layer.attributes;
-              const intConfig = layer.attributes?.interactionConfig;
-              const itemGroup = item.group;
-              item.layer = layer.attributes.layerConfig;
-              item.dashboardURL =
-                item.dataLayer?.dashboardURL?.length !== 0
-                  ? item.dataLayer.dashboardURL
-                  : null;
-              item.group = itemGroup;
-              item.layer.metadata = {
-                metadata,
-                legendConfig: attributes.legendConfig,
-                interactionConfig: intConfig
-              };
-              return item;
-            })
-        )
-        .catch(error => console.error(error));
-    });
-    detailedLayers.forEach((detailedLayer: object) => {
-      remoteDataLayerRequests.push(detailedLayer);
-    });
-    return Promise.all(remoteDataLayerRequests);
-  }
-
-  async retrieveLegendInfo(
-    layerObject: LayerProps
-  ): Promise<any[] | undefined> {
+  async retrieveLegendInfo(layerObject: LayerProps): Promise<any[] | undefined> {
     let legendResult;
     if (!layerObject.url) {
       return legendResult;
@@ -686,9 +483,7 @@ export class MapController {
 
     const legendInfoObject = await fetchLegendInfo(layerObject.url);
     if (legendInfoObject && !legendInfoObject.error) {
-      legendResult = legendInfoObject?.layers?.filter((l: any) =>
-        layerObject.layerIds?.includes(l.layerId)
-      );
+      legendResult = legendInfoObject?.layers?.filter((l: any) => layerObject.layerIds?.includes(l.layerId));
     }
     return legendResult;
   }
@@ -709,24 +504,12 @@ export class MapController {
     store.dispatch(setActiveFeatures([]));
     store.dispatch(setDocuments(null));
 
-    const {
-      language,
-      webmap,
-      alternativeWebmap,
-      sharinghost
-    } = store.getState().appSettings;
+    const { language, webmap, alternativeWebmap, sharinghost } = store.getState().appSettings;
 
-    this.setPageTitle(
-      lang,
-      appSettings.language,
-      appSettings.title,
-      appSettings.alternativeLanguageTitle
-    );
+    this.setPageTitle(lang, appSettings.language, appSettings.title, appSettings.alternativeLanguageTitle);
 
     const newWebMapId = lang === language ? webmap : alternativeWebmap;
-    const nonWebmapLayers = mapviewState.allAvailableLayers.filter(
-      layer => layer.origin !== 'webmap'
-    );
+    const nonWebmapLayers = mapviewState.allAvailableLayers.filter(layer => layer.origin !== 'webmap');
     const esriNonWebmapLayers = nonWebmapLayers.map((l: LayerProps) => {
       const layerOnMap = this._map?.findLayerById(l.id);
       return layerOnMap;
@@ -796,23 +579,18 @@ export class MapController {
           //In the event of multiple graphics items on the layer (situation with multi polygon uploads) we iterate over then and find if any are intersecting with click
 
           //Go over all graphics on the user_features layer and find which ones we are clicking on (if any)
-          const graphicsWeClickedOn = userFeatLayer.graphics.items.filter(
-            (graphic: __esri.Graphic) => {
-              return geometryEngine.within(clickGeo, graphic.geometry);
-            }
-          );
+          const graphicsWeClickedOn = userFeatLayer.graphics.items.filter((graphic: __esri.Graphic) => {
+            return geometryEngine.within(clickGeo, graphic.geometry);
+          });
 
           if (graphicsWeClickedOn.length !== 0) {
-            const graphicIndex = graphicsWeClickedOn[0].attributes
-              ?.attributeIndex
+            const graphicIndex = graphicsWeClickedOn[0].attributes?.attributeIndex
               ? graphicsWeClickedOn[0].attributes.attributeIndex
               : 0;
 
-            const graphicsWeMissed = userFeatLayer.graphics.items.filter(
-              (item: any) => {
-                return item.attributes.attributeIndex !== graphicIndex;
-              }
-            );
+            const graphicsWeMissed = userFeatLayer.graphics.items.filter((item: any) => {
+              return item.attributes.attributeIndex !== graphicIndex;
+            });
 
             //Update colors on multi poly layer
             const copyGraphicsWeClickedOn = graphicsWeClickedOn[0].clone();
@@ -835,10 +613,7 @@ export class MapController {
                   geometry: graphic.geometry
                 };
               })
-              .sort(
-                (a: any, b: any) =>
-                  a.attributes.attributeIndex - b.attributes.attributeIndex
-              );
+              .sort((a: any, b: any) => a.attributes.attributeIndex - b.attributes.attributeIndex);
             const featuresOnMap: LayerFeatureResult = {
               layerID: 'user_features',
               layerTitle: 'User Features',
@@ -861,15 +636,11 @@ export class MapController {
         }
       });
 
-      const mapLayerObjects: LayerProps[] = await extractWebmapLayerObjects(
-        this._map
-      );
+      const mapLayerObjects: LayerProps[] = await extractWebmapLayerObjects(this._map);
 
       //Update the layer objects with new titles based on current language
       const updatedLayerObjects = nonWebmapLayers.map(layerObject => {
-        const layerTitle = layerObject.label[lang]
-          ? layerObject.label[lang]
-          : 'Untitled Layer';
+        const layerTitle = layerObject.label[lang] ? layerObject.label[lang] : 'Untitled Layer';
         layerObject.title = layerTitle;
         return layerObject;
       });
@@ -879,11 +650,7 @@ export class MapController {
       this._map?.addMany(esriNonWebmapLayers);
       const allLayerObjects = [...updatedLayerObjects, ...mapLayerObjects];
       store.dispatch(allAvailableLayers(allLayerObjects));
-      const mapLayerIDs = getSortedLayers(
-        appSettings.layerPanel,
-        allLayerObjects,
-        this._map
-      );
+      const mapLayerIDs = getSortedLayers(appSettings.layerPanel, allLayerObjects, this._map);
 
       this.addExtraLayers();
 
@@ -906,17 +673,10 @@ export class MapController {
     const extraLayers = layerPanel['extraLayers'];
     extraLayers.forEach((exLayer: any) => {
       let extraEsriLayer;
-      if (
-        exLayer.id === 'MASK' &&
-        appSettings.iso &&
-        appSettings.iso.length !== 0
-      ) {
+      if (exLayer.id === 'MASK' && appSettings.iso && appSettings.iso.length !== 0) {
         exLayer.type = 'MASK';
         extraEsriLayer = LayerFactory(this._mapview, exLayer);
-      } else if (
-        exLayer.id === 'MASK' &&
-        (!appSettings.iso || appSettings.iso.length === 0)
-      ) {
+      } else if (exLayer.id === 'MASK' && (!appSettings.iso || appSettings.iso.length === 0)) {
         extraEsriLayer = null;
       } else {
         extraEsriLayer = LayerFactory(this._mapview, exLayer);
@@ -963,14 +723,12 @@ export class MapController {
 
     const planetBasemapReferenceLayer1 = new TileLayer({
       id: 'planet-basemap-reference-layer',
-      url:
-        'https://services.arcgisonline.com/arcgis/rest/services/Canvas/World_Dark_Gray_Base/MapServer',
+      url: 'https://services.arcgisonline.com/arcgis/rest/services/Canvas/World_Dark_Gray_Base/MapServer',
       visible: true
     });
     const planetBasemapReferenceLayer2 = new TileLayer({
       id: 'planet-basemap-reference-layer',
-      url:
-        'https://services.arcgisonline.com/arcgis/rest/services/Canvas/World_Dark_Gray_Reference/MapServer',
+      url: 'https://services.arcgisonline.com/arcgis/rest/services/Canvas/World_Dark_Gray_Reference/MapServer',
       visible: true
     });
 
@@ -993,11 +751,7 @@ export class MapController {
       urlTemplate: planetConfig.url
     });
     const planetBase = new Basemap({
-      baseLayers: [
-        planetBasemapReferenceLayer1,
-        planetLayer,
-        planetBasemapReferenceLayer2
-      ]
+      baseLayers: [planetBasemapReferenceLayer1, planetLayer, planetBasemapReferenceLayer2]
     });
     this._planetBasemap = planetBase;
     this._map!.basemap = planetBase;
@@ -1015,12 +769,8 @@ export class MapController {
     }
   }
 
-  async attachCoordinatesWidget(
-    domref: React.MutableRefObject<any>
-  ): Promise<void> {
-    const [CoordinateConversion] = await loadModules([
-      'esri/widgets/CoordinateConversion'
-    ]);
+  async attachCoordinatesWidget(domref: React.MutableRefObject<any>): Promise<void> {
+    const [CoordinateConversion] = await loadModules(['esri/widgets/CoordinateConversion']);
     new CoordinateConversion({
       view: this._mapview,
       container: domref.current
@@ -1038,23 +788,19 @@ export class MapController {
         return;
       }
       if (layer.sublayers && !layer.id.includes('MODIS')) {
-        layer.allSublayers.items.forEach(
-          (sub: __esri.Sublayer) => (sub.visible = false)
-        );
+        layer.allSublayers.items.forEach((sub: __esri.Sublayer) => (sub.visible = false));
       }
       layer.visible = false;
     });
 
     //2. Update redux state with visible layers array being empty
     const { mapviewState } = store.getState();
-    const newLayersArray = mapviewState.allAvailableLayers.map(
-      (l: LayerProps) => {
-        return {
-          ...l,
-          visible: false
-        };
-      }
-    );
+    const newLayersArray = mapviewState.allAvailableLayers.map((l: LayerProps) => {
+      return {
+        ...l,
+        visible: false
+      };
+    });
     store.dispatch(allAvailableLayers(newLayersArray));
   }
 
@@ -1062,21 +808,17 @@ export class MapController {
     if (!this._map) return;
     this._map.layers.forEach((layer: any) => {
       if (layer.sublayers) {
-        layer.allSublayers.items.forEach(
-          (sub: __esri.Sublayer) => (sub.visible = true)
-        );
+        layer.allSublayers.items.forEach((sub: __esri.Sublayer) => (sub.visible = true));
       }
       layer.visible = true;
     });
     const { mapviewState } = store.getState();
-    const newLayersArray = mapviewState.allAvailableLayers.map(
-      (l: LayerProps) => {
-        return {
-          ...l,
-          visible: true
-        };
-      }
-    );
+    const newLayersArray = mapviewState.allAvailableLayers.map((l: LayerProps) => {
+      return {
+        ...l,
+        visible: true
+      };
+    });
     store.dispatch(allAvailableLayers(newLayersArray));
   }
 
@@ -1102,9 +844,7 @@ export class MapController {
     const activeOutlineColor = [115, 252, 253];
     const inactiveOutlineColor = [3, 188, 255];
     const activeIndex = activeFeature[0].attributes.attributeIndex;
-    const newActiveGraphic = this._sketchVMGraphicsLayer!.graphics[
-      'items'
-    ].filter((item: any) => {
+    const newActiveGraphic = this._sketchVMGraphicsLayer!.graphics['items'].filter((item: any) => {
       return item.attributes.attributeIndex === activeIndex;
     });
 
@@ -1113,9 +853,7 @@ export class MapController {
     this._sketchVMGraphicsLayer!.remove(newActiveGraphic[0]);
     this._sketchVMGraphicsLayer!.add(newActiveGraphicClone);
 
-    const inactiveGraphics = this._sketchVMGraphicsLayer!.graphics[
-      'items'
-    ].filter((item: any) => {
+    const inactiveGraphics = this._sketchVMGraphicsLayer!.graphics['items'].filter((item: any) => {
       return item.attributes.attributeIndex !== activeIndex;
     });
 
@@ -1148,11 +886,7 @@ export class MapController {
     }
   }
 
-  toggleLayerVisibility(
-    layerID: string,
-    sublayer?: boolean,
-    parentID?: string
-  ): void {
+  toggleLayerVisibility(layerID: string, sublayer?: boolean, parentID?: string): void {
     let layer = null as any;
     if (sublayer && parentID) {
       layer = this._map
@@ -1188,12 +922,7 @@ export class MapController {
     }
   }
 
-  setLayerOpacity(
-    layerID: string,
-    value: string,
-    sublayer?: boolean,
-    parentID?: string
-  ): void {
+  setLayerOpacity(layerID: string, value: string, sublayer?: boolean, parentID?: string): void {
     let layer = null as any;
     if (sublayer && parentID) {
       layer = this._map
@@ -1242,8 +971,7 @@ export class MapController {
   }
 
   updateSketchVM(graphicIndex?: number): void {
-    interface CustomUpdateOptions
-      extends __esri.SketchViewModelDefaultUpdateOptions {
+    interface CustomUpdateOptions extends __esri.SketchViewModelDefaultUpdateOptions {
       tool: 'reshape';
     }
     const updateOptions: CustomUpdateOptions = {
@@ -1256,15 +984,10 @@ export class MapController {
 
     if (this._sketchVM && this._sketchVMGraphicsLayer) {
       //find the right graphic and run updater on it leaving other graphics in tact
-      const graphicToUpdate = this._sketchVMGraphicsLayer.graphics[
-        'items'
-      ].findIndex((graphic: __esri.Graphic) => {
+      const graphicToUpdate = this._sketchVMGraphicsLayer.graphics['items'].findIndex((graphic: __esri.Graphic) => {
         return graphic.attributes['attributeIndex'] === graphicIndex;
       });
-      this._sketchVM.update(
-        this._sketchVMGraphicsLayer.graphics['items'][graphicToUpdate],
-        updateOptions
-      );
+      this._sketchVM.update(this._sketchVMGraphicsLayer.graphics['items'][graphicToUpdate], updateOptions);
     }
   }
 
@@ -1314,9 +1037,7 @@ export class MapController {
     if (this._sketchVMGraphicsLayer) {
       //let's make sure this layer is actually on the map, on lang changes sometimes we have sketchVM
       //layer instance but it is not necessarily on the map
-      const userLayer = this._map?.findLayerById(
-        'user_features'
-      ) as __esri.GraphicsLayer;
+      const userLayer = this._map?.findLayerById('user_features') as __esri.GraphicsLayer;
       if (!userLayer) {
         this._sketchVMGraphicsLayer = new GraphicsLayer({
           id: 'user_features'
@@ -1379,9 +1100,7 @@ export class MapController {
         if (optionType === 'area') {
           areaResults = {
             area: this._selectedWidget?.viewModel.measurementLabel['area'],
-            perimeter: this._selectedWidget?.viewModel.measurementLabel[
-              'perimeter'
-            ]
+            perimeter: this._selectedWidget?.viewModel.measurementLabel['perimeter']
           };
         } else if (optionType === 'distance') {
           distanceResults = {
@@ -1448,9 +1167,7 @@ export class MapController {
 
   updateSelectedMeasureWidget(
     optionType: OptionType,
-    selectedUnit:
-      | __esri.AreaMeasurement2D['unit']
-      | __esri.DistanceMeasurement2D['unit']
+    selectedUnit: __esri.AreaMeasurement2D['unit'] | __esri.DistanceMeasurement2D['unit']
   ): void {
     let areaResults = {};
     let distanceResults = {};
@@ -1461,9 +1178,7 @@ export class MapController {
         case 'area':
           areaResults = {
             area: this._selectedWidget.viewModel.measurementLabel['area'],
-            perimeter: this._selectedWidget.viewModel.measurementLabel[
-              'perimeter'
-            ]
+            perimeter: this._selectedWidget.viewModel.measurementLabel['perimeter']
           };
           break;
         case 'distance':
@@ -1599,9 +1314,7 @@ export class MapController {
       printOptions = await fetch(`${printServiceURL}/?f=json`)
         .then(res => res.json())
         .then(results => {
-          return results.parameters.filter(
-            (param: any) => param.name === 'Layout_Template'
-          )[0].choiceList;
+          return results.parameters.filter((param: any) => param.name === 'Layout_Template')[0].choiceList;
         });
 
       layoutType = printOptions[0];
@@ -1620,10 +1333,7 @@ export class MapController {
       // * custom layout types from GFW print service URL
       layoutOptions: {
         scalebarUnit: 'Kilometers',
-        customTextElements: [
-          { title: 'GFW Mapbuilder' },
-          { subtitle: 'Make maps that matter' }
-        ]
+        customTextElements: [{ title: 'GFW Mapbuilder' }, { subtitle: 'Make maps that matter' }]
       }
     });
 
@@ -1633,18 +1343,14 @@ export class MapController {
     });
 
     if (!this._printTask) return;
-    const mapPDF = await this._printTask
-      .execute(params)
-      .catch(e => console.log('error in generateMapPDF()', e));
+    const mapPDF = await this._printTask.execute(params).catch(e => console.log('error in generateMapPDF()', e));
 
     return mapPDF;
   };
   // let GraphicsLayer
   setPolygon = (points: Array<__esri.Point>): void => {
     // import GraphicsLayer from 'esri/layers/GraphicsLayer';
-    const userLayer = this._map?.findLayerById(
-      'user_features'
-    ) as __esri.GraphicsLayer;
+    const userLayer = this._map?.findLayerById('user_features') as __esri.GraphicsLayer;
     if (userLayer) {
       userLayer.graphics.removeAll();
     } else {
@@ -1730,10 +1436,7 @@ export class MapController {
   }
 
   async setSearchWidget(latitude: string, longitude: string): Promise<void> {
-    const [Point, Graphic] = await loadModules([
-      'esri/geometry/Point',
-      'esri/Graphic'
-    ]);
+    const [Point, Graphic] = await loadModules(['esri/geometry/Point', 'esri/Graphic']);
     this._mapview?.graphics.removeAll();
 
     const specificPoint = new Point({
@@ -1772,19 +1475,14 @@ export class MapController {
     densityEnabledLayers.forEach((layerId: string) => {
       const layer: any = this._map?.findLayerById(layerId);
       if (layer && layer.id !== 'AG_BIOMASS' && layer.urlTemplate) {
-        layer.urlTemplate = layer.urlTemplate.replace(
-          /(tcd_)(?:[^\/]+)/,
-          `tcd_${value}`
-        );
+        layer.urlTemplate = layer.urlTemplate.replace(/(tcd_)(?:[^\/]+)/, `tcd_${value}`);
         layer.refresh();
       }
     });
   }
 
   updateBiodensityValue(value: number): void {
-    const bioLayer = this._map?.findLayerById(
-      'AG_BIOMASS'
-    ) as __esri.ImageryLayer;
+    const bioLayer = this._map?.findLayerById('AG_BIOMASS') as __esri.ImageryLayer;
     //current biomass layer does not support density level below 20%, so we disable the layer if user selects such value
     if (value < 3) {
       bioLayer.mosaicRule.where = '1=0';
@@ -1796,9 +1494,7 @@ export class MapController {
 
   async updateTreeCoverValue(value: number): Promise<any> {
     const { mapviewState } = store.getState();
-    const treeCoverLayerInfo: any = mapviewState.allAvailableLayers.find(
-      l => l.id === 'TREE_COVER'
-    );
+    const treeCoverLayerInfo: any = mapviewState.allAvailableLayers.find(l => l.id === 'TREE_COVER');
     const treeLayer: any = this._map?.findLayerById('TREE_COVER');
     if (treeLayer && treeCoverLayerInfo) {
       const oldLayer = treeLayer;
@@ -1844,10 +1540,7 @@ export class MapController {
   }
 
   async setWRIBasemap(id: string): Promise<void> {
-    const [WebTileLayer, Basemap] = await loadModules([
-      'esri/layers/WebTileLayer',
-      'esri/Basemap'
-    ]);
+    const [WebTileLayer, Basemap] = await loadModules(['esri/layers/WebTileLayer', 'esri/Basemap']);
     if (!this._map) return;
     const basemapURL = WRIBasemapConfig[id];
     const wriLayer = new WebTileLayer({
@@ -1880,9 +1573,7 @@ export class MapController {
         isUploadFile: false
       });
 
-      const graphicsLayer: any = this._map.findLayerById(
-        'active-feature-layer'
-      );
+      const graphicsLayer: any = this._map.findLayerById('active-feature-layer');
       this._mapview.goTo(graphicsLayer.graphics);
     }
   }
@@ -1890,9 +1581,7 @@ export class MapController {
   addActiveFeaturePointGraphic(esriJson: FeatureResult): void {
     if (this._map && this._mapview) {
       addPointGraphic(this._map, esriJson);
-      const graphicsLayer: any = this._map.findLayerById(
-        'active-feature-layer'
-      );
+      const graphicsLayer: any = this._map.findLayerById('active-feature-layer');
       this._mapview.goTo(graphicsLayer.graphics);
       //TODO: For some reason it does not zoom to points?
       this._mapview.zoom = 12;
@@ -1919,18 +1608,13 @@ export class MapController {
 
     if (modisLayer.sublayers) {
       const twentyFourHourMODIS = modisLayer.sublayers.items.filter(
-        (sublayer: __esri.Sublayer) =>
-          sublayer.title === 'Global Fires (MODIS) 24 hrs'
+        (sublayer: __esri.Sublayer) => sublayer.title === 'Global Fires (MODIS) 24 hrs'
       )[0];
       twentyFourHourMODIS.definitionExpression = undefined;
     }
   }
 
-  setCustomDateRange(
-    layerID: string,
-    startDate: string | Date,
-    endDate: string | Date
-  ): void {
+  setCustomDateRange(layerID: string, startDate: string | Date, endDate: string | Date): void {
     //Custom date range is always set on the 1 year layer, all other layers must be turned off first
     //and definition expression will be applied to that 1 year layer
     const defExpression = `ACQ_DATE > date '${startDate}' AND ACQ_DATE < date '${endDate}'`;
@@ -2039,9 +1723,7 @@ export class MapController {
   toggleVIIRSorMODIS(layerID: string): void {
     if (!this._map) return;
 
-    const layer = (this._map.allLayers as any).items.filter(
-      (layer: LayerProps) => layer.id === layerID
-    )[0];
+    const layer = (this._map.allLayers as any).items.filter((layer: LayerProps) => layer.id === layerID)[0];
 
     if (!layer || !layer.sublayers) {
       return;
@@ -2050,8 +1732,7 @@ export class MapController {
     layer.visible = !layer.visible;
 
     const sublayer24 = layer.sublayers.items.filter(
-      (sublayer: __esri.Sublayer) =>
-        sublayer.title === 'Global Fires (MODIS) 24 hrs'
+      (sublayer: __esri.Sublayer) => sublayer.title === 'Global Fires (MODIS) 24 hrs'
     )[0];
 
     if (sublayer24) {
@@ -2087,9 +1768,7 @@ export class MapController {
       return;
     }
 
-    const layer = (this._map.allLayers as any).items.filter(
-      (layer: LayerProps) => layer.id === layerID
-    )[0];
+    const layer = (this._map.allLayers as any).items.filter((layer: LayerProps) => layer.id === layerID)[0];
 
     if (!layer || !layer.sublayers) {
       return;
@@ -2110,8 +1789,7 @@ export class MapController {
     store.dispatch(allAvailableLayers(newLayersArray));
 
     const sublayer24 = layer.sublayers.items.filter(
-      (sublayer: __esri.Sublayer) =>
-        sublayer.title === 'Global Fires (MODIS) 24 hrs'
+      (sublayer: __esri.Sublayer) => sublayer.title === 'Global Fires (MODIS) 24 hrs'
     );
 
     sublayer24.opacity = opacity;
@@ -2149,14 +1827,9 @@ export class MapController {
 
   syncWebmapLayersWithURL(layerInfosFromURL: LayerInfo[]): void {
     this._map?.layers.forEach((webmapLayer: any) => {
-      if (
-        webmapLayer.allSublayers &&
-        webmapLayer.allSublayers.items.length > 0
-      ) {
+      if (webmapLayer.allSublayers && webmapLayer.allSublayers.items.length > 0) {
         webmapLayer.sublayers.items.forEach((sub: __esri.Layer) => {
-          const layerFromURL = layerInfosFromURL.find(
-            l => l.sublayerID && String(l.sublayerID) === String(sub.id)
-          );
+          const layerFromURL = layerInfosFromURL.find(l => l.sublayerID && String(l.sublayerID) === String(sub.id));
           if (layerFromURL) {
             sub.visible = true;
             sub.opacity = layerFromURL.opacity;
@@ -2165,9 +1838,7 @@ export class MapController {
           }
         });
       } else {
-        const layerFromURL = layerInfosFromURL.find(
-          l => l.layerID === webmapLayer.id
-        );
+        const layerFromURL = layerInfosFromURL.find(l => l.layerID === webmapLayer.id);
         if (layerFromURL) {
           webmapLayer.visible = true;
           webmapLayer.opacity = layerFromURL.opacity;
@@ -2193,20 +1864,14 @@ export class MapController {
 
   changeLayerDefinitionExpression(layerInfo: LayerProps, defExp: string): void {
     if (layerInfo.type === 'feature') {
-      const layerOnMap = this._map?.findLayerById(
-        layerInfo.id
-      ) as __esri.FeatureLayer;
+      const layerOnMap = this._map?.findLayerById(layerInfo.id) as __esri.FeatureLayer;
       if (layerOnMap) {
         layerOnMap.definitionExpression = defExp;
       }
     } else if (layerInfo.type === 'dynamic') {
-      const layerOnMap = this._map?.findLayerById(
-        layerInfo.id
-      ) as __esri.MapImageLayer;
+      const layerOnMap = this._map?.findLayerById(layerInfo.id) as __esri.MapImageLayer;
       if (layerOnMap) {
-        layerOnMap.allSublayers.forEach(
-          sub => (sub.definitionExpression = defExp)
-        );
+        layerOnMap.allSublayers.forEach(sub => (sub.definitionExpression = defExp));
       }
     }
   }

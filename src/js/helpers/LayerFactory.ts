@@ -3,6 +3,7 @@ import { loadModules } from 'esri-loader';
 import { createTCL } from '../../js/layers/TreeCoverLossLayer';
 import { createTreeCover } from '../../js/layers/TreeCoverLayer';
 import { createGlad } from '../../js/layers/GladLayer';
+import { createHeight } from '../../js/layers/TreeCoverHeightLayer';
 import { createPrimary } from '../../js/layers/PrimaryForestLayer';
 import { createGain } from '../../js/layers/TreeCoverGainLayer';
 import { markValueMap } from '../../js/components/mapWidgets/widgetContent/CanopyDensityContent';
@@ -20,10 +21,7 @@ interface LayerOptions {
   definitionExpression?: string;
 }
 
-export async function LayerFactory(
-  mapView: any,
-  layerConfig: LayerProps
-): Promise<any> {
+export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promise<any> {
   const [
     ImageryLayer,
     FeatureLayer,
@@ -74,10 +72,7 @@ export async function LayerFactory(
         const remapRF = new RasterFunction();
         remapRF.functionName = 'Remap';
         remapRF.functionArguments = {
-          InputRanges: [
-            markValueMap[appState.leftPanel.density],
-            layerConfig.metadata.inputRange[1]
-          ],
+          InputRanges: [markValueMap[appState.leftPanel.density], layerConfig.metadata.inputRange[1]],
           OutputValues: layerConfig.metadata.outputRange,
           AllowUnmatched: false,
           Raster: '$$'
@@ -111,10 +106,7 @@ export async function LayerFactory(
       break;
     case 'loss':
       const densityValue = markValueMap[appState.leftPanel.density];
-      layerConfig.url = layerConfig.url.replace(
-        /(tcd_)(?:[^\/]+)/,
-        `tcd_${densityValue}`
-      );
+      layerConfig.url = layerConfig.url.replace(/(tcd_)(?:[^\/]+)/, `tcd_${densityValue}`);
       const yearRange = mapviewState.timeSlider;
       const tclConstructor = await createTCL();
       const tclLayer = new tclConstructor({
@@ -128,6 +120,17 @@ export async function LayerFactory(
       esriLayer.minYear = yearRange[0];
       esriLayer.maxYear = yearRange[1];
       esriLayer.refresh();
+      break;
+    case 'gain':
+      const gainConstructor = await createGain();
+      const gainLayer = new gainConstructor({
+        id: layerConfig.id,
+        title: layerConfig.title,
+        visible: layerConfig.visible,
+        urlTemplate: layerConfig.url,
+        view: mapView
+      });
+      esriLayer = gainLayer;
       break;
     case 'tree-cover':
       const dVal = markValueMap[appState.leftPanel.density];
@@ -143,16 +146,18 @@ export async function LayerFactory(
       });
       esriLayer = treeCoverL;
       break;
-    case 'gain':
-      const gainConstructor = await createGain();
-      const gainLayer = new gainConstructor({
+    case 'tree-cover-height':
+      const url = 'https://storage.googleapis.com/gfw-data-layers/umd-tree-height/{z}/{x}/{y}.png';
+      const heightConstructor = await createHeight();
+      const heightLayer = new heightConstructor({
         id: layerConfig.id,
         title: layerConfig.title,
         visible: layerConfig.visible,
-        urlTemplate: layerConfig.url,
+        urlTemplate: url,
         view: mapView
       });
-      esriLayer = gainLayer;
+      esriLayer = heightLayer;
+      esriLayer.height = appState.leftPanel.treeHeight;
       break;
     case 'primed':
     case 'webtiled':
@@ -187,9 +192,7 @@ export async function LayerFactory(
       esriLayer = gladLayer;
       esriLayer.confirmed = appState.leftPanel.gladConfirmed;
       // //@ts-ignore
-      const startDate: any = new Date(
-        appState.leftPanel.gladStart
-      ).getJulian() as any;
+      const startDate: any = new Date(appState.leftPanel.gladStart).getJulian() as any;
       // //@ts-ignore
       const endDate = new Date(appState.leftPanel.gladEnd).getJulian();
       esriLayer.julianFrom = startDate;
@@ -214,11 +217,7 @@ export async function LayerFactory(
       break;
     case 'Vector.Layer': //only viirs is supported at this time
       if (layerConfig.id === 'VIIRS_ACTIVE_FIRES') {
-        esriLayer = await viirsLayer(
-          layerConfig.id,
-          layerConfig.url,
-          layerConfig.visible
-        );
+        esriLayer = await viirsLayer(layerConfig.id, layerConfig.url, layerConfig.visible);
       } else {
         esriLayer = new VectorTileLayer({
           id: layerConfig.id,
@@ -229,7 +228,6 @@ export async function LayerFactory(
       }
       break;
     default:
-      console.error('No error type!');
       break;
   }
 
