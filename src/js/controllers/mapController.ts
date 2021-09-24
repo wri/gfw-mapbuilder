@@ -1513,6 +1513,14 @@ export class MapController {
     }
   }
 
+  async updateTreeHeightValue(value: number): Promise<any> {
+    const treeLayer: any = this._map?.findLayerById('TREE_COVER_HEIGHT');
+    if (treeLayer) {
+      treeLayer.height = value;
+      treeLayer.refresh();
+    }
+  }
+
   getMapviewCoordinates(): URLCoordinates {
     const zoom = this._mapview!.zoom;
     const { latitude, longitude } = this._mapview!.center;

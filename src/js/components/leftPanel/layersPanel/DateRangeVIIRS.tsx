@@ -4,14 +4,9 @@ import { mapController } from '../../../../js/controllers/mapController';
 import { RootState } from '../../../../js/store/index';
 import { useSelector } from 'react-redux';
 import { LayerProps } from '../../../../js/store/mapview/types';
-import viirsLayer, {
-  getMaxDateForViirsTiles
-} from '../../../../js/helpers/viirsLayerUtil';
+import viirsLayer, { getMaxDateForViirsTiles } from '../../../../js/helpers/viirsLayerUtil';
 import { format, subDays, parse, differenceInDays } from 'date-fns';
-import {
-  setViirsStart,
-  setViirsEnd
-} from '../../../../js/store/appState/actions';
+import { setViirsStart, setViirsEnd } from '../../../../js/store/appState/actions';
 
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -50,45 +45,30 @@ const checkForURLRange = (s: string, e: string): string => {
 };
 
 const DateRange = (props: DateRangeProps): JSX.Element => {
-  const customColorTheme = useSelector(
-    (store: RootState) => store.appSettings.customColorTheme
-  );
+  const customColorTheme = useSelector((store: RootState) => store.appSettings.customColorTheme);
 
-  const viirsStart = useSelector(
-    (store: RootState) => store.appState.leftPanel.viirsStart
-  );
-  const viirsEnd = useSelector(
-    (store: RootState) => store.appState.leftPanel.viirsEnd
-  );
+  const viirsStart = useSelector((store: RootState) => store.appState.leftPanel.viirsStart);
+  const viirsEnd = useSelector((store: RootState) => store.appState.leftPanel.viirsEnd);
 
-  const allAvailableLayers = useSelector(
-    (store: RootState) => store.mapviewState.allAvailableLayers
-  );
+  const allAvailableLayers = useSelector((store: RootState) => store.mapviewState.allAvailableLayers);
 
   const [startDate, setStartDate] = useState(viirsStart);
   const [endDate, setEndDate] = useState(viirsEnd);
   const [maxDate, setMaxDate] = useState(format(new Date(), 'yyyy-MM-dd'));
   const [renderCustomRange, setRenderCustomRange] = useState(false);
-  const [definedRange, setDefinedRange] = useState(
-    checkForURLRange(startDate, endDate)
-  ); //this should come from url if at all?
+  const [definedRange, setDefinedRange] = useState(checkForURLRange(startDate, endDate)); //this should come from url if at all?
   const dispatch = useDispatch();
 
   const updateStartDate = (day): void => {
     const dFormat = format(day, 'yyyy-MM-dd');
     setStartDate(dFormat);
     const viirsOnMap = mapController._map?.findLayerById('VIIRS_ACTIVE_FIRES');
-    const viirsConfig = allAvailableLayers.find(
-      l => l.id === 'VIIRS_ACTIVE_FIRES'
-    );
+    const viirsConfig = allAvailableLayers.find(l => l.id === 'VIIRS_ACTIVE_FIRES');
 
     if (viirsOnMap && mapController._map && viirsConfig) {
       const viirsIndex: number = mapController._map!.layers.indexOf(viirsOnMap);
       mapController._map.remove(viirsOnMap);
-      const viirsNew = viirsLayer(viirsConfig.id, viirsConfig.url, true, 7, [
-        dFormat,
-        endDate
-      ]);
+      const viirsNew = viirsLayer(viirsConfig.id, viirsConfig.url, true, 7, [dFormat, endDate]);
       mapController._map?.add(viirsNew, viirsIndex);
     }
     dispatch(setViirsStart(String(dFormat)));
@@ -99,16 +79,11 @@ const DateRange = (props: DateRangeProps): JSX.Element => {
     setEndDate(dFormat);
 
     const viirsOnMap = mapController._map?.findLayerById('VIIRS_ACTIVE_FIRES');
-    const viirsConfig = allAvailableLayers.find(
-      l => l.id === 'VIIRS_ACTIVE_FIRES'
-    );
+    const viirsConfig = allAvailableLayers.find(l => l.id === 'VIIRS_ACTIVE_FIRES');
     if (viirsOnMap && mapController._map && viirsConfig) {
       const viirsIndex: number = mapController._map!.layers.indexOf(viirsOnMap);
       mapController._map.remove(viirsOnMap);
-      const viirsNew = viirsLayer(viirsConfig.id, viirsConfig.url, true, 7, [
-        startDate,
-        dFormat
-      ]);
+      const viirsNew = viirsLayer(viirsConfig.id, viirsConfig.url, true, 7, [startDate, dFormat]);
       mapController._map?.add(viirsNew, viirsIndex);
     }
     dispatch(setViirsEnd(String(dFormat)));
@@ -119,25 +94,15 @@ const DateRange = (props: DateRangeProps): JSX.Element => {
     setDefinedRange(e.target.value);
 
     const viirsOnMap = mapController._map?.findLayerById('VIIRS_ACTIVE_FIRES');
-    const viirsConfig = allAvailableLayers.find(
-      l => l.id === 'VIIRS_ACTIVE_FIRES'
-    );
+    const viirsConfig = allAvailableLayers.find(l => l.id === 'VIIRS_ACTIVE_FIRES');
     if (viirsOnMap && mapController._map && viirsConfig) {
       const viirsIndex: number = mapController._map!.layers.indexOf(viirsOnMap);
       mapController._map.remove(viirsOnMap);
-      const viirsNew = viirsLayer(
-        viirsConfig.id,
-        viirsConfig.url,
-        true,
-        valueMap[e.target.value]
-      );
+      const viirsNew = viirsLayer(viirsConfig.id, viirsConfig.url, true, valueMap[e.target.value]);
       mapController._map?.add(viirsNew, viirsIndex);
 
       const fDate = parse(maxDate, 'yyyy-MM-dd', new Date());
-      const startDate = format(
-        subDays(fDate, valueMap[e.target.value]),
-        'yyyy-MM-dd'
-      );
+      const startDate = format(subDays(fDate, valueMap[e.target.value]), 'yyyy-MM-dd');
       setEndDate(maxDate);
       setStartDate(startDate);
       dispatch(setViirsStart(String(startDate)));
