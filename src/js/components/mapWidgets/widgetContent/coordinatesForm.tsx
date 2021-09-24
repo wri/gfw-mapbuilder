@@ -3,10 +3,7 @@ import { useSelector } from 'react-redux';
 import DMSSection from './coordinatesDMSSection';
 import DDSection from './coordinatesDDSection';
 import { mapController } from '../../../../js/controllers/mapController';
-import {
-  convertXYToPoint,
-  convertDMSToXY
-} from '../../../../js/helpers/coordinatesConversion';
+import { convertXYToPoint, convertDMSToXY } from '../../../../js/helpers/coordinatesConversion';
 import { RootState } from '../../../../js/store/index';
 import { coordinatesContent } from '../../../../../configs/translations/modal.tanslations';
 import {
@@ -15,7 +12,7 @@ import {
   SpecificDMSSection,
   DMSFormValues,
   DMSCardinalPoint
-} from '../../../../js/interfaces/coordinateForm';
+} from '../../../../js/types/coordinateForm';
 
 import '../../../../css/coordinatesForm';
 
@@ -85,27 +82,13 @@ const CoordinatesForm: FunctionComponent = () => {
       }
     }
   ]);
-  const selectedLanguage = useSelector(
-    (state: RootState) => state.appState.selectedLanguage
-  );
-  const customColorTheme = useSelector(
-    (state: RootState) => state.appSettings.customColorTheme
-  );
+  const selectedLanguage = useSelector((state: RootState) => state.appState.selectedLanguage);
+  const customColorTheme = useSelector((state: RootState) => state.appSettings.customColorTheme);
 
   const { degree, minutes, seconds } = coordinatesContent;
-  const {
-    title,
-    dropdownTitle,
-    decimalOptions,
-    addMoreLabel,
-    makeShapeLabel
-  } = coordinatesContent[selectedLanguage];
+  const { title, dropdownTitle, decimalOptions, addMoreLabel, makeShapeLabel } = coordinatesContent[selectedLanguage];
 
-  const setDDFormValues = ({
-    userInput,
-    rowNum,
-    coordinateType
-  }: DDFormValues): void => {
+  const setDDFormValues = ({ userInput, rowNum, coordinateType }: DDFormValues): void => {
     const sections = [...ddSections];
     const sectionNum = sections.findIndex(section => section.rowNum === rowNum);
 
@@ -114,12 +97,7 @@ const CoordinatesForm: FunctionComponent = () => {
     setDDForm(sections);
   };
 
-  const setDMSFormValues = ({
-    coordinateValue,
-    rowNum,
-    coordinateType,
-    degreeType
-  }: DMSFormValues): void => {
+  const setDMSFormValues = ({ coordinateValue, rowNum, coordinateType, degreeType }: DMSFormValues): void => {
     const sections = [...dmsSections];
     const sectionNum = sections.findIndex(section => section.rowNum === rowNum);
 
@@ -130,11 +108,7 @@ const CoordinatesForm: FunctionComponent = () => {
     setDMSForm(sections);
   };
 
-  const setDMSCardinalType = ({
-    specificPoint,
-    rowNum,
-    coordinateType
-  }: DMSCardinalPoint): void => {
+  const setDMSCardinalType = ({ specificPoint, rowNum, coordinateType }: DMSCardinalPoint): void => {
     const sections = [...dmsSections];
     const sectionNum = sections.findIndex(section => section.rowNum === rowNum);
 
@@ -179,11 +153,9 @@ const CoordinatesForm: FunctionComponent = () => {
         }
       };
 
-      const updatedSections = addOrRemoveSection(
-        defaultDMSSection,
-        allDMSSections,
-        addSection
-      ) as Array<SpecificDMSSection>;
+      const updatedSections = addOrRemoveSection(defaultDMSSection, allDMSSections, addSection) as Array<
+        SpecificDMSSection
+      >;
       setDMSForm(updatedSections);
     } else {
       const allDDSections = [...ddSections];
@@ -192,11 +164,9 @@ const CoordinatesForm: FunctionComponent = () => {
         latitude: '',
         longitude: ''
       };
-      const updatedSections = addOrRemoveSection(
-        defaultDDSection,
-        allDDSections,
-        addSection
-      ) as Array<SpecificDDSection>;
+      const updatedSections = addOrRemoveSection(defaultDDSection, allDDSections, addSection) as Array<
+        SpecificDDSection
+      >;
       setDDForm(updatedSections);
     }
   };
@@ -257,11 +227,7 @@ const CoordinatesForm: FunctionComponent = () => {
           })}
         <div className="buttons-wrapper">
           <button onClick={(): void => setSection(true)}>{addMoreLabel}</button>
-          <button
-            className="orange-button"
-            style={{ backgroundColor: customColorTheme }}
-            onClick={() => setShape()}
-          >
+          <button className="orange-button" style={{ backgroundColor: customColorTheme }} onClick={() => setShape()}>
             {makeShapeLabel}
           </button>
         </div>

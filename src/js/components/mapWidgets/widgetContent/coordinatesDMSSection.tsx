@@ -2,10 +2,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../js/store/index';
 import { coordinatesContent } from '../../../../../configs/translations/modal.tanslations';
-import {
-  DMSFormValues,
-  CoordinateProps
-} from '../../../../js/interfaces/coordinateForm';
+import { DMSFormValues, CoordinateProps } from '../../../../js/types/coordinateForm';
 import { TrashCanIcon } from '../../../../images/trashCanIcon';
 
 import '../../../../css/coordinatesForm.scss';
@@ -27,12 +24,8 @@ interface DMSSectionProps {
 }
 
 export default function DMSSection(props: DMSSectionProps): JSX.Element {
-  const selectedLanguage = useSelector(
-    (state: RootState) => state.appState.selectedLanguage
-  );
-  const { latitudeLabel, longitudeLabel } = coordinatesContent[
-    selectedLanguage
-  ];
+  const selectedLanguage = useSelector((state: RootState) => state.appState.selectedLanguage);
+  const { latitudeLabel, longitudeLabel } = coordinatesContent[selectedLanguage];
   const {
     dmsSection,
     setDMSFormValues,
@@ -49,10 +42,7 @@ export default function DMSSection(props: DMSSectionProps): JSX.Element {
     <>
       <div className="dms-wrapper">
         {renderRemoveButton && (
-          <button
-            onClick={(): void => setSection(false)}
-            className="remove-button"
-          >
+          <button onClick={(): void => setSection(false)} className="remove-button">
             REMOVE <TrashCanIcon height={20} width={20} fill={'#555'} />
           </button>
         )}

@@ -1,4 +1,4 @@
-import { Attachment } from '../../../js/interfaces/Attachment';
+import { Attachment } from '../../types/Attachment';
 
 interface SpecificAreaResults {
   area: string;

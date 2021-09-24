@@ -1,34 +1,21 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../js/store/index';
-import { DDSectionProps } from '../../../../js/interfaces/coordinateForm';
+import { DDSectionProps } from '../../../../js/types/coordinateForm';
 import { coordinatesContent } from '../../../../../configs/translations/modal.tanslations';
 import { TrashCanIcon } from '../../../../images/trashCanIcon';
 
 export default function DDSection(props: DDSectionProps): JSX.Element {
-  const selectedLanguage = useSelector(
-    (state: RootState) => state.appState.selectedLanguage
-  );
-  const { latitudeLabel, longitudeLabel } = coordinatesContent[
-    selectedLanguage
-  ];
+  const selectedLanguage = useSelector((state: RootState) => state.appState.selectedLanguage);
+  const { latitudeLabel, longitudeLabel } = coordinatesContent[selectedLanguage];
 
-  const {
-    ddSection,
-    degreeSymbol,
-    renderRemoveButton,
-    setSection,
-    setDDFormValues
-  } = props;
+  const { ddSection, degreeSymbol, renderRemoveButton, setSection, setDDFormValues } = props;
   const { rowNum, latitude, longitude } = ddSection;
 
   return (
     <>
       {renderRemoveButton && (
-        <button
-          onClick={(): void => setSection(false)}
-          className="remove-button"
-        >
+        <button onClick={(): void => setSection(false)} className="remove-button">
           REMOVE <TrashCanIcon height={20} width={20} fill={'#555'} />
         </button>
       )}
