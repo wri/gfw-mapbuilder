@@ -1,6 +1,14 @@
 //Helper for determining layer opacity that we start with. Depending on the URL hash, resources file and API response those can be diffent
+import { defaultAPIFlagshipLayers } from '../../../../configs/layer-config';
 import { LayerInfo } from '../../../../src/js/helpers/shareFunctionality';
 import { LayerProps } from '../../../js/store/mapview/types';
+import store from '../../store';
+import {
+  CustomLayerConfig,
+  FlagshipLayerConfig,
+  RecentImageryLayerConfig,
+  RemoteApiLayerConfig
+} from '../../types/layersTypes';
 import { fetchLegendInfo } from '../legendInfo';
 
 async function createVectorLayerLegendInfo(layer: any): Promise<any> {
@@ -39,18 +47,11 @@ async function createVectorLayerLegendInfo(layer: any): Promise<any> {
   }
 }
 
-export function determineLayerOpacity(
-  apiLayer: any,
-  layerInfosFromURL: LayerInfo[]
-): number {
+export function determineLayerOpacity(apiLayer: any, layerInfosFromURL: LayerInfo[]): number {
   //In case of sharing functionality, check for URL containing layer visibility and opacity information
   //Check For layer in the URL state first
-  const resourceLayerID = apiLayer.dataLayer
-    ? apiLayer.dataLayer.id
-    : apiLayer.id;
-  const layerInfoFromURL = layerInfosFromURL.find(
-    l => l.layerID === resourceLayerID
-  );
+  const resourceLayerID = apiLayer.dataLayer ? apiLayer.dataLayer.id : apiLayer.id;
+  const layerInfoFromURL = layerInfosFromURL.find(l => l.layerID === resourceLayerID);
   if (layerInfoFromURL) {
     return layerInfoFromURL.opacity;
   } else {
@@ -65,24 +66,15 @@ export function determineLayerOpacity(
 }
 
 //Helper to determine layer visibility
-export function determineLayerVisibility(
-  apiLayer: any,
-  layerInfosFromURL: LayerInfo[]
-): boolean {
-  const resourceLayerID = apiLayer.dataLayer
-    ? apiLayer.dataLayer.id
-    : apiLayer.id;
-  const layerInfoFromURL = layerInfosFromURL.find(
-    l => l.layerID === resourceLayerID
-  );
+export function determineLayerVisibility(apiLayer: any, layerInfosFromURL: LayerInfo[]): boolean {
+  const resourceLayerID = apiLayer.dataLayer ? apiLayer.dataLayer.id : apiLayer.id;
+  const layerInfoFromURL = layerInfosFromURL.find(l => l.layerID === resourceLayerID);
   if (layerInfoFromURL) {
     return true;
   } else {
     let visibility;
     if (apiLayer.dataLayer) {
-      visibility = apiLayer.dataLayer.visible
-        ? apiLayer.dataLayer.visible
-        : false;
+      visibility = apiLayer.dataLayer.visible ? apiLayer.dataLayer.visible : false;
     } else {
       visibility = apiLayer.visible ? apiLayer.visible : false;
     }
@@ -90,9 +82,7 @@ export function determineLayerVisibility(
   }
 }
 
-export async function extractWebmapLayerObjects(
-  esriMap?: __esri.Map
-): Promise<LayerProps[]> {
+export async function extractWebmapLayerObjects(esriMap?: __esri.Map): Promise<LayerProps[]> {
   const mapLayerObjects: LayerProps[] = [];
   if (!esriMap) return [];
 
@@ -107,20 +97,9 @@ export async function extractWebmapLayerObjects(
       const legendInfo = await fetchLegendInfo(layer.url);
       layer.sublayers.forEach((sub: any) => {
         //get sublayer legend info
-        const sublayerLegendInfo = legendInfo?.layers?.find(
-          (l: any) => l.layerId === sub.id
-        );
+        const sublayerLegendInfo = legendInfo?.layers?.find((l: any) => l.layerId === sub.id);
         sub.opacity = sub.opacity ? sub.opacity : 1;
-        const {
-          id,
-          title,
-          opacity,
-          visible,
-          definitionExpression,
-          url,
-          maxScale,
-          minScale
-        } = sub;
+        const { id, title, opacity, visible, definitionExpression, url, maxScale, minScale } = sub;
         mapLayerObjects.push({
           id,
           title,
@@ -146,16 +125,7 @@ export async function extractWebmapLayerObjects(
         ? undefined
         : legendInfo?.layers.find((l: any) => l.layerId === layer.layerId);
 
-      const {
-        id,
-        title,
-        opacity,
-        visible,
-        definitionExpression,
-        url,
-        maxScale,
-        minScale
-      } = layer;
+      const { id, title, opacity, visible, definitionExpression, url, maxScale, minScale } = layer;
       mapLayerObjects.push({
         id,
         title,
@@ -184,16 +154,7 @@ export async function extractWebmapLayerObjects(
       } else {
         legendInfo = layer.legendInfo ? layer.legendInfo : undefined;
       }
-      const {
-        id,
-        title,
-        opacity,
-        visible,
-        definitionExpression,
-        url,
-        maxScale,
-        minScale
-      } = layer;
+      const { id, title, opacity, visible, definitionExpression, url, maxScale, minScale } = layer;
       mapLayerObjects.push({
         id,
         title,
@@ -208,11 +169,180 @@ export async function extractWebmapLayerObjects(
         minScale,
         sublayer: false,
         legendInfo,
-        portalItemID:
-          layer.portalItem && layer.portalItem.id ? layer.portalItem.id : null
+        portalItemID: layer.portalItem && layer.portalItem.id ? layer.portalItem.id : null
       });
     }
   }
   mapLayerObjects.reverse();
   return mapLayerObjects;
+}
+
+type AllLayersConfig = RemoteApiLayerConfig | RecentImageryLayerConfig | CustomLayerConfig | FlagshipLayerConfig;
+export async function getRemoteAndServiceLayers(): Promise<any> {
+  const { appSettings } = store.getState();
+  const { layerPanel } = appSettings;
+
+  const detailedLayers: any[] = [];
+  const remoteDataLayers: any[] = [];
+
+  const layers: AllLayersConfig[] = Object.keys(layerPanel)
+    //Ignore basemap and extraLayer config, those are handled elsewhere
+    .filter(groupName => {
+      return groupName !== 'GROUP_BASEMAP' && groupName !== 'extraLayers';
+    })
+    .reduce((list, groupName) => {
+      let orderedGroups;
+      if (layerPanel[groupName]?.groupType === 'nested') {
+        let allNestedLayers: AllLayersConfig[] = [];
+        layerPanel[groupName].layers.forEach(layerG => {
+          allNestedLayers = allNestedLayers.concat(layerG.nestedLayers);
+        });
+        orderedGroups = allNestedLayers.map(layer => {
+          return { ...layer, groupId: groupName };
+        });
+      } else {
+        orderedGroups = layerPanel[groupName].layers.map(layer => {
+          return { ...layer, groupId: groupName };
+        });
+      }
+      return list.concat(orderedGroups);
+    }, []);
+
+  const configLayerFilters = {
+    VIIRS_ACTIVE_FIRES: 'viirsFires',
+    MODIS_ACTIVE_FIRES: 'modisFires',
+    LAND_COVER: 'landCover',
+    AG_BIOMASS: 'aboveGroundBiomass',
+    IFL: 'intactForests',
+    PRIMARY_FORESTS: 'primaryForests',
+    FORMA_ALERTS: 'forma',
+    GLOB_MANGROVE: 'mangroves',
+    IMAZON_SAD: 'sadAlerts',
+    GLAD_ALERTS: 'gladAlerts',
+    RECENT_IMAGERY: 'recentImagery'
+  };
+  const configLayerIDs = Object.keys(configLayerFilters);
+
+  function checkLayerFilterConfig(l: any): boolean {
+    const checkLayer = configLayerIDs.includes(l.id);
+    if (checkLayer) {
+      //Check for settings on that layer
+      const settingID = configLayerFilters[l.id];
+      //If no setting exist for the layer, we default to showing the layer
+      const settingValue = appSettings.hasOwnProperty(settingID) ? appSettings[settingID] : true;
+      return settingValue;
+    } else {
+      return true;
+    }
+  }
+
+  layers
+    .filter(l => checkLayerFilterConfig(l))
+    .forEach((layer): void => {
+      if (layer.type === 'remoteDataLayer') {
+        remoteDataLayers.push({
+          order: layer.order,
+          layerGroupId: layer.groupId,
+          dataLayer: layer
+        });
+      } else {
+        detailedLayers.push(layer);
+      }
+    });
+
+  defaultAPIFlagshipLayers.forEach(layer => {
+    remoteDataLayers.push({
+      order: layer.order,
+      layerGroupId: layer.groupId,
+      dataLayer: layer,
+      origin: layer.origin,
+      uuid: layer.uuid,
+      label: layer.label,
+      layerType: layer.layerType,
+      id: layer.id,
+      opacity: layer.opacity,
+      legend: layer.legend,
+      sublabel: layer.sublabel
+    });
+  });
+
+  function fetchRemoteApiLayer(item): Promise<any> {
+    const baseURL = `https://production-api.globalforestwatch.org/v1/layer/${item?.dataLayer?.uuid}`;
+    return fetch(baseURL)
+      .then(response => response.json())
+      .then(json => json.data)
+      .then(layer =>
+        fetch(layer.attributes.layerConfig.metadata)
+          .then(response => response.json())
+          .then(metadata => {
+            const attributes = layer.attributes;
+            const intConfig = layer.attributes?.interactionConfig;
+            const itemGroup = item.group;
+            item.layer = layer.attributes.layerConfig;
+            item.dashboardURL = item.dataLayer?.dashboardURL?.length !== 0 ? item.dataLayer.dashboardURL : null;
+            item.group = itemGroup;
+            item.layer.metadata = {
+              metadata,
+              legendConfig: attributes.legendConfig,
+              interactionConfig: intConfig
+            };
+            return item;
+          })
+      )
+      .catch(error => console.error(error));
+  }
+
+  function fetchFlaghshipLayer(item): Promise<any> {
+    const baseURL = `https://api.resourcewatch.org/v1/layer/${item.uuid}`;
+    const baseMetadataURL = 'https://api.resourcewatch.org/v1/gfw-metadata/'; //append metadata id to the url to retrieve it, attributes.applicationConfig.metadata
+    return fetch(baseURL)
+      .then(response => response.json())
+      .then(json => json.data)
+      .then(layer => {
+        return fetch(`${baseMetadataURL}${layer.attributes.applicationConfig.metadata}`)
+          .then(response => response.json())
+          .then(metadata => {
+            const intConfig = layer.attributes?.interactionConfig;
+            item.groupId = item.layerGroupId;
+            const newItem = {
+              dataLayer: item,
+              layer: {
+                id: item.id,
+                opacity: item.opacity,
+                order: item.order,
+                url: layer.attributes.layerConfig.source.tiles[0],
+                type: item.layerType,
+                label: item.label,
+                sublabel: item.sublabel,
+                metadata: {
+                  metadata: metadata,
+                  legendConfig: item.legend,
+                  interactionConfig: intConfig
+                }
+              },
+              dashboardURL: null,
+              group: item.layerGroupId,
+              order: item.order,
+              layerGroupId: item.layerGroupId
+            };
+            return newItem;
+          });
+      })
+      .catch(error => console.error(error));
+    //
+  }
+
+  const remoteDataLayerRequests = remoteDataLayers.map((item: any) => {
+    if (item?.origin === 'gfw-api') {
+      return fetchFlaghshipLayer(item);
+    } else {
+      return fetchRemoteApiLayer(item);
+    }
+  });
+
+  detailedLayers.forEach(detailedLayer => {
+    remoteDataLayerRequests.push(detailedLayer);
+  });
+
+  return Promise.all(remoteDataLayerRequests);
 }

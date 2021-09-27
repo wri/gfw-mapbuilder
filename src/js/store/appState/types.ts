@@ -12,6 +12,7 @@ export interface LeftPanel {
   modisEnd: string;
   viirsStart: string;
   viirsEnd: string;
+  treeHeight: number;
   versionedLayer: {
     [key: string]: string;
   };
@@ -85,6 +86,7 @@ export const SET_MODIS_END = 'SET_MODIS_END';
 export const SET_RENDER_POPUP = 'SET_RENDER_POPUP';
 export const SET_AREA_IMAGES = 'SET_AREA_IMAGES';
 export const SET_VERSIONED_LAYER = 'SET_VERSIONED_LAYER';
+export const SET_TREE_HEIGHT = 'SET_TREE_HEIGHT';
 
 interface SetSelectedSearchWidgetLayer {
   type: typeof SET_SELECTED_SEARCH_WIDGET_LAYER;
@@ -196,6 +198,11 @@ interface SetViirsEnd {
   payload: AppState['leftPanel']['viirsEnd'];
 }
 
+interface SetTreeHeight {
+  type: typeof SET_TREE_HEIGHT;
+  payload: AppState['leftPanel']['treeHeight'];
+}
+
 interface SetRenderPopup {
   type: typeof SET_RENDER_POPUP;
   payload: AppState['renderPopup'];
@@ -236,4 +243,5 @@ export type AppStateTypes =
   | SetViirsEnd
   | SetRenderPopup
   | SetAreaImages
-  | SetVersionedLayer;
+  | SetVersionedLayer
+  | SetTreeHeight;

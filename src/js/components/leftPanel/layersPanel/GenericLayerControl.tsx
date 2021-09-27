@@ -30,6 +30,7 @@ import { layerControlsTranslations } from '../../../../../configs/translations/l
 
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import TreeHeightPicker from '../../sharedComponents/TreeHeightPicker';
 
 //Dynamic custom theme override using styled-components lib
 interface CheckBoxWrapperProps {
@@ -50,21 +51,13 @@ interface GladControlsProps {
 
 const GladControls = (props: GladControlsProps): JSX.Element => {
   const dispatch = useDispatch();
-  const gladConfirmed = useSelector(
-    (store: RootState) => store.appState.leftPanel.gladConfirmed
-  );
+  const gladConfirmed = useSelector((store: RootState) => store.appState.leftPanel.gladConfirmed);
 
-  const gladStart = useSelector(
-    (store: RootState) => store.appState.leftPanel.gladStart
-  );
+  const gladStart = useSelector((store: RootState) => store.appState.leftPanel.gladStart);
 
-  const gladEnd = useSelector(
-    (store: RootState) => store.appState.leftPanel.gladEnd
-  );
+  const gladEnd = useSelector((store: RootState) => store.appState.leftPanel.gladEnd);
 
-  const [unconfirmedAlerts, setUnconfirmedAlerts] = React.useState(
-    gladConfirmed
-  );
+  const [unconfirmedAlerts, setUnconfirmedAlerts] = React.useState(gladConfirmed);
   const [startDate, setStartDate] = React.useState(String(gladStart));
   const [endDate, setEndDate] = React.useState(gladEnd);
 
@@ -78,10 +71,7 @@ const GladControls = (props: GladControlsProps): JSX.Element => {
     const gladLayerOld: any = mapController._map!.findLayerById('GLAD_ALERTS');
     const gladIndex: number = mapController._map!.layers.indexOf(gladLayerOld);
     mapController._map?.remove(gladLayerOld);
-    const gladLayerNew: any = LayerFactory(
-      mapController._mapview,
-      props.layerConfig
-    );
+    const gladLayerNew: any = LayerFactory(mapController._mapview, props.layerConfig);
     gladLayerNew.julianFrom = start;
     gladLayerNew.julianTo = end;
     mapController._map?.add(gladLayerNew, gladIndex);
@@ -100,10 +90,7 @@ const GladControls = (props: GladControlsProps): JSX.Element => {
     const gladLayerOld: any = mapController._map!.findLayerById('GLAD_ALERTS');
     const gladIndex: number = mapController._map!.layers.indexOf(gladLayerOld);
     mapController._map?.remove(gladLayerOld);
-    const gladLayerNew: any = LayerFactory(
-      mapController._mapview,
-      props.layerConfig
-    );
+    const gladLayerNew: any = LayerFactory(mapController._mapview, props.layerConfig);
     gladLayerNew.julianFrom = start;
     gladLayerNew.julianTo = end;
     mapController._map?.add(gladLayerNew, gladIndex);
@@ -117,10 +104,7 @@ const GladControls = (props: GladControlsProps): JSX.Element => {
     dispatch(setGladConfirmed(!unconfirmedAlerts));
     const gladLayerOld: any = mapController._map!.findLayerById('GLAD_ALERTS');
     mapController._map?.remove(gladLayerOld);
-    const gladLayerNew: any = LayerFactory(
-      mapController._mapview,
-      props.layerConfig
-    );
+    const gladLayerNew: any = LayerFactory(mapController._mapview, props.layerConfig);
     gladLayerNew.confirmed = !unconfirmedAlerts;
     mapController._map?.add(gladLayerNew);
   }
@@ -138,19 +122,14 @@ const GladControls = (props: GladControlsProps): JSX.Element => {
               checked={unconfirmedAlerts}
               onChange={handleConfirmedAlertsToggle}
             />
-            <label
-              className="styled-checkboxlabel"
-              htmlFor="layer-checkbox-glad"
-            ></label>
+            <label className="styled-checkboxlabel" htmlFor="layer-checkbox-glad"></label>
           </CheckboxWrapper>
         </div>
         <p>Hide unconfirmed alerts</p>
       </div>
       <div className="calendar-wrapper">
         <div className="date-section-wrapper">
-          <label htmlFor="start-date">
-            {layerControlsTranslations[props.selectedLanguage].timeStart}
-          </label>
+          <label htmlFor="start-date">{layerControlsTranslations[props.selectedLanguage].timeStart}</label>
           <DatePicker
             placeholderText="select a day"
             onChange={date => handleStartDateChange(date)}
@@ -159,9 +138,7 @@ const GladControls = (props: GladControlsProps): JSX.Element => {
         </div>
 
         <div className="date-section-wrapper">
-          <label htmlFor="end-date">
-            {layerControlsTranslations[props.selectedLanguage].timeEnd}
-          </label>
+          <label htmlFor="end-date">{layerControlsTranslations[props.selectedLanguage].timeEnd}</label>
           <DatePicker
             placeholderText="select a day"
             onChange={date => handleEndDateChange(date)}
@@ -205,8 +182,7 @@ const LayerFilterSelection = (props: LayerInfo): JSX.Element => {
         const url = layerInfo.url;
         const fieldResponse = await esriQuery(url, queryParams);
         const fieldOptions = fieldResponse.features.map((feature: any) => {
-          const entry =
-            feature.attributes[layerInfo.filterField[selectedLanguage]];
+          const entry = feature.attributes[layerInfo.filterField[selectedLanguage]];
           return {
             label: entry,
             value: entry
@@ -223,8 +199,7 @@ const LayerFilterSelection = (props: LayerInfo): JSX.Element => {
           values.forEach((value: any) => {
             const fieldOptions = value.features
               .map((feature: any) => {
-                const entry =
-                  feature.attributes[layerInfo.filterField[selectedLanguage]];
+                const entry = feature.attributes[layerInfo.filterField[selectedLanguage]];
                 return {
                   label: entry,
                   value: entry
@@ -295,13 +270,9 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
   const layer = props.layer;
   const dispatch = useDispatch();
 
-  const selectedLanguage = useSelector(
-    (store: RootState) => store.appState.selectedLanguage
-  );
+  const selectedLanguage = useSelector((store: RootState) => store.appState.selectedLanguage);
 
-  const customColorTheme = useSelector(
-    (store: RootState) => store.appSettings.customColorTheme
-  );
+  const customColorTheme = useSelector((store: RootState) => store.appSettings.customColorTheme);
   //Determine if we need density control on this layer
   const densityPicker = layer && densityEnabledLayers.includes(layer.id);
   const altLayerName = layer.label && layer.label[selectedLanguage];
@@ -345,11 +316,7 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
     }
   };
 
-  const returnDateRange = (
-    id: string,
-    layerConfig: any,
-    selectedLanguage: string
-  ): JSX.Element | undefined => {
+  const returnDateRange = (id: string, layerConfig: any, selectedLanguage: string): JSX.Element | undefined => {
     if (!layer) return;
     switch (id) {
       case 'VIIRS_ACTIVE_FIRES':
@@ -402,9 +369,7 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
           <div className="label-control-top">
             {returnLayerControl()}
             <div className="title-wrapper">
-              <span className="layer-label">
-                {altLayerName ? altLayerName : layer?.title}
-              </span>
+              <span className="layer-label">{altLayerName ? altLayerName : layer?.title}</span>
             </div>
           </div>
           {returnSubtitle()}
@@ -430,17 +395,10 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
       </div>
       {layer?.visible && returnTimeSlider(props.id)}
       {layer?.visible && densityPicker && <CanopyDensityPicker />}
-      {layer?.visible && layer.versions && (
-        <LayerVersionPicker
-          layerInfo={layer}
-          selectedLanguage={selectedLanguage}
-        />
-      )}
+      {layer?.visible && layer.id === 'TREE_COVER_HEIGHT' && <TreeHeightPicker />}
+      {layer?.visible && layer.versions && <LayerVersionPicker layerInfo={layer} selectedLanguage={selectedLanguage} />}
       {layer?.visible && layer.filterField && (
-        <LayerFilterSelection
-          layerInfo={layer}
-          selectedLanguage={selectedLanguage}
-        />
+        <LayerFilterSelection layerInfo={layer} selectedLanguage={selectedLanguage} />
       )}
       {layer?.visible && returnDateRange(props.id, layer, selectedLanguage)}
       {layer?.visible && (

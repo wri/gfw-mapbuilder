@@ -1,12 +1,9 @@
 import React, { FunctionComponent, useState, useRef, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import {
-  setMeasureResults,
-  setActiveMeasureButton
-} from '../../../../js/store/appState/actions';
+import { setMeasureResults, setActiveMeasureButton } from '../../../../js/store/appState/actions';
 import { mapController } from '../../../../js/controllers/mapController';
 import { measureContent } from '../../../../../configs/translations/modal.tanslations';
-import { OptionType } from '../../../../js/interfaces/measureWidget';
+import { OptionType } from '../../../../js/types/measureWidget';
 import { RootState } from '../../../../js/store/index';
 
 import '../../../../css/measureContent.scss';
@@ -31,15 +28,10 @@ interface SpecificDropDownOption {
 }
 
 const ReturnMeasurementResults = (): JSX.Element => {
-  const { activeButton } = useSelector(
+  const { activeButton } = useSelector((state: RootState) => state.appState.measureContent);
+  const { areaResults, distanceResults, coordinateMouseClickResults, coordinatePointerMoveResults } = useSelector(
     (state: RootState) => state.appState.measureContent
   );
-  const {
-    areaResults,
-    distanceResults,
-    coordinateMouseClickResults,
-    coordinatePointerMoveResults
-  } = useSelector((state: RootState) => state.appState.measureContent);
 
   const returnResults = (): JSX.Element | void => {
     // * NOTE - later one we'll want a message saying;
@@ -81,20 +73,13 @@ const ReturnMeasurementResults = (): JSX.Element => {
 };
 
 const ReturnDropdown: any = () => {
-  const { activeButton } = useSelector(
-    (state: RootState) => state.appState.measureContent
-  );
+  const { activeButton } = useSelector((state: RootState) => state.appState.measureContent);
 
-  const { selectedLanguage } = useSelector(
-    (state: RootState) => state.appState
-  );
+  const { selectedLanguage } = useSelector((state: RootState) => state.appState);
 
-  const {
-    defaultOption,
-    areaUnitsOfLength,
-    distanceUnitsOfLength,
-    latitudeLongitudeUnits
-  } = measureContent[selectedLanguage];
+  const { defaultOption, areaUnitsOfLength, distanceUnitsOfLength, latitudeLongitudeUnits } = measureContent[
+    selectedLanguage
+  ];
 
   let selectedDropdown = [];
 
@@ -110,61 +95,37 @@ const ReturnDropdown: any = () => {
       break;
   }
 
-  return selectedDropdown.map(
-    (lengthUnit: SpecificDropDownOption, index: number) => {
-      const { text, esriUnit } = lengthUnit;
+  return selectedDropdown.map((lengthUnit: SpecificDropDownOption, index: number) => {
+    const { text, esriUnit } = lengthUnit;
 
-      return (
-        <option value={esriUnit} key={index}>
-          {text}
-        </option>
-      );
-    }
-  );
+    return (
+      <option value={esriUnit} key={index}>
+        {text}
+      </option>
+    );
+  });
 };
 
 const MeasureContent: FunctionComponent = () => {
-  const { activeButton } = useSelector(
-    (state: RootState) => state.appState.measureContent
-  );
-  const selectedLanguage = useSelector(
-    (state: RootState) => state.appState.selectedLanguage
-  );
+  const { activeButton } = useSelector((state: RootState) => state.appState.measureContent);
+  const selectedLanguage = useSelector((state: RootState) => state.appState.selectedLanguage);
 
-  const {
-    areaUnitsOfLength,
-    distanceUnitsOfLength,
-    latitudeLongitudeUnits
-  } = measureContent[selectedLanguage];
+  const { areaUnitsOfLength, distanceUnitsOfLength, latitudeLongitudeUnits } = measureContent[selectedLanguage];
 
-  const [selectedAreaUnit, setSelectedAreaUnit] = useState(
-    areaUnitsOfLength[0].esriUnit
-  );
-  const [selectedDistanceUnit, setSelectedDistanceUnit] = useState(
-    distanceUnitsOfLength[0].esriUnit
-  );
-  const [selectedCoordinatesUnit, setSelectedCoordinatesUnit] = useState(
-    latitudeLongitudeUnits[0].esriUnit
-  );
+  const [selectedAreaUnit, setSelectedAreaUnit] = useState(areaUnitsOfLength[0].esriUnit);
+  const [selectedDistanceUnit, setSelectedDistanceUnit] = useState(distanceUnitsOfLength[0].esriUnit);
+  const [selectedCoordinatesUnit, setSelectedCoordinatesUnit] = useState(latitudeLongitudeUnits[0].esriUnit);
   const dispatch = useDispatch();
 
   const setMeasurementUnit = (
-    selectedUnit:
-      | __esri.AreaMeasurement2D['unit']
-      | __esri.DistanceMeasurement2D['unit']
+    selectedUnit: __esri.AreaMeasurement2D['unit'] | __esri.DistanceMeasurement2D['unit']
   ): void => {
     if (activeButton === 'area') {
       setSelectedAreaUnit(selectedUnit);
-      mapController.updateSelectedMeasureWidget(
-        'area',
-        selectedUnit as __esri.AreaMeasurement2D['unit']
-      );
+      mapController.updateSelectedMeasureWidget('area', selectedUnit as __esri.AreaMeasurement2D['unit']);
     } else if (activeButton === 'distance') {
       setSelectedDistanceUnit(selectedUnit);
-      mapController.updateSelectedMeasureWidget(
-        'distance',
-        selectedUnit as __esri.AreaMeasurement2D['unit']
-      );
+      mapController.updateSelectedMeasureWidget('distance', selectedUnit as __esri.AreaMeasurement2D['unit']);
     }
   };
 
@@ -206,34 +167,24 @@ const MeasureContent: FunctionComponent = () => {
       <div className="buttons-select-wrapper">
         <button
           onClick={(): void => setOption('area')}
-          className={`esri-icon-measure-area ${
-            activeButton === 'area' ? 'selected' : ''
-          }`}
+          className={`esri-icon-measure-area ${activeButton === 'area' ? 'selected' : ''}`}
         />
         <button
           onClick={(): void => setOption('distance')}
-          className={`esri-icon-measure ${
-            activeButton === 'distance' ? 'selected' : ''
-          }`}
+          className={`esri-icon-measure ${activeButton === 'distance' ? 'selected' : ''}`}
         />
         <button
           onClick={(): void => setOption('coordinates')}
-          className={`esri-icon-maps ${
-            activeButton === 'coordinates' ? 'selected' : ''
-          }`}
+          className={`esri-icon-maps ${activeButton === 'coordinates' ? 'selected' : ''}`}
         />
-        {(activeButton === 'area' ||
-          activeButton === 'distance' ||
-          activeButton === '') && (
+        {(activeButton === 'area' || activeButton === 'distance' || activeButton === '') && (
           <>
             <span>|</span>
             <select
               value={returnSelectedUnit()}
               onChange={(e): void =>
                 setMeasurementUnit(
-                  e.target.value as
-                    | __esri.AreaMeasurement2D['unit']
-                    | __esri.DistanceMeasurement2D['unit']
+                  e.target.value as __esri.AreaMeasurement2D['unit'] | __esri.DistanceMeasurement2D['unit']
                 )
               }
               disabled={activeButton === '' ? true : false}

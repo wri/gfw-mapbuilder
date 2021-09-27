@@ -1,41 +1,25 @@
 import { loadModules } from 'esri-loader';
 
-import {
-  SpecificDMSSection,
-  SpecificDDSection
-} from '../interfaces/coordinateForm';
+import { SpecificDMSSection, SpecificDDSection } from '../types/coordinateForm';
 
-export const convertDMSToXY = async (
-  setDMSForm: Array<SpecificDMSSection>
-): Promise<__esri.Point[]> => {
+export const convertDMSToXY = async (setDMSForm: Array<SpecificDMSSection>): Promise<__esri.Point[]> => {
   const [Point] = await loadModules(['esri/geometry/Point']);
   return setDMSForm.map(point => {
     const { latitude, longitude } = point;
     let convertedLatitude;
     let convertedLongitude;
     if (latitude.cardinalPoint === 'N') {
-      convertedLatitude =
-        Number(latitude.seconds) / 3600 +
-        Number(latitude.minutes) / 60 +
-        Number(latitude.degree);
+      convertedLatitude = Number(latitude.seconds) / 3600 + Number(latitude.minutes) / 60 + Number(latitude.degree);
     } else {
       convertedLatitude =
-        (Number(longitude.seconds) / 3600 -
-          Number(longitude.minutes) / 60 +
-          Number(longitude.degree)) *
-        -1;
+        (Number(longitude.seconds) / 3600 - Number(longitude.minutes) / 60 + Number(longitude.degree)) * -1;
     }
 
     if (longitude.cardinalPoint === 'E') {
-      convertedLongitude =
-        Number(longitude.seconds) / 3600 +
-        Number(longitude.minutes) / 60 +
-        Number(longitude.degree);
+      convertedLongitude = Number(longitude.seconds) / 3600 + Number(longitude.minutes) / 60 + Number(longitude.degree);
     } else {
       convertedLongitude =
-        Number(longitude.seconds) / 3600 +
-        Number(longitude.minutes) / 60 +
-        Number(longitude.degree) * -1;
+        Number(longitude.seconds) / 3600 + Number(longitude.minutes) / 60 + Number(longitude.degree) * -1;
     }
 
     return new Point({
@@ -45,9 +29,7 @@ export const convertDMSToXY = async (
   });
 };
 
-export const convertXYToPoint = async (
-  setDDForm: Array<SpecificDDSection>
-): Promise<__esri.Point[]> => {
+export const convertXYToPoint = async (setDDForm: Array<SpecificDDSection>): Promise<__esri.Point[]> => {
   const [Point] = await loadModules(['esri/geometry/Point']);
   return setDDForm.map(point => {
     const { latitude, longitude } = point;

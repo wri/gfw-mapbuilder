@@ -25,7 +25,8 @@ import {
   SET_MODIS_END,
   SET_RENDER_POPUP,
   SET_AREA_IMAGES,
-  SET_VERSIONED_LAYER
+  SET_VERSIONED_LAYER,
+  SET_TREE_HEIGHT
 } from './types';
 
 export function setSelectedSearchWidgetLayer(
@@ -202,6 +203,13 @@ export function setRenderPopup(payload: AppState['renderPopup']) {
 export function setAreaImages(payload: string) {
   return {
     type: SET_AREA_IMAGES as typeof SET_AREA_IMAGES,
+    payload: payload
+  };
+}
+
+export function setTreeHeight(payload: number) {
+  return {
+    type: SET_TREE_HEIGHT as typeof SET_TREE_HEIGHT,
     payload: payload
   };
 }

@@ -1,9 +1,7 @@
 import { mapController } from '../../../js/controllers/mapController';
-import { Attachment, URLProperties } from '../../../js/interfaces/Attachment';
+import { Attachment, URLProperties } from '../../../js/types/Attachment';
 
-export const getDocuments = async (
-  urlProperties: URLProperties
-): Promise<Array<Attachment> | null> => {
+export const getDocuments = async (urlProperties: URLProperties): Promise<Array<Attachment> | null> => {
   const { sublayerID, specificFeatureID, layerID } = urlProperties;
 
   let endPoint = '';
@@ -11,9 +9,7 @@ export const getDocuments = async (
   const layer: any = mapController._map?.findLayerById(layerID);
 
   if (layer.sublayers.length && specificFeatureID) {
-    const sublayer = layer.sublayers.items.filter(
-      (s: __esri.Sublayer) => String(s.id) === String(sublayerID)
-    );
+    const sublayer = layer.sublayers.items.filter((s: __esri.Sublayer) => String(s.id) === String(sublayerID));
 
     endPoint = `${sublayer[0].url}/${specificFeatureID}/attachments?f=pjson`;
   } else {
@@ -26,10 +22,7 @@ export const getDocuments = async (
       const { attachmentInfos } = results;
       if (attachmentInfos) {
         return attachmentInfos.map((attachment: Attachment) => {
-          attachment.url = endPoint.replace(
-            'attachments?f=pjson',
-            `attachments/${results.attachmentInfos[0].id}`
-          );
+          attachment.url = endPoint.replace('attachments?f=pjson', `attachments/${results.attachmentInfos[0].id}`);
           return attachment;
         });
       }
