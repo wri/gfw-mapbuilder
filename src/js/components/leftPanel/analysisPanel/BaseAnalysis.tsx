@@ -7,10 +7,7 @@ import ReactTooltip from 'react-tooltip';
 import { RootState } from '../../../../js/store';
 import { setActiveFeatures } from '../../../../js/store/mapview/actions';
 import { format } from 'date-fns';
-import {
-  setAnalysisDateRange,
-  setRenderPopup
-} from '../../../../js/store/appState/actions';
+import { setAnalysisDateRange, setRenderPopup } from '../../../../js/store/appState/actions';
 
 import { registerGeometry } from '../../../../js/helpers/geometryRegistration';
 import fragmentationSpec from './fragmentationVegaSpec';
@@ -30,11 +27,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 
 import { AnalysisModule } from '../../../../js/store/appSettings/types';
 import { analysisSQLConfigs } from '../../../../../configs/layer-config';
-import {
-  fetchGFWWidgetConfig,
-  fetchDownloadInfo,
-  fetchWCSAnalysis
-} from './analysisUtils';
+import { fetchGFWWidgetConfig, fetchDownloadInfo, fetchWCSAnalysis } from './analysisUtils';
 
 import '../../../../css/leftpanel.scss';
 import { DateRangePicker } from '../../sharedComponents/DateRangePicker';
@@ -77,12 +70,8 @@ const BaseAnalysis = (): JSX.Element => {
 
   //This is used for date picker analysis module
 
-  const selectedLanguage = useSelector(
-    (store: RootState) => store.appState.selectedLanguage
-  );
-  const canopyDensity = useSelector(
-    (store: RootState) => store.appState.leftPanel.density
-  );
+  const selectedLanguage = useSelector((store: RootState) => store.appState.selectedLanguage);
+  const canopyDensity = useSelector((store: RootState) => store.appState.leftPanel.density);
   const analysisModules = useSelector(selectAnalysisModules);
 
   //Default to the first analysis
@@ -90,23 +79,15 @@ const BaseAnalysis = (): JSX.Element => {
 
   const [geostoreReady, setGeostoreReady] = useState(false);
 
-  const activeFeatures = useSelector(
-    (store: RootState) => store.mapviewState.activeFeatures
-  );
+  const activeFeatures = useSelector((store: RootState) => store.mapviewState.activeFeatures);
 
-  const activeFeatureIndex = useSelector(
-    (store: RootState) => store.mapviewState.activeFeatureIndex
-  );
+  const activeFeatureIndex = useSelector((store: RootState) => store.mapviewState.activeFeatureIndex);
 
   const analysisDateRange = useSelector(selectAnalysisDaterange);
 
-  const analysisYearRange = useSelector(
-    (store: RootState) => store.appState.leftPanel.analysisYearRange
-  );
+  const analysisYearRange = useSelector((store: RootState) => store.appState.leftPanel.analysisYearRange);
 
-  const customColorTheme = useSelector(
-    (store: RootState) => store.appSettings.customColorTheme
-  );
+  const customColorTheme = useSelector((store: RootState) => store.appSettings.customColorTheme);
 
   useEffect(() => {
     const activeLayer = activeFeatures[activeFeatureIndex[0]];
@@ -177,13 +158,16 @@ const BaseAnalysis = (): JSX.Element => {
     //2. Add Geostore ID
     baseURL = baseURL.concat(`&geostore_id=${geostoreID}&geostore_origin=rw`);
 
+    console.log(analysisId);
     //3. Add SQL Query if it is defined in the configuration
-    if (analysisId === 'VIIRS_FIRES') {
+    if (analysisId === 'VIIRS_FIRES' || analysisId === 'GLAD_ALERTS') {
       let sqlQuery = analysisSQLConfigs[analysisId];
       sqlQuery = sqlQuery.replace('{startDate}', `'${analysisDateRange[0]}'`);
       sqlQuery = sqlQuery.replace('{endDate}', `'${analysisDateRange[1]}'`);
       baseURL = baseURL.concat(`&sql=${sqlQuery}`);
     }
+
+    console.log(baseURL);
 
     //Check for query Params and append if they exist
     // if (queryParams) {
@@ -199,9 +183,7 @@ const BaseAnalysis = (): JSX.Element => {
     setBase64ChartURL('');
     setChartLoading(true);
     setVegaSpec(null);
-    const mod = analysisModules.find(
-      module => module.analysisId === selectedAnalysis
-    );
+    const mod = analysisModules.find(module => module.analysisId === selectedAnalysis);
     if (!mod) return;
     setBaseConfig(mod);
     const activeLayer = activeFeatures[activeFeatureIndex[0]];
@@ -216,14 +198,13 @@ const BaseAnalysis = (): JSX.Element => {
         activeFeature.attributes.geostoreId
       );
       fetchGFWWidgetConfig(widgetURL).then(res => {
+        console.log(res);
         //Send attributes over for processing
-        res.attributes = activeFeature.attributes;
         setVegaSpec(res);
         //grab download urls if they exist
         const widgetConfigData = res.data;
-        const downloadUrl = widgetConfigData.find(
-          (e: any) => e.name === 'data'
-        );
+        const downloadUrl = widgetConfigData.find((e: any) => e.name === 'data');
+        console.log(downloadUrl.url);
         if (!downloadUrl) return;
         fetchDownloadInfo(downloadUrl.url).then((res: any) => {
           setChartDownTitle(res?.chartTitle ? res.chartTitle : '');
@@ -231,21 +212,13 @@ const BaseAnalysis = (): JSX.Element => {
         });
       });
     } else if (mod.analysisId.includes('FRAGMENTATION') && mod.analysisUrl) {
-      fetchWCSAnalysis(
-        mod,
-        mod.analysisUrl,
-        activeFeature,
-        analysisYearRange,
-        selectedLanguage
-      ).then((res: any) => {
+      fetchWCSAnalysis(mod, mod.analysisUrl, activeFeature, analysisYearRange, selectedLanguage).then((res: any) => {
         //Title value overwrite
         fragmentationSpec.marks[1].encode.enter.text!.value = `${res.data.title}`;
         //Year sublaybel overwrite
         fragmentationSpec.marks[2].encode.enter.text!.value = `${res.data.startYear} - ${res.data.endYear}`;
         //Computed value overwrite
-        fragmentationSpec.marks[3].encode.enter.text!.value = res.data.totalResult.toFixed(
-          3
-        );
+        fragmentationSpec.marks[3].encode.enter.text!.value = res.data.totalResult.toFixed(3);
 
         //@ts-ignore ts is not liking my hand crafted base spec for some reason
         setVegaSpec(fragmentationSpec);
@@ -255,10 +228,7 @@ const BaseAnalysis = (): JSX.Element => {
     }
   }
 
-  const renderInputComponent = (
-    props: UIParams,
-    analysisConfig: AnalysisModule
-  ): JSX.Element | null | undefined => {
+  const renderInputComponent = (props: UIParams, analysisConfig: AnalysisModule): JSX.Element | null | undefined => {
     const { bounds } = props;
     if (props.inputType === 'rangeSlider') {
       if (bounds) return <MemoRangeSlider yearRange={bounds} />;
@@ -268,10 +238,7 @@ const BaseAnalysis = (): JSX.Element => {
       return <CanopyDensityPicker />;
     }
 
-    if (
-      props.inputType === 'datepicker' &&
-      analysisConfig.analysisId !== 'VIIRS_FIRES'
-    ) {
+    if (props.inputType === 'datepicker' && analysisConfig.analysisId !== 'VIIRS_FIRES') {
       return <DateRangePicker />;
     }
 
@@ -280,19 +247,13 @@ const BaseAnalysis = (): JSX.Element => {
 
   const AnalysisInstructions = React.useMemo(
     () => (): JSX.Element | null => {
-      const currentAnalysis = analysisModules.find(
-        module => module.analysisId === selectedAnalysis
-      );
+      const currentAnalysis = analysisModules.find(module => module.analysisId === selectedAnalysis);
       if (selectedAnalysis === 'default') {
         return (
           <>
             <div className="analysis-text">
-              <p style={{ fontWeight: 'bold' }}>
-                {analysisTranslations.analysisNotSelected[selectedLanguage][0]}
-              </p>
-              <p>
-                {analysisTranslations.analysisNotSelected[selectedLanguage][1]}
-              </p>
+              <p style={{ fontWeight: 'bold' }}>{analysisTranslations.analysisNotSelected[selectedLanguage][0]}</p>
+              <p>{analysisTranslations.analysisNotSelected[selectedLanguage][1]}</p>
             </div>
             <div className="chart-icon"></div>
           </>
@@ -300,12 +261,8 @@ const BaseAnalysis = (): JSX.Element => {
       } else {
         return (
           <>
-            <p style={{ fontWeight: 'bold', fontSize: '16px' }}>
-              {currentAnalysis?.title[selectedLanguage]}
-            </p>
-            <p style={{ fontSize: '12px' }}>
-              {currentAnalysis?.description[selectedLanguage]}
-            </p>
+            <p style={{ fontWeight: 'bold', fontSize: '16px' }}>{currentAnalysis?.title[selectedLanguage]}</p>
+            <p style={{ fontSize: '12px' }}>{currentAnalysis?.description[selectedLanguage]}</p>
             <div>
               {currentAnalysis?.uiParams &&
                 currentAnalysis.uiParams !== 'none' &&
@@ -319,28 +276,25 @@ const BaseAnalysis = (): JSX.Element => {
                         </div>
                         <p>{uiParam.label[selectedLanguage]}</p>
                       </div>
-                      <div className="analysis-input">
-                        {renderInputComponent(uiParam, currentAnalysis)}
-                      </div>
+                      <div className="analysis-input">{renderInputComponent(uiParam, currentAnalysis)}</div>
                     </div>
                   );
                 })}
-              {currentAnalysis?.uiParams &&
-                currentAnalysis.analysisId === 'VIIRS_FIRES' && (
-                  <div>
-                    <div className="ui-analysis-wrapper">
-                      <div className="ui-description">
-                        <div className="number">
-                          <p>{1}</p>
-                        </div>
-                        <p>Select range for analysis</p>
+              {currentAnalysis?.uiParams && currentAnalysis.analysisId === 'VIIRS_FIRES' && (
+                <div>
+                  <div className="ui-analysis-wrapper">
+                    <div className="ui-description">
+                      <div className="number">
+                        <p>{1}</p>
                       </div>
-                      <div className="analysis-input">
-                        <DateRangePicker />
-                      </div>
+                      <p>Select range for analysis</p>
+                    </div>
+                    <div className="analysis-input">
+                      <DateRangePicker />
                     </div>
                   </div>
-                )}
+                </div>
+              )}
             </div>
           </>
         );
@@ -357,19 +311,12 @@ const BaseAnalysis = (): JSX.Element => {
     }
 
     return (
-      <select
-        className="analysis-select"
-        value={selectedAnalysis || 'default'}
-        onChange={handleAnalysisOptionChange}
-      >
-        <option value="default">
-          {analysisTranslations.defaultAnalysisLabel[selectedLanguage]}
-        </option>
+      <select className="analysis-select" value={selectedAnalysis || 'default'} onChange={handleAnalysisOptionChange}>
+        <option value="default">{analysisTranslations.defaultAnalysisLabel[selectedLanguage]}</option>
         {analysisModules.map((module: any, i: number) => {
           return (
             <option value={module.analysisId} key={i}>
-              {module.label[selectedLanguage] ||
-                `Untranslated ${module.analysisId}`}
+              {module.label[selectedLanguage] || `Untranslated ${module.analysisId}`}
             </option>
           );
         })}
@@ -398,8 +345,7 @@ const BaseAnalysis = (): JSX.Element => {
 
   const activeLayer = activeFeatures[activeFeatureIndex[0]];
 
-  const returnLayerTitle =
-    activeLayer && activeLayer.layerTitle ? activeLayer.layerTitle : null;
+  const returnLayerTitle = activeLayer && activeLayer.layerTitle ? activeLayer.layerTitle : null;
 
   const title =
     activeLayer && activeLayer.sublayerTitle
@@ -417,8 +363,7 @@ const BaseAnalysis = (): JSX.Element => {
 
   const returnButtons = (): JSX.Element | undefined => {
     const isUploadOrDrawn =
-      (activeLayer as any).layerID === 'user_features' ||
-      (activeLayer as any).layerID === 'upload_file_features';
+      (activeLayer as any).layerID === 'user_features' || (activeLayer as any).layerID === 'upload_file_features';
 
     if (isUploadOrDrawn && renderEditButton) {
       return (
@@ -456,11 +401,9 @@ const BaseAnalysis = (): JSX.Element => {
   };
 
   //Analysis is disabled for point and polyline features
-  const selectedFeature =
-    activeFeatures[activeFeatureIndex[0]].features[activeFeatureIndex[1]];
+  const selectedFeature = activeFeatures[activeFeatureIndex[0]].features[activeFeatureIndex[1]];
   const selectedFeatureType = selectedFeature.geometry.type;
-  const featureIsNotAllowed =
-    selectedFeatureType === 'point' || selectedFeatureType === 'polyline';
+  const featureIsNotAllowed = selectedFeatureType === 'point' || selectedFeatureType === 'polyline';
 
   return (
     <>
@@ -493,9 +436,7 @@ const BaseAnalysis = (): JSX.Element => {
             <>
               <div
                 style={{ cursor: 'pointer', float: 'right' }}
-                onClick={(): void =>
-                  setDownloadOptionsVisible(!downloadOptionsVisible)
-                }
+                onClick={(): void => setDownloadOptionsVisible(!downloadOptionsVisible)}
               >
                 <DownloadIcon width={25} height={25} />
                 {downloadOptionsVisible && (
@@ -528,32 +469,19 @@ const BaseAnalysis = (): JSX.Element => {
               />
             </>
           )}
-          <span
-            data-tip={'Analysis disabled for point and line features'}
-            data-offset="{'top': -5}"
-          >
+          <span data-tip={'Analysis disabled for point and line features'} data-offset="{'top': -5}">
             <button
               disabled={selectedAnalysis === 'default' || featureIsNotAllowed}
-              style={
-                selectedAnalysis !== 'default'
-                  ? { backgroundColor: customColorTheme }
-                  : {}
-              }
+              style={selectedAnalysis !== 'default' ? { backgroundColor: customColorTheme } : {}}
               className={
-                selectedAnalysis === 'default' || featureIsNotAllowed
-                  ? 'orange-button disabled'
-                  : 'orange-button'
+                selectedAnalysis === 'default' || featureIsNotAllowed ? 'orange-button disabled' : 'orange-button'
               }
               onClick={runAnalysis}
             >
               {analysisTranslations.runAnalysisButton[selectedLanguage]}
             </button>
           </span>
-          <ReactTooltip
-            effect="solid"
-            className="tab-tooltip"
-            disable={!featureIsNotAllowed}
-          />
+          <ReactTooltip effect="solid" className="tab-tooltip" disable={!featureIsNotAllowed} />
           <DataTabFooter />
         </div>
       ) : (
