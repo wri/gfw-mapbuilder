@@ -2,12 +2,18 @@ import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { layerIsInScale } from '../../../../js/helpers/layerScaleCheck';
+import { allAvailableLayers as allAvailableLayersAction } from '../../../../js/store/mapview/actions';
 import GenericLayerControl from './GenericLayerControl';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 import { RootState } from '../../../../js/store';
 import { setOpenLayerGroup } from '../../../../js/store/appState/actions';
 import { mapController } from '../../../../js/controllers/mapController';
 import styled from 'styled-components';
+
+const getListStyle = (isDraggingOver: boolean) => ({
+  background: isDraggingOver ? 'white' : ''
+});
 
 //Override speudo element styling with our custom style
 interface CheckBoxWrapperProps {
@@ -91,9 +97,24 @@ const NestedLayerGroup = (props: NestedLayerGroupProps): JSX.Element => {
       const nestedLayerIDs = lGroup.nestedLayers.map((l: any) => l.id);
       const layers = props.layersInGroup
         .filter((layer: any) => nestedLayerIDs.includes(layer.id))
-        .map((layer: any, i: number) => (
-          <GenericLayerControl layer={layer} id={layer.id} key={layer.id} type={'default'} />
-        ));
+        .map((layer: any, index: number) => {
+          return (
+            <Draggable key={index} index={index} draggableId={index.toString()}>
+              {(providedDraggable, snapshotDraggable) => {
+                return (
+                  <GenericLayerControl
+                    layer={layer}
+                    id={layer.id}
+                    key={layer.id}
+                    type={'default'}
+                    dndProvided={providedDraggable}
+                    dndSnapshot={snapshotDraggable}
+                  />
+                );
+              }}
+            </Draggable>
+          );
+        });
       return (
         <LayerGroup
           key={k}
@@ -140,16 +161,26 @@ const RadioLayerGroup = (props: RadioLayerGroupProps): JSX.Element => {
     });
   }
 
-  const layers = props.layersInGroup.map(layer => (
-    <GenericLayerControl
-      layer={layer}
-      id={layer.id}
-      key={layer.id}
-      type="radio"
-      activeLayer={activeLayer}
-      sendActiveLayer={sendActiveLayer}
-    />
-  ));
+  const layers = props.layersInGroup.map((layer, index) => {
+    return (
+      <Draggable key={index} index={index} draggableId={index.toString()}>
+        {(providedDraggable, snapshotDraggable) => {
+          return (
+            <GenericLayerControl
+              dndProvided={providedDraggable}
+              dndSnapshot={snapshotDraggable}
+              layer={layer}
+              id={layer.id}
+              key={layer.id}
+              type="radio"
+              activeLayer={activeLayer}
+              sendActiveLayer={sendActiveLayer}
+            />
+          );
+        }}
+      </Draggable>
+    );
+  });
   return <>{layers}</>;
 };
 
@@ -158,18 +189,19 @@ interface LayerGroupProps {
   layerGroupConfig: any;
 }
 
-const DefaultLayerGroup = (props: LayerGroupProps): React.ReactElement => {
+const DefaultLayerGroup = ({ layerGroupKey, layerGroupConfig }: LayerGroupProps): React.ReactElement => {
+  const customColorTheme = useSelector((store: RootState) => store.appSettings.customColorTheme);
   const selectedLanguage = useSelector((store: RootState) => store.appState.selectedLanguage);
-  const openLayerGroup = useSelector((store: RootState) => store.appState.leftPanel.openLayerGroup);
 
+  const openLayerGroup = useSelector((store: RootState) => store.appState.leftPanel.openLayerGroup);
   const allAvailableLayers = useSelector((store: RootState) => store.mapviewState.allAvailableLayers);
   const scale = useSelector((store: RootState) => store.mapviewState.scale);
-
   const allLayersInScale = allAvailableLayers.filter(l => layerIsInScale(l, scale));
-  const customColorTheme = useSelector((store: RootState) => store.appSettings.customColorTheme);
+
+  const layersInGroup = allLayersInScale.filter(layer => layer.group === layerGroupKey);
 
   const dispatch = useDispatch();
-  const { layerGroupKey, layerGroupConfig } = props;
+
   //If layer group is nested, layer ids are also nested, so find those appropriatly
   let groupLayerIds: string[] = [];
   if (layerGroupConfig.groupType === 'nested') {
@@ -183,8 +215,6 @@ const DefaultLayerGroup = (props: LayerGroupProps): React.ReactElement => {
 
   const groupOpen = openLayerGroup === layerGroupKey;
 
-  const layersInGroup = allLayersInScale.filter(layer => layer.group === layerGroupKey);
-
   const handleGroupToggle = () => {
     const openGroupKey = groupOpen ? '' : layerGroupKey;
     dispatch(setOpenLayerGroup(openGroupKey));
@@ -192,34 +222,94 @@ const DefaultLayerGroup = (props: LayerGroupProps): React.ReactElement => {
 
   function renderLayerGroup(): JSX.Element {
     switch (layerGroupConfig.groupType) {
-      case 'checkbox':
-        return (
-          <>
-            {layersInGroup.map(layer => (
-              <GenericLayerControl layer={layer} id={layer.id} key={layer.id} type={layerGroupConfig.groupType} />
-            ))}
-          </>
-        );
       case 'nested':
         return (
-          <NestedLayerGroup
-            layersInGroup={layersInGroup}
-            groupConfig={layerGroupConfig}
-            selectedLanguage={selectedLanguage}
-            customColorTheme={customColorTheme}
-          />
+          <Droppable droppableId={layerGroupKey}>
+            {(provided, snapshot) => (
+              <div
+                className="dataset"
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+                style={getListStyle(snapshot.isDraggingOver)}
+              >
+                <NestedLayerGroup
+                  layersInGroup={layersInGroup}
+                  groupConfig={layerGroupConfig}
+                  selectedLanguage={selectedLanguage}
+                  customColorTheme={customColorTheme}
+                />
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
         );
+
       case 'radio':
-        return <RadioLayerGroup layersInGroup={layersInGroup} />;
+        return (
+          <Droppable droppableId={layerGroupKey}>
+            {(provided, snapshot) => (
+              <div
+                className="dataset"
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+                style={getListStyle(snapshot.isDraggingOver)}
+              >
+                <RadioLayerGroup layersInGroup={layersInGroup} />
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+        );
+
+      case 'checkbox':
       default:
         return (
-          <>
-            {layersInGroup.map(layer => (
-              <GenericLayerControl layer={layer} id={layer.id} key={layer.id} type={layerGroupConfig.groupType} />
-            ))}
-          </>
+          <Droppable droppableId={layerGroupKey}>
+            {(provided, snapshot) => (
+              <div
+                className="dataset"
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+                style={getListStyle(snapshot.isDraggingOver)}
+              >
+                {layersInGroup.map((layer, index) => {
+                  return (
+                    <Draggable key={index} index={index} draggableId={index.toString()}>
+                      {(providedDraggable, snapshotDraggable) => {
+                        return (
+                          <GenericLayerControl
+                            dndProvided={providedDraggable}
+                            dndSnapshot={snapshotDraggable}
+                            layer={layer}
+                            id={layer.id}
+                            key={layer.id}
+                            type={layerGroupConfig.groupType}
+                          />
+                        );
+                      }}
+                    </Draggable>
+                  );
+                })}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
         );
     }
+  }
+
+  function onDragEnd(result) {
+    // Early return if the item is dropped outside the list
+    if (!result.destination) {
+      return;
+    }
+    const oldLayerGroup = Array.from(layersInGroup);
+    const [movedLayer] = oldLayerGroup.splice(result.source.index, 1);
+    oldLayerGroup.splice(result.destination.index, 0, movedLayer);
+    const newOrderedArrayGroup = allAvailableLayers.filter(l => l.group !== layerGroupKey);
+    const newOrderedArray = [...newOrderedArrayGroup, ...oldLayerGroup];
+    dispatch(allAvailableLayersAction(newOrderedArray));
+    mapController.reorderLayer(movedLayer.id, result.destination.index);
   }
 
   return (
@@ -236,7 +326,9 @@ const DefaultLayerGroup = (props: LayerGroupProps): React.ReactElement => {
           {groupOpen ? '▼' : '▲'}
         </button>
       </div>
-      <div className={groupOpen ? 'layers-control-container' : 'hidden'}>{renderLayerGroup()}</div>
+      <div className={groupOpen ? 'layers-control-container' : 'hidden'}>
+        <DragDropContext onDragEnd={onDragEnd}>{renderLayerGroup()}</DragDropContext>
+      </div>
     </div>
   );
 };
