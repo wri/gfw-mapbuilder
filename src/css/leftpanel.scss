@@ -533,6 +533,10 @@
   }
 }
 
+.draggable-card {
+  animation: slide-down 1s ease;
+}
+
 .layers-control-container {
   color: $dark-grey;
 
@@ -1351,11 +1355,7 @@
 }
 
 @media screen and (max-width: $mobile-device) {
-  .left-panel
-    > .analysis-tab-container
-    > .directions
-    > .drop-shapefile-container
-    h4 {
+  .left-panel > .analysis-tab-container > .directions > .drop-shapefile-container h4 {
     display: none;
   }
 
