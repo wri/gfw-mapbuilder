@@ -198,7 +198,6 @@ const BaseAnalysis = (): JSX.Element => {
         activeFeature.attributes.geostoreId
       );
       fetchGFWWidgetConfig(widgetURL).then(res => {
-        console.log(res);
         //Send attributes over for processing
         setVegaSpec(res);
         //grab download urls if they exist
@@ -280,21 +279,22 @@ const BaseAnalysis = (): JSX.Element => {
                     </div>
                   );
                 })}
-              {currentAnalysis?.uiParams && currentAnalysis.analysisId === 'VIIRS_FIRES' && (
-                <div>
-                  <div className="ui-analysis-wrapper">
-                    <div className="ui-description">
-                      <div className="number">
-                        <p>{1}</p>
+              {(currentAnalysis?.uiParams && currentAnalysis.analysisId === 'VIIRS_FIRES') ||
+                (currentAnalysis?.analysisId === 'GLAD_ALERTS' && (
+                  <div>
+                    <div className="ui-analysis-wrapper">
+                      <div className="ui-description">
+                        <div className="number">
+                          <p>{1}</p>
+                        </div>
+                        <p>Select range for analysis</p>
                       </div>
-                      <p>Select range for analysis</p>
-                    </div>
-                    <div className="analysis-input">
-                      <DateRangePicker />
+                      <div className="analysis-input">
+                        <DateRangePicker />
+                      </div>
                     </div>
                   </div>
-                </div>
-              )}
+                ))}
             </div>
           </>
         );

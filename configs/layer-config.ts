@@ -109,7 +109,7 @@ export const analysisSQLConfigs = {
   VIIRS_FIRES:
     'select COALESCE(sum(alert__count), 0)  as "sum" from nasa_viirs_fire_alerts where alert__date >= {startDate} and alert__date <= {endDate}',
   GLAD_ALERTS:
-    'select COALESCE(sum(alert__count), 0)  as "sum" from umd_glad_landsat_alerts where umd_glad_landsat_alerts__date >= {startDate} and umd_glad_landsat_alerts__date <= {endDate}'
+    'select count(*) from umd_glad_landsat_alerts where umd_glad_landsat_alerts__date >= {startDate} and umd_glad_landsat_alerts__date <= {endDate}'
 };
 
 // "sum of all glad alerts within an AOI from from Jan 1, 2021 till Jan 31, 2021
