@@ -2,36 +2,16 @@ import * as React from 'react';
 import Slider, { createSliderWithTooltip } from 'rc-slider';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../js/store/index';
-import { mapController } from '../../../../js/controllers/mapController';
 
 interface LayerTransparencyProps {
-  layerID?: string;
   layerOpacity: number | undefined;
-  sublayer?: boolean;
-  parentID?: string;
+  handleOpacityChange: (val: number) => void;
 }
 
 const SliderWithTooltip = createSliderWithTooltip(Slider);
 
-const LayerTransparencySlider = (
-  props: LayerTransparencyProps
-): React.ReactElement => {
-  const customColorTheme = useSelector(
-    (store: RootState) => store.appSettings.customColorTheme
-  );
-
-  const { layerID, layerOpacity, sublayer, parentID } = props;
-
-  const handleOpacityChange = (eventValue: any): void => {
-    if (layerID === 'MODIS_ACTIVE_FIRES') {
-      mapController.updateMODISorVIIRSOpacity(layerID, eventValue);
-    } else {
-      // * NOTE: default logic
-      if (layerID) {
-        mapController.setLayerOpacity(layerID, eventValue, sublayer, parentID);
-      }
-    }
-  };
+const LayerTransparencySlider = ({ layerOpacity, handleOpacityChange }: LayerTransparencyProps): React.ReactElement => {
+  const customColorTheme = useSelector((store: RootState) => store.appSettings.customColorTheme);
 
   return (
     <div className="transparency-slider">
@@ -40,7 +20,7 @@ const LayerTransparencySlider = (
         max={1}
         step={0.05}
         value={layerOpacity}
-        tipFormatter={(val: number): string => `${val * 100}%`}
+        tipFormatter={(val: number): string => `${(val * 100).toFixed(0)}%`}
         onChange={handleOpacityChange}
         railStyle={{ height: 5, backgroundColor: '#e9e9e9' }}
         trackStyle={{ backgroundColor: `${customColorTheme}`, height: 5 }}
