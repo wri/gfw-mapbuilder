@@ -19,9 +19,9 @@ const LayerTransparencySlider = ({ layerOpacity, handleOpacityChange }: LayerTra
         min={0}
         max={1}
         step={0.05}
-        value={layerOpacity}
+        defaultValue={layerOpacity}
         tipFormatter={(val: number): string => `${(val * 100).toFixed(0)}%`}
-        onChange={handleOpacityChange}
+        onAfterChange={handleOpacityChange}
         railStyle={{ height: 5, backgroundColor: '#e9e9e9' }}
         trackStyle={{ backgroundColor: `${customColorTheme}`, height: 5 }}
         dotStyle={{

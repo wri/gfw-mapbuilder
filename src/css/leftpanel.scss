@@ -690,7 +690,6 @@
 .transparency-slider {
   display: flex;
   flex-wrap: wrap;
-  padding: 0 2rem;
 }
 
 .info-icon-container {
@@ -1351,11 +1350,7 @@
 }
 
 @media screen and (max-width: $mobile-device) {
-  .left-panel
-    > .analysis-tab-container
-    > .directions
-    > .drop-shapefile-container
-    h4 {
+  .left-panel > .analysis-tab-container > .directions > .drop-shapefile-container h4 {
     display: none;
   }
 

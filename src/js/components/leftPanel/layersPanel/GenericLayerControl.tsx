@@ -31,6 +31,8 @@ import { layerControlsTranslations } from '../../../../../configs/translations/l
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import TreeHeightPicker from '../../sharedComponents/TreeHeightPicker';
+import { OpacityIcon } from '../../../../images/opacityIcon';
+import { useState } from 'react';
 
 //Dynamic custom theme override using styled-components lib
 interface CheckBoxWrapperProps {
@@ -269,6 +271,7 @@ interface LayerControlProps {
 const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
   const layer = props.layer;
   const dispatch = useDispatch();
+  const [opacityControl, setOpacityControl] = useState(false);
 
   const selectedLanguage = useSelector((store: RootState) => store.appState.selectedLanguage);
 
@@ -292,6 +295,10 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
       dispatch(setInfoModalLayerID(layer.id));
     }
     return;
+  };
+
+  const toggleOpacitySlider = (): void => {
+    setOpacityControl(!opacityControl);
   };
 
   const openDashModal = (): void => {
@@ -362,8 +369,51 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
     }
   };
 
+  const handleFullOpacityChange = (eventValue: any): void => {
+    //TODO: check if we still need modis
+    if (props.id === 'MODIS_ACTIVE_FIRES') {
+      mapController.updateMODISorVIIRSOpacity(props.id, eventValue);
+    } else {
+      mapController.setLayerOpacity(props.id, eventValue, props.sublayer, props.parentID);
+    }
+  };
+
+  const handleRendererOpacityChange = (fill: boolean, val: number): void => {
+    mapController.setLayerOpacityFillOutline(fill, props.id, val, props.sublayer, props.parentID);
+  };
+
+  const returnOpacityControl = (layer: LayerProps) => {
+    //determine if we have generic slider or dual (fill, outline) one.
+    // fill, outline only available for those layers that have potential renderers, sublayers, featurelayers
+    if (layer.sublayer || layer.type === 'feature') {
+      return (
+        <div style={{ padding: '0 2rem' }}>
+          <span style={{ fontSize: '0.7rem' }}>Fill</span>
+          <LayerTransparencySlider
+            layerOpacity={layer.opacity.fill}
+            handleOpacityChange={(val: number) => handleRendererOpacityChange(true, val)}
+          />
+          <span style={{ fontSize: '0.7rem' }}>Outline</span>
+          <LayerTransparencySlider
+            layerOpacity={layer.opacity.outline}
+            handleOpacityChange={(val: number) => handleRendererOpacityChange(false, val)}
+          />
+        </div>
+      );
+    } else {
+      return (
+        <div style={{ padding: '0 2rem' }}>
+          <LayerTransparencySlider
+            layerOpacity={layer.opacity.combined}
+            handleOpacityChange={handleFullOpacityChange}
+          />
+        </div>
+      );
+    }
+  };
+
   return (
-    <>
+    <div style={{ borderBottom: '1px solid #8983834a', paddingBottom: 10 }}>
       <div className="layers-control-checkbox">
         <div className="label-wrapper">
           <div className="label-control-top">
@@ -375,6 +425,13 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
           {returnSubtitle()}
         </div>
         <div style={{ display: 'flex', gap: 5, flexDirection: 'row' }}>
+          <div
+            className="info-icon-container"
+            style={{ backgroundColor: `${customColorTheme}` }}
+            onClick={(): void => toggleOpacitySlider()}
+          >
+            <OpacityIcon width={13} height={13} fill={'#fff'} />
+          </div>
           <div
             className="info-icon-container"
             style={{ backgroundColor: `${customColorTheme}` }}
@@ -401,15 +458,8 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
         <LayerFilterSelection layerInfo={layer} selectedLanguage={selectedLanguage} />
       )}
       {layer?.visible && returnDateRange(props.id, layer, selectedLanguage)}
-      {layer?.visible && (
-        <LayerTransparencySlider
-          layerID={props.id}
-          layerOpacity={layer?.opacity}
-          sublayer={props.sublayer}
-          parentID={props.parentID}
-        />
-      )}
-    </>
+      {opacityControl && returnOpacityControl(layer)}
+    </div>
   );
 };
 
