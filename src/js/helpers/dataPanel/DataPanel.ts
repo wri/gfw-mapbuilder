@@ -4,11 +4,7 @@ import { esriQuery } from './esriQuery';
 import { getAttributesToFetch } from './getAttributes';
 import { formatAttributeValues } from './formatAttributes';
 import { setActiveFeatures } from '../../../js/store/mapview/actions';
-import {
-  LayerFeatureResult,
-  FeatureResult,
-  FieldName
-} from '../../../js/store/mapview/types';
+import { LayerFeatureResult, FeatureResult, FieldName } from '../../../js/store/mapview/types';
 import { selectActiveTab } from '../../../js/store/appState/actions';
 import { layerIsInScale } from '../../../js/helpers/layerScaleCheck';
 import { viirsFieldNames } from '../../../js/helpers/viirsLayerUtil';
@@ -30,11 +26,7 @@ type LayerFieldInfos = {
   displayField: string;
 };
 
-async function fetchVIIRSFeatures(
-  mapview: __esri.MapView,
-  mapPoint: any,
-  viirsConfig: any
-): Promise<any> {
+async function fetchVIIRSFeatures(mapview: __esri.MapView, mapPoint: any, viirsConfig: any): Promise<any> {
   const { appState } = store.getState();
   //@ts-ignore
   let url = viirsConfig?.metadata.interactionConfig.config.url;
@@ -47,9 +39,7 @@ async function fetchVIIRSFeatures(
     .catch(e => console.log(e));
 }
 
-export async function getAllLayerFields(
-  layer: __esri.FeatureLayer
-): Promise<LayerFieldInfos> {
+export async function getAllLayerFields(layer: __esri.FeatureLayer): Promise<LayerFieldInfos> {
   let layerFields = [] as __esri.Field[] | undefined;
   let displayField = '';
   if (layer.fields) {
@@ -87,51 +77,36 @@ async function fetchQueryTask(
     where: '1=1',
     outFields: ['*'],
     units: 'miles',
-    distance: 0.01 * mapview.resolution, //reduce the distance if you want more precision
+    // distance: 0.01 * mapview.resolution, //reduce the distance if you want more precision
     geometry: event.mapPoint,
-    geometryPrecision: 1,
+    // geometryPrecision: 1,
     returnGeometry: true
   };
   const url = layer.url;
   let displayField = '';
   try {
-    const {
-      layerFields: allLayerFields,
-      displayField: fetchedField
-    } = await getAllLayerFields(layer);
+    const { layerFields: allLayerFields, displayField: fetchedField } = await getAllLayerFields(layer);
     displayField = fetchedField;
     let objectid: string | null = null;
     if (allLayerFields) {
       const layerObjectField = allLayerFields.find(
-        field =>
-          field.type.toLowerCase() === 'esrifieldtypeoid' ||
-          field.type.toLowerCase() === 'oid'
+        field => field.type.toLowerCase() === 'esrifieldtypeoid' || field.type.toLowerCase() === 'oid'
       );
       if (layerObjectField?.name) {
         objectid = layerObjectField?.name;
         queryParams.outFields = [layerObjectField.name];
       }
     }
-    const attributesToFetch = getAttributesToFetch(
-      layer,
-      isSubLayer,
-      allLayerFields
-    );
+    const attributesToFetch = getAttributesToFetch(layer, isSubLayer, allLayerFields);
     fieldNames = attributesToFetch;
     const newOutFields = attributesToFetch?.map(f => f.fieldName);
-    queryParams.outFields = newOutFields
-      ? queryParams.outFields.concat(newOutFields)
-      : ['*'];
+    queryParams.outFields = newOutFields ? queryParams.outFields.concat(newOutFields) : ['*'];
     const sublayerResult = await esriQuery(url, queryParams);
     const [esriIntl] = await loadModules(['esri/intl']);
 
     if (sublayerResult.features.length > 0) {
       featureResult = sublayerResult.features.map(f => {
-        const formattedAttributes = formatAttributeValues(
-          f.attributes,
-          fieldNames,
-          esriIntl
-        );
+        const formattedAttributes = formatAttributeValues(f.attributes, fieldNames, esriIntl);
         return {
           attributes: formattedAttributes,
           geometry: f.geometry,
@@ -148,27 +123,28 @@ async function fetchQueryTask(
 
 async function fetchQueryFeatures(
   layer: __esri.FeatureLayer,
-  event: __esri.MapViewClickEvent
+  event: __esri.MapViewClickEvent,
+  view: __esri.MapView
 ): Promise<any> {
   let featureResult = [] as FeatureResult[];
   let fieldNames = [] as any[] | null;
+
   const queryParams: any = {
     where: '1=1',
     outFields: ['*'],
     geometry: event.mapPoint,
-    returnGeometry: true
+    returnGeometry: true,
+    units: 'miles',
+    distance: 0.02 * view.resolution
   };
+
   const attributesToFetch = getAttributesToFetch(layer);
   fieldNames = attributesToFetch;
-  const { layerFields: allLayerFields, displayField } = await getAllLayerFields(
-    layer
-  );
+  const { layerFields: allLayerFields, displayField } = await getAllLayerFields(layer);
   let objectid: string | null = null;
   if (allLayerFields) {
     const layerObjectField = allLayerFields.find(
-      field =>
-        field.type.toLowerCase() === 'esrifieldtypeoid' ||
-        field.type.toLowerCase() === 'oid'
+      field => field.type.toLowerCase() === 'esrifieldtypeoid' || field.type.toLowerCase() === 'oid'
     );
     if (layerObjectField?.name) {
       objectid = layerObjectField?.name;
@@ -226,12 +202,7 @@ export async function queryLayersForFeatures(
         for (const sublayer of layer.sublayers.items) {
           if (!sublayer.visible) continue;
           //sublayers do not have a type, so it always defaults to QueryTask
-          const { features, fieldNames, displayField } = await fetchQueryTask(
-            sublayer,
-            mapview,
-            event,
-            true
-          );
+          const { features, fieldNames, displayField } = await fetchQueryTask(sublayer, mapview, event, true);
           if (features.length > 0) {
             layerFeatureResults.push({
               layerID: layer.id,
@@ -246,18 +217,9 @@ export async function queryLayersForFeatures(
         }
       } else {
         //layer does not have subs, query just the layer itself!
-        if (
-          layer.type === 'feature' ||
-          layer.type === 'csv' ||
-          layer.type === 'geojson' ||
-          layer.type === 'scene'
-        ) {
+        if (layer.type === 'feature' || layer.type === 'csv' || layer.type === 'geojson' || layer.type === 'scene') {
           //deal with queryFeatures() approach
-          const {
-            features,
-            fieldNames,
-            displayField
-          } = await fetchQueryFeatures(layer, event);
+          const { features, fieldNames, displayField } = await fetchQueryFeatures(layer, event, mapview);
           if (features.length > 0) {
             layerFeatureResults.push({
               layerID: layer.id,
@@ -267,21 +229,12 @@ export async function queryLayersForFeatures(
               displayField
             });
           }
-        } else if (
-          layer.type === 'vector-tile' &&
-          layer.id === 'VIIRS_ACTIVE_FIRES'
-        ) {
-          const viirsConfig = mapviewState.allAvailableLayers.find(
-            l => l.id === 'VIIRS_ACTIVE_FIRES'
-          );
+        } else if (layer.type === 'vector-tile' && layer.id === 'VIIRS_ACTIVE_FIRES') {
+          const viirsConfig = mapviewState.allAvailableLayers.find(l => l.id === 'VIIRS_ACTIVE_FIRES');
           if (!viirsConfig) return;
 
           const [Graphic] = await loadModules(['esri/Graphic']);
-          const viirsFeatures = await fetchVIIRSFeatures(
-            mapview,
-            event.mapPoint,
-            viirsConfig
-          );
+          const viirsFeatures = await fetchVIIRSFeatures(mapview, event.mapPoint, viirsConfig);
 
           if (viirsFeatures.length > 0) {
             const popFeats = viirsFeatures.map((f: any) => {
@@ -311,12 +264,7 @@ export async function queryLayersForFeatures(
           }
         } else {
           //use generic QueryTask approach
-          const { features, fieldNames, displayField } = await fetchQueryTask(
-            layer,
-            mapview,
-            event,
-            false
-          );
+          const { features, fieldNames, displayField } = await fetchQueryTask(layer, mapview, event, false);
           if (features.length > 0) {
             layerFeatureResults.push({
               layerID: layer.id,
