@@ -6,7 +6,6 @@ import { MemoReportRangeSlider } from './ReportRangeSlider';
 import { MemoReportDatePicker } from './DatePicker';
 import CanopyDensityPicker from '../../../js/components/sharedComponents/CanopyDensityPicker';
 import { UIParams } from '../../../js/components/leftPanel/analysisPanel/BaseAnalysis';
-import { markValueMap } from '../../../js/components/mapWidgets/widgetContent/CanopyDensityContent';
 import Loader from '../../../js/components/sharedComponents/Loader';
 import VegaChart from '../../../js/components/leftPanel/analysisPanel/VegaChartContainer';
 import analysisTranslations from '../../../js/components/leftPanel/analysisPanel/analysisTranslations';
@@ -15,7 +14,7 @@ import styled from 'styled-components';
 import { GearIcon } from '../../../images/gearIcon';
 import { DownloadIcon } from '../../../images/downloadIcon';
 import fragmentationSpec from '../../../js/components/leftPanel/analysisPanel/fragmentationVegaSpec';
-import { fetchWCSAnalysis } from '../../../js/components/leftPanel/analysisPanel/analysisUtils';
+import { fetchWCSAnalysis, generateWidgetURL } from '../../../js/components/leftPanel/analysisPanel/analysisUtils';
 import { defaultAnalysisModules } from '../../../../configs/analysis-config';
 //Dynamic custom theme override using styled-components lib
 interface CheckBoxWrapperProps {
@@ -26,66 +25,6 @@ const CheckboxWrapper = styled.div<CheckBoxWrapperProps>`
     background-color: ${props => props.customColorTheme};
   }
 `;
-
-function generateWidgetURL(
-  viirsStart: string,
-  viirsEnd: string,
-  uiParams: any,
-  widgetID: string,
-  geostoreID: string,
-  startDate: string,
-  endDate: string,
-  analysisYearRange: number[] | null,
-  canopyDensity: number,
-  analysisId: string,
-  sqlString: string
-): string {
-  let baseURL = 'https://api.resourcewatch.org/v1/widget/';
-  //Add Widget ID
-  baseURL = baseURL.concat(`${widgetID}?`);
-  //Figure out if we have Date Range, Date Picker or Canopy Density Params that need appending
-  for (const param of uiParams) {
-    if (param.inputType === 'datepicker') {
-      let datePickerString = `${param.startParamName}=`;
-      if (param.combineParams) {
-        const start = startDate;
-        const end = endDate;
-        datePickerString = datePickerString.concat(`${start}${param.valueSeparator}${end}`);
-        baseURL = baseURL.concat(datePickerString);
-      }
-    } else if (param.inputType === 'rangeSlider') {
-      let yearRangeString = `${param.startParamName}=`;
-      if (param.combineParams && analysisYearRange) {
-        const start = `${analysisYearRange[0]}-01-01`;
-        const end = `${analysisYearRange[1]}-12-31`;
-        yearRangeString = yearRangeString.concat(`${start}${param.valueSeparator}${end}`);
-        baseURL = baseURL.concat(yearRangeString);
-      }
-    } else if (param.inputType === 'tcd') {
-      const threshold = `&thresh=${markValueMap[canopyDensity]}`;
-      baseURL = baseURL.concat(threshold);
-    }
-  }
-
-  //Add Geostore ID
-  baseURL = baseURL.concat(`&geostore_id=${geostoreID}&geostore_origin=rw`);
-
-  //VIIRS SQL
-  if (analysisId === 'VIIRS_FIRES' || analysisId === 'GLAD_ALERTS') {
-    let sqlQuery = sqlString;
-    sqlQuery = sqlQuery.replace('{startDate}', `'${viirsStart}'`);
-    sqlQuery = sqlQuery.replace('{endDate}', `'${viirsEnd}'`);
-    baseURL = baseURL.concat(`&sql=${sqlQuery}`);
-  }
-
-  //Check for query Params and append if they exist
-  // if (queryParams) {
-  //   queryParams.forEach(param => {
-  //     baseURL = baseURL.concat(`&${param.name}=${param.value}`);
-  //   });
-  // }
-  return baseURL;
-}
 
 function getDefaultYearRange(uiParams: any): null | number[] {
   if (uiParams === 'none') return null;
@@ -196,20 +135,18 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
   React.useEffect(() => {
     setChartLoading(true);
     if (props.moduleInfo.widgetId) {
+      const stDate = props.moduleInfo.analysisId === 'VIIRS_FIRES' ? viirsStart : startDate;
+      const enDate = props.moduleInfo.analysisId === 'VIIRS_FIRES' ? viirsEnd : endDate;
       // GFW WIDGET
-      const widgetURL = generateWidgetURL(
-        viirsStart,
-        viirsEnd,
-        uiParams,
-        props.moduleInfo.widgetId,
-        props.geostoreID,
-        startDate,
-        endDate,
-        yearRangeValue,
-        density,
-        props.moduleInfo.analysisId,
-        props.moduleInfo.sqlString
-      );
+      const widgetURL = generateWidgetURL({
+        widgetId: props.moduleInfo.widgetId,
+        geostoreId: props.geostoreID,
+        startDate: stDate,
+        endDate: enDate,
+        density: density,
+        analysisId: props.moduleInfo.analysisId,
+        sqlString: props.moduleInfo.sqlString
+      });
 
       fetch(widgetURL)
         .then((response: any) => response.json())

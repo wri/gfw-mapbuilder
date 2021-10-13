@@ -20,11 +20,10 @@ import { mapController } from '../../../../js/controllers/mapController';
 import DataTabFooter from '../dataPanel/DataTabFooter';
 
 import { AnalysisModule } from '../../../../js/store/appSettings/types';
-import { fetchGFWWidgetConfig, fetchDownloadInfo, fetchWCSAnalysis } from './analysisUtils';
+import { fetchGFWWidgetConfig, fetchDownloadInfo, fetchWCSAnalysis, generateWidgetURL } from './analysisUtils';
 import { DateRangePicker } from '../../sharedComponents/DateRangePicker';
 
 import { defaultAnalysisModules } from '../../../../../configs/analysis-config';
-import { markValueMap } from '../../mapWidgets/widgetContent/CanopyDensityContent';
 
 import '../../../../css/leftpanel.scss';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -109,38 +108,6 @@ const BaseAnalysis = (): JSX.Element => {
     }
   }, [activeFeatures, activeFeatureIndex, selectedAnalysis]);
 
-  function generateWidgetURL(
-    analysisId: string,
-    uiParams: 'none' | unknown[],
-    widgetID: string,
-    geostoreID: string,
-    sqlString: string
-  ): string {
-    let baseURL = 'https://api.resourcewatch.org/v1/widget/';
-    //1. Add Widget ID
-    baseURL = baseURL.concat(`${widgetID}?`);
-
-    //2. Add Geostore ID
-    baseURL = baseURL.concat(`&geostore_id=${geostoreID}&geostore_origin=rw`);
-
-    console.log(analysisId);
-    //3. Add SQL Query if it is defined in the configuration
-    if (analysisId === 'VIIRS_FIRES' || analysisId === 'GLAD_ALERTS') {
-      let sqlQuery = sqlString;
-      sqlQuery = sqlQuery.replace('{startDate}', `'${analysisDateRange[0]}'`);
-      sqlQuery = sqlQuery.replace('{endDate}', `'${analysisDateRange[1]}'`);
-      baseURL = baseURL.concat(`&sql=${sqlQuery}`);
-    }
-    if (analysisId === 'TC_LOSS' || analysisId === 'IFL') {
-      let sqlQuery = sqlString;
-      sqlQuery = sqlQuery.replace('{density}', `${markValueMap[density]}`);
-      baseURL = baseURL.concat(`&sql=${sqlQuery}`);
-    }
-
-    console.log(baseURL);
-    return baseURL;
-  }
-
   //Main Func to run the analysis with selected option and geometry
   function runAnalysis(): void {
     setBase64ChartURL('');
@@ -154,13 +121,15 @@ const BaseAnalysis = (): JSX.Element => {
 
     //Generate GFW Widget URL for the request
     if (mod.widgetId) {
-      const widgetURL = generateWidgetURL(
-        mod.analysisId,
-        mod.uiParams,
-        mod.widgetId,
-        activeFeature.attributes.geostoreId!,
-        mod.sqlString
-      );
+      const widgetURL = generateWidgetURL({
+        analysisId: mod.analysisId,
+        widgetId: mod.widgetId,
+        geostoreId: activeFeature.attributes.geostoreId!,
+        sqlString: mod.sqlString,
+        startDate: analysisDateRange[0],
+        endDate: analysisDateRange[1],
+        density: density
+      });
       fetchGFWWidgetConfig(widgetURL).then(res => {
         //Send attributes over for processing
         setVegaSpec(res);
