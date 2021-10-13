@@ -1,4 +1,3 @@
-/* eslint-disable no-prototype-builtins */
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
@@ -6,8 +5,7 @@ import { createSelector } from 'reselect';
 import ReactTooltip from 'react-tooltip';
 import { RootState } from '../../../../js/store';
 import { setActiveFeatures } from '../../../../js/store/mapview/actions';
-import { format } from 'date-fns';
-import { setAnalysisDateRange, setRenderPopup } from '../../../../js/store/appState/actions';
+import { setRenderPopup } from '../../../../js/store/appState/actions';
 
 import { registerGeometry } from '../../../../js/helpers/geometryRegistration';
 import fragmentationSpec from './fragmentationVegaSpec';
@@ -15,24 +13,24 @@ import VegaChart from './VegaChartContainer';
 import analysisTranslations from './analysisTranslations';
 import { MemoRangeSlider } from './InputComponents';
 import CanopyDensityPicker from '../../../../js/components/sharedComponents/CanopyDensityPicker';
-import { markValueMap } from '../../../../js/components/mapWidgets/widgetContent/CanopyDensityContent';
 import { DownloadIcon } from '../../../../images/downloadIcon';
 import { DownloadOptions } from '../../../../js/components/sharedComponents/DownloadOptions';
 import Loader from '../../../../js/components/sharedComponents/Loader';
 import { mapController } from '../../../../js/controllers/mapController';
 import DataTabFooter from '../dataPanel/DataTabFooter';
 
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
-
 import { AnalysisModule } from '../../../../js/store/appSettings/types';
-import { analysisSQLConfigs } from '../../../../../configs/layer-config';
 import { fetchGFWWidgetConfig, fetchDownloadInfo, fetchWCSAnalysis } from './analysisUtils';
-
-import '../../../../css/leftpanel.scss';
 import { DateRangePicker } from '../../sharedComponents/DateRangePicker';
 
+import { defaultAnalysisModules } from '../../../../../configs/analysis-config';
+import { markValueMap } from '../../mapWidgets/widgetContent/CanopyDensityContent';
+
+import '../../../../css/leftpanel.scss';
+import 'react-datepicker/dist/react-datepicker.css';
+
 type InputTypes = 'rangeSlider' | 'tcd' | 'datepicker';
+
 export interface UIParams {
   inputType: InputTypes;
   startParamName: string;
@@ -48,10 +46,6 @@ export interface UIParams {
 }
 
 //Memo'd selectors
-const selectAnalysisModules = createSelector(
-  (state: RootState) => state.appSettings,
-  settings => settings.analysisModules
-);
 const selectAnalysisDaterange = createSelector(
   (state: RootState) => state.appState,
   appState => appState.leftPanel.analysisDateRange
@@ -71,8 +65,6 @@ const BaseAnalysis = (): JSX.Element => {
   //This is used for date picker analysis module
 
   const selectedLanguage = useSelector((store: RootState) => store.appState.selectedLanguage);
-  const canopyDensity = useSelector((store: RootState) => store.appState.leftPanel.density);
-  const analysisModules = useSelector(selectAnalysisModules);
 
   //Default to the first analysis
   const [selectedAnalysis, setSelectedAnalysis] = useState('default');
@@ -86,6 +78,8 @@ const BaseAnalysis = (): JSX.Element => {
   const analysisDateRange = useSelector(selectAnalysisDaterange);
 
   const analysisYearRange = useSelector((store: RootState) => store.appState.leftPanel.analysisYearRange);
+
+  const density = useSelector((store: RootState) => store.appState.leftPanel.density);
 
   const customColorTheme = useSelector((store: RootState) => store.appSettings.customColorTheme);
 
@@ -119,41 +113,12 @@ const BaseAnalysis = (): JSX.Element => {
     analysisId: string,
     uiParams: 'none' | unknown[],
     widgetID: string,
-    geostoreID?: string
+    geostoreID: string,
+    sqlString: string
   ): string {
     let baseURL = 'https://api.resourcewatch.org/v1/widget/';
     //1. Add Widget ID
     baseURL = baseURL.concat(`${widgetID}?`);
-
-    // baseURL = baseURL.concat('query/json/');
-    //Figure out if we have Date Range, Date Picker or Canopy Density Params that need appending
-    //for (const param of uiParams) {
-    //  if (param.inputType === 'datepicker') {
-    //    let datePickerString = `${param.startParamName}=`;
-    //    if (param.combineParams) {
-    //      const start = analysisDateRange[0];
-    //      const end = analysisDateRange[1];
-    //      datePickerString = datePickerString.concat(
-    //        `${start}${param.valueSeparator}${end}`
-    //      );
-    //      baseURL = baseURL.concat(datePickerString);
-    //    }
-    //  } else if (param.inputType === 'rangeSlider') {
-    //    let yearRangeString = `${param.startParamName}=`;
-    //    if (param.combineParams) {
-    //      const start = `${analysisYearRange[0]}-01-01`;
-    //      const end = `${analysisYearRange[1]}-12-31`;
-    //      yearRangeString = yearRangeString.concat(
-    //        `${start}${param.valueSeparator}${end}`
-    //      );
-    //      baseURL = baseURL.concat(yearRangeString);
-    //    }
-    //  } else if (param.inputType === 'tcd') {
-    //    const threshold = `&thresh=${markValueMap[canopyDensity]}`;
-    //    baseURL = baseURL.concat(threshold);
-    //    //&thresh=20
-    //  }
-    //}
 
     //2. Add Geostore ID
     baseURL = baseURL.concat(`&geostore_id=${geostoreID}&geostore_origin=rw`);
@@ -161,20 +126,18 @@ const BaseAnalysis = (): JSX.Element => {
     console.log(analysisId);
     //3. Add SQL Query if it is defined in the configuration
     if (analysisId === 'VIIRS_FIRES' || analysisId === 'GLAD_ALERTS') {
-      let sqlQuery = analysisSQLConfigs[analysisId];
+      let sqlQuery = sqlString;
       sqlQuery = sqlQuery.replace('{startDate}', `'${analysisDateRange[0]}'`);
       sqlQuery = sqlQuery.replace('{endDate}', `'${analysisDateRange[1]}'`);
       baseURL = baseURL.concat(`&sql=${sqlQuery}`);
     }
+    if (analysisId === 'TC_LOSS' || analysisId === 'IFL') {
+      let sqlQuery = sqlString;
+      sqlQuery = sqlQuery.replace('{density}', `${markValueMap[density]}`);
+      baseURL = baseURL.concat(`&sql=${sqlQuery}`);
+    }
 
     console.log(baseURL);
-
-    //Check for query Params and append if they exist
-    // if (queryParams) {
-    //   queryParams.forEach(param => {
-    //     baseURL = baseURL.concat(`&${param.name}=${param.value}`);
-    //   });
-    // }
     return baseURL;
   }
 
@@ -183,7 +146,7 @@ const BaseAnalysis = (): JSX.Element => {
     setBase64ChartURL('');
     setChartLoading(true);
     setVegaSpec(null);
-    const mod = analysisModules.find(module => module.analysisId === selectedAnalysis);
+    const mod = defaultAnalysisModules.find(module => module.analysisId === selectedAnalysis) as AnalysisModule;
     if (!mod) return;
     setBaseConfig(mod);
     const activeLayer = activeFeatures[activeFeatureIndex[0]];
@@ -195,7 +158,8 @@ const BaseAnalysis = (): JSX.Element => {
         mod.analysisId,
         mod.uiParams,
         mod.widgetId,
-        activeFeature.attributes.geostoreId
+        activeFeature.attributes.geostoreId!,
+        mod.sqlString
       );
       fetchGFWWidgetConfig(widgetURL).then(res => {
         //Send attributes over for processing
@@ -246,7 +210,7 @@ const BaseAnalysis = (): JSX.Element => {
 
   const AnalysisInstructions = React.useMemo(
     () => (): JSX.Element | null => {
-      const currentAnalysis = analysisModules.find(module => module.analysisId === selectedAnalysis);
+      const currentAnalysis = defaultAnalysisModules.find(module => module.analysisId === selectedAnalysis);
       if (selectedAnalysis === 'default') {
         return (
           <>
@@ -300,7 +264,7 @@ const BaseAnalysis = (): JSX.Element => {
         );
       }
     },
-    [analysisModules, selectedAnalysis, selectedLanguage, analysisDateRange]
+    [selectedAnalysis, selectedLanguage]
   );
 
   const AnalysisOptions = (): JSX.Element => {
@@ -313,7 +277,7 @@ const BaseAnalysis = (): JSX.Element => {
     return (
       <select className="analysis-select" value={selectedAnalysis || 'default'} onChange={handleAnalysisOptionChange}>
         <option value="default">{analysisTranslations.defaultAnalysisLabel[selectedLanguage]}</option>
-        {analysisModules.map((module: any, i: number) => {
+        {defaultAnalysisModules.map((module: any, i: number) => {
           return (
             <option value={module.analysisId} key={i}>
               {module.label[selectedLanguage] || `Untranslated ${module.analysisId}`}

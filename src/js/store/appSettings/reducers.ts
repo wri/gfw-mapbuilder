@@ -1,10 +1,4 @@
-import {
-  AppSettings,
-  AppSettingsTypes,
-  OVERWRITE_SETTINGS,
-  OVERWRITE_COLOR_THEME,
-  SET_HIDE_LEGEND
-} from './types';
+import { AppSettings, AppSettingsTypes, OVERWRITE_SETTINGS, OVERWRITE_COLOR_THEME, SET_HIDE_LEGEND } from './types';
 
 const initialState: AppSettings = {
   webmap: '512eef95997b4e7486cdbdc45078739d',
@@ -24,8 +18,7 @@ const initialState: AppSettings = {
   aboutLinkUrl: '',
   downloadLinkUrl: '',
   sharinghost: 'https://www.arcgis.com/',
-  printServiceUrl:
-    'https://gis.forest-atlas.org/server/rest/services/print/ExportWebMap/GPServer/Export%20Web%20Map',
+  printServiceUrl: 'https://gis.forest-atlas.org/server/rest/services/print/ExportWebMap/GPServer/Export%20Web%20Map',
   language: 'en',
   iso: '',
   layerPanel: {
@@ -44,32 +37,10 @@ const initialState: AppSettings = {
   mapThemes: '',
   alternativeMapThemes: '',
   customColorTheme: '#f0ab00', // #f0ab00 - is the default, it will be overwritten if configed
-  footerLinks: [],
-  analysisModules: [
-    {
-      analysisId: '',
-      label: {
-        en: ''
-      },
-      title: {
-        en: ''
-      },
-      description: {
-        en: ''
-      },
-      useGfwWidget: false,
-      chartType: '',
-      uiParams: [],
-      widgetId: '',
-      params: []
-    }
-  ]
+  footerLinks: []
 };
 
-export function appSettingsReducer(
-  state = initialState,
-  action: AppSettingsTypes
-): AppSettings {
+export function appSettingsReducer(state = initialState, action: AppSettingsTypes): AppSettings {
   switch (action.type) {
     case OVERWRITE_SETTINGS:
       return { ...state, ...action.payload };

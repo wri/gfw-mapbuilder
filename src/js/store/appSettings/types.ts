@@ -17,7 +17,6 @@ export interface AppSettings {
   printServiceUrl?: string;
   narrative: string;
   alternativeNarrative: string;
-  analysisModules: AnalysisModule[];
   alternativeLanguageTitle: string;
   alternativeLanguageSubtitle: string;
   iso: string;
@@ -47,13 +46,7 @@ export interface AppSettings {
 
 type FooterLink = { label: string; link: string };
 
-type LayerGroupKey =
-  | 'GROUP_WEBMAP'
-  | 'GROUP_BASEMAP'
-  | 'GROUP_LC'
-  | 'GROUP_LCD'
-  | 'GROUP_IMAGERY'
-  | 'extraLayers';
+type LayerGroupKey = 'GROUP_WEBMAP' | 'GROUP_BASEMAP' | 'GROUP_LC' | 'GROUP_LCD' | 'GROUP_IMAGERY' | 'extraLayers';
 
 type LayerGroup = {
   [key in LayerGroupKey]: LayerGroupInfo;
@@ -72,9 +65,9 @@ export interface AnalysisModule {
   useGfwWidget: boolean;
   widgetId: string;
   uiParams: any;
-  params: { name: string; value: string }[];
   analysisUrl?: string;
   attributes?: any;
+  sqlString: string;
 }
 
 export interface LayerGroupInfo {
@@ -119,7 +112,4 @@ interface SetHideLegendAction {
   payload: boolean;
 }
 
-export type AppSettingsTypes =
-  | OverwriteSettingsAction
-  | OverwriteColorThemeAction
-  | SetHideLegendAction;
+export type AppSettingsTypes = OverwriteSettingsAction | OverwriteColorThemeAction | SetHideLegendAction;

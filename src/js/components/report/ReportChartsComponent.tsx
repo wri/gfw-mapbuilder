@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { RootState } from '../../../js/store';
-import { createSelector } from 'reselect';
 import { useSelector } from 'react-redux';
 import { AnalysisModule } from '../../../js/store/appSettings/types';
 import { MemoReportRangeSlider } from './ReportRangeSlider';
@@ -16,12 +15,8 @@ import styled from 'styled-components';
 import { GearIcon } from '../../../images/gearIcon';
 import { DownloadIcon } from '../../../images/downloadIcon';
 import fragmentationSpec from '../../../js/components/leftPanel/analysisPanel/fragmentationVegaSpec';
-import {
-  fetchGFWWidgetConfig,
-  fetchDownloadInfo,
-  fetchWCSAnalysis
-} from '../../../js/components/leftPanel/analysisPanel/analysisUtils';
-import { analysisSQLConfigs } from '../../../../configs/layer-config';
+import { fetchWCSAnalysis } from '../../../js/components/leftPanel/analysisPanel/analysisUtils';
+import { defaultAnalysisModules } from '../../../../configs/analysis-config';
 //Dynamic custom theme override using styled-components lib
 interface CheckBoxWrapperProps {
   customColorTheme: string;
@@ -31,11 +26,6 @@ const CheckboxWrapper = styled.div<CheckBoxWrapperProps>`
     background-color: ${props => props.customColorTheme};
   }
 `;
-
-const selectAnalysisModules = createSelector(
-  (state: RootState) => state.appSettings,
-  settings => settings.analysisModules
-);
 
 function generateWidgetURL(
   viirsStart: string,
@@ -48,9 +38,8 @@ function generateWidgetURL(
   analysisYearRange: number[] | null,
   canopyDensity: number,
   analysisId: string,
-  queryParams?: { name: string; value: string }[]
+  sqlString: string
 ): string {
-  debugger;
   let baseURL = 'https://api.resourcewatch.org/v1/widget/';
   //Add Widget ID
   baseURL = baseURL.concat(`${widgetID}?`);
@@ -83,18 +72,18 @@ function generateWidgetURL(
 
   //VIIRS SQL
   if (analysisId === 'VIIRS_FIRES' || analysisId === 'GLAD_ALERTS') {
-    let sqlQuery = analysisSQLConfigs[analysisId];
+    let sqlQuery = sqlString;
     sqlQuery = sqlQuery.replace('{startDate}', `'${viirsStart}'`);
     sqlQuery = sqlQuery.replace('{endDate}', `'${viirsEnd}'`);
     baseURL = baseURL.concat(`&sql=${sqlQuery}`);
   }
 
   //Check for query Params and append if they exist
-  if (queryParams) {
-    queryParams.forEach(param => {
-      baseURL = baseURL.concat(`&${param.name}=${param.value}`);
-    });
-  }
+  // if (queryParams) {
+  //   queryParams.forEach(param => {
+  //     baseURL = baseURL.concat(`&${param.name}=${param.value}`);
+  //   });
+  // }
   return baseURL;
 }
 
@@ -207,7 +196,6 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
   React.useEffect(() => {
     setChartLoading(true);
     if (props.moduleInfo.widgetId) {
-      debugger;
       // GFW WIDGET
       const widgetURL = generateWidgetURL(
         viirsStart,
@@ -220,7 +208,7 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
         yearRangeValue,
         density,
         props.moduleInfo.analysisId,
-        props.moduleInfo.params
+        props.moduleInfo.sqlString
       );
 
       fetch(widgetURL)
@@ -400,12 +388,11 @@ interface ChartProps {
   attributes: any;
 }
 const ReportChartsComponent = (props: ChartProps): JSX.Element => {
-  const analysisModules = useSelector(selectAnalysisModules);
   const selectedLanguage = useSelector((store: RootState) => store.appState.selectedLanguage);
 
   return (
     <div className="chart-area-container">
-      {analysisModules.map((module, i) => (
+      {defaultAnalysisModules.map((module, i) => (
         <ChartModule
           key={i}
           moduleInfo={module}
