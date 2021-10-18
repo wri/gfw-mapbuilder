@@ -82,7 +82,20 @@ export const defaultAnalysisModules: AnalysisModule[] = [
     },
     useGfwWidget: true,
     widgetId: '0734ba0a-3a6c-4388-aa4a-5871791b1d1f',
-    analysisParams: [],
+    analysisParams: [
+      {
+        type: 'date-picker',
+        label: {
+          en: 'Select range for analysis',
+          fr: 'Sélectionner une plage pour l’analyse',
+          es: 'Seleccione un rango para el análisis',
+          pt: 'Selecione o período para análise',
+          id: 'Pilih rentang untuk analisis',
+          zh: '选择分析范围',
+          ka: 'საზღვრების შერჩევა ანალიზისთვის'
+        }
+      }
+    ],
     sqlString:
       'select count(*) from umd_glad_landsat_alerts where umd_glad_landsat_alerts__date >= {startDate} and umd_glad_landsat_alerts__date <= {endDate}'
   },
