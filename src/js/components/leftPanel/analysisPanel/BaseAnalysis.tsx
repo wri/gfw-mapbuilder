@@ -292,6 +292,24 @@ const BaseAnalysis = (): JSX.Element => {
     setChartLoading(false);
   }
 
+  function analysisDateRangeHeader() {
+    if (selectedAnalysis !== 'VIIRS_FIRES' && selectedAnalysis !== 'GLAD_ALERTS') return null;
+    return (
+      <div
+        style={{
+          textAlign: 'center',
+          marginTop: 15,
+          marginBottom: -20
+        }}
+      >
+        <span style={{ fontWeight: 600 }}>From: </span>
+        <span>{analysisDateRange[0]}</span>
+        <span style={{ fontWeight: 600 }}> to: </span>
+        <span>{analysisDateRange[1]}</span>
+      </div>
+    );
+  }
+
   const returnButtons = (): JSX.Element | undefined => {
     const isUploadOrDrawn =
       (activeLayer as any).layerID === 'user_features' || (activeLayer as any).layerID === 'upload_file_features';
@@ -380,18 +398,7 @@ const BaseAnalysis = (): JSX.Element => {
                   />
                 )}
               </div>
-              <div
-                style={{
-                  textAlign: 'center',
-                  marginTop: 15,
-                  marginBottom: -20
-                }}
-              >
-                <span style={{ fontWeight: 600 }}>From: </span>
-                <span>{analysisDateRange[0]}</span>
-                <span style={{ fontWeight: 600 }}> to: </span>
-                <span>{analysisDateRange[1]}</span>
-              </div>
+              {analysisDateRangeHeader()}
               <VegaChart
                 spec={vegaSpec}
                 language={selectedLanguage}

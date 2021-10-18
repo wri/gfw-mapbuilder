@@ -136,19 +136,6 @@ export const defaultAnalysisModules: AnalysisModule[] = [
     widgetId: '12ef50f6-af39-405b-a5b4-1a2f1bbadb1a',
     analysisParams: [
       {
-        type: 'rangeSlider',
-        bounds: [2001, 2018],
-        label: {
-          en: 'Select range for analysis',
-          fr: 'Sélectionner une plage pour l’analyse:',
-          es: 'Seleccione un rango para el análisis:',
-          pt: 'Selecione o período para análise:',
-          id: 'Pilih rentang untuk analisis:',
-          zh: '选择分析范围:',
-          ka: 'საზღვრების შერჩევა ანალიზისთვის:'
-        }
-      },
-      {
         type: 'tcd',
         label: {
           en: 'Select tree cover density: ',
@@ -203,19 +190,6 @@ export const defaultAnalysisModules: AnalysisModule[] = [
     useGfwWidget: true,
     widgetId: 'f95b2715-6f6b-483d-827a-5dada5614263',
     analysisParams: [
-      {
-        type: 'rangeSlider',
-        bounds: [2001, 2018],
-        label: {
-          en: 'Select range for analysis',
-          fr: 'Sélectionner une plage pour l’analyse:',
-          es: 'Seleccione un rango para el análisis:',
-          pt: 'Selecione o período para análise:',
-          id: 'Pilih rentang untuk analisis:',
-          zh: '选择分析范围:',
-          ka: 'საზღვრების შერჩევა ანალიზისთვის:'
-        }
-      },
       {
         type: 'tcd',
         label: {
