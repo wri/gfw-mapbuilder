@@ -33,7 +33,20 @@ export const defaultAnalysisModules: AnalysisModule[] = [
     },
     useGfwWidget: true,
     widgetId: '5d696f96-e6c7-4323-8bda-4c99cd6b0cb4',
-    uiParams: 'none',
+    analysisParams: [
+      {
+        type: 'date-picker',
+        label: {
+          en: 'Select range for analysis',
+          fr: 'Sélectionner une plage pour l’analyse',
+          es: 'Seleccione un rango para el análisis',
+          pt: 'Selecione o período para análise',
+          id: 'Pilih rentang untuk analisis',
+          zh: '选择分析范围',
+          ka: 'საზღვრების შერჩევა ანალიზისთვის'
+        }
+      }
+    ],
     sqlString:
       'select COALESCE(sum(alert__count), 0)  as "sum" from nasa_viirs_fire_alerts where alert__date >= {startDate} and alert__date <= {endDate}'
   },
@@ -69,7 +82,7 @@ export const defaultAnalysisModules: AnalysisModule[] = [
     },
     useGfwWidget: true,
     widgetId: '0734ba0a-3a6c-4388-aa4a-5871791b1d1f',
-    uiParams: 'none',
+    analysisParams: [],
     sqlString:
       'select count(*) from umd_glad_landsat_alerts where umd_glad_landsat_alerts__date >= {startDate} and umd_glad_landsat_alerts__date <= {endDate}'
   },
@@ -107,15 +120,11 @@ export const defaultAnalysisModules: AnalysisModule[] = [
       ka: 'შეარჩიეთ საზღვრები და ხის ვარჯის სიხშირე, შემდეგ დააჭირეთ ღილაკს ანალიზის ჩატარება შედეგებს სანახავად.'
     },
     useGfwWidget: true,
-    widgetId: 'e53e541c-92cd-4b00-9aa7-2c7bb36d4697',
-    uiParams: [
+    widgetId: '12ef50f6-af39-405b-a5b4-1a2f1bbadb1a',
+    analysisParams: [
       {
-        inputType: 'rangeSlider',
-        startParamName: 'period',
-        combineParams: true,
-        valueSeparator: ',',
+        type: 'rangeSlider',
         bounds: [2001, 2018],
-        valueType: 'date',
         label: {
           en: 'Select range for analysis',
           fr: 'Sélectionner une plage pour l’analyse:',
@@ -127,8 +136,7 @@ export const defaultAnalysisModules: AnalysisModule[] = [
         }
       },
       {
-        name: 'thresh',
-        inputType: 'tcd',
+        type: 'tcd',
         label: {
           en: 'Select tree cover density: ',
           fr: 'Sélectionner la densité de couverture arborée: ',
@@ -180,15 +188,11 @@ export const defaultAnalysisModules: AnalysisModule[] = [
         'შედეგები არ იქნება ხელმისაწვდომი, თუკი თქვენ მიერ შერჩეული ფართობი არ შეიცავს ხტლ-ს. შეარჩიეთ საზღვრები და ხის ვარჯის სიხშირე, შემდეგ დააჭირეთ ღილაკს ანალიზის ჩატარება შედეგების სანახავად.'
     },
     useGfwWidget: true,
-    widgetId: '2083a1bc-440d-43fe-8b50-ff9918a37c57',
-    uiParams: [
+    widgetId: 'f95b2715-6f6b-483d-827a-5dada5614263',
+    analysisParams: [
       {
-        inputType: 'rangeSlider',
-        startParamName: 'period',
-        combineParams: true,
-        valueSeparator: ',',
+        type: 'rangeSlider',
         bounds: [2001, 2018],
-        valueType: 'date',
         label: {
           en: 'Select range for analysis',
           fr: 'Sélectionner une plage pour l’analyse:',
@@ -200,8 +204,76 @@ export const defaultAnalysisModules: AnalysisModule[] = [
         }
       },
       {
-        name: 'thresh',
-        inputType: 'tcd',
+        type: 'tcd',
+        label: {
+          en: 'Select tree cover density: ',
+          fr: 'Sélectionner la densité de couverture arborée: ',
+          es: 'Seleccione la densidad de la cobertura arbórea: ',
+          pt: 'Selecione a densidade de cobertura arbórea: ',
+          id: 'Pilih kerapatan tutupan pohon: ',
+          zh: '选择森林覆盖密度: ',
+          ka: 'ხის ვარჯის სიხშირის შერჩევა: '
+        }
+      }
+    ],
+    sqlString:
+      "select sum(area__ha) from umd_tree_cover_loss where umd_tree_cover_density_2000__threshold >= {density} and is__ifl_intact_forest_landscapes = 'true' group by umd_tree_cover_loss__year"
+  },
+  {
+    analysisId: 'Loss_LandCover',
+    chartType: 'bar',
+    label: {
+      en: 'Annual tree cover loss by land cover class',
+      fr: 'Perte annuelle de la couverture arborée par catégorie de couverture terrestre',
+      es: 'Pérdida de cobertura arbórea anual por clase de cobertura de tierra',
+      pt: 'Perda anual de cobertura arbórea por classe de cobertura de terra',
+      id: 'Kehilangan tutupan pohon tahunan berdasarkan  kelas tutupan lahan',
+      zh: '年度森林覆盖减少量（按土地覆盖分类）',
+      ka: 'ყოველწლიური ხის ვარჯის კარგვა მიწის საფარის კლასის მიხედვით'
+    },
+    title: {
+      en: 'Annual tree cover loss by land cover class',
+      fr: 'Perte annuelle de la couverture arborée par catégorie de couverture terrestre',
+      es: 'Pérdida de cobertura arbórea anual por clase de cobertura de tierra',
+      pt: 'Perda anual de cobertura arbórea por classe de cobertura de terra',
+      id: 'Kehilangan tutupan pohon tahunan berdasarkan  kelas tutupan lahan',
+      zh: '年度森林覆盖减少量（按土地覆盖分类）',
+      ka: 'ყოველწლიური ხის ვარჯის კარგვა მიწის საფარის კლასის მიხედვით'
+    },
+    description: {
+      en:
+        'Land cover data from 2000 and provided by the European Space Agency (ESA) and UCLouvain. Select range and tree cover density then click the run analysis button to see results.',
+      fr:
+        'Données de couverture du sol datant de 2000 et fournies par l’Agence Spatiale Européenne (European Space Agency, ESA) et UCLouvain. Sélectionner la plage et la densité de couverture arborée, puis cliquer sur le bouton « Lancer l’analyse » pour voir les résultats.',
+      es:
+        'Los datos de la cobertura de tierra son de 2000 y fueron proporcionados por la Agencia Espacial Europea (European Space Agency, ESA) y UCLouvain. Para ver los resultados, seleccione el rango y la densidad de la cobertura arbórea, después haga clic en el botón ejecutar análisis.',
+      pt:
+        'Dados de cobertura de terra relativos ao período posterior a 2000 e fornecidos pela Agência Espacial Europeia (ESA) e pela Universidade Católica da Lovaina (UCLouvain). Para ver os resultados, selecione o período e a densidade de cobertura arbórea; em seguida, clique no botão para executar a análise.',
+      id:
+        'Data tutupan lahan dari tahun 2000 dan disediakan oleh Badan Antariksa Eropa –(ESA) dan UCLouvain. Pilih rentang dan kerapatan tutupan pohon kemudian klik tombol mulai analisis untuk melihat hasil.',
+      zh:
+        '自 2000 年以来的土地覆盖数据，由欧洲空间局 (ESA) 和 UCLouvain 提供。选择范围和森林覆盖密度，然后点击“运行分析”按钮查看结果。',
+      ka:
+        'მიწის საფარის მონაცემები 2000 წლიდან მოწოდებულია ევროპული კოსმოსური სააგენტოს (ESA) და ლუვენის კათოლიკური უნივერსიტეტის (UCLouvain) მიერ. შეარჩიეთ საზღვრები და ხის ვარჯის სიხშირე, შემდეგ დააჭირეთ ღილაკს ანალიზის ჩატარება შედეგების სანახავად.'
+    },
+    useGfwWidget: true,
+    widgetId: 'd8317d56-b7d9-4888-81d4-e1c411c380a4',
+    analysisParams: [
+      {
+        type: 'rangeSlider',
+        bounds: [2001, 2018],
+        label: {
+          en: 'Select range for analysis',
+          fr: 'Sélectionner une plage pour l’analyse:',
+          es: 'Seleccione un rango para el análisis:',
+          pt: 'Selecione o período para análise:',
+          id: 'Pilih rentang untuk analisis:',
+          zh: '选择分析范围:',
+          ka: 'საზღვრების შერჩევა ანალიზისთვის:'
+        }
+      },
+      {
+        type: 'tcd',
         label: {
           en: 'Select tree cover density: ',
           fr: 'Sélectionner la densité de couverture arborée: ',

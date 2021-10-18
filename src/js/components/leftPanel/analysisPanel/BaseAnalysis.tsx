@@ -19,7 +19,7 @@ import Loader from '../../../../js/components/sharedComponents/Loader';
 import { mapController } from '../../../../js/controllers/mapController';
 import DataTabFooter from '../dataPanel/DataTabFooter';
 
-import { AnalysisModule } from '../../../../js/store/appSettings/types';
+import { AnalysisModule, AnalysisParam } from '../../../../js/store/appSettings/types';
 import { fetchGFWWidgetConfig, fetchDownloadInfo, fetchWCSAnalysis, generateWidgetURL } from './analysisUtils';
 import { DateRangePicker } from '../../sharedComponents/DateRangePicker';
 
@@ -106,7 +106,7 @@ const BaseAnalysis = (): JSX.Element => {
         })
         .catch(e => console.log('failed to register geostore', e));
     }
-  }, [activeFeatures, activeFeatureIndex, selectedAnalysis]);
+  }, [dispatch, activeFeatures, activeFeatureIndex, selectedAnalysis]);
 
   //Main Func to run the analysis with selected option and geometry
   function runAnalysis(): void {
@@ -160,17 +160,17 @@ const BaseAnalysis = (): JSX.Element => {
     }
   }
 
-  const renderInputComponent = (props: UIParams, analysisConfig: AnalysisModule): JSX.Element | null | undefined => {
-    const { bounds } = props;
-    if (props.inputType === 'rangeSlider') {
+  const renderInputComponent = (props: AnalysisParam, analysisConfig: AnalysisModule): JSX.Element | null => {
+    const { bounds, type } = props;
+    if (type === 'rangeSlider') {
       if (bounds) return <MemoRangeSlider yearRange={bounds} />;
     }
 
-    if (props.inputType === 'tcd') {
+    if (type === 'tcd') {
       return <CanopyDensityPicker />;
     }
 
-    if (props.inputType === 'datepicker' && analysisConfig.analysisId !== 'VIIRS_FIRES') {
+    if (type === 'date-picker') {
       return <DateRangePicker />;
     }
 
@@ -196,23 +196,21 @@ const BaseAnalysis = (): JSX.Element => {
             <p style={{ fontWeight: 'bold', fontSize: '16px' }}>{currentAnalysis?.title[selectedLanguage]}</p>
             <p style={{ fontSize: '12px' }}>{currentAnalysis?.description[selectedLanguage]}</p>
             <div>
-              {currentAnalysis?.uiParams &&
-                currentAnalysis.uiParams !== 'none' &&
-                currentAnalysis.analysisId !== 'VIIRS_FIRES' &&
-                currentAnalysis.uiParams.map((uiParam: any, i: number) => {
+              {currentAnalysis?.analysisParams.length !== 0 &&
+                currentAnalysis?.analysisParams.map((param: AnalysisParam, i: number) => {
                   return (
                     <div className="ui-analysis-wrapper" key={i}>
                       <div className="ui-description">
                         <div className="number">
                           <p>{i + 1}</p>
                         </div>
-                        <p>{uiParam.label[selectedLanguage]}</p>
+                        <p>{param.label[selectedLanguage]}</p>
                       </div>
-                      <div className="analysis-input">{renderInputComponent(uiParam, currentAnalysis)}</div>
+                      <div className="analysis-input">{renderInputComponent(param, currentAnalysis)}</div>
                     </div>
                   );
                 })}
-              {(currentAnalysis?.uiParams && currentAnalysis.analysisId === 'VIIRS_FIRES') ||
+              {/* {currentAnalysis.analysisId === 'VIIRS_FIRES' ||
                 (currentAnalysis?.analysisId === 'GLAD_ALERTS' && (
                   <div>
                     <div className="ui-analysis-wrapper">
@@ -227,7 +225,7 @@ const BaseAnalysis = (): JSX.Element => {
                       </div>
                     </div>
                   </div>
-                ))}
+                ))} */}
             </div>
           </>
         );

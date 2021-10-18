@@ -64,10 +64,18 @@ export interface AnalysisModule {
   };
   useGfwWidget: boolean;
   widgetId: string;
-  uiParams: any;
+  analysisParams: AnalysisParam[] | [];
   analysisUrl?: string;
   attributes?: any;
   sqlString: string;
+}
+
+export interface AnalysisParam {
+  type: 'tcd' | 'rangeSlider' | 'date-picker';
+  bounds?: [number, number];
+  label: {
+    [key: string]: string;
+  };
 }
 
 export interface LayerGroupInfo {

@@ -64,7 +64,7 @@ interface ChartModuleProps {
 }
 
 const ChartModule = (props: ChartModuleProps): JSX.Element => {
-  const { label, uiParams } = props.moduleInfo;
+  const { label, analysisParams } = props.moduleInfo;
   const language = props.lang;
   const translatedLabel = label[language] ? label[language] : 'Missing Translation Analysis Label';
 
@@ -76,9 +76,9 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
   const [submoduleIsHidden, setSubmoduleIsHidden] = React.useState(false);
   const [baseConfig, setBaseConfig] = React.useState<AnalysisModule>();
   const [inputsAreHidden, setInputsAreHidden] = React.useState(true);
-  const [yearRangeValue, setYearRangeValue] = React.useState<null | number[]>(getDefaultYearRange(uiParams));
-  const [startDate, setStartDate] = React.useState(getDefaultStartDate(uiParams));
-  const [endDate, setEndDate] = React.useState(getDefaultEndDate(uiParams));
+  const [yearRangeValue, setYearRangeValue] = React.useState<null | number[]>(getDefaultYearRange(analysisParams));
+  const [startDate, setStartDate] = React.useState(getDefaultStartDate(analysisParams));
+  const [endDate, setEndDate] = React.useState(getDefaultEndDate(analysisParams));
   const [chartLoading, setChartLoading] = React.useState(true);
   const [chartError, setChartError] = React.useState(false);
   const [vegaSpec, setVegaSpec] = React.useState(null);
@@ -206,6 +206,7 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
         setVegaSpec(fragmentationSpec);
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.geostoreID, forceRender]);
 
   function handlePNGURL(base64: string): void {
@@ -221,7 +222,7 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
       <div className="report-top-toolbar">
         <h4 className="report-toolbar-title">{translatedLabel}</h4>
         <div className="report-button-controls">
-          {currentAnalysis?.uiParams && currentAnalysis?.uiParams !== 'none' ? (
+          {currentAnalysis?.analysisParams?.length !== 0 ? (
             <div onClick={(): void => setInputsAreHidden(!inputsAreHidden)} style={{ cursor: 'pointer' }}>
               <GearIcon width={22} height={22} fill={'#888888'} />
             </div>
@@ -260,9 +261,8 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
       </div>
       <div className={submoduleIsHidden ? 'chart-submodule hidden' : 'chart-submodule'}>
         <div className={inputsAreHidden ? 'hidden' : 'chart-control-inputs'}>
-          {currentAnalysis?.uiParams &&
-            currentAnalysis?.uiParams !== 'none' &&
-            currentAnalysis?.uiParams.map((uiParam: any, i: number) => {
+          {currentAnalysis?.analysisParams?.length !== 0 &&
+            currentAnalysis?.analysisParams.map((uiParam: any, i: number) => {
               return (
                 <div className="ui-analysis-wrapper" key={i}>
                   <div className="ui-description">
@@ -275,7 +275,7 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
                 </div>
               );
             })}
-          {currentAnalysis?.uiParams !== 'none' && (
+          {currentAnalysis?.analysisParams.length !== 0 && (
             <button
               className="orange-button"
               style={{ backgroundColor: customColorTheme }}
