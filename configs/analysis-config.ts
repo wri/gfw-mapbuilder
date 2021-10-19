@@ -207,72 +207,111 @@ export const defaultAnalysisModules: AnalysisModule[] = [
       "select sum(area__ha) from umd_tree_cover_loss where umd_tree_cover_density_2000__threshold >= {density} and is__ifl_intact_forest_landscapes = 'true' group by umd_tree_cover_loss__year"
   },
   {
-    analysisId: 'Loss_LandCover',
-    chartType: 'bar',
+    analysisId: 'LCC',
+    chartType: 'pie',
     label: {
-      en: 'Annual tree cover loss by land cover class',
-      fr: 'Perte annuelle de la couverture arborée par catégorie de couverture terrestre',
-      es: 'Pérdida de cobertura arbórea anual por clase de cobertura de tierra',
-      pt: 'Perda anual de cobertura arbórea por classe de cobertura de terra',
-      id: 'Kehilangan tutupan pohon tahunan berdasarkan  kelas tutupan lahan',
-      zh: '年度森林覆盖减少量（按土地覆盖分类）',
-      ka: 'ყოველწლიური ხის ვარჯის კარგვა მიწის საფარის კლასის მიხედვით'
+      en: 'Land Cover Composition',
+      fr: 'Composition de la couverture terrestre',
+      es: 'Cobertura terrestre',
+      pt: 'Cobertura do Solo',
+      id: 'Komposisi tutupan lahan',
+      zh: '土地覆盖构成',
+      ka: 'მიწის საფარის შემადგენლობა'
     },
     title: {
-      en: 'Annual tree cover loss by land cover class',
-      fr: 'Perte annuelle de la couverture arborée par catégorie de couverture terrestre',
-      es: 'Pérdida de cobertura arbórea anual por clase de cobertura de tierra',
-      pt: 'Perda anual de cobertura arbórea por classe de cobertura de terra',
-      id: 'Kehilangan tutupan pohon tahunan berdasarkan  kelas tutupan lahan',
-      zh: '年度森林覆盖减少量（按土地覆盖分类）',
-      ka: 'ყოველწლიური ხის ვარჯის კარგვა მიწის საფარის კლასის მიხედვით'
+      en: 'Land Cover Composition',
+      fr: 'Composition de la couverture terrestre',
+      es: 'Composición de la cobertura de tierra',
+      pt: 'Composição da cobertura de terra',
+      id: 'Komposisi tutupan lahan',
+      zh: '土地覆盖构成',
+      ka: 'მიწის საფარის შემადგენლობა'
     },
     description: {
-      en:
-        'Land cover data from 2000 and provided by the European Space Agency (ESA) and UCLouvain. Select range and tree cover density then click the run analysis button to see results.',
+      en: 'Land cover data is from 2015 and provided by the European Space Agency (ESA) and UCLouvain.',
       fr:
-        'Données de couverture du sol datant de 2000 et fournies par l’Agence Spatiale Européenne (European Space Agency, ESA) et UCLouvain. Sélectionner la plage et la densité de couverture arborée, puis cliquer sur le bouton « Lancer l’analyse » pour voir les résultats.',
+        'Les données de la couverture terrestre datent de 2015 et sont fournies par l’Agence Spatiale Européenne (European Space Agency, ESA) et UCLouvain.',
       es:
-        'Los datos de la cobertura de tierra son de 2000 y fueron proporcionados por la Agencia Espacial Europea (European Space Agency, ESA) y UCLouvain. Para ver los resultados, seleccione el rango y la densidad de la cobertura arbórea, después haga clic en el botón ejecutar análisis.',
+        'Los datos de la cobertura de tierra son de 2015 y fueron proporcionados por la Agencia Espacial Europea (European Space Agency, ESA) y UCLouvain. ',
       pt:
-        'Dados de cobertura de terra relativos ao período posterior a 2000 e fornecidos pela Agência Espacial Europeia (ESA) e pela Universidade Católica da Lovaina (UCLouvain). Para ver os resultados, selecione o período e a densidade de cobertura arbórea; em seguida, clique no botão para executar a análise.',
-      id:
-        'Data tutupan lahan dari tahun 2000 dan disediakan oleh Badan Antariksa Eropa –(ESA) dan UCLouvain. Pilih rentang dan kerapatan tutupan pohon kemudian klik tombol mulai analisis untuk melihat hasil.',
-      zh:
-        '自 2000 年以来的土地覆盖数据，由欧洲空间局 (ESA) 和 UCLouvain 提供。选择范围和森林覆盖密度，然后点击“运行分析”按钮查看结果。',
+        'Dados de cobertura de terra relativos ao período posterior a 2015 e fornecidos pela Agência Espacial Europeia (ESA) e pela UCLouvain. ',
+      id: 'Data tutupan lahan dari tahun 2015 yang disediakan oleh Badan Antariksa Eropa () dan UCLouvain.',
+      zh: '自 2015 年以来的土地覆盖数据，由欧洲空间局 (ESA) 和 UCLouvain 提供。 ',
       ka:
-        'მიწის საფარის მონაცემები 2000 წლიდან მოწოდებულია ევროპული კოსმოსური სააგენტოს (ESA) და ლუვენის კათოლიკური უნივერსიტეტის (UCLouvain) მიერ. შეარჩიეთ საზღვრები და ხის ვარჯის სიხშირე, შემდეგ დააჭირეთ ღილაკს ანალიზის ჩატარება შედეგების სანახავად.'
+        'მიწის საფარის მონაცემები 2015 წლის შემდეგაა და მოწოდებულია ევროპული კოსმოსური სააგენტოს (ESA)  და ლუვენის კათოლიკური უნივერსიტეტის (UCLouvain) მიერ.'
     },
     useGfwWidget: true,
     widgetId: 'd8317d56-b7d9-4888-81d4-e1c411c380a4',
-    analysisParams: [
-      {
-        type: 'rangeSlider',
-        bounds: [2001, 2018],
-        label: {
-          en: 'Select range for analysis',
-          fr: 'Sélectionner une plage pour l’analyse:',
-          es: 'Seleccione un rango para el análisis:',
-          pt: 'Selecione o período para análise:',
-          id: 'Pilih rentang untuk analisis:',
-          zh: '选择分析范围:',
-          ka: 'საზღვრების შერჩევა ანალიზისთვის:'
-        }
-      },
-      {
-        type: 'tcd',
-        label: {
-          en: 'Select tree cover density: ',
-          fr: 'Sélectionner la densité de couverture arborée: ',
-          es: 'Seleccione la densidad de la cobertura arbórea: ',
-          pt: 'Selecione a densidade de cobertura arbórea: ',
-          id: 'Pilih kerapatan tutupan pohon: ',
-          zh: '选择森林覆盖密度: ',
-          ka: 'ხის ვარჯის სიხშირის შერჩევა: '
-        }
-      }
-    ],
-    sqlString:
-      "select sum(area__ha) from umd_tree_cover_loss where umd_tree_cover_density_2000__threshold >= {density} and is__ifl_intact_forest_landscapes = 'true' group by umd_tree_cover_loss__year"
+    analysisParams: [],
+    sqlString: 'select sum(area__ha) from esa_land_cover_2015 group by esa_land_cover_2015__class'
   }
+  // {
+  //   analysisId: 'Loss_LandCover',
+  //   chartType: 'bar',
+  //   label: {
+  //     en: 'Annual tree cover loss by land cover class',
+  //     fr: 'Perte annuelle de la couverture arborée par catégorie de couverture terrestre',
+  //     es: 'Pérdida de cobertura arbórea anual por clase de cobertura de tierra',
+  //     pt: 'Perda anual de cobertura arbórea por classe de cobertura de terra',
+  //     id: 'Kehilangan tutupan pohon tahunan berdasarkan  kelas tutupan lahan',
+  //     zh: '年度森林覆盖减少量（按土地覆盖分类）',
+  //     ka: 'ყოველწლიური ხის ვარჯის კარგვა მიწის საფარის კლასის მიხედვით'
+  //   },
+  //   title: {
+  //     en: 'Annual tree cover loss by land cover class',
+  //     fr: 'Perte annuelle de la couverture arborée par catégorie de couverture terrestre',
+  //     es: 'Pérdida de cobertura arbórea anual por clase de cobertura de tierra',
+  //     pt: 'Perda anual de cobertura arbórea por classe de cobertura de terra',
+  //     id: 'Kehilangan tutupan pohon tahunan berdasarkan  kelas tutupan lahan',
+  //     zh: '年度森林覆盖减少量（按土地覆盖分类）',
+  //     ka: 'ყოველწლიური ხის ვარჯის კარგვა მიწის საფარის კლასის მიხედვით'
+  //   },
+  //   description: {
+  //     en:
+  //       'Land cover data from 2000 and provided by the European Space Agency (ESA) and UCLouvain. Select range and tree cover density then click the run analysis button to see results.',
+  //     fr:
+  //       'Données de couverture du sol datant de 2000 et fournies par l’Agence Spatiale Européenne (European Space Agency, ESA) et UCLouvain. Sélectionner la plage et la densité de couverture arborée, puis cliquer sur le bouton « Lancer l’analyse » pour voir les résultats.',
+  //     es:
+  //       'Los datos de la cobertura de tierra son de 2000 y fueron proporcionados por la Agencia Espacial Europea (European Space Agency, ESA) y UCLouvain. Para ver los resultados, seleccione el rango y la densidad de la cobertura arbórea, después haga clic en el botón ejecutar análisis.',
+  //     pt:
+  //       'Dados de cobertura de terra relativos ao período posterior a 2000 e fornecidos pela Agência Espacial Europeia (ESA) e pela Universidade Católica da Lovaina (UCLouvain). Para ver os resultados, selecione o período e a densidade de cobertura arbórea; em seguida, clique no botão para executar a análise.',
+  //     id:
+  //       'Data tutupan lahan dari tahun 2000 dan disediakan oleh Badan Antariksa Eropa –(ESA) dan UCLouvain. Pilih rentang dan kerapatan tutupan pohon kemudian klik tombol mulai analisis untuk melihat hasil.',
+  //     zh:
+  //       '自 2000 年以来的土地覆盖数据，由欧洲空间局 (ESA) 和 UCLouvain 提供。选择范围和森林覆盖密度，然后点击“运行分析”按钮查看结果。',
+  //     ka:
+  //       'მიწის საფარის მონაცემები 2000 წლიდან მოწოდებულია ევროპული კოსმოსური სააგენტოს (ESA) და ლუვენის კათოლიკური უნივერსიტეტის (UCLouvain) მიერ. შეარჩიეთ საზღვრები და ხის ვარჯის სიხშირე, შემდეგ დააჭირეთ ღილაკს ანალიზის ჩატარება შედეგების სანახავად.'
+  //   },
+  //   useGfwWidget: true,
+  //   widgetId: 'd8317d56-b7d9-4888-81d4-e1c411c380a4',
+  //   analysisParams: [
+  //     {
+  //       type: 'rangeSlider',
+  //       bounds: [2001, 2018],
+  //       label: {
+  //         en: 'Select range for analysis',
+  //         fr: 'Sélectionner une plage pour l’analyse:',
+  //         es: 'Seleccione un rango para el análisis:',
+  //         pt: 'Selecione o período para análise:',
+  //         id: 'Pilih rentang untuk analisis:',
+  //         zh: '选择分析范围:',
+  //         ka: 'საზღვრების შერჩევა ანალიზისთვის:'
+  //       }
+  //     },
+  //     {
+  //       type: 'tcd',
+  //       label: {
+  //         en: 'Select tree cover density: ',
+  //         fr: 'Sélectionner la densité de couverture arborée: ',
+  //         es: 'Seleccione la densidad de la cobertura arbórea: ',
+  //         pt: 'Selecione a densidade de cobertura arbórea: ',
+  //         id: 'Pilih kerapatan tutupan pohon: ',
+  //         zh: '选择森林覆盖密度: ',
+  //         ka: 'ხის ვარჯის სიხშირის შერჩევა: '
+  //       }
+  //     }
+  //   ],
+  //   sqlString:
+  //     "select sum(area__ha) from umd_tree_cover_loss where umd_tree_cover_density_2000__threshold >= {density} and is__ifl_intact_forest_landscapes = 'true' group by umd_tree_cover_loss__year"
+  // }
 ];

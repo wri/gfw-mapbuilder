@@ -210,22 +210,6 @@ const BaseAnalysis = (): JSX.Element => {
                     </div>
                   );
                 })}
-              {/* {currentAnalysis.analysisId === 'VIIRS_FIRES' ||
-                (currentAnalysis?.analysisId === 'GLAD_ALERTS' && (
-                  <div>
-                    <div className="ui-analysis-wrapper">
-                      <div className="ui-description">
-                        <div className="number">
-                          <p>{1}</p>
-                        </div>
-                        <p>Select range for analysis</p>
-                      </div>
-                      <div className="analysis-input">
-                        <DateRangePicker />
-                      </div>
-                    </div>
-                  </div>
-                ))} */}
             </div>
           </>
         );

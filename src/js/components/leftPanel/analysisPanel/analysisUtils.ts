@@ -124,6 +124,10 @@ export function generateWidgetURL({
     sqlQuery = sqlQuery.replace('{density}', `${markValueMap[density]}`);
     baseURL = baseURL.concat(`&sql=${sqlQuery}`);
   }
+  if (analysisId === 'LCC') {
+    const sqlQuery = sqlString;
+    baseURL = baseURL.concat(`&sql=${sqlQuery}`);
+  }
 
   console.log(baseURL);
   return baseURL;
