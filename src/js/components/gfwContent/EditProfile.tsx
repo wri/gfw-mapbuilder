@@ -4,36 +4,23 @@ import { useForm, Controller } from 'react-hook-form';
 import { makeStyles } from '@material-ui/core/styles';
 import { RootState } from '../../../js/store';
 import { MemoCountryPicker } from './CountryPicker';
-import {
-  sectors,
-  usage,
-  topics,
-  editProfileTranslations
-} from '../../../../configs/translations/staticOptions';
+import { sectors, usage, topics, editProfileTranslations } from '../../../../configs/translations/staticOptions';
 import clsx from 'clsx';
 import { Select, RadioGroup, FormControlLabel, Radio } from '@material-ui/core';
 import '../../../css/formInputs.scss';
 import '../../../css/editProfile.scss';
 
 const EditProfile = (): JSX.Element => {
-  const customColorTheme = useSelector(
-    (store: RootState) => store.appSettings.customColorTheme
-  );
-  const selectedLanguage = useSelector(
-    (store: RootState) => store.appState.selectedLanguage
-  );
-  const [activeSector, setActiveSector] = React.useState(
-    sectors[selectedLanguage][0].sector.value
-  );
+  const customColorTheme = useSelector((store: RootState) => store.appSettings.customColorTheme);
+  const selectedLanguage = useSelector((store: RootState) => store.appState.selectedLanguage);
+  const [activeSector, setActiveSector] = React.useState(sectors[selectedLanguage][0].sector.value);
   const [activeSubsector, setActiveSubsector] = React.useState();
   const [activeUsage, setActiveUsage] = React.useState<string[]>([]);
   const [activeTopics, setActiveTopics] = React.useState<string[]>([]);
   const [activeCountry, setActiveCountry] = React.useState('');
   const [interestActiveCountry, setInterestActiveCountry] = React.useState('');
   const [existingProfileInfo, setExistingProfileInfo] = React.useState<any>({});
-  const [originalSectorIndex, setOriginalSectorIndex] = React.useState<
-    number | undefined
-  >();
+  const [originalSectorIndex, setOriginalSectorIndex] = React.useState<number | undefined>();
   const [updateSuccess, setUpdateSuccess] = React.useState(false);
   const [updateError, setUpdateError] = React.useState();
   const [userInfo, setUserInfo] = React.useState<{
@@ -91,10 +78,7 @@ const EditProfile = (): JSX.Element => {
     };
 
     //Get the subsectors
-    if (
-      data.hasOwnProperty('subsectorOther') &&
-      data.subsectorOther.length !== 0
-    ) {
+    if (data.hasOwnProperty('subsectorOther') && data.subsectorOther.length !== 0) {
       payload.subsector = payload.subsector + data.subsectorOther;
     }
 
@@ -150,24 +134,22 @@ const EditProfile = (): JSX.Element => {
 
   const selectClasses = useSelectStyles();
   const menuItems = useMenuItemStyles();
-  const sectorsItems = sectors[selectedLanguage].map(
-    (sectorObject, i: number) => {
-      let optionIsSelected = false;
-      if (originalSectorIndex && originalSectorIndex === i) {
-        optionIsSelected = true;
-      }
-      return (
-        <option
-          selected={optionIsSelected}
-          className={clsx(selectClasses.root, menuItems.root)}
-          key={i}
-          value={sectorObject.sector.value}
-        >
-          {sectorObject.sector.label}
-        </option>
-      );
+  const sectorsItems = sectors[selectedLanguage].map((sectorObject, i: number) => {
+    let optionIsSelected = false;
+    if (originalSectorIndex && originalSectorIndex === i) {
+      optionIsSelected = true;
     }
-  );
+    return (
+      <option
+        selected={optionIsSelected}
+        className={clsx(selectClasses.root, menuItems.root)}
+        key={i}
+        value={sectorObject.sector.value}
+      >
+        {sectorObject.sector.label}
+      </option>
+    );
+  });
 
   const useStyles = makeStyles({
     root: {
@@ -180,11 +162,9 @@ const EditProfile = (): JSX.Element => {
       borderRadius: '50%',
       width: 16,
       height: 16,
-      boxShadow:
-        'inset 0 0 0 1px rgba(16,22,26,.2), inset 0 -1px 0 rgba(16,22,26,.1)',
+      boxShadow: 'inset 0 0 0 1px rgba(16,22,26,.2), inset 0 -1px 0 rgba(16,22,26,.1)',
       backgroundColor: '#f5f8fa',
-      backgroundImage:
-        'linear-gradient(180deg,hsla(0,0%,100%,.8),hsla(0,0%,100%,0))',
+      backgroundImage: 'linear-gradient(180deg,hsla(0,0%,100%,.8),hsla(0,0%,100%,0))',
       '$root.Mui-focusVisible &': {
         outline: '2px auto rgba(19,124,189,.6)',
         outlineOffset: 2
@@ -199,8 +179,7 @@ const EditProfile = (): JSX.Element => {
     },
     checkedIcon: {
       backgroundColor: customColorTheme,
-      backgroundImage:
-        'linear-gradient(180deg,hsla(0,0%,100%,.1),hsla(0,0%,100%,0))',
+      backgroundImage: 'linear-gradient(180deg,hsla(0,0%,100%,.1),hsla(0,0%,100%,0))',
       '&:before': {
         display: 'block',
         width: 16,
@@ -222,9 +201,7 @@ const EditProfile = (): JSX.Element => {
         className={classes.root}
         disableRipple
         color="default"
-        checkedIcon={
-          <span className={clsx(classes.icon, classes.checkedIcon)} />
-        }
+        checkedIcon={<span className={clsx(classes.icon, classes.checkedIcon)} />}
         icon={<span className={classes.icon} />}
         {...props}
       />
@@ -320,11 +297,7 @@ const EditProfile = (): JSX.Element => {
                     placeholder="First Name"
                     name="firstName"
                   />
-                  {errors.fname && (
-                    <p className="input-error">
-                      {editProfileTranslations[selectedLanguage].required}
-                    </p>
-                  )}
+                  {errors.fname && <p className="input-error">{editProfileTranslations[selectedLanguage].required}</p>}
                 </div>
                 <div className="form-section">
                   <label htmlFor="lastName" className="input-label">
@@ -338,11 +311,7 @@ const EditProfile = (): JSX.Element => {
                     placeholder="Last Name"
                     name="lastName"
                   />
-                  {errors.lname && (
-                    <p className="input-error">
-                      {editProfileTranslations[selectedLanguage].required}
-                    </p>
-                  )}
+                  {errors.lname && <p className="input-error">{editProfileTranslations[selectedLanguage].required}</p>}
                 </div>
                 <div className="form-section">
                   <label htmlFor="email" className="input-label">
@@ -356,24 +325,17 @@ const EditProfile = (): JSX.Element => {
                     placeholder="example@globalforestwatch.com"
                     name="email"
                   />
-                  {errors.email && (
-                    <p className="input-error">
-                      {editProfileTranslations[selectedLanguage].required}
-                    </p>
-                  )}
+                  {errors.email && <p className="input-error">{editProfileTranslations[selectedLanguage].required}</p>}
                 </div>
                 <div className="form-section">
-                  <p className="input-label">
-                    {editProfileTranslations[selectedLanguage].sector}
-                  </p>
+                  <p className="input-label">{editProfileTranslations[selectedLanguage].sector}</p>
                   <Select
                     native
                     variant="outlined"
                     className={clsx(selectClasses.root)}
                     defaultValue={
                       originalSectorIndex
-                        ? sectors[selectedLanguage][originalSectorIndex].sector
-                            .value
+                        ? sectors[selectedLanguage][originalSectorIndex].sector.value
                         : sectors[selectedLanguage][0].sector.value
                     }
                     onChange={(e: any): void => setActiveSector(e.target.value)}
@@ -382,17 +344,11 @@ const EditProfile = (): JSX.Element => {
                   </Select>
                 </div>
                 <div className="form-section">
-                  <p className="input-label">
-                    {editProfileTranslations[selectedLanguage].role}
-                  </p>
+                  <p className="input-label">{editProfileTranslations[selectedLanguage].role}</p>
                   <Controller
                     name="subsector"
                     control={control}
-                    render={() => (
-                      <RadioGroup aria-label="subsector">
-                        {subSectors()}
-                      </RadioGroup>
-                    )}
+                    render={() => <RadioGroup aria-label="subsector">{subSectors()}</RadioGroup>}
                   />
                   {activeSubsector === 'Other: ' && (
                     <input
@@ -430,19 +386,15 @@ const EditProfile = (): JSX.Element => {
                     name="company"
                   />
                   {errors.company && (
-                    <p className="input-error">
-                      {editProfileTranslations[selectedLanguage].required}
-                    </p>
+                    <p className="input-error">{editProfileTranslations[selectedLanguage].required}</p>
                   )}
                 </div>
 
                 <h4>{editProfileTranslations[selectedLanguage].located}</h4>
                 <MemoCountryPicker
-                  countryLabel={
-                    editProfileTranslations[selectedLanguage].country
-                  }
+                  countryLabel={editProfileTranslations[selectedLanguage].country}
                   defaultCountry={existingProfileInfo.country}
-                  activeCountryCallback={(id: any): any => setActiveCountry(id)}
+                  activeCountryCallback={(id: string) => setActiveCountry(id)}
                 />
                 <div className="form-section">
                   <label htmlFor="city" className="input-label">
@@ -472,13 +424,9 @@ const EditProfile = (): JSX.Element => {
                 </div>
                 <h4>{editProfileTranslations[selectedLanguage].interest}</h4>
                 <MemoCountryPicker
-                  countryLabel={
-                    editProfileTranslations[selectedLanguage].country
-                  }
+                  countryLabel={editProfileTranslations[selectedLanguage].country}
                   defaultCountry={existingProfileInfo?.aoiCountry}
-                  activeCountryCallback={(id: any): any =>
-                    setInterestActiveCountry(id)
-                  }
+                  activeCountryCallback={(id: any): any => setInterestActiveCountry(id)}
                 />
                 <div className="form-section">
                   <label htmlFor="aoiCity" className="input-label">
@@ -507,23 +455,13 @@ const EditProfile = (): JSX.Element => {
                   />
                 </div>
                 <div className="form-section">
-                  <p className="input-label">
-                    {editProfileTranslations[selectedLanguage].topics} *
-                  </p>
-                  <p className="input-sublabel">
-                    {editProfileTranslations[selectedLanguage].selectAll}
-                  </p>
-                  <select
-                    className="multi-select"
-                    multiple
-                    onChange={handleTopics}
-                  >
+                  <p className="input-label">{editProfileTranslations[selectedLanguage].topics} *</p>
+                  <p className="input-sublabel">{editProfileTranslations[selectedLanguage].selectAll}</p>
+                  <select className="multi-select" multiple onChange={handleTopics}>
                     {topics[selectedLanguage].map((topic, i: number) => {
                       return (
                         <option
-                          selected={existingProfileInfo?.interests?.includes(
-                            topic.id
-                          )}
+                          selected={existingProfileInfo?.interests?.includes(topic.id)}
                           className="multi-option"
                           key={i}
                           value={topic.id}
@@ -535,23 +473,13 @@ const EditProfile = (): JSX.Element => {
                   </select>
                 </div>
                 <div className="form-section">
-                  <p className="input-label">
-                    {editProfileTranslations[selectedLanguage].howUse} *
-                  </p>
-                  <p className="input-sublabel">
-                    {editProfileTranslations[selectedLanguage].selectAll}
-                  </p>
-                  <select
-                    className="multi-select"
-                    multiple
-                    onChange={handleUsage}
-                  >
+                  <p className="input-label">{editProfileTranslations[selectedLanguage].howUse} *</p>
+                  <p className="input-sublabel">{editProfileTranslations[selectedLanguage].selectAll}</p>
+                  <select className="multi-select" multiple onChange={handleUsage}>
                     {usage[selectedLanguage].map((usage, i: number) => {
                       return (
                         <option
-                          selected={existingProfileInfo?.howDoYouUse?.includes(
-                            usage.id
-                          )}
+                          selected={existingProfileInfo?.howDoYouUse?.includes(usage.id)}
                           className="multi-option"
                           key={i}
                           value={usage.id}
