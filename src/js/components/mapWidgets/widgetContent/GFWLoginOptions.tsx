@@ -12,24 +12,13 @@ const GFWLoginOptions = (props: any) => {
   const dropdownRef = React.useRef<HTMLDivElement | null>(null);
   const dispatch = useDispatch();
 
-  const isLoggedIn = useSelector(
-    (state: RootState) => state.appState.isLoggedIn
-  );
+  const isLoggedIn = useSelector((state: RootState) => state.appState.isLoggedIn);
 
-  const selectedLanguage = useSelector(
-    (state: RootState) => state.appState.selectedLanguage
-  );
+  const selectedLanguage = useSelector((state: RootState) => state.appState.selectedLanguage);
 
-  const {
-    subscriptions,
-    profile,
-    logout,
-    twitter,
-    facebook,
-    google,
-    loginReq,
-    contactUs
-  } = headerContent[selectedLanguage];
+  const { subscriptions, profile, logout, twitter, facebook, google, loginReq, contactUs } = headerContent[
+    selectedLanguage
+  ];
 
   //Check if we are clicking outside the dropwdown and close dropdown if so
   function handleOutsideClick(e: any): void {
@@ -47,8 +36,12 @@ const GFWLoginOptions = (props: any) => {
       credentials: 'include'
     })
       .then(() => {
+        //clear user credentials from local storage
         localStorage.clear();
         dispatch(setLoggedIn(false));
+
+        //remove user token from the URL
+        window.location.href = window.origin;
       })
       .catch(e => console.log('Logout failed', e));
   }
@@ -105,10 +98,7 @@ const GFWLoginOptions = (props: any) => {
           <li onClick={getSubscriptions} className="gfw-api-option">
             {subscriptions}
           </li>
-          <li
-            onClick={() => dispatch(renderModal('EditProfile'))}
-            className="gfw-api-option"
-          >
+          <li onClick={() => dispatch(renderModal('EditProfile'))} className="gfw-api-option">
             {profile}
           </li>
           <li className="gfw-api-option">
@@ -126,11 +116,7 @@ const GFWLoginOptions = (props: any) => {
     };
   }, []);
 
-  return (
-    <div ref={dropdownRef}>
-      {isLoggedIn ? <MYGFWOptions /> : <RenderLogins />}
-    </div>
-  );
+  return <div ref={dropdownRef}>{isLoggedIn ? <MYGFWOptions /> : <RenderLogins />}</div>;
 };
 
 export default GFWLoginOptions;

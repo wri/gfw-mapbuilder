@@ -8,6 +8,7 @@ import {
   SET_OPEN_LAYER_GROUP,
   SET_HIDE_WIDGET,
   SET_LOGGED_IN,
+  SET_IS_PROFILE_COMPLETE,
   AppState,
   LeftPanel,
   SET_MEASURE_RESULTS,
@@ -29,9 +30,7 @@ import {
   SET_TREE_HEIGHT
 } from './types';
 
-export function setSelectedSearchWidgetLayer(
-  payload: AppState['selectedSearchWidgetLayer']
-) {
+export function setSelectedSearchWidgetLayer(payload: AppState['selectedSearchWidgetLayer']) {
   return {
     type: SET_SELECTED_SEARCH_WIDGET_LAYER as typeof SET_SELECTED_SEARCH_WIDGET_LAYER,
     payload: payload
@@ -87,6 +86,13 @@ export function setLoggedIn(payload: AppState['isLoggedIn']) {
   };
 }
 
+export function setIsProfileComplete(payload: AppState['isProfileComplete']) {
+  return {
+    type: SET_IS_PROFILE_COMPLETE as typeof SET_IS_PROFILE_COMPLETE,
+    payload: payload
+  };
+}
+
 export function selectActiveTab(payload: LeftPanel['activeTab']) {
   return {
     type: SELECT_ACTIVE_TAB as typeof SELECT_ACTIVE_TAB,
@@ -115,36 +121,28 @@ export function setMeasureResults(payload: AppState['measureContent']) {
   };
 }
 
-export function setActiveMeasureButton(
-  payload: AppState['measureContent']['activeButton']
-) {
+export function setActiveMeasureButton(payload: AppState['measureContent']['activeButton']) {
   return {
     type: SET_ACTIVE_MEASURE_BUTTON as typeof SET_ACTIVE_MEASURE_BUTTON,
     payload: payload
   };
 }
 
-export function setAnalysisDateRange(
-  payload: AppState['leftPanel']['analysisDateRange']
-) {
+export function setAnalysisDateRange(payload: AppState['leftPanel']['analysisDateRange']) {
   return {
     type: SET_ANALYSIS_DATE as typeof SET_ANALYSIS_DATE,
     payload: payload
   };
 }
 
-export function setAnalysisYearRange(
-  payload: AppState['leftPanel']['analysisYearRange']
-) {
+export function setAnalysisYearRange(payload: AppState['leftPanel']['analysisYearRange']) {
   return {
     type: SET_ANALYSIS_YEAR_RANGE as typeof SET_ANALYSIS_YEAR_RANGE,
     payload: payload
   };
 }
 
-export function setGladConfirmed(
-  payload: AppState['leftPanel']['gladConfirmed']
-) {
+export function setGladConfirmed(payload: AppState['leftPanel']['gladConfirmed']) {
   return {
     type: SET_GLAD_CONFIRMED as typeof SET_GLAD_CONFIRMED,
     payload: payload

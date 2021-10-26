@@ -22,9 +22,7 @@ import { RootState } from '../../../js/store';
 import '../../../css/modalCard.scss';
 
 const ModalCard: FunctionComponent<{}> = () => {
-  const modalType = useSelector(
-    (state: RootState) => state.appState.renderModal
-  );
+  const modalType = useSelector((state: RootState) => state.appState.renderModal);
   const dispatch = useDispatch();
 
   const handleEscapeKey = (key: string) => {
@@ -119,11 +117,7 @@ const ModalCard: FunctionComponent<{}> = () => {
             tabIndex={0}
           ></div>
           <div className={`modal-card-container ${setClassName()}`}>
-            <button
-              style={{ color: '#555' }}
-              className="exit-button"
-              onClick={() => dispatch(renderModal(''))}
-            >
+            <button style={{ color: '#555' }} className="exit-button" onClick={() => dispatch(renderModal(''))}>
               <svg className="svg-icon">
                 <svg id="shape-close" viewBox="0 0 25 25">
                   <title>Close</title>

@@ -21,6 +21,7 @@ import resources from '../../../configs/resources';
 // import resources from '../../../configs/countryConfigs/cameroon';
 
 import '../../css/index.scss';
+import { CHECK_LOGGED_URL } from './gfwContent/utils';
 
 const App = (props: AppSettings | any): JSX.Element => {
   //Check for Report param in the URL (if that exists, we render a report view instead of our full scale application
@@ -28,23 +29,14 @@ const App = (props: AppSettings | any): JSX.Element => {
   const [showGlobalSpinner, setShowGlobalSpinner] = useState(true);
   const dispatch = useDispatch();
   //Listen to map loading state that comes from mapController via redux store change
-  const hideHeader = useSelector(
-    (store: RootState) => store.appSettings.hideHeader
-  );
-  const sharinghost = useSelector(
-    (store: RootState) => store.appSettings.sharinghost
-  );
-  const analyticsCode = useSelector(
-    (store: RootState) => store.appSettings.analyticsCode
-  );
+  const hideHeader = useSelector((store: RootState) => store.appSettings.hideHeader);
+  const sharinghost = useSelector((store: RootState) => store.appSettings.sharinghost);
+  const analyticsCode = useSelector((store: RootState) => store.appSettings.analyticsCode);
 
   loadGoogleAnalytics(analyticsCode);
 
   const fetchPortalInfo = async (appID: string) => {
-    const [Portal, PortalItem] = await loadModules([
-      'esri/portal/Portal',
-      'esri/portal/PortalItem'
-    ]);
+    const [Portal, PortalItem] = await loadModules(['esri/portal/Portal', 'esri/portal/PortalItem']);
 
     // APPID existing on the URL indicates that mapbuilder is loaded using arcgis template and we need to fetch settings using that app id to overwrite our default settings
     const portalURL = sharinghost || 'https://www.arcgis.com';
@@ -101,15 +93,12 @@ const App = (props: AppSettings | any): JSX.Element => {
         userToken = token;
       }
       if (userToken) {
-        fetch(
-          'https://production-api.globalforestwatch.org/auth/check-logged',
-          {
-            credentials: 'include',
-            headers: {
-              Authorization: `Bearer ${userToken}`
-            }
+        fetch(CHECK_LOGGED_URL, {
+          credentials: 'include',
+          headers: {
+            Authorization: `Bearer ${userToken}`
           }
-        )
+        })
           .then(response => {
             const hasError = response.status !== 200;
             response.json().then(data => {
