@@ -1,6 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
+import { DraggableProvided, DraggableStateSnapshot } from 'react-beautiful-dnd';
 import Select from 'react-select';
 import LayerToggleSwitch from './LayerToggleSwitch';
 import LayerTransparencySlider from './LayerTransparencySlider';
@@ -31,6 +32,7 @@ import { layerControlsTranslations } from '../../../../../configs/translations/l
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import TreeHeightPicker from '../../sharedComponents/TreeHeightPicker';
+import { DragIcon } from '../../../../images/dragIcon';
 
 //Dynamic custom theme override using styled-components lib
 interface CheckBoxWrapperProps {
@@ -264,6 +266,8 @@ interface LayerControlProps {
   activeLayer?: string;
   sendActiveLayer?: (val: string) => void;
   layer: LayerProps;
+  dndProvided: DraggableProvided;
+  dndSnapshot: DraggableStateSnapshot;
 }
 
 const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
@@ -362,14 +366,31 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
     }
   };
 
+  const getItemStyle = (isDragging: boolean, draggableStyle: any) => ({
+    userSelect: 'none',
+    border: isDragging ? '2px solid #f0ab01' : '',
+    boxSizing: isDragging ? 'border-box' : '',
+    ...draggableStyle
+  });
+
   return (
-    <>
+    <div
+      ref={props!.dndProvided!.innerRef}
+      {...props!.dndProvided!.draggableProps}
+      className="draggable-card"
+      style={getItemStyle(props!.dndSnapshot!.isDragging, props!.dndProvided!.draggableProps.style)}
+    >
       <div className="layers-control-checkbox">
         <div className="label-wrapper">
-          <div className="label-control-top">
-            {returnLayerControl()}
-            <div className="title-wrapper">
-              <span className="layer-label">{altLayerName ? altLayerName : layer?.title}</span>
+          <div {...props!.dndProvided!.dragHandleProps}>
+            <div className="label-control-top">
+              <div style={{ marginRight: 5, cursor: 'grab', zIndex: 100 }}>
+                <DragIcon titleId="drag-icon" />
+              </div>
+              {returnLayerControl()}
+              <div className="title-wrapper">
+                <span className="layer-label">{altLayerName ? altLayerName : layer?.title}</span>
+              </div>
             </div>
           </div>
           {returnSubtitle()}
@@ -409,7 +430,7 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
           parentID={props.parentID}
         />
       )}
-    </>
+    </div>
   );
 };
 
