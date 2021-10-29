@@ -398,7 +398,7 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
     // fill, outline only available for those layers that have potential renderers, sublayers, featurelayers
     if (layer.sublayer || layer.type === 'feature') {
       return (
-        <div style={{ padding: '0 2rem' }}>
+        <div style={{ padding: '5px 2rem' }}>
           <span style={{ fontSize: '0.7rem' }}>Fill</span>
           <LayerTransparencySlider
             layerOpacity={layer.opacity.fill}
@@ -413,7 +413,7 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
       );
     } else {
       return (
-        <div style={{ padding: '0 2rem' }}>
+        <div style={{ padding: '5px 2rem' }}>
           <LayerTransparencySlider
             layerOpacity={layer.opacity.combined}
             handleOpacityChange={handleFullOpacityChange}
@@ -431,7 +431,6 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
       style={getItemStyle(props!.dndSnapshot!.isDragging, props!.dndProvided!.draggableProps.style)}
     >
       <div style={{ borderBottom: '1px solid #8983834a', paddingBottom: 10 }}>
-        {/* style={{ borderBottom: '1px solid #8983834a', paddingBottom: 10 }} */}
         <div className="layers-control-checkbox">
           <div className="label-wrapper">
             <div {...props!.dndProvided!.dragHandleProps}>
