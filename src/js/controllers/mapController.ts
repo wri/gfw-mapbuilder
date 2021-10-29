@@ -1985,6 +1985,17 @@ export class MapController {
       unit: 'metric'
     });
   }
+
+  reorderLayer(layerID: string, index: number) {
+    const layerToReorder = this._map?.findLayerById(layerID);
+    if (layerToReorder && this._map) {
+      //Because UI layer legend ordering is inverse of how esri orders layers on map,
+      //we subtract index that represents UI from total number of layers, that gives us the inverse index
+      const numberOfLayers = this._map.layers.length - 1;
+      const inverseIndex = numberOfLayers - index;
+      this._map.reorder(layerToReorder, inverseIndex);
+    }
+  }
 }
 
 export const mapController = new MapController();

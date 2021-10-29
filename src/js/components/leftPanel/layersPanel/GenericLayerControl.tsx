@@ -1,6 +1,8 @@
 import * as React from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
+import { DraggableProvided, DraggableStateSnapshot } from 'react-beautiful-dnd';
 import Select from 'react-select';
 import LayerToggleSwitch from './LayerToggleSwitch';
 import LayerTransparencySlider from './LayerTransparencySlider';
@@ -27,12 +29,12 @@ import { DashboardIcon } from '../../../../images/dashboardIcon';
 import { LayerVersionPicker } from './LayerVersionPicker';
 import { LayerFactory } from '../../../../js/helpers/LayerFactory';
 import { layerControlsTranslations } from '../../../../../configs/translations/leftPanel.translations';
-
 import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
 import TreeHeightPicker from '../../sharedComponents/TreeHeightPicker';
 import { OpacityIcon } from '../../../../images/opacityIcon';
-import { useState } from 'react';
+import { DragIcon } from '../../../../images/dragIcon';
+
+import 'react-datepicker/dist/react-datepicker.css';
 
 //Dynamic custom theme override using styled-components lib
 interface CheckBoxWrapperProps {
@@ -266,6 +268,8 @@ interface LayerControlProps {
   activeLayer?: string;
   sendActiveLayer?: (val: string) => void;
   layer: LayerProps;
+  dndProvided: DraggableProvided;
+  dndSnapshot: DraggableStateSnapshot;
 }
 
 const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
@@ -343,6 +347,13 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
     }
   };
 
+  const getItemStyle = (isDragging: boolean, draggableStyle: any) => ({
+    userSelect: 'none',
+    border: isDragging ? '2px solid #f0ab01' : '',
+    boxSizing: isDragging ? 'border-box' : '',
+    ...draggableStyle
+  });
+
   const returnLayerControl = (): JSX.Element => {
     function handleLayerRadioClick(val: string) {
       if (props.sendActiveLayer) {
@@ -413,52 +424,67 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
   };
 
   return (
-    <div style={{ borderBottom: '1px solid #8983834a', paddingBottom: 10 }}>
-      <div className="layers-control-checkbox">
-        <div className="label-wrapper">
-          <div className="label-control-top">
-            {returnLayerControl()}
-            <div className="title-wrapper">
-              <span className="layer-label">{altLayerName ? altLayerName : layer?.title}</span>
+    <div
+      ref={props!.dndProvided!.innerRef}
+      {...props!.dndProvided!.draggableProps}
+      className="draggable-card"
+      style={getItemStyle(props!.dndSnapshot!.isDragging, props!.dndProvided!.draggableProps.style)}
+    >
+      <div style={{ borderBottom: '1px solid #8983834a', paddingBottom: 10 }}>
+        {/* style={{ borderBottom: '1px solid #8983834a', paddingBottom: 10 }} */}
+        <div className="layers-control-checkbox">
+          <div className="label-wrapper">
+            <div {...props!.dndProvided!.dragHandleProps}>
+              <div className="label-control-top">
+                <div style={{ marginRight: 5, cursor: 'grab', zIndex: 100 }}>
+                  <DragIcon titleId="drag-icon" />
+                </div>
+                {returnLayerControl()}
+                <div className="title-wrapper">
+                  <span className="layer-label">{altLayerName ? altLayerName : layer?.title}</span>
+                </div>
+              </div>
             </div>
+            {returnSubtitle()}
           </div>
-          {returnSubtitle()}
-        </div>
-        <div style={{ display: 'flex', gap: 5, flexDirection: 'row' }}>
-          <div
-            className="info-icon-container"
-            style={{ backgroundColor: `${customColorTheme}` }}
-            onClick={(): void => toggleOpacitySlider()}
-          >
-            <OpacityIcon width={13} height={13} fill={'#fff'} />
-          </div>
-          <div
-            className="info-icon-container"
-            style={{ backgroundColor: `${customColorTheme}` }}
-            onClick={(): void => openInfoModal()}
-          >
-            <InfoIcon width={10} height={10} fill={'#fff'} />
-          </div>
-          {layer.dashboardURL && (
+          <div style={{ display: 'flex', gap: 5, flexDirection: 'row' }}>
             <div
               className="info-icon-container"
               style={{ backgroundColor: `${customColorTheme}` }}
-              onClick={(): void => openDashModal()}
+              onClick={(): void => toggleOpacitySlider()}
             >
-              <DashboardIcon width={10} height={10} fill={'#fff'} />
+              <OpacityIcon width={12} height={12} fill={'#fff'} />
             </div>
-          )}
+            <div
+              className="info-icon-container"
+              style={{ backgroundColor: `${customColorTheme}` }}
+              onClick={(): void => openInfoModal()}
+            >
+              <InfoIcon width={10} height={10} fill={'#fff'} />
+            </div>
+            {layer.dashboardURL && (
+              <div
+                className="info-icon-container"
+                style={{ backgroundColor: `${customColorTheme}` }}
+                onClick={(): void => openDashModal()}
+              >
+                <DashboardIcon width={10} height={10} fill={'#fff'} />
+              </div>
+            )}
+          </div>
         </div>
+        {layer?.visible && returnTimeSlider(props.id)}
+        {layer?.visible && densityPicker && <CanopyDensityPicker />}
+        {layer?.visible && layer.id === 'TREE_COVER_HEIGHT' && <TreeHeightPicker />}
+        {layer?.visible && layer.versions && (
+          <LayerVersionPicker layerInfo={layer} selectedLanguage={selectedLanguage} />
+        )}
+        {layer?.visible && layer.filterField && (
+          <LayerFilterSelection layerInfo={layer} selectedLanguage={selectedLanguage} />
+        )}
+        {layer?.visible && returnDateRange(props.id, layer, selectedLanguage)}
+        {opacityControl && returnOpacityControl(layer)}
       </div>
-      {layer?.visible && returnTimeSlider(props.id)}
-      {layer?.visible && densityPicker && <CanopyDensityPicker />}
-      {layer?.visible && layer.id === 'TREE_COVER_HEIGHT' && <TreeHeightPicker />}
-      {layer?.visible && layer.versions && <LayerVersionPicker layerInfo={layer} selectedLanguage={selectedLanguage} />}
-      {layer?.visible && layer.filterField && (
-        <LayerFilterSelection layerInfo={layer} selectedLanguage={selectedLanguage} />
-      )}
-      {layer?.visible && returnDateRange(props.id, layer, selectedLanguage)}
-      {opacityControl && returnOpacityControl(layer)}
     </div>
   );
 };

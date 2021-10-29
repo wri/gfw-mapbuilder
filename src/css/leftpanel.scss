@@ -533,6 +533,10 @@
   }
 }
 
+.draggable-card {
+  animation: slide-down 1s ease;
+}
+
 .layers-control-container {
   color: $dark-grey;
 
