@@ -21,6 +21,7 @@ export interface AppSettings {
   alternativeLanguageSubtitle: string;
   iso: string;
   hideFooter?: boolean;
+  disabledAnalysisModules?: ['VIIRS_FIRES', 'GLAD_ALERTS', 'TC_LOSS', 'IFL', 'LCC'] | [];
   hideHeader?: boolean;
   hideLegend?: boolean;
   navLinksInNewTab?: boolean;
@@ -53,7 +54,7 @@ type LayerGroup = {
 };
 
 export interface AnalysisModule {
-  analysisId: string;
+  analysisId: 'VIIRS_FIRES' | 'GLAD_ALERTS' | 'TC_LOSS' | 'IFL' | 'LCC';
   chartType: string;
   label: { [key: string]: string };
   title: {

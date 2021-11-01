@@ -326,19 +326,27 @@ interface ChartProps {
 }
 const ReportChartsComponent = (props: ChartProps): JSX.Element => {
   const selectedLanguage = useSelector((store: RootState) => store.appState.selectedLanguage);
+  const disabledAnalysisModules = useSelector((store: RootState) => store.appSettings.disabledAnalysisModules);
 
   return (
     <div className="chart-area-container">
-      {defaultAnalysisModules.map((module, i) => (
-        <ChartModule
-          key={i}
-          moduleInfo={module}
-          lang={selectedLanguage}
-          geostoreID={props.geostoreID}
-          esriGeometry={props.esriGeometry}
-          activeFeatureAttributes={props.attributes}
-        />
-      ))}
+      {defaultAnalysisModules
+        .filter(m => {
+          if (disabledAnalysisModules?.length) {
+            return !disabledAnalysisModules.includes(m.analysisId);
+          }
+          return true;
+        })
+        .map((module, i) => (
+          <ChartModule
+            key={i}
+            moduleInfo={module}
+            lang={selectedLanguage}
+            geostoreID={props.geostoreID}
+            esriGeometry={props.esriGeometry}
+            activeFeatureAttributes={props.attributes}
+          />
+        ))}
     </div>
   );
 };

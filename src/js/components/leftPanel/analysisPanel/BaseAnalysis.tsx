@@ -82,6 +82,8 @@ const BaseAnalysis = (): JSX.Element => {
 
   const customColorTheme = useSelector((store: RootState) => store.appSettings.customColorTheme);
 
+  const disabledAnalysisModules = useSelector((store: RootState) => store.appSettings.disabledAnalysisModules);
+
   useEffect(() => {
     const activeLayer = activeFeatures[activeFeatureIndex[0]];
     const activeFeature = activeLayer?.features[activeFeatureIndex[1]];
@@ -228,13 +230,20 @@ const BaseAnalysis = (): JSX.Element => {
     return (
       <select className="analysis-select" value={selectedAnalysis || 'default'} onChange={handleAnalysisOptionChange}>
         <option value="default">{analysisTranslations.defaultAnalysisLabel[selectedLanguage]}</option>
-        {defaultAnalysisModules.map((module: any, i: number) => {
-          return (
-            <option value={module.analysisId} key={i}>
-              {module.label[selectedLanguage] || `Untranslated ${module.analysisId}`}
-            </option>
-          );
-        })}
+        {defaultAnalysisModules
+          .filter(m => {
+            if (disabledAnalysisModules?.length) {
+              return !disabledAnalysisModules.includes(m.analysisId);
+            }
+            return true;
+          })
+          .map((module, i: number) => {
+            return (
+              <option value={module.analysisId} key={i}>
+                {module.label[selectedLanguage] || `Untranslated ${module.analysisId}`}
+              </option>
+            );
+          })}
       </select>
     );
   };
