@@ -8,7 +8,7 @@ import { RootState } from '../../js/store/index';
 import { useSelector, useDispatch } from 'react-redux';
 import Loader from '../../js/components/sharedComponents/Loader';
 import { overwriteSettings } from '../../js/store/appSettings/actions';
-import { setLoggedIn } from '../../js/store/appState/actions';
+import { setIsProfileComplete, setLoggedIn } from '../../js/store/appState/actions';
 import { AppSettings } from '../../js/store/appSettings/types';
 import {
   checkForReportView,
@@ -21,7 +21,7 @@ import resources from '../../../configs/resources';
 // import resources from '../../../configs/countryConfigs/cameroon';
 
 import '../../css/index.scss';
-import { CHECK_LOGGED_URL } from './gfwContent/utils';
+import { allRequiredFieldsPresent, CHECK_LOGGED_URL, getUserData } from './gfwContent/utils';
 
 const App = (props: AppSettings | any): JSX.Element => {
   //Check for Report param in the URL (if that exists, we render a report view instead of our full scale application
@@ -106,6 +106,18 @@ const App = (props: AppSettings | any): JSX.Element => {
               localStorage.setItem('userID', data.id);
               localStorage.setItem('email', data?.email);
               dispatch(setLoggedIn(true));
+
+              //check if user has completed their profile
+              getUserData(data.id, userToken).then(dataRes => {
+                console.log('userData', dataRes);
+                if (dataRes?.error) {
+                  //hande error
+                  console.log('Err:', dataRes.errorMsg);
+                  dispatch(setIsProfileComplete(false));
+                } else if (dataRes?.userData) {
+                  dispatch(setIsProfileComplete(allRequiredFieldsPresent(dataRes?.userData).length === 0));
+                }
+              });
             });
           })
           .catch(e => console.error(e));
