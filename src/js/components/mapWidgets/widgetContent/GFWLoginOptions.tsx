@@ -41,7 +41,10 @@ const GFWLoginOptions = (props: any) => {
         dispatch(setLoggedIn(false));
 
         //remove user token from the URL
-        window.location.href = window.origin;
+        const url = new URL(window.location.href);
+        const searchParams = new URLSearchParams(url.search);
+        searchParams.has('token') && searchParams.delete('token');
+        window.location.href = window.origin + searchParams.toString();
       })
       .catch(e => console.log('Logout failed', e));
   }
