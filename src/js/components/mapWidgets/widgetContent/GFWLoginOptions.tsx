@@ -44,7 +44,7 @@ const GFWLoginOptions = (props: any) => {
         const url = new URL(window.location.href);
         const searchParams = new URLSearchParams(url.search);
         searchParams.has('token') && searchParams.delete('token');
-        window.location.href = window.origin + searchParams.toString();
+        window.location.href = url.origin + url.pathname + searchParams.toString();
       })
       .catch(e => console.log('Logout failed', e));
   }
