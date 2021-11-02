@@ -298,7 +298,7 @@ const BaseAnalysis = (): JSX.Element => {
           <span style={{ fontWeight: 600 }}>From: </span>
           <span>{2001}</span>
           <span style={{ fontWeight: 600 }}> to: </span>
-          <span>{3020}</span>
+          <span>{2020}</span>
         </div>
       );
     }

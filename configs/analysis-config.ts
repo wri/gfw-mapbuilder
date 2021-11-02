@@ -244,74 +244,86 @@ export const defaultAnalysisModules: AnalysisModule[] = [
     widgetId: 'd8317d56-b7d9-4888-81d4-e1c411c380a4',
     analysisParams: [],
     sqlString: 'select sum(area__ha) from esa_land_cover_2015 group by esa_land_cover_2015__class'
+  },
+  {
+    analysisId: 'TC_LOSS_TOTAL',
+    chartType: 'badge',
+    label: {
+      en: 'Total tree cover loss',
+      fr: 'Perte total de la couverture arborée',
+      es: 'Pérdida de cobertura arbórea total',
+      pt: 'Perda total de cobertura arbórea',
+      id: 'Total kehilangan tutupan pohon ',
+      zh: '总森林覆盖减少',
+      ka: 'ხის ვარჯის საერთო კარგვა'
+    },
+    title: {
+      en: 'Total tree cover loss',
+      fr: 'Perte total de la couverture arborée',
+      es: 'Pérdida de cobertura arbórea total',
+      pt: 'Perda total de cobertura arbórea',
+      id: 'Total kehilangan tutupan pohon ',
+      zh: '总森林覆盖减少',
+      ka: 'ხის ვარჯის საერთო კარგვა'
+    },
+    description: {
+      en: 'Select range and tree cover density for loss data then click the run analysis button to see results.',
+      fr:
+        'Sélectionner la plage et la densité de couverture arborée pour les données de perte, puis cliquer sur le bouton « lancer l’analyse » pour voir les résultats.',
+      es:
+        'Para obtener los datos sobre pérdida, seleccione el rango y la densidad de la cobertura arbórea, después haga clic en el botón ejecutar análisis para ver los resultados.',
+      pt:
+        'Selecione o período e a densidade de cobertura arbórea para dados de perda; em seguida, clique no botão para executar a análise e ver os resultados.',
+      id:
+        'Pilih rentang dan kerapatan tutupan pohon untuk data yang hilang, kemudian klik tombol mulai analisis untuk melihat hasilnya.',
+      zh: '选择要考察减少量数据的范围和森林覆盖密度，然后点击“运行分析”按钮查看结果。',
+      ka:
+        'შეარჩიეთ საზღვრები და ხის ვარჯის სიხშირე კარგვის მონაცემებისთვის, შემდეგ დააჭირეთ ღილაკს ანალიზის  ჩატარება შედეგების სანახავად.'
+    },
+    useGfwWidget: true,
+    widgetId: '7a7aba4a-2b71-47d7-983a-bdba4c4b6223',
+    analysisParams: [],
+    sqlString: 'select sum(area__ha) from umd_tree_cover_loss where umd_tree_cover_density_2000__threshold >= {density}'
+  },
+  {
+    analysisId: 'TC_GAIN_TOTAL',
+    chartType: 'badge',
+    label: {
+      en: 'Total tree cover gain',
+      fr: 'Gain total de la couverture arborée',
+      es: 'Ganancia de cobertura arbórea total',
+      pt: 'Ganho total de cobertura arbórea',
+      id: 'Perolehan tutupan pohon ',
+      zh: '增加面积量',
+      ka: 'ხის ვარჯის საერთო მატება'
+    },
+    title: {
+      en: 'Total tree cover gain',
+      fr: 'Gain total de la couverture arborée',
+      es: 'Ganancia de cobertura arbórea total',
+      pt: 'Ganho total de cobertura arbórea',
+      id: 'Total perolehan tutupan pohon ',
+      zh: '增加面积量',
+      ka: 'ხის ვარჯის საერთო მატება'
+    },
+    description: {
+      en:
+        'Gain data is currently only available for 2000 – 2012 and the gain analysis will always reflect the full 12-year time-period.',
+      fr:
+        'Les données de gain ne sont actuellement disponibles que pour 2000 – 2012 et l’analyse de gain reflétera toujours la plage de 12 ans entière.',
+      es:
+        'Los datos sobre ganancia actualmente solo están disponibles para los años 2000 a 2012 y el análisis de la ganancia siempre reflejará el periodo de 12 años completo.',
+      pt:
+        'Os dados de ganho estão disponíveis atualmente apenas para o período 2000 – 2012 e a análise de ganho sempre refletirá o período completo de 12 anos.',
+      id:
+        'Data perolehan saat ini hanya tersedia untuk periode 2000 – 2012 dan analisis perolehan akan selalu mencerminkan periode waktu 12 tahun penuh.',
+      zh: '目前仅有 2000 – 2012 年的增加量数据，增加分析始终反映这 12 年的完整情况。',
+      ka:
+        'მატების მონაცემები ამჟამად ხელმისაწვდომია 2000-2012 წლებისთვის და მატების ანალიზი ყოველთვის ასახავს სრულ 12-წლიან დროის პერიოდს.'
+    },
+    useGfwWidget: true,
+    widgetId: '8e6f1e58-bdb8-4e2d-bb08-9c223de53896',
+    analysisParams: [],
+    sqlString: 'select sum(area__ha) from umd_tree_cover_gain'
   }
-  // {
-  //   analysisId: 'Loss_LandCover',
-  //   chartType: 'bar',
-  //   label: {
-  //     en: 'Annual tree cover loss by land cover class',
-  //     fr: 'Perte annuelle de la couverture arborée par catégorie de couverture terrestre',
-  //     es: 'Pérdida de cobertura arbórea anual por clase de cobertura de tierra',
-  //     pt: 'Perda anual de cobertura arbórea por classe de cobertura de terra',
-  //     id: 'Kehilangan tutupan pohon tahunan berdasarkan  kelas tutupan lahan',
-  //     zh: '年度森林覆盖减少量（按土地覆盖分类）',
-  //     ka: 'ყოველწლიური ხის ვარჯის კარგვა მიწის საფარის კლასის მიხედვით'
-  //   },
-  //   title: {
-  //     en: 'Annual tree cover loss by land cover class',
-  //     fr: 'Perte annuelle de la couverture arborée par catégorie de couverture terrestre',
-  //     es: 'Pérdida de cobertura arbórea anual por clase de cobertura de tierra',
-  //     pt: 'Perda anual de cobertura arbórea por classe de cobertura de terra',
-  //     id: 'Kehilangan tutupan pohon tahunan berdasarkan  kelas tutupan lahan',
-  //     zh: '年度森林覆盖减少量（按土地覆盖分类）',
-  //     ka: 'ყოველწლიური ხის ვარჯის კარგვა მიწის საფარის კლასის მიხედვით'
-  //   },
-  //   description: {
-  //     en:
-  //       'Land cover data from 2000 and provided by the European Space Agency (ESA) and UCLouvain. Select range and tree cover density then click the run analysis button to see results.',
-  //     fr:
-  //       'Données de couverture du sol datant de 2000 et fournies par l’Agence Spatiale Européenne (European Space Agency, ESA) et UCLouvain. Sélectionner la plage et la densité de couverture arborée, puis cliquer sur le bouton « Lancer l’analyse » pour voir les résultats.',
-  //     es:
-  //       'Los datos de la cobertura de tierra son de 2000 y fueron proporcionados por la Agencia Espacial Europea (European Space Agency, ESA) y UCLouvain. Para ver los resultados, seleccione el rango y la densidad de la cobertura arbórea, después haga clic en el botón ejecutar análisis.',
-  //     pt:
-  //       'Dados de cobertura de terra relativos ao período posterior a 2000 e fornecidos pela Agência Espacial Europeia (ESA) e pela Universidade Católica da Lovaina (UCLouvain). Para ver os resultados, selecione o período e a densidade de cobertura arbórea; em seguida, clique no botão para executar a análise.',
-  //     id:
-  //       'Data tutupan lahan dari tahun 2000 dan disediakan oleh Badan Antariksa Eropa –(ESA) dan UCLouvain. Pilih rentang dan kerapatan tutupan pohon kemudian klik tombol mulai analisis untuk melihat hasil.',
-  //     zh:
-  //       '自 2000 年以来的土地覆盖数据，由欧洲空间局 (ESA) 和 UCLouvain 提供。选择范围和森林覆盖密度，然后点击“运行分析”按钮查看结果。',
-  //     ka:
-  //       'მიწის საფარის მონაცემები 2000 წლიდან მოწოდებულია ევროპული კოსმოსური სააგენტოს (ESA) და ლუვენის კათოლიკური უნივერსიტეტის (UCLouvain) მიერ. შეარჩიეთ საზღვრები და ხის ვარჯის სიხშირე, შემდეგ დააჭირეთ ღილაკს ანალიზის ჩატარება შედეგების სანახავად.'
-  //   },
-  //   useGfwWidget: true,
-  //   widgetId: 'd8317d56-b7d9-4888-81d4-e1c411c380a4',
-  //   analysisParams: [
-  //     {
-  //       type: 'rangeSlider',
-  //       bounds: [2001, 2018],
-  //       label: {
-  //         en: 'Select range for analysis',
-  //         fr: 'Sélectionner une plage pour l’analyse:',
-  //         es: 'Seleccione un rango para el análisis:',
-  //         pt: 'Selecione o período para análise:',
-  //         id: 'Pilih rentang untuk analisis:',
-  //         zh: '选择分析范围:',
-  //         ka: 'საზღვრების შერჩევა ანალიზისთვის:'
-  //       }
-  //     },
-  //     {
-  //       type: 'tcd',
-  //       label: {
-  //         en: 'Select tree cover density: ',
-  //         fr: 'Sélectionner la densité de couverture arborée: ',
-  //         es: 'Seleccione la densidad de la cobertura arbórea: ',
-  //         pt: 'Selecione a densidade de cobertura arbórea: ',
-  //         id: 'Pilih kerapatan tutupan pohon: ',
-  //         zh: '选择森林覆盖密度: ',
-  //         ka: 'ხის ვარჯის სიხშირის შერჩევა: '
-  //       }
-  //     }
-  //   ],
-  //   sqlString:
-  //     "select sum(area__ha) from umd_tree_cover_loss where umd_tree_cover_density_2000__threshold >= {density} and is__ifl_intact_forest_landscapes = 'true' group by umd_tree_cover_loss__year"
-  // }
 ];
