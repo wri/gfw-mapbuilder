@@ -103,7 +103,7 @@ export const defaultAnalysisModules: AnalysisModule[] = [
     analysisId: 'TC_LOSS',
     chartType: 'bar',
     label: {
-      en: 'Annual Tree cover loss',
+      en: 'Annual Tree Cover Loss',
       fr: 'Pertes de la couverture arborée annuelles',
       es: 'Pérdida de cobertura arbórea anual',
       pt: 'Perda anual de cobertura arbórea',
@@ -112,7 +112,7 @@ export const defaultAnalysisModules: AnalysisModule[] = [
       ka: 'წლიური ხის ვარჯის კარგვა'
     },
     title: {
-      en: 'Annual Tree cover loss',
+      en: 'Annual Tree Cover Loss',
       fr: 'Pertes de la couverture arborée annuelles',
       es: 'Pérdida de cobertura arbórea anual',
       pt: 'Perda anual de cobertura arbórea',
@@ -155,7 +155,7 @@ export const defaultAnalysisModules: AnalysisModule[] = [
     analysisId: 'IFL',
     chartType: 'bar',
     label: {
-      en: 'Annual tree cover loss in IFL',
+      en: 'Annual Tree Cover Loss in Intact Forest Landscapes (IFL)',
       fr: 'Perte annuelle de la couverture arborée en PFI',
       es: 'Pérdida de cobertura arbórea anual en IFL',
       pt: 'Perda anual de cobertura arbórea em IFL',
@@ -249,7 +249,7 @@ export const defaultAnalysisModules: AnalysisModule[] = [
     analysisId: 'TC_LOSS_TOTAL',
     chartType: 'badge',
     label: {
-      en: 'Total tree cover loss',
+      en: 'Total Tree Cover Loss',
       fr: 'Perte total de la couverture arborée',
       es: 'Pérdida de cobertura arbórea total',
       pt: 'Perda total de cobertura arbórea',
@@ -289,7 +289,7 @@ export const defaultAnalysisModules: AnalysisModule[] = [
     analysisId: 'TC_GAIN_TOTAL',
     chartType: 'badge',
     label: {
-      en: 'Total tree cover gain',
+      en: 'Total Tree Cover Gain',
       fr: 'Gain total de la couverture arborée',
       es: 'Ganancia de cobertura arbórea total',
       pt: 'Ganho total de cobertura arbórea',
