@@ -66,7 +66,7 @@ const BaseAnalysis = (): JSX.Element => {
   const selectedLanguage = useSelector((store: RootState) => store.appState.selectedLanguage);
 
   //Default to the first analysis
-  const [selectedAnalysis, setSelectedAnalysis] = useState('default');
+  const [selectedAnalysis, setSelectedAnalysis] = useState<any>('default');
 
   const [geostoreReady, setGeostoreReady] = useState(false);
 
@@ -286,21 +286,38 @@ const BaseAnalysis = (): JSX.Element => {
   }
 
   function analysisDateRangeHeader() {
-    if (selectedAnalysis !== 'VIIRS_FIRES' && selectedAnalysis !== 'GLAD_ALERTS') return null;
-    return (
-      <div
-        style={{
-          textAlign: 'center',
-          marginTop: 15,
-          marginBottom: -20
-        }}
-      >
-        <span style={{ fontWeight: 600 }}>From: </span>
-        <span>{analysisDateRange[0]}</span>
-        <span style={{ fontWeight: 600 }}> to: </span>
-        <span>{analysisDateRange[1]}</span>
-      </div>
-    );
+    if (selectedAnalysis === 'TC_LOSS_TOTAL') {
+      return (
+        <div
+          style={{
+            textAlign: 'center',
+            marginTop: 15,
+            marginBottom: -20
+          }}
+        >
+          <span style={{ fontWeight: 600 }}>From: </span>
+          <span>{2001}</span>
+          <span style={{ fontWeight: 600 }}> to: </span>
+          <span>{3020}</span>
+        </div>
+      );
+    }
+    if (selectedAnalysis === 'VIIRS_FIRES' || selectedAnalysis === 'GLAD_ALERTS') {
+      return (
+        <div
+          style={{
+            textAlign: 'center',
+            marginTop: 15,
+            marginBottom: -20
+          }}
+        >
+          <span style={{ fontWeight: 600 }}>From: </span>
+          <span>{analysisDateRange[0]}</span>
+          <span style={{ fontWeight: 600 }}> to: </span>
+          <span>{analysisDateRange[1]}</span>
+        </div>
+      );
+    }
   }
 
   const returnButtons = (): JSX.Element | undefined => {

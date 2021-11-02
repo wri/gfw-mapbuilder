@@ -119,12 +119,12 @@ export function generateWidgetURL({
     sqlQuery = sqlQuery.replace('{endDate}', `'${endDate}'`);
     baseURL = baseURL.concat(`&sql=${sqlQuery}`);
   }
-  if ((analysisId === 'TC_LOSS' || analysisId === 'IFL') && density !== undefined) {
+  if ((analysisId === 'TC_LOSS' || analysisId === 'IFL' || analysisId === 'TC_LOSS_TOTAL') && density !== undefined) {
     let sqlQuery = sqlString;
     sqlQuery = sqlQuery.replace('{density}', `${markValueMap[density]}`);
     baseURL = baseURL.concat(`&sql=${sqlQuery}`);
   }
-  if (analysisId === 'LCC') {
+  if (analysisId === 'LCC' || analysisId === 'TC_GAIN_TOTAL') {
     const sqlQuery = sqlString;
     baseURL = baseURL.concat(`&sql=${sqlQuery}`);
   }
