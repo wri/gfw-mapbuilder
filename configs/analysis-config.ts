@@ -258,7 +258,7 @@ export const defaultAnalysisModules: AnalysisModule[] = [
       ka: 'ხის ვარჯის საერთო კარგვა'
     },
     title: {
-      en: 'Total tree cover loss',
+      en: 'Total Tree Cover Loss',
       fr: 'Perte total de la couverture arborée',
       es: 'Pérdida de cobertura arbórea total',
       pt: 'Perda total de cobertura arbórea',
@@ -298,7 +298,7 @@ export const defaultAnalysisModules: AnalysisModule[] = [
       ka: 'ხის ვარჯის საერთო მატება'
     },
     title: {
-      en: 'Total tree cover gain',
+      en: 'Total Tree Cover Gain',
       fr: 'Gain total de la couverture arborée',
       es: 'Ganancia de cobertura arbórea total',
       pt: 'Ganho total de cobertura arbórea',
