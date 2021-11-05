@@ -36,10 +36,7 @@ const urlEncodingMap = {
   ty: 'tree_cover_loss_years'
 };
 
-function getGeostoreID(
-  activeFeatureIndex: number[],
-  activeFeatures: LayerFeatureResult[]
-): Promise<string> {
+function getGeostoreID(activeFeatureIndex: number[], activeFeatures: LayerFeatureResult[]): Promise<string> {
   const activeLayer = activeFeatures[activeFeatureIndex[0]];
   const activeFeature = activeLayer?.features[activeFeatureIndex[1]];
   return registerGeometry(activeFeature)
@@ -63,17 +60,12 @@ export async function getShareableURL(props: ShareURLProps): Promise<string> {
 
   //Active Feature geostoreID specificly for the report usecase
   if (props.report) {
-    const geostoreID = await getGeostoreID(
-      mapviewState.activeFeatureIndex,
-      mapviewState.activeFeatures
-    );
+    const geostoreID = await getGeostoreID(mapviewState.activeFeatureIndex, mapviewState.activeFeatures);
     urlParams.push(`geostoreID=${geostoreID}`);
 
     //Report queries active feature for attributes, so we need objectID, layerID and subLayerID tracking also
-    const activeLayer =
-      mapviewState.activeFeatures[mapviewState.activeFeatureIndex[0]];
-    const activeFeature =
-      activeLayer.features[mapviewState.activeFeatureIndex[1]];
+    const activeLayer = mapviewState.activeFeatures[mapviewState.activeFeatureIndex[0]];
+    const activeFeature = activeLayer.features[mapviewState.activeFeatureIndex[1]];
     urlParams.push(`acLayer=${activeLayer.layerID}`);
     urlParams.push(`acSublayer=${activeLayer.sublayerID}`);
     urlParams.push(`objectid=${activeFeature.objectid}`);
@@ -113,7 +105,7 @@ export async function getShareableURL(props: ShareURLProps): Promise<string> {
     } else {
       layerIDS.push(l.id);
     }
-    layerOpacities.push(l.opacity);
+    layerOpacities.push(l.opacity.combined);
   });
   const layerIDSString = layerIDS.join('%2C');
   const layerOpacitiesString = layerOpacities.join('%2C');

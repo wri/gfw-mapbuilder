@@ -37,7 +37,7 @@ import {
   setGladStart,
   setGladEnd
 } from '../../js/store/appState/actions';
-import { LayerProps, LayerFeatureResult, FeatureResult } from '../../js/store/mapview/types';
+import { LayerProps, LayerFeatureResult, FeatureResult, LayerTypes } from '../../js/store/mapview/types';
 import { OptionType } from '../types/measureWidget';
 import { queryLayersForFeatures } from '../../js/helpers/dataPanel/DataPanel';
 import { setNewGraphic } from '../../js/helpers/MapGraphics';
@@ -288,11 +288,15 @@ export class MapController {
           for (const remoteLayerObject of allowedRemoteLayersObjects) {
             if (!remoteLayerObject) continue; //remoteLayerObject may be undefined if we failed to retrieve layer data from api for some reason
 
+            const newRemoteLayerObject = {} as LayerProps;
             //Depending if layer is from GFW API or Resource (config file) construct object appropriately
-            const newRemoteLayerObject = {
-              opacity: determineLayerOpacity(remoteLayerObject, layerInfosFromURL),
-              visible: determineLayerVisibility(remoteLayerObject, layerInfosFromURL)
-            } as LayerProps;
+            newRemoteLayerObject['opacity'] = {
+              combined: determineLayerOpacity(remoteLayerObject, layerInfosFromURL),
+              fill: 1,
+              outline: 1
+            };
+
+            newRemoteLayerObject['visible'] = determineLayerVisibility(remoteLayerObject, layerInfosFromURL);
 
             //dealing with GFW API layers
             //TODO: This needs a major rethink/rework
@@ -922,24 +926,102 @@ export class MapController {
     }
   }
 
-  setLayerOpacity(layerID: string, value: string, sublayer?: boolean, parentID?: string): void {
-    let layer = null as any;
+  updateRendererOpacity(renderer: any, fill: boolean, opacityValue: number) {
+    const rendererClone = renderer.clone();
+    if (rendererClone.type === 'unique-value' && rendererClone?.uniqueValueInfos.length !== 0) {
+      rendererClone.uniqueValueInfos.forEach(uniqueValueInfo => {
+        if (fill) {
+          uniqueValueInfo.symbol.color.a = opacityValue;
+        } else {
+          uniqueValueInfo.symbol.outline.color.a = opacityValue;
+        }
+      });
+      return rendererClone;
+    }
+    if (rendererClone.type === 'simple') {
+      if (fill) {
+        rendererClone.symbol.color.a = opacityValue;
+      } else {
+        rendererClone.symbol.outline.color.a = opacityValue;
+      }
+      return rendererClone;
+    }
+  }
+
+  setLayerOpacityFillOutline(fill: boolean, layerID: string, value: number, sublayer?: boolean, parentID?: string) {
+    let layer: any;
     if (sublayer && parentID) {
       layer = this._map
         ?.findLayerById(parentID)
         //@ts-ignore -- sublayers exist
         ?.allSublayers.items.find((sub: any) => sub.id === layerID);
     } else {
-      layer = this._map?.findLayerById(layerID);
+      layer = this._map?.findLayerById(layerID) as any;
+    }
+
+    if (layer) {
+      if (!layer.renderer) {
+        layer.load().then(() => {
+          const updatedRenderer = this.updateRendererOpacity(layer.renderer, fill, value);
+          layer.renderer = updatedRenderer;
+        });
+      } else {
+        //we have renderer available, so use that
+        const updatedRenderer = this.updateRendererOpacity(layer.renderer, fill, value);
+        layer.renderer = updatedRenderer;
+      }
+      const { mapviewState } = store.getState();
+      const newLayersArray = mapviewState.allAvailableLayers.map(l => {
+        if (l.id === layerID) {
+          const opacity = {
+            combined: l.opacity.combined,
+            fill: 0,
+            outline: 0
+          };
+          if (fill) {
+            opacity['fill'] = value;
+            opacity['outline'] = l.opacity.outline;
+          } else {
+            opacity['fill'] = l.opacity.fill;
+            opacity['outline'] = value;
+          }
+          return {
+            ...l,
+            opacity: opacity
+          };
+        } else {
+          return l;
+        }
+      });
+      store.dispatch(allAvailableLayers(newLayersArray));
+    }
+  }
+
+  setLayerOpacity(layerID: string, value: string, sublayer?: boolean, parentID?: string): void {
+    let layer: any;
+    if (sublayer && parentID) {
+      layer = this._map
+        ?.findLayerById(parentID)
+        //@ts-ignore -- sublayers exist
+        ?.allSublayers.items.find((sub: any) => sub.id === layerID);
+    } else {
+      layer = this._map?.findLayerById(layerID) as any;
     }
     if (layer) {
+      //updating layer's esri property
       layer.opacity = Number(value);
+
+      //updating redux arr values
       const { mapviewState } = store.getState();
       const newLayersArray = mapviewState.allAvailableLayers.map(l => {
         if (l.id === layerID) {
           return {
             ...l,
-            opacity: layer.opacity
+            opacity: {
+              combined: Number(value),
+              fill: l.opacity.fill,
+              outline: l.opacity.outline
+            }
           };
         } else {
           return l;
@@ -1782,7 +1864,7 @@ export class MapController {
       return;
     }
 
-    layer.opacity = opacity;
+    layer.opacity.combined = opacity;
     const { mapviewState } = store.getState();
     const newLayersArray = mapviewState.allAvailableLayers.map(l => {
       if (l.id === layerID) {

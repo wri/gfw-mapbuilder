@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import { DraggableProvided, DraggableStateSnapshot } from 'react-beautiful-dnd';
@@ -28,11 +29,12 @@ import { DashboardIcon } from '../../../../images/dashboardIcon';
 import { LayerVersionPicker } from './LayerVersionPicker';
 import { LayerFactory } from '../../../../js/helpers/LayerFactory';
 import { layerControlsTranslations } from '../../../../../configs/translations/leftPanel.translations';
-
 import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
 import TreeHeightPicker from '../../sharedComponents/TreeHeightPicker';
+import { OpacityIcon } from '../../../../images/opacityIcon';
 import { DragIcon } from '../../../../images/dragIcon';
+
+import 'react-datepicker/dist/react-datepicker.css';
 
 //Dynamic custom theme override using styled-components lib
 interface CheckBoxWrapperProps {
@@ -273,6 +275,7 @@ interface LayerControlProps {
 const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
   const layer = props.layer;
   const dispatch = useDispatch();
+  const [opacityControl, setOpacityControl] = useState(false);
 
   const selectedLanguage = useSelector((store: RootState) => store.appState.selectedLanguage);
 
@@ -296,6 +299,10 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
       dispatch(setInfoModalLayerID(layer.id));
     }
     return;
+  };
+
+  const toggleOpacitySlider = (): void => {
+    setOpacityControl(!opacityControl);
   };
 
   const openDashModal = (): void => {
@@ -340,6 +347,13 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
     }
   };
 
+  const getItemStyle = (isDragging: boolean, draggableStyle: any) => ({
+    userSelect: 'none',
+    border: isDragging ? '2px solid #f0ab01' : '',
+    boxSizing: isDragging ? 'border-box' : '',
+    ...draggableStyle
+  });
+
   const returnLayerControl = (): JSX.Element => {
     function handleLayerRadioClick(val: string) {
       if (props.sendActiveLayer) {
@@ -366,12 +380,48 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
     }
   };
 
-  const getItemStyle = (isDragging: boolean, draggableStyle: any) => ({
-    userSelect: 'none',
-    border: isDragging ? '2px solid #f0ab01' : '',
-    boxSizing: isDragging ? 'border-box' : '',
-    ...draggableStyle
-  });
+  const handleFullOpacityChange = (eventValue: any): void => {
+    //TODO: check if we still need modis
+    if (props.id === 'MODIS_ACTIVE_FIRES') {
+      mapController.updateMODISorVIIRSOpacity(props.id, eventValue);
+    } else {
+      mapController.setLayerOpacity(props.id, eventValue, props.sublayer, props.parentID);
+    }
+  };
+
+  const handleRendererOpacityChange = (fill: boolean, val: number): void => {
+    mapController.setLayerOpacityFillOutline(fill, props.id, val, props.sublayer, props.parentID);
+  };
+
+  const returnOpacityControl = (layer: LayerProps) => {
+    //determine if we have generic slider or dual (fill, outline) one.
+    // fill, outline only available for those layers that have potential renderers, sublayers, featurelayers
+    if (layer.sublayer || layer.type === 'feature') {
+      return (
+        <div style={{ padding: '5px 2rem' }}>
+          <span style={{ fontSize: '0.7rem' }}>Fill</span>
+          <LayerTransparencySlider
+            layerOpacity={layer.opacity.fill}
+            handleOpacityChange={(val: number) => handleRendererOpacityChange(true, val)}
+          />
+          <span style={{ fontSize: '0.7rem' }}>Outline</span>
+          <LayerTransparencySlider
+            layerOpacity={layer.opacity.outline}
+            handleOpacityChange={(val: number) => handleRendererOpacityChange(false, val)}
+          />
+        </div>
+      );
+    } else {
+      return (
+        <div style={{ padding: '5px 2rem' }}>
+          <LayerTransparencySlider
+            layerOpacity={layer.opacity.combined}
+            handleOpacityChange={handleFullOpacityChange}
+          />
+        </div>
+      );
+    }
+  };
 
   return (
     <div
@@ -380,56 +430,60 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
       className="draggable-card"
       style={getItemStyle(props!.dndSnapshot!.isDragging, props!.dndProvided!.draggableProps.style)}
     >
-      <div className="layers-control-checkbox">
-        <div className="label-wrapper">
-          <div {...props!.dndProvided!.dragHandleProps}>
-            <div className="label-control-top">
-              <div style={{ marginRight: 5, cursor: 'grab', zIndex: 100 }}>
-                <DragIcon titleId="drag-icon" />
-              </div>
-              {returnLayerControl()}
-              <div className="title-wrapper">
-                <span className="layer-label">{altLayerName ? altLayerName : layer?.title}</span>
+      <div style={{ borderBottom: '1px solid #8983834a', paddingBottom: 10 }}>
+        <div className="layers-control-checkbox">
+          <div className="label-wrapper">
+            <div {...props!.dndProvided!.dragHandleProps}>
+              <div className="label-control-top">
+                <div style={{ marginRight: 5, cursor: 'grab', zIndex: 100 }}>
+                  <DragIcon titleId="drag-icon" />
+                </div>
+                {returnLayerControl()}
+                <div className="title-wrapper">
+                  <span className="layer-label">{altLayerName ? altLayerName : layer?.title}</span>
+                </div>
               </div>
             </div>
+            {returnSubtitle()}
           </div>
-          {returnSubtitle()}
-        </div>
-        <div style={{ display: 'flex', gap: 5, flexDirection: 'row' }}>
-          <div
-            className="info-icon-container"
-            style={{ backgroundColor: `${customColorTheme}` }}
-            onClick={(): void => openInfoModal()}
-          >
-            <InfoIcon width={10} height={10} fill={'#fff'} />
-          </div>
-          {layer.dashboardURL && (
+          <div style={{ display: 'flex', gap: 5, flexDirection: 'row' }}>
             <div
               className="info-icon-container"
               style={{ backgroundColor: `${customColorTheme}` }}
-              onClick={(): void => openDashModal()}
+              onClick={(): void => toggleOpacitySlider()}
             >
-              <DashboardIcon width={10} height={10} fill={'#fff'} />
+              <OpacityIcon width={12} height={12} fill={'#fff'} />
             </div>
-          )}
+            <div
+              className="info-icon-container"
+              style={{ backgroundColor: `${customColorTheme}` }}
+              onClick={(): void => openInfoModal()}
+            >
+              <InfoIcon width={10} height={10} fill={'#fff'} />
+            </div>
+            {layer.dashboardURL && (
+              <div
+                className="info-icon-container"
+                style={{ backgroundColor: `${customColorTheme}` }}
+                onClick={(): void => openDashModal()}
+              >
+                <DashboardIcon width={10} height={10} fill={'#fff'} />
+              </div>
+            )}
+          </div>
         </div>
+        {layer?.visible && returnTimeSlider(props.id)}
+        {layer?.visible && densityPicker && <CanopyDensityPicker />}
+        {layer?.visible && layer.id === 'TREE_COVER_HEIGHT' && <TreeHeightPicker />}
+        {layer?.visible && layer.versions && (
+          <LayerVersionPicker layerInfo={layer} selectedLanguage={selectedLanguage} />
+        )}
+        {layer?.visible && layer.filterField && (
+          <LayerFilterSelection layerInfo={layer} selectedLanguage={selectedLanguage} />
+        )}
+        {layer?.visible && returnDateRange(props.id, layer, selectedLanguage)}
+        {opacityControl && returnOpacityControl(layer)}
       </div>
-      {layer?.visible && returnTimeSlider(props.id)}
-      {layer?.visible && densityPicker && <CanopyDensityPicker />}
-      {layer?.visible && layer.id === 'TREE_COVER_HEIGHT' && <TreeHeightPicker />}
-      {layer?.visible && layer.versions && <LayerVersionPicker layerInfo={layer} selectedLanguage={selectedLanguage} />}
-      {layer?.visible && layer.filterField && (
-        <LayerFilterSelection layerInfo={layer} selectedLanguage={selectedLanguage} />
-      )}
-      {layer?.visible && returnDateRange(props.id, layer, selectedLanguage)}
-      {layer?.visible && (
-        <LayerTransparencySlider
-          layerID={props.id}
-          layerOpacity={layer?.opacity}
-          sublayer={props.sublayer}
-          parentID={props.parentID}
-        />
-      )}
     </div>
   );
 };

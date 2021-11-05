@@ -103,7 +103,11 @@ export async function extractWebmapLayerObjects(esriMap?: __esri.Map): Promise<L
         mapLayerObjects.push({
           id,
           title,
-          opacity,
+          opacity: {
+            combined: opacity,
+            fill: opacity,
+            outline: opacity
+          },
           visible,
           definitionExpression,
           group: 'webmap',

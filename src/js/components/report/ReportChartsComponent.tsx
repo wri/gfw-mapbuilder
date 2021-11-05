@@ -50,6 +50,7 @@ function generateWidgetURL(
   analysisId: string,
   queryParams?: { name: string; value: string }[]
 ): string {
+  debugger;
   let baseURL = 'https://api.resourcewatch.org/v1/widget/';
   //Add Widget ID
   baseURL = baseURL.concat(`${widgetID}?`);
@@ -60,9 +61,7 @@ function generateWidgetURL(
       if (param.combineParams) {
         const start = startDate;
         const end = endDate;
-        datePickerString = datePickerString.concat(
-          `${start}${param.valueSeparator}${end}`
-        );
+        datePickerString = datePickerString.concat(`${start}${param.valueSeparator}${end}`);
         baseURL = baseURL.concat(datePickerString);
       }
     } else if (param.inputType === 'rangeSlider') {
@@ -70,9 +69,7 @@ function generateWidgetURL(
       if (param.combineParams && analysisYearRange) {
         const start = `${analysisYearRange[0]}-01-01`;
         const end = `${analysisYearRange[1]}-12-31`;
-        yearRangeString = yearRangeString.concat(
-          `${start}${param.valueSeparator}${end}`
-        );
+        yearRangeString = yearRangeString.concat(`${start}${param.valueSeparator}${end}`);
         baseURL = baseURL.concat(yearRangeString);
       }
     } else if (param.inputType === 'tcd') {
@@ -85,7 +82,7 @@ function generateWidgetURL(
   baseURL = baseURL.concat(`&geostore_id=${geostoreID}&geostore_origin=rw`);
 
   //VIIRS SQL
-  if (analysisId === 'VIIRS_FIRES') {
+  if (analysisId === 'VIIRS_FIRES' || analysisId === 'GLAD_ALERTS') {
     let sqlQuery = analysisSQLConfigs[analysisId];
     sqlQuery = sqlQuery.replace('{startDate}', `'${viirsStart}'`);
     sqlQuery = sqlQuery.replace('{endDate}', `'${viirsEnd}'`);
@@ -103,9 +100,7 @@ function generateWidgetURL(
 
 function getDefaultYearRange(uiParams: any): null | number[] {
   if (uiParams === 'none') return null;
-  const input = uiParams.find(
-    (param: any) => param.inputType === 'rangeSlider'
-  );
+  const input = uiParams.find((param: any) => param.inputType === 'rangeSlider');
   if (input) return input.bounds;
   return null;
 }
@@ -143,47 +138,27 @@ interface ChartModuleProps {
 const ChartModule = (props: ChartModuleProps): JSX.Element => {
   const { label, uiParams } = props.moduleInfo;
   const language = props.lang;
-  const translatedLabel = label[language]
-    ? label[language]
-    : 'Missing Translation Analysis Label';
+  const translatedLabel = label[language] ? label[language] : 'Missing Translation Analysis Label';
 
-  const density = useSelector(
-    (store: RootState) => store.appState.leftPanel.density
-  );
-  const customColorTheme = useSelector(
-    (store: RootState) => store.appSettings.customColorTheme
-  );
-  const viirsStart = useSelector(
-    (store: RootState) => store.appState.leftPanel.viirsStart
-  );
-  const viirsEnd = useSelector(
-    (store: RootState) => store.appState.leftPanel.viirsEnd
-  );
+  const density = useSelector((store: RootState) => store.appState.leftPanel.density);
+  const customColorTheme = useSelector((store: RootState) => store.appSettings.customColorTheme);
+  const viirsStart = useSelector((store: RootState) => store.appState.leftPanel.viirsStart);
+  const viirsEnd = useSelector((store: RootState) => store.appState.leftPanel.viirsEnd);
   const currentAnalysis = props.moduleInfo;
   const [submoduleIsHidden, setSubmoduleIsHidden] = React.useState(false);
   const [baseConfig, setBaseConfig] = React.useState<AnalysisModule>();
   const [inputsAreHidden, setInputsAreHidden] = React.useState(true);
-  const [yearRangeValue, setYearRangeValue] = React.useState<null | number[]>(
-    getDefaultYearRange(uiParams)
-  );
-  const [startDate, setStartDate] = React.useState(
-    getDefaultStartDate(uiParams)
-  );
+  const [yearRangeValue, setYearRangeValue] = React.useState<null | number[]>(getDefaultYearRange(uiParams));
+  const [startDate, setStartDate] = React.useState(getDefaultStartDate(uiParams));
   const [endDate, setEndDate] = React.useState(getDefaultEndDate(uiParams));
   const [chartLoading, setChartLoading] = React.useState(true);
   const [chartError, setChartError] = React.useState(false);
   const [vegaSpec, setVegaSpec] = React.useState(null);
   const [downloadUrl, setDownloadUrl] = React.useState('');
-  const [downloadOptionsVisible, setDownloadOptionsVisible] = React.useState(
-    false
-  );
-  const [chartDownloadTitle, setChartDownloadTitle] = React.useState(
-    'analysis.png'
-  );
+  const [downloadOptionsVisible, setDownloadOptionsVisible] = React.useState(false);
+  const [chartDownloadTitle, setChartDownloadTitle] = React.useState('analysis.png');
   const [base64ChartURL, setBase64ChartURL] = React.useState('');
-  const [chartDescription, setChartDescription] = React.useState<null | string>(
-    null
-  );
+  const [chartDescription, setChartDescription] = React.useState<null | string>(null);
 
   //We want to re-render chart if user clicks on the 'run analysis' button, this is one way to do it, there may be better options
   const [forceRender, setForceRender] = React.useReducer(x => x + 1, 0);
@@ -197,18 +172,8 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
     setEndDate(end);
   }
 
-  const renderInputComponent = (
-    props: UIParams,
-    analysisId
-  ): JSX.Element | null | undefined => {
-    const {
-      multi,
-      minDate,
-      maxDate,
-      defaultStartDate,
-      defaultEndDate,
-      bounds
-    } = props;
+  const renderInputComponent = (props: UIParams, analysisId): JSX.Element | null | undefined => {
+    const { multi, minDate, maxDate, defaultStartDate, defaultEndDate, bounds } = props;
     switch (props.inputType) {
       case 'rangeSlider':
         if (bounds)
@@ -228,12 +193,8 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
             multi={multi}
             minDate={minDate}
             maxDate={maxDate}
-            defaultStartDate={
-              analysisId === 'VIIRS_FIRES' ? viirsStart : defaultStartDate
-            }
-            defaultEndDate={
-              analysisId === 'VIIRS_FIRES' ? viirsEnd : defaultEndDate
-            }
+            defaultStartDate={analysisId === 'VIIRS_FIRES' ? viirsStart : defaultStartDate}
+            defaultEndDate={analysisId === 'VIIRS_FIRES' ? viirsEnd : defaultEndDate}
             sendDateValue={updateDatePickerValues}
             customColorTheme={customColorTheme}
           />
@@ -246,6 +207,7 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
   React.useEffect(() => {
     setChartLoading(true);
     if (props.moduleInfo.widgetId) {
+      debugger;
       // GFW WIDGET
       const widgetURL = generateWidgetURL(
         viirsStart,
@@ -272,22 +234,15 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
           fetch(descriptionURL)
             .then((response: any) => response.json())
             .then((data: any) => {
-              setChartDescription(
-                data && data?.data[0]?.attributes?.description
-              );
+              setChartDescription(data && data?.data[0]?.attributes?.description);
             })
             .catch(e => {
-              setChartDescription(
-                'Error retrieving chart analysis description.'
-              );
+              setChartDescription('Error retrieving chart analysis description.');
               console.error(e);
             });
           //download urls
-          const widgetConfigData =
-            analysisMod.data.attributes.widgetConfig.data;
-          const downloadUrl = widgetConfigData.find(
-            (e: any) => e.name === 'data'
-          );
+          const widgetConfigData = analysisMod.data.attributes.widgetConfig.data;
+          const downloadUrl = widgetConfigData.find((e: any) => e.name === 'data');
 
           // WCS specific modules need attribute data to be passed down as well, GFW analysis mods do not need that but we send it anyway,
           // they get ignored downstream at Chart creator
@@ -300,10 +255,7 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
           setChartError(true);
           setChartLoading(false);
         });
-    } else if (
-      props.moduleInfo.analysisId.includes('FRAGMENTATION') &&
-      props.moduleInfo.analysisUrl
-    ) {
+    } else if (props.moduleInfo.analysisId.includes('FRAGMENTATION') && props.moduleInfo.analysisUrl) {
       //HANDLE WCS Fragmentation analysis modules
       fetchWCSAnalysis(
         props.moduleInfo,
@@ -321,9 +273,7 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
           ? `${res.data.startYear} - ${res.data.endYear}`
           : '';
         //Computed value overwrite
-        fragmentationSpec.marks[3].encode.enter.text!.value = res.data.totalResult.toFixed(
-          3
-        );
+        fragmentationSpec.marks[3].encode.enter.text!.value = res.data.totalResult.toFixed(3);
         fragmentationSpec.width = 500;
         fragmentationSpec.marks[0].encode.enter.width!.signal = '460';
         fragmentationSpec.signals = [];
@@ -347,21 +297,13 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
         <h4 className="report-toolbar-title">{translatedLabel}</h4>
         <div className="report-button-controls">
           {currentAnalysis?.uiParams && currentAnalysis?.uiParams !== 'none' ? (
-            <div
-              onClick={(): void => setInputsAreHidden(!inputsAreHidden)}
-              style={{ cursor: 'pointer' }}
-            >
+            <div onClick={(): void => setInputsAreHidden(!inputsAreHidden)} style={{ cursor: 'pointer' }}>
               <GearIcon width={22} height={22} fill={'#888888'} />
             </div>
           ) : (
             <div></div>
           )}
-          <div
-            style={{ cursor: 'pointer' }}
-            onClick={(): void =>
-              setDownloadOptionsVisible(!downloadOptionsVisible)
-            }
-          >
+          <div style={{ cursor: 'pointer' }} onClick={(): void => setDownloadOptionsVisible(!downloadOptionsVisible)}>
             <DownloadIcon width={25} height={25} />
             {downloadOptionsVisible && (
               <DownloadOptions
@@ -384,21 +326,14 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
                 checked={!submoduleIsHidden}
                 onChange={(): void => setSubmoduleIsHidden(!submoduleIsHidden)}
               />
-              <label
-                className="styled-checkboxlabel"
-                htmlFor={`layer-checkbox-${translatedLabel}`}
-              >
+              <label className="styled-checkboxlabel" htmlFor={`layer-checkbox-${translatedLabel}`}>
                 {'a'}
               </label>
             </div>
           </CheckboxWrapper>
         </div>
       </div>
-      <div
-        className={
-          submoduleIsHidden ? 'chart-submodule hidden' : 'chart-submodule'
-        }
-      >
+      <div className={submoduleIsHidden ? 'chart-submodule hidden' : 'chart-submodule'}>
         <div className={inputsAreHidden ? 'hidden' : 'chart-control-inputs'}>
           {currentAnalysis?.uiParams &&
             currentAnalysis?.uiParams !== 'none' &&
@@ -411,9 +346,7 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
                     </div>
                     <p>{uiParam.label[language]}</p>
                   </div>
-                  <div className="analysis-input">
-                    {renderInputComponent(uiParam, currentAnalysis.analysisId)}
-                  </div>
+                  <div className="analysis-input">{renderInputComponent(uiParam, currentAnalysis.analysisId)}</div>
                 </div>
               );
             })}
@@ -468,9 +401,7 @@ interface ChartProps {
 }
 const ReportChartsComponent = (props: ChartProps): JSX.Element => {
   const analysisModules = useSelector(selectAnalysisModules);
-  const selectedLanguage = useSelector(
-    (store: RootState) => store.appState.selectedLanguage
-  );
+  const selectedLanguage = useSelector((store: RootState) => store.appState.selectedLanguage);
 
   return (
     <div className="chart-area-container">

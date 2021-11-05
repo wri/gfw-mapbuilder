@@ -694,7 +694,6 @@
 .transparency-slider {
   display: flex;
   flex-wrap: wrap;
-  padding: 0 2rem;
 }
 
 .info-icon-container {
@@ -1321,7 +1320,7 @@
   flex-wrap: wrap;
   margin-top: 1rem;
   flex-direction: row;
-  gap: 33px;
+  gap: 5px;
   .date-section-wrapper {
     display: grid;
     grid-template-columns: 1fr;
