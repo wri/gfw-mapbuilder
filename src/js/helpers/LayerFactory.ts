@@ -206,7 +206,8 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
         id: layerConfig.id,
         visible: true,
         url: layerConfig.url,
-        opacity: layerConfig.opacity.combined
+        //@ts-ignore
+        opacity: layerConfig.opacity
       };
       if (layerConfig.layerIds) {
         maskLayerOptions.sublayers = layerConfig.layerIds.map(id => {
