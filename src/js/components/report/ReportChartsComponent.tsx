@@ -1,13 +1,11 @@
 import * as React from 'react';
 import { RootState } from '../../../js/store';
-import { createSelector } from 'reselect';
 import { useSelector } from 'react-redux';
 import { AnalysisModule } from '../../../js/store/appSettings/types';
 import { MemoReportRangeSlider } from './ReportRangeSlider';
 import { MemoReportDatePicker } from './DatePicker';
 import CanopyDensityPicker from '../../../js/components/sharedComponents/CanopyDensityPicker';
 import { UIParams } from '../../../js/components/leftPanel/analysisPanel/BaseAnalysis';
-import { markValueMap } from '../../../js/components/mapWidgets/widgetContent/CanopyDensityContent';
 import Loader from '../../../js/components/sharedComponents/Loader';
 import VegaChart from '../../../js/components/leftPanel/analysisPanel/VegaChartContainer';
 import analysisTranslations from '../../../js/components/leftPanel/analysisPanel/analysisTranslations';
@@ -16,12 +14,8 @@ import styled from 'styled-components';
 import { GearIcon } from '../../../images/gearIcon';
 import { DownloadIcon } from '../../../images/downloadIcon';
 import fragmentationSpec from '../../../js/components/leftPanel/analysisPanel/fragmentationVegaSpec';
-import {
-  fetchGFWWidgetConfig,
-  fetchDownloadInfo,
-  fetchWCSAnalysis
-} from '../../../js/components/leftPanel/analysisPanel/analysisUtils';
-import { analysisSQLConfigs } from '../../../../configs/layer-config';
+import { fetchWCSAnalysis, generateWidgetURL } from '../../../js/components/leftPanel/analysisPanel/analysisUtils';
+import { defaultAnalysisModules } from '../../../../configs/analysis-config';
 //Dynamic custom theme override using styled-components lib
 interface CheckBoxWrapperProps {
   customColorTheme: string;
@@ -31,72 +25,6 @@ const CheckboxWrapper = styled.div<CheckBoxWrapperProps>`
     background-color: ${props => props.customColorTheme};
   }
 `;
-
-const selectAnalysisModules = createSelector(
-  (state: RootState) => state.appSettings,
-  settings => settings.analysisModules
-);
-
-function generateWidgetURL(
-  viirsStart: string,
-  viirsEnd: string,
-  uiParams: any,
-  widgetID: string,
-  geostoreID: string,
-  startDate: string,
-  endDate: string,
-  analysisYearRange: number[] | null,
-  canopyDensity: number,
-  analysisId: string,
-  queryParams?: { name: string; value: string }[]
-): string {
-  debugger;
-  let baseURL = 'https://api.resourcewatch.org/v1/widget/';
-  //Add Widget ID
-  baseURL = baseURL.concat(`${widgetID}?`);
-  //Figure out if we have Date Range, Date Picker or Canopy Density Params that need appending
-  for (const param of uiParams) {
-    if (param.inputType === 'datepicker') {
-      let datePickerString = `${param.startParamName}=`;
-      if (param.combineParams) {
-        const start = startDate;
-        const end = endDate;
-        datePickerString = datePickerString.concat(`${start}${param.valueSeparator}${end}`);
-        baseURL = baseURL.concat(datePickerString);
-      }
-    } else if (param.inputType === 'rangeSlider') {
-      let yearRangeString = `${param.startParamName}=`;
-      if (param.combineParams && analysisYearRange) {
-        const start = `${analysisYearRange[0]}-01-01`;
-        const end = `${analysisYearRange[1]}-12-31`;
-        yearRangeString = yearRangeString.concat(`${start}${param.valueSeparator}${end}`);
-        baseURL = baseURL.concat(yearRangeString);
-      }
-    } else if (param.inputType === 'tcd') {
-      const threshold = `&thresh=${markValueMap[canopyDensity]}`;
-      baseURL = baseURL.concat(threshold);
-    }
-  }
-
-  //Add Geostore ID
-  baseURL = baseURL.concat(`&geostore_id=${geostoreID}&geostore_origin=rw`);
-
-  //VIIRS SQL
-  if (analysisId === 'VIIRS_FIRES' || analysisId === 'GLAD_ALERTS') {
-    let sqlQuery = analysisSQLConfigs[analysisId];
-    sqlQuery = sqlQuery.replace('{startDate}', `'${viirsStart}'`);
-    sqlQuery = sqlQuery.replace('{endDate}', `'${viirsEnd}'`);
-    baseURL = baseURL.concat(`&sql=${sqlQuery}`);
-  }
-
-  //Check for query Params and append if they exist
-  if (queryParams) {
-    queryParams.forEach(param => {
-      baseURL = baseURL.concat(`&${param.name}=${param.value}`);
-    });
-  }
-  return baseURL;
-}
 
 function getDefaultYearRange(uiParams: any): null | number[] {
   if (uiParams === 'none') return null;
@@ -136,7 +64,7 @@ interface ChartModuleProps {
 }
 
 const ChartModule = (props: ChartModuleProps): JSX.Element => {
-  const { label, uiParams } = props.moduleInfo;
+  const { label, analysisParams } = props.moduleInfo;
   const language = props.lang;
   const translatedLabel = label[language] ? label[language] : 'Missing Translation Analysis Label';
 
@@ -148,9 +76,9 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
   const [submoduleIsHidden, setSubmoduleIsHidden] = React.useState(false);
   const [baseConfig, setBaseConfig] = React.useState<AnalysisModule>();
   const [inputsAreHidden, setInputsAreHidden] = React.useState(true);
-  const [yearRangeValue, setYearRangeValue] = React.useState<null | number[]>(getDefaultYearRange(uiParams));
-  const [startDate, setStartDate] = React.useState(getDefaultStartDate(uiParams));
-  const [endDate, setEndDate] = React.useState(getDefaultEndDate(uiParams));
+  const [yearRangeValue, setYearRangeValue] = React.useState<null | number[]>(getDefaultYearRange(analysisParams));
+  const [startDate, setStartDate] = React.useState(getDefaultStartDate(analysisParams));
+  const [endDate, setEndDate] = React.useState(getDefaultEndDate(analysisParams));
   const [chartLoading, setChartLoading] = React.useState(true);
   const [chartError, setChartError] = React.useState(false);
   const [vegaSpec, setVegaSpec] = React.useState(null);
@@ -207,21 +135,18 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
   React.useEffect(() => {
     setChartLoading(true);
     if (props.moduleInfo.widgetId) {
-      debugger;
+      const stDate = props.moduleInfo.analysisId === 'VIIRS_FIRES' ? viirsStart : startDate;
+      const enDate = props.moduleInfo.analysisId === 'VIIRS_FIRES' ? viirsEnd : endDate;
       // GFW WIDGET
-      const widgetURL = generateWidgetURL(
-        viirsStart,
-        viirsEnd,
-        uiParams,
-        props.moduleInfo.widgetId,
-        props.geostoreID,
-        startDate,
-        endDate,
-        yearRangeValue,
-        density,
-        props.moduleInfo.analysisId,
-        props.moduleInfo.params
-      );
+      const widgetURL = generateWidgetURL({
+        widgetId: props.moduleInfo.widgetId,
+        geostoreId: props.geostoreID,
+        startDate: stDate,
+        endDate: enDate,
+        density: density,
+        analysisId: props.moduleInfo.analysisId,
+        sqlString: props.moduleInfo.sqlString
+      });
 
       fetch(widgetURL)
         .then((response: any) => response.json())
@@ -281,6 +206,7 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
         setVegaSpec(fragmentationSpec);
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.geostoreID, forceRender]);
 
   function handlePNGURL(base64: string): void {
@@ -296,7 +222,7 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
       <div className="report-top-toolbar">
         <h4 className="report-toolbar-title">{translatedLabel}</h4>
         <div className="report-button-controls">
-          {currentAnalysis?.uiParams && currentAnalysis?.uiParams !== 'none' ? (
+          {currentAnalysis?.analysisParams?.length !== 0 ? (
             <div onClick={(): void => setInputsAreHidden(!inputsAreHidden)} style={{ cursor: 'pointer' }}>
               <GearIcon width={22} height={22} fill={'#888888'} />
             </div>
@@ -335,9 +261,8 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
       </div>
       <div className={submoduleIsHidden ? 'chart-submodule hidden' : 'chart-submodule'}>
         <div className={inputsAreHidden ? 'hidden' : 'chart-control-inputs'}>
-          {currentAnalysis?.uiParams &&
-            currentAnalysis?.uiParams !== 'none' &&
-            currentAnalysis?.uiParams.map((uiParam: any, i: number) => {
+          {currentAnalysis?.analysisParams?.length !== 0 &&
+            currentAnalysis?.analysisParams.map((uiParam: any, i: number) => {
               return (
                 <div className="ui-analysis-wrapper" key={i}>
                   <div className="ui-description">
@@ -350,7 +275,7 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
                 </div>
               );
             })}
-          {currentAnalysis?.uiParams !== 'none' && (
+          {currentAnalysis?.analysisParams.length !== 0 && (
             <button
               className="orange-button"
               style={{ backgroundColor: customColorTheme }}
@@ -400,21 +325,28 @@ interface ChartProps {
   attributes: any;
 }
 const ReportChartsComponent = (props: ChartProps): JSX.Element => {
-  const analysisModules = useSelector(selectAnalysisModules);
   const selectedLanguage = useSelector((store: RootState) => store.appState.selectedLanguage);
+  const disabledAnalysisModules = useSelector((store: RootState) => store.appSettings.disabledAnalysisModules);
 
   return (
     <div className="chart-area-container">
-      {analysisModules.map((module, i) => (
-        <ChartModule
-          key={i}
-          moduleInfo={module}
-          lang={selectedLanguage}
-          geostoreID={props.geostoreID}
-          esriGeometry={props.esriGeometry}
-          activeFeatureAttributes={props.attributes}
-        />
-      ))}
+      {defaultAnalysisModules
+        .filter(m => {
+          if (disabledAnalysisModules?.length) {
+            return !disabledAnalysisModules.includes(m.analysisId);
+          }
+          return true;
+        })
+        .map((module, i) => (
+          <ChartModule
+            key={i}
+            moduleInfo={module}
+            lang={selectedLanguage}
+            geostoreID={props.geostoreID}
+            esriGeometry={props.esriGeometry}
+            activeFeatureAttributes={props.attributes}
+          />
+        ))}
     </div>
   );
 };
