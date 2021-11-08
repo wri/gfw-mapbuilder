@@ -267,18 +267,20 @@ export const defaultAnalysisModules: AnalysisModule[] = [
       ka: 'ხის ვარჯის საერთო კარგვა'
     },
     description: {
-      en: 'Select range and tree cover density for loss data then click the run analysis button to see results.',
+      en:
+        'Click the run analysis button to see results. This analysis includes tree cover with >30% tree canopy density.',
       fr:
-        'Sélectionner la plage et la densité de couverture arborée pour les données de perte, puis cliquer sur le bouton « lancer l’analyse » pour voir les résultats.',
+        'Cliquez sur le bouton « Lancer l’analyse » pour voir les résultats. Cette analyse comprend la couverture arborée avec une densité de canopée >30 %.',
       es:
-        'Para obtener los datos sobre pérdida, seleccione el rango y la densidad de la cobertura arbórea, después haga clic en el botón ejecutar análisis para ver los resultados.',
+        'Haga clic en el botón ejecutar análisis. Este análisis incluye la cobertura arbórea con> 30% de densidad de la copa de los árboles.',
       pt:
-        'Selecione o período e a densidade de cobertura arbórea para dados de perda; em seguida, clique no botão para executar a análise e ver os resultados.',
+        'Clique no botão para executar a análise. Esta análise inclui cobertura de árvores com> 30% de densidade da copa das árvores.',
       id:
-        'Pilih rentang dan kerapatan tutupan pohon untuk data yang hilang, kemudian klik tombol mulai analisis untuk melihat hasilnya.',
-      zh: '选择要考察减少量数据的范围和森林覆盖密度，然后点击“运行分析”按钮查看结果。',
-      ka:
-        'შეარჩიეთ საზღვრები და ხის ვარჯის სიხშირე კარგვის მონაცემებისთვის, შემდეგ დააჭირეთ ღილაკს ანალიზის  ჩატარება შედეგების სანახავად.'
+        'Klik tombol mulai analisis untuk melihat hasil. Analisis ini meliputi tutupan pohon dengan kerapatan tajuk pohon >30%.',
+      zh: '点击“运行分析”按钮查看结果。分析包括树冠密度 >30% 的树木覆盖率。',
+      ka: 'შედეგების სანახავად დააჭირეთ ღილაკს ანალიზი. ანალიზი მოიცავს 30%-ზე მეტი სიმკვრივის ხეებს.',
+      hy: 'Սեղմեք «Կատարել վերլուծություն» կոճակը:Վերլուծությունը ներառում է ավելի քան 30% խտությամբ ծառեր:',
+      az: 'Təhlili həyata keçirin düyməsini basın. Təhlil 30%-dən çox sıxlığı olan ağacları əhatə edir.'
     },
     useGfwWidget: true,
     widgetId: '7a7aba4a-2b71-47d7-983a-bdba4c4b6223',
