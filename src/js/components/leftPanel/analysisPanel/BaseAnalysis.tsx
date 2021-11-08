@@ -60,6 +60,7 @@ const BaseAnalysis = (): JSX.Element => {
   const [downloadOptionsVisible, setDownloadOptionsVisible] = useState(false);
   const [renderEditButton, setRenderEditButton] = useState(true);
   const [baseConfig, setBaseConfig] = useState<AnalysisModule>();
+  const [chartError, setChartError] = useState(false);
 
   //This is used for date picker analysis module
 
@@ -285,6 +286,12 @@ const BaseAnalysis = (): JSX.Element => {
     setChartLoading(false);
   }
 
+  function handleChartError() {
+    setChartError(true);
+    setDownloadOptionsVisible(false);
+    setVegaSpec(null);
+  }
+
   function analysisDateRangeHeader() {
     if (selectedAnalysis === 'TC_LOSS_TOTAL') {
       return (
@@ -373,9 +380,23 @@ const BaseAnalysis = (): JSX.Element => {
             {returnButtons()}
           </div>
           {!chartLoading && <AnalysisOptions />}
-          {!vegaSpec && (
+          {!vegaSpec && !chartError && (
             <div className="analysis-instructions" style={{ height: 300 }}>
               {!chartLoading && <AnalysisInstructions />}
+            </div>
+          )}
+          {chartError && (
+            <div
+              style={{
+                height: 368,
+                justifyContent: 'center',
+                display: 'flex',
+                alignContent: 'center',
+                alignItems: 'center',
+                color: 'red'
+              }}
+            >
+              Error loading chart analysis.
             </div>
           )}
           {chartLoading && (
@@ -414,21 +435,24 @@ const BaseAnalysis = (): JSX.Element => {
                 language={selectedLanguage}
                 baseConfig={baseConfig}
                 sendBackURL={handlePNGURL}
+                sendError={handleChartError}
               />
             </>
           )}
-          <span data-tip={'Analysis disabled for point and line features'} data-offset="{'top': -5}">
-            <button
-              disabled={selectedAnalysis === 'default' || featureIsNotAllowed}
-              style={selectedAnalysis !== 'default' ? { backgroundColor: customColorTheme } : {}}
-              className={
-                selectedAnalysis === 'default' || featureIsNotAllowed ? 'orange-button disabled' : 'orange-button'
-              }
-              onClick={runAnalysis}
-            >
-              {analysisTranslations.runAnalysisButton[selectedLanguage]}
-            </button>
-          </span>
+          {!chartError && (
+            <span data-tip={'Analysis disabled for point and line features'} data-offset="{'top': -5}">
+              <button
+                disabled={selectedAnalysis === 'default' || featureIsNotAllowed}
+                style={selectedAnalysis !== 'default' ? { backgroundColor: customColorTheme } : {}}
+                className={
+                  selectedAnalysis === 'default' || featureIsNotAllowed ? 'orange-button disabled' : 'orange-button'
+                }
+                onClick={runAnalysis}
+              >
+                {analysisTranslations.runAnalysisButton[selectedLanguage]}
+              </button>
+            </span>
+          )}
           <ReactTooltip effect="solid" className="tab-tooltip" disable={!featureIsNotAllowed} />
           <DataTabFooter />
         </div>

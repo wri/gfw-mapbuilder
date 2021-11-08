@@ -26,7 +26,13 @@ export function generateAndAttachVegaChart(
       .hover()
       .run()
       .toImageURL('png')
-      .then((url: string) => callback(url));
+      .then((url: string) => {
+        callback(url);
+      })
+      .catch(e => {
+        console.error(e);
+        callback({ error: 'failed to retrieve chart analysis' });
+      });
   }
 
   if (spec.featureDataFieldsToPass && spec.attributes) {
