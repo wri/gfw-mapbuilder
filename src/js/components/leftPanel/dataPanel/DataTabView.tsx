@@ -1,11 +1,8 @@
 import * as React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../../../js/store';
-import {
-  setActiveFeatureIndex,
-  setActiveFeatures,
-  setDocuments
-} from '../../../../js/store/mapview/actions';
+import { setActiveFeatureIndex, setActiveFeatures, setDocuments } from '../../../../js/store/mapview/actions';
+import { setAnalysisFeatureList, setMultiPolygonSelectionMode } from '../../../../js/store/appState/actions';
 import DataTabFooter from './DataTabFooter';
 import DefaultTabView from './DefaultTabView';
 import LayerSelector from './LayerSelector';
@@ -34,21 +31,14 @@ interface DataTabProps {
 const DataTabView = (props: DataTabProps): JSX.Element => {
   const dispatch = useDispatch();
   const [layerTitle, setLayerTitle] = React.useState('');
-  const activeTab = useSelector(
-    (store: RootState) => store.appState.leftPanel.activeTab
-  );
-  const tabViewVisible = useSelector(
-    (store: RootState) => store.appState.leftPanel.tabViewVisible
-  );
-  const activeFeatures = useSelector(
-    (store: RootState) => store.mapviewState.activeFeatures
-  );
-  const activeFeatureIndex = useSelector(
-    (store: RootState) => store.mapviewState.activeFeatureIndex
-  );
-  const customColorTheme = useSelector(
-    (store: RootState) => store.appSettings.customColorTheme
-  );
+  const activeTab = useSelector((store: RootState) => store.appState.leftPanel.activeTab);
+  const tabViewVisible = useSelector((store: RootState) => store.appState.leftPanel.tabViewVisible);
+  const activeFeatures = useSelector((store: RootState) => store.mapviewState.activeFeatures);
+  const activeFeatureIndex = useSelector((store: RootState) => store.mapviewState.activeFeatureIndex);
+  const customColorTheme = useSelector((store: RootState) => store.appSettings.customColorTheme);
+  const multiPolygonSelection = useSelector((store: RootState) => store.appState.multiPolygonSelectionMode);
+  const analysisFeatureList = useSelector((store: RootState) => store.appState.analysisFeatureList);
+  console.log(analysisFeatureList);
 
   const FeatureDataView = (): JSX.Element => {
     const activeLayerInfo = activeFeatures[activeFeatureIndex[0]];
@@ -62,32 +52,19 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
 
     const activeLayerIndex = activeFeatures.findIndex(findLayer);
     if (activeLayerInfo && activeFeatures[activeLayerIndex]) {
-      const activeFeature = new Array(
-        activeFeatures[activeLayerIndex].features[activeFeatureIndex[1]]
-      );
-      if (
-        activeLayerInfo.layerID !== 'user_features' &&
-        activeLayerInfo.layerID !== 'upload_file_features'
-      ) {
+      const activeFeature = new Array(activeFeatures[activeLayerIndex].features[activeFeatureIndex[1]]);
+      if (activeLayerInfo.layerID !== 'user_features' && activeLayerInfo.layerID !== 'upload_file_features') {
         mapController.drawGraphic(activeFeature);
       }
     }
 
-    const LayerAttributesElement = (props: {
-      activeLayerInfo: any;
-      activeLayerIndex: number;
-    }): JSX.Element => {
+    const LayerAttributesElement = (props: { activeLayerInfo: any; activeLayerIndex: number }): JSX.Element => {
       const page = activeFeatureIndex[1];
 
       async function turnAttributeTablePage(forward: boolean): Promise<void> {
         const newPage = forward ? page + 1 : page - 1;
-        const activeFeature = new Array(
-          activeFeatures[activeLayerIndex].features[newPage]
-        );
-        if (
-          activeLayerInfo.layerID !== 'user_features' &&
-          activeLayerInfo.layerID !== 'upload_file_features'
-        ) {
+        const activeFeature = new Array(activeFeatures[activeLayerIndex].features[newPage]);
+        if (activeLayerInfo.layerID !== 'user_features' && activeLayerInfo.layerID !== 'upload_file_features') {
           await mapController.drawGraphic(activeFeature);
         } else {
           mapController.updateActivePolyGraphic(activeFeature);
@@ -112,21 +89,11 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
                     );
                     if (attributeKey) {
                       // Use label unless it is not set, then default to fieldName
-                      const label =
-                        field?.label || field.label !== ''
-                          ? field.label
-                          : attributeKey;
+                      const label = field?.label || field.label !== '' ? field.label : attributeKey;
                       let value = props.attributes[attributeKey];
                       //Users can set the href tag on the data attribute on the service, we want to show an actual link instead of plain text
-                      if (
-                        typeof value === 'string' &&
-                        value?.includes('href')
-                      ) {
-                        value = (
-                          <div
-                            dangerouslySetInnerHTML={{ __html: value }}
-                          ></div>
-                        );
+                      if (typeof value === 'string' && value?.includes('href')) {
+                        value = <div dangerouslySetInnerHTML={{ __html: value }}></div>;
                       }
                       return (
                         <tr key={i}>
@@ -142,9 +109,7 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
                     return (
                       <tr key={i}>
                         <td className="first-cell">{attribute}</td>
-                        <td className="second-cell">
-                          {props.attributes[attribute]}
-                        </td>
+                        <td className="second-cell">{props.attributes[attribute]}</td>
                       </tr>
                     );
                   })}
@@ -167,15 +132,11 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
           mapController.removeAllGraphics('active-feature-layer');
         } else {
           //remove only one feature and keep everything else intact
-          oldActiveFeatures[activeLayerIndex].features.splice(
-            activeFeatureIndex[1],
-            1
-          );
+          oldActiveFeatures[activeLayerIndex].features.splice(activeFeatureIndex[1], 1);
           //update redux
           dispatch(setActiveFeatures(oldActiveFeatures));
           //new active page depends if we are on first page or not, if we are on first page, we keep same page, if not we decrement by one
-          const newActivePage =
-            activeFeatureIndex[1] === 0 ? 0 : activeFeatureIndex[1] - 1;
+          const newActivePage = activeFeatureIndex[1] === 0 ? 0 : activeFeatureIndex[1] - 1;
           dispatch(setActiveFeatureIndex([activeLayerIndex, newActivePage]));
         }
       }
@@ -200,12 +161,9 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
         color: '#555'
       };
 
-      const prevBtn =
-        page === 0 ? disabledButtonCustomStyle : enabledButtonCustomStyle;
+      const prevBtn = page === 0 ? disabledButtonCustomStyle : enabledButtonCustomStyle;
       const nextBtn =
-        page === props.activeLayerInfo.features.length - 1
-          ? disabledButtonCustomStyle
-          : enabledButtonCustomStyle;
+        page === props.activeLayerInfo.features.length - 1 ? disabledButtonCustomStyle : enabledButtonCustomStyle;
 
       React.useEffect(() => {
         //Attempt to fetch documents associated with the selected feature, this
@@ -217,8 +175,7 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
 
         setLayerTitle(generateLayerTitle(props.activeLayerInfo));
 
-        const selectedFeature =
-          selectedFeatureInfo.features[activeFeatureIndex[1]];
+        const selectedFeature = selectedFeatureInfo.features[activeFeatureIndex[1]];
 
         const urlProperties = {
           sublayerID,
@@ -241,9 +198,7 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
                 generateLayerTitle={generateLayerTitle}
                 activeFeatures={activeFeatures}
                 activeLayerInfo={activeLayerInfo}
-                handleLayerSelection={(layerID: string): void =>
-                  handleLayerSwitch(layerID)
-                }
+                handleLayerSelection={(layerID: string): void => handleLayerSwitch(layerID)}
               />
               <div className="attribute-page-buttons">
                 <button
@@ -275,9 +230,7 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
           </div>
           <div className="layer-title">{layerTitle}</div>
           <hr />
-          <AttributeTable
-            attributes={props.activeLayerInfo.features[page].attributes}
-          />
+          <AttributeTable attributes={props.activeLayerInfo.features[page].attributes} />
         </div>
       );
     };
@@ -285,10 +238,7 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
     //TODO: needs to be active language aware!
     return (
       <div className="data-tabview-container">
-        <LayerAttributesElement
-          activeLayerIndex={activeLayerIndex}
-          activeLayerInfo={activeLayerInfo}
-        />
+        <LayerAttributesElement activeLayerIndex={activeLayerIndex} activeLayerInfo={activeLayerInfo} />
         <DataTabFooter />
       </div>
     );
@@ -296,17 +246,35 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
 
   const tabViewIsVisible = tabViewVisible && activeTab === props.label;
 
+  console.log(multiPolygonSelection);
+
   return (
-    <div
-      className={
-        tabViewIsVisible ? 'tabview-container' : 'hide tabview-container'
-      }
-    >
-      {activeFeatures.length === 0 ? (
-        <DefaultTabView customColorTheme={customColorTheme} />
-      ) : (
-        <FeatureDataView />
-      )}
+    <div className={tabViewIsVisible ? 'tabview-container' : 'hide tabview-container'}>
+      <div style={{ border: '1px solid red', padding: 5 }}>
+        <button
+          onClick={() => {
+            dispatch(setMultiPolygonSelectionMode(!multiPolygonSelection));
+          }}
+        >
+          multiToggle
+        </button>
+        <button
+          onClick={() => {
+            const activeLayerDetails = activeFeatures[activeFeatureIndex[0]];
+            dispatch(setAnalysisFeatureList([...analysisFeatureList, activeLayerDetails]));
+          }}
+        >
+          add analysis list
+        </button>
+        {analysisFeatureList.map((feat, index) => {
+          return (
+            <div key={index}>
+              {feat.layerTitle} {feat.features[0].objectid}
+            </div>
+          );
+        })}
+      </div>
+      {activeFeatures.length === 0 ? <DefaultTabView customColorTheme={customColorTheme} /> : <FeatureDataView />}
     </div>
   );
 };

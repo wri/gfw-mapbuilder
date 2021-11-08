@@ -1,3 +1,5 @@
+import { LayerFeatureResult } from '../mapview/types';
+
 export interface LeftPanel {
   tabViewVisible: boolean;
   activeTab: string;
@@ -58,6 +60,7 @@ export interface AppState {
   renderPopup: boolean;
   areaImages: string[];
   multiPolygonSelectionMode: boolean;
+  analysisFeatureList: [] | LayerFeatureResult[];
 }
 
 //Action names available
@@ -88,6 +91,7 @@ export const SET_AREA_IMAGES = 'SET_AREA_IMAGES';
 export const SET_VERSIONED_LAYER = 'SET_VERSIONED_LAYER';
 export const SET_TREE_HEIGHT = 'SET_TREE_HEIGHT';
 export const SET_MULTI_POLYGON_SELECTION_MODE = 'SET_MULTI_POLYGON_SELECTION_MODE';
+export const SET_ANALYSIS_FEATURE_LIST = 'SET_ANALYSIS_FEATURE_LIST';
 
 interface SetSelectedSearchWidgetLayer {
   type: typeof SET_SELECTED_SEARCH_WIDGET_LAYER;
@@ -224,6 +228,11 @@ interface SetMultiPolygonSelectionMode {
   payload: boolean;
 }
 
+interface SetAnalysisFeatureList {
+  type: typeof SET_ANALYSIS_FEATURE_LIST;
+  payload: any;
+}
+
 export type AppStateTypes =
   | ToggleTabviewPanelAction
   | RenderModalAction
@@ -251,4 +260,5 @@ export type AppStateTypes =
   | SetAreaImages
   | SetVersionedLayer
   | SetMultiPolygonSelectionMode
-  | SetTreeHeight;
+  | SetTreeHeight
+  | SetAnalysisFeatureList;

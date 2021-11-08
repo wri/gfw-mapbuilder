@@ -27,7 +27,8 @@ import {
   SET_AREA_IMAGES,
   SET_VERSIONED_LAYER,
   SET_TREE_HEIGHT,
-  SET_MULTI_POLYGON_SELECTION_MODE
+  SET_MULTI_POLYGON_SELECTION_MODE,
+  SET_ANALYSIS_FEATURE_LIST
 } from './types';
 
 export function setSelectedSearchWidgetLayer(payload: AppState['selectedSearchWidgetLayer']) {
@@ -215,6 +216,13 @@ export function setVersionedLayer(payload: any) {
 export function setMultiPolygonSelectionMode(payload: any) {
   return {
     type: SET_MULTI_POLYGON_SELECTION_MODE as typeof SET_MULTI_POLYGON_SELECTION_MODE,
+    payload: payload
+  };
+}
+
+export function setAnalysisFeatureList(payload: any) {
+  return {
+    type: SET_ANALYSIS_FEATURE_LIST as typeof SET_ANALYSIS_FEATURE_LIST,
     payload: payload
   };
 }
