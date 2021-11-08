@@ -57,6 +57,7 @@ export interface AppState {
   selectedSearchWidgetLayer: SelectedSearchWidgetLayer;
   renderPopup: boolean;
   areaImages: string[];
+  multiPolygonSelectionMode: boolean;
 }
 
 //Action names available
@@ -74,8 +75,7 @@ export const SET_HIDE_WIDGET = 'SET_HIDE_WIDGET';
 export const SET_CANOPY_DENSITY = 'SET_CANOPY_DENSITY';
 export const SET_ANALYSIS_DATE = 'SET_ANALYSIS_DATE';
 export const SET_ANALYSIS_YEAR_RANGE = 'SET_ANALYSIS_YEAR_RANGE';
-export const SET_SELECTED_SEARCH_WIDGET_LAYER =
-  'SET_SELECTED_SEARCH_WIDGET_LAYER';
+export const SET_SELECTED_SEARCH_WIDGET_LAYER = 'SET_SELECTED_SEARCH_WIDGET_LAYER';
 export const SET_GLAD_CONFIRMED = 'SET_GLAD_CONFIRMED';
 export const SET_GLAD_START = 'SET_GLAD_START';
 export const SET_GLAD_END = 'SET_GLAD_END';
@@ -87,6 +87,7 @@ export const SET_RENDER_POPUP = 'SET_RENDER_POPUP';
 export const SET_AREA_IMAGES = 'SET_AREA_IMAGES';
 export const SET_VERSIONED_LAYER = 'SET_VERSIONED_LAYER';
 export const SET_TREE_HEIGHT = 'SET_TREE_HEIGHT';
+export const SET_MULTI_POLYGON_SELECTION_MODE = 'SET_MULTI_POLYGON_SELECTION_MODE';
 
 interface SetSelectedSearchWidgetLayer {
   type: typeof SET_SELECTED_SEARCH_WIDGET_LAYER;
@@ -218,6 +219,11 @@ interface SetVersionedLayer {
   payload: any;
 }
 
+interface SetMultiPolygonSelectionMode {
+  type: typeof SET_MULTI_POLYGON_SELECTION_MODE;
+  payload: boolean;
+}
+
 export type AppStateTypes =
   | ToggleTabviewPanelAction
   | RenderModalAction
@@ -244,4 +250,5 @@ export type AppStateTypes =
   | SetRenderPopup
   | SetAreaImages
   | SetVersionedLayer
+  | SetMultiPolygonSelectionMode
   | SetTreeHeight;
