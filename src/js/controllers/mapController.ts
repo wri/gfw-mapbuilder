@@ -9,7 +9,7 @@ import store from '../store/index';
 import { LayerFactory } from '../../js/helpers/LayerFactory';
 import { setLayerSearchSource } from '../../js/helpers/mapController/searchSources';
 import { getSortedLayers } from '../../js/helpers/mapController/layerSorting';
-import { addPointGraphic } from '../../js/helpers/MapGraphics';
+import { addPointGraphic, clearGraphics, drawIntersectingGraphic } from '../../js/helpers/MapGraphics';
 import {
   allAvailableLayers,
   mapError,
@@ -55,7 +55,7 @@ import { fetchLegendInfo } from '../../js/helpers/legendInfo';
 import { parseExtentConfig } from '../../js/helpers/mapController/configParsing';
 import { overwriteColorTheme } from '../../js/store/appSettings/actions';
 
-setDefaultOptions({ css: true, version: '4.18' });
+setDefaultOptions({ css: true, version: '4.19' });
 
 interface URLCoordinates {
   zoom: number;
@@ -196,6 +196,9 @@ export class MapController {
         this.setGLADDates();
 
         this._mapview!.on('click', event => {
+          //clear out map graphics
+          clearGraphics();
+
           //clean active indexes for data tab and activeFeatures
           store.dispatch(setActiveFeatures([]));
           store.dispatch(setActiveFeatureIndex([0, 0]));
@@ -2006,7 +2009,12 @@ export class MapController {
 
     // if yes, what is the intersection?
     const intersecting = (geometryEngine as __esri.geometryEngine).intersect(geo1, geo2);
-    console.log('intersecting', intersecting);
+    if (intersects) {
+      console.log('intersecting', intersecting);
+      drawIntersectingGraphic(intersecting);
+      return;
+    }
+    console.log('no intersection found...');
   }
 }
 

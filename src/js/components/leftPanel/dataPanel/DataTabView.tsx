@@ -254,6 +254,7 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
         <button
           onClick={() => {
             dispatch(setMultiPolygonSelectionMode(!multiPolygonSelection));
+            dispatch(setAnalysisFeatureList([]));
           }}
         >
           multiToggle
@@ -265,6 +266,17 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
           }}
         >
           add analysis list
+        </button>
+        <button
+          onClick={() => {
+            console.log('go for', analysisFeatureList);
+            mapController.checkIntersection(
+              analysisFeatureList[0].features[0].geometry,
+              analysisFeatureList[1].features[0].geometry
+            );
+          }}
+        >
+          Overlap Geo Analysis
         </button>
         {analysisFeatureList.map((feat, index) => {
           return (
