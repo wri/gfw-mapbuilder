@@ -34,6 +34,7 @@
     "@material-ui/lab": "^4.0.0-alpha.56",
     "@types/arcgis-js-api": "^4.18.0",
     "@types/react-beautiful-dnd": "^13.1.2",
+    "@types/styled-components": "^5.1.15",
     "clsx": "^1.1.1",
     "date-fns": "^2.11.1",
     "esri-loader": "^3.0.0",
@@ -52,7 +53,7 @@
     "react-tooltip": "4.2.21",
     "redux": "^4.0.5",
     "reselect": "^4.0.0",
-    "styled-components": "^5.1.0",
+    "styled-components": "^5.3.3",
     "xml-js": "^1.6.11"
   },
   "devDependencies": {
@@ -66,7 +67,6 @@
     "@types/react-redux": "^7.1.5",
     "@types/react-select": "^3.0.11",
     "@types/redux-logger": "^3.0.7",
-    "@types/styled-components": "^5.1.0",
     "@typescript-eslint/eslint-plugin": "^2.15.0",
     "@typescript-eslint/parser": "^2.15.0",
     "clean-webpack-plugin": "^3.0.0",
