@@ -18,6 +18,8 @@ import UploadFile from '../../sharedComponents/UploadFile';
 import MethodSelection from './multiPolyAnalysis/MethodSelection';
 import { DeleteIcon } from '../../../../images/deleteIcon';
 import { removeIntersectingGraphic } from '../../../helpers/MapGraphics';
+import { AnalyzingIcon } from '../../../../images/analyzingIcon';
+import { ErrorIcon } from '../../../../images/errorIcon';
 
 const MultiPolygonAnalysis = () => {
   const dispatch = useDispatch();
@@ -128,6 +130,36 @@ const MultiPolygonAnalysis = () => {
     );
   };
 
+  const FailedStatus = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    font-size: 0.9rem;
+    color: #e80000;
+    p {
+      border: 0;
+      padding: 0;
+      margin: 0;
+      line-height: 20px;
+    }
+  `;
+
+  const AnalyzingStatus = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    font-size: 0.9rem;
+    color: ${customColorTheme};
+    p {
+      border: 0;
+      padding: 0;
+      margin: 0;
+      line-height: 20px;
+    }
+  `;
+
   return (
     <div>
       <MultiPolyWrap>
@@ -153,6 +185,18 @@ const MultiPolygonAnalysis = () => {
           />
         ) : (
           <SelectedShapeContainer inputIndex={1} label="Selected shape 2" />
+        )}
+        {overlap === 'analyzing' && (
+          <AnalyzingStatus style={{ color: '#e8a600' }}>
+            <AnalyzingIcon width={20} height={20} />
+            <p>Detecting Overlapping Area ...</p>
+          </AnalyzingStatus>
+        )}
+        {overlap === 'failed' && (
+          <FailedStatus>
+            <ErrorIcon width={20} height={20} />
+            <p>Overlapping Area Not Detected</p>
+          </FailedStatus>
         )}
       </MultiPolyWrap>
       <BottomBtnWrap>

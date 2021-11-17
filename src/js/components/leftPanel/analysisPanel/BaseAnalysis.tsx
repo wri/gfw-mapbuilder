@@ -125,36 +125,6 @@ const BaseAnalysis = (): JSX.Element => {
     //1. Add Widget ID
     baseURL = baseURL.concat(`${widgetID}?`);
 
-    // baseURL = baseURL.concat('query/json/');
-    //Figure out if we have Date Range, Date Picker or Canopy Density Params that need appending
-    //for (const param of uiParams) {
-    //  if (param.inputType === 'datepicker') {
-    //    let datePickerString = `${param.startParamName}=`;
-    //    if (param.combineParams) {
-    //      const start = analysisDateRange[0];
-    //      const end = analysisDateRange[1];
-    //      datePickerString = datePickerString.concat(
-    //        `${start}${param.valueSeparator}${end}`
-    //      );
-    //      baseURL = baseURL.concat(datePickerString);
-    //    }
-    //  } else if (param.inputType === 'rangeSlider') {
-    //    let yearRangeString = `${param.startParamName}=`;
-    //    if (param.combineParams) {
-    //      const start = `${analysisYearRange[0]}-01-01`;
-    //      const end = `${analysisYearRange[1]}-12-31`;
-    //      yearRangeString = yearRangeString.concat(
-    //        `${start}${param.valueSeparator}${end}`
-    //      );
-    //      baseURL = baseURL.concat(yearRangeString);
-    //    }
-    //  } else if (param.inputType === 'tcd') {
-    //    const threshold = `&thresh=${markValueMap[canopyDensity]}`;
-    //    baseURL = baseURL.concat(threshold);
-    //    //&thresh=20
-    //  }
-    //}
-
     //2. Add Geostore ID
     baseURL = baseURL.concat(`&geostore_id=${geostoreID}&geostore_origin=rw`);
 
@@ -169,12 +139,6 @@ const BaseAnalysis = (): JSX.Element => {
 
     console.log(baseURL);
 
-    //Check for query Params and append if they exist
-    // if (queryParams) {
-    //   queryParams.forEach(param => {
-    //     baseURL = baseURL.concat(`&${param.name}=${param.value}`);
-    //   });
-    // }
     return baseURL;
   }
 

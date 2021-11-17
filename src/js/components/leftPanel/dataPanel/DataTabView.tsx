@@ -53,7 +53,11 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
     const activeLayerIndex = activeFeatures.findIndex(findLayer);
     if (activeLayerInfo && activeFeatures[activeLayerIndex]) {
       const activeFeature = new Array(activeFeatures[activeLayerIndex].features[activeFeatureIndex[1]]);
-      if (activeLayerInfo.layerID !== 'user_features' && activeLayerInfo.layerID !== 'upload_file_features') {
+      if (
+        activeLayerInfo.layerID !== 'user_features' &&
+        activeLayerInfo.layerID !== 'upload_file_features' &&
+        activeLayerInfo.layerID !== 'overlap-feature-layer'
+      ) {
         mapController.drawGraphic(activeFeature);
       }
     }
@@ -250,42 +254,6 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
 
   return (
     <div className={tabViewIsVisible ? 'tabview-container' : 'hide tabview-container'}>
-      <div style={{ border: '1px solid red', padding: 5 }}>
-        <button
-          onClick={() => {
-            dispatch(setMultiPolygonSelectionMode(!multiPolygonSelection));
-            dispatch(setAnalysisFeatureList([]));
-          }}
-        >
-          multiToggle
-        </button>
-        <button
-          onClick={() => {
-            const activeLayerDetails = activeFeatures[activeFeatureIndex[0]];
-            dispatch(setAnalysisFeatureList([...analysisFeatureList, activeLayerDetails]));
-          }}
-        >
-          add analysis list
-        </button>
-        <button
-          onClick={() => {
-            console.log('go for', analysisFeatureList);
-            mapController.checkIntersection(
-              analysisFeatureList[0].features[0].geometry,
-              analysisFeatureList[1].features[0].geometry
-            );
-          }}
-        >
-          Overlap Geo Analysis
-        </button>
-        {analysisFeatureList.map((feat, index) => {
-          return (
-            <div key={index}>
-              {feat.layerTitle} {feat.features[0].objectid}
-            </div>
-          );
-        })}
-      </div>
       {activeFeatures.length === 0 ? <DefaultTabView customColorTheme={customColorTheme} /> : <FeatureDataView />}
     </div>
   );

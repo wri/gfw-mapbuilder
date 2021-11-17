@@ -2093,7 +2093,23 @@ export class MapController {
     const intersecting = (geometryEngine as __esri.geometryEngine).intersect(geo1, geo2);
     if (intersects) {
       drawIntersectingGraphic(intersecting);
-      //do we save this intersection graphic into redux?
+
+      const intersectingGraphics = intersecting;
+      const intersectingFeature = {
+        attributes: {},
+        geometry: intersectingGraphics,
+        objectid: 0
+      } as any;
+      const drawnFeatures: LayerFeatureResult = {
+        layerID: 'overlap-feature-layer',
+        layerTitle: 'Intersecting User Features',
+        features: [intersectingFeature],
+        fieldNames: null
+      };
+
+      store.dispatch(setActiveFeatures([drawnFeatures]));
+
+      store.dispatch(setActiveFeatureIndex([0, 0]));
       return true;
     }
     return false;
