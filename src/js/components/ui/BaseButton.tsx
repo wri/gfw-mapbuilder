@@ -15,8 +15,8 @@ const BaseButton = styled.button<Props>`
   font-weight: bold;
   border: none;
   text-transform: uppercase;
-  background-color: ${props => (props.disabled ? 'gray' : props.customColorTheme)};
-  color: white;
+  background-color: ${props => (props.disabled ? '#EEEEEE' : props.customColorTheme)};
+  color: ${props => (props.disabled ? '#76767680' : 'white')};
   margin: 0 auto;
   margin-top: 1rem;
   font-family: $fira-sans;

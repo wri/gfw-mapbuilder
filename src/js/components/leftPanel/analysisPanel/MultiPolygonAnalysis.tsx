@@ -17,19 +17,29 @@ import { mapController } from '../../../controllers/mapController';
 import UploadFile from '../../sharedComponents/UploadFile';
 import MethodSelection from './multiPolyAnalysis/MethodSelection';
 import { DeleteIcon } from '../../../../images/deleteIcon';
+import { removeIntersectingGraphic } from '../../../helpers/MapGraphics';
 
 const MultiPolygonAnalysis = () => {
   const dispatch = useDispatch();
   const selectedLanguage = useSelector((store: RootState) => store.appState.selectedLanguage);
-  // const analysisFeatureList = useSelector((store: RootState) => store.appState.analysisFeatureList);
 
   const analysisFeatureList = useSelector((store: RootState) => store.appState.analysisFeatureList, shallowEqual);
-  console.log('analysisFeatureList', analysisFeatureList);
   const customColorTheme = useSelector((store: RootState) => store.appSettings.customColorTheme);
 
-  //TODO: how and when do we disable the analyze button?
   //TODO: Add translations
-  const dis = false;
+  const [overlap, setOverlap] = React.useState<'intersect' | 'analyzing' | 'failed' | 'idle'>('idle');
+
+  React.useEffect(() => {
+    if (analysisFeatureList[0] && analysisFeatureList[1]) {
+      setOverlap('analyzing');
+      //check if we have overlap between the two!
+      mapController
+        .checkIntersection(analysisFeatureList[0].features[0].geometry, analysisFeatureList[1].features[0].geometry)
+        .then(intersects => {
+          setOverlap(intersects ? 'intersect' : 'failed');
+        });
+    }
+  }, [analysisFeatureList]);
 
   const BottomBtnWrap = styled.div`
     display: grid;
@@ -69,10 +79,15 @@ const MultiPolygonAnalysis = () => {
 
   const SelectedShapeContainer = ({ label, inputIndex }) => {
     const handleClearSingleAnalysis = React.useCallback((inputIndex: number) => {
-      const oldState = [...analysisFeatureList];
-      oldState[inputIndex] = undefined;
+      setOverlap('idle');
+
       mapController.clearGraphicFromMultiSelection(inputIndex);
       console.log('clear');
+      //because we are removing one of the geometry selections, by definition we wont have any geometries intersecting, so newly drawn intersection grahic needs to go away
+      removeIntersectingGraphic();
+
+      const oldState = [...analysisFeatureList];
+      oldState[inputIndex] = undefined;
       dispatch(setAnalysisFeatureList(oldState));
     }, []);
 
@@ -142,7 +157,6 @@ const MultiPolygonAnalysis = () => {
       </MultiPolyWrap>
       <BottomBtnWrap>
         <BackButton
-          disabled={dis}
           onClick={() => {
             dispatch(setMultiPolygonSelectionMode(false));
           }}
@@ -151,7 +165,8 @@ const MultiPolygonAnalysis = () => {
           {'Back'}
         </BackButton>
         <BaseButton
-          disabled={dis}
+          customColorTheme={customColorTheme}
+          disabled={overlap !== 'intersect'}
           onClick={() => {
             console.log('analyze?');
           }}

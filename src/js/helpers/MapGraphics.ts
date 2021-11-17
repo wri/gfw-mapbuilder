@@ -78,6 +78,13 @@ export function clearGraphics() {
   }
 }
 
+export async function removeIntersectingGraphic() {
+  const graphicsLayer = mapController._map?.findLayerById('overlap-feature-layer') as __esri.GraphicsLayer;
+  if (graphicsLayer) {
+    graphicsLayer.removeAll();
+  }
+}
+
 export async function drawIntersectingGraphic(geometry: __esri.Geometry | __esri.Geometry[]): Promise<void> {
   const [GraphicsLayer, Graphic] = await loadModules(['esri/layers/GraphicsLayer', 'esri/Graphic']);
 

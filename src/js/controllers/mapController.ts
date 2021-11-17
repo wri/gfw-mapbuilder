@@ -2084,20 +2084,19 @@ export class MapController {
   }
 
   // Checks two geometries to see if they intersect. And returns intersection geometry if true
-  async checkIntersection(geo1: __esri.Geometry, geo2: __esri.Geometry) {
+  async checkIntersection(geo1: __esri.Geometry, geo2: __esri.Geometry): Promise<boolean> {
     const [geometryEngine] = await loadModules(['esri/geometry/geometryEngine']);
     //does it intersect?
     const intersects = (geometryEngine as __esri.geometryEngine).intersects(geo1, geo2);
-    console.log('intersects', intersects);
 
     // if yes, what is the intersection?
     const intersecting = (geometryEngine as __esri.geometryEngine).intersect(geo1, geo2);
     if (intersects) {
-      console.log('intersecting', intersecting);
       drawIntersectingGraphic(intersecting);
-      return;
+      //do we save this intersection graphic into redux?
+      return true;
     }
-    console.log('no intersection found...');
+    return false;
   }
 }
 
