@@ -10,6 +10,7 @@ interface ChartProps {
   report?: boolean;
   chartType?: string;
   sendBackURL?: (pngString: string) => void;
+  sendError?: (error: string) => void;
 }
 
 function createChartWrapperStyle(chartType?: string): object {
@@ -58,9 +59,13 @@ const Chart = (props: ChartProps): JSX.Element => {
     dimensions: { width: -1, height: -1 }
   });
 
-  function callback(pngString: string): void {
-    if (props.sendBackURL) {
-      props.sendBackURL(pngString);
+  function callback(payload: any): void {
+    if (props.sendError && payload.error) {
+      props.sendError(payload.error);
+    }
+
+    if (props.sendBackURL && payload.hasOwnProperty('url')) {
+      props.sendBackURL(payload?.url);
     }
   }
   React.useEffect(() => {
@@ -91,14 +96,7 @@ const Chart = (props: ChartProps): JSX.Element => {
     };
     spec.signals.push(resizeWidthSignal);
 
-    generateAndAttachVegaChart(
-      props.spec,
-      chartRef.current,
-      props.language,
-      props.baseConfig,
-      props.report,
-      callback
-    );
+    generateAndAttachVegaChart(props.spec, chartRef.current, props.language, props.baseConfig, props.report, callback);
   }, [chartRef, spec, language]);
 
   const chartWrapperStyle = createChartWrapperStyle(chartType);

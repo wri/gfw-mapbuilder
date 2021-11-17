@@ -104,14 +104,3 @@ export const WRIBasemapConfig = {
 };
 
 export const customBasemapIcon = 'https://my.gfw-mapbuilder.org/img/custom_basemap.png';
-
-export const analysisSQLConfigs = {
-  VIIRS_FIRES:
-    'select COALESCE(sum(alert__count), 0)  as "sum" from nasa_viirs_fire_alerts where alert__date >= {startDate} and alert__date <= {endDate}',
-  GLAD_ALERTS:
-    'select count(*) from umd_glad_landsat_alerts where umd_glad_landsat_alerts__date >= {startDate} and umd_glad_landsat_alerts__date <= {endDate}'
-};
-
-// "sum of all glad alerts within an AOI from from Jan 1, 2021 till Jan 31, 2021
-
-// https://staging-data-api.globalforestwatch.org/dataset/umd_glad_landsat_alerts/latest/query?geostore_id=1d568c183033da6c17cc28c4aecf1bcf&geostore_origin=rw&sql=select sum(alert__count) from umd_glad_landsat_alerts where umd_glad_landsat_alerts__date >= '2021-01-01' and umd_glad_landsat_alerts__date <= '2021-01-31'"

@@ -1,4 +1,3 @@
-/* eslint-disable no-prototype-builtins */
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
@@ -6,8 +5,7 @@ import { createSelector } from 'reselect';
 import ReactTooltip from 'react-tooltip';
 import { RootState } from '../../../../js/store';
 import { setActiveFeatures } from '../../../../js/store/mapview/actions';
-import { format } from 'date-fns';
-import { setAnalysisDateRange, setRenderPopup } from '../../../../js/store/appState/actions';
+import { setRenderPopup } from '../../../../js/store/appState/actions';
 
 import { registerGeometry } from '../../../../js/helpers/geometryRegistration';
 import fragmentationSpec from './fragmentationVegaSpec';
@@ -15,24 +13,23 @@ import VegaChart from './VegaChartContainer';
 import analysisTranslations from './analysisTranslations';
 import { MemoRangeSlider } from './InputComponents';
 import CanopyDensityPicker from '../../../../js/components/sharedComponents/CanopyDensityPicker';
-import { markValueMap } from '../../../../js/components/mapWidgets/widgetContent/CanopyDensityContent';
 import { DownloadIcon } from '../../../../images/downloadIcon';
 import { DownloadOptions } from '../../../../js/components/sharedComponents/DownloadOptions';
 import Loader from '../../../../js/components/sharedComponents/Loader';
 import { mapController } from '../../../../js/controllers/mapController';
 import DataTabFooter from '../dataPanel/DataTabFooter';
 
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
-
-import { AnalysisModule } from '../../../../js/store/appSettings/types';
-import { analysisSQLConfigs } from '../../../../../configs/layer-config';
-import { fetchGFWWidgetConfig, fetchDownloadInfo, fetchWCSAnalysis } from './analysisUtils';
-
-import '../../../../css/leftpanel.scss';
+import { AnalysisModule, AnalysisParam } from '../../../../js/store/appSettings/types';
+import { fetchGFWWidgetConfig, fetchDownloadInfo, fetchWCSAnalysis, generateWidgetURL } from './analysisUtils';
 import { DateRangePicker } from '../../sharedComponents/DateRangePicker';
 
+import { defaultAnalysisModules } from '../../../../../configs/analysis-config';
+
+import '../../../../css/leftpanel.scss';
+import 'react-datepicker/dist/react-datepicker.css';
+
 type InputTypes = 'rangeSlider' | 'tcd' | 'datepicker';
+
 export interface UIParams {
   inputType: InputTypes;
   startParamName: string;
@@ -48,10 +45,6 @@ export interface UIParams {
 }
 
 //Memo'd selectors
-const selectAnalysisModules = createSelector(
-  (state: RootState) => state.appSettings,
-  settings => settings.analysisModules
-);
 const selectAnalysisDaterange = createSelector(
   (state: RootState) => state.appState,
   appState => appState.leftPanel.analysisDateRange
@@ -67,15 +60,14 @@ const BaseAnalysis = (): JSX.Element => {
   const [downloadOptionsVisible, setDownloadOptionsVisible] = useState(false);
   const [renderEditButton, setRenderEditButton] = useState(true);
   const [baseConfig, setBaseConfig] = useState<AnalysisModule>();
+  const [chartError, setChartError] = useState(false);
 
   //This is used for date picker analysis module
 
   const selectedLanguage = useSelector((store: RootState) => store.appState.selectedLanguage);
-  const canopyDensity = useSelector((store: RootState) => store.appState.leftPanel.density);
-  const analysisModules = useSelector(selectAnalysisModules);
 
   //Default to the first analysis
-  const [selectedAnalysis, setSelectedAnalysis] = useState('default');
+  const [selectedAnalysis, setSelectedAnalysis] = useState<any>('default');
 
   const [geostoreReady, setGeostoreReady] = useState(false);
 
@@ -87,7 +79,11 @@ const BaseAnalysis = (): JSX.Element => {
 
   const analysisYearRange = useSelector((store: RootState) => store.appState.leftPanel.analysisYearRange);
 
+  const density = useSelector((store: RootState) => store.appState.leftPanel.density);
+
   const customColorTheme = useSelector((store: RootState) => store.appSettings.customColorTheme);
+
+  const disabledAnalysisModules = useSelector((store: RootState) => store.appSettings.disabledAnalysisModules);
 
   useEffect(() => {
     const activeLayer = activeFeatures[activeFeatureIndex[0]];
@@ -113,41 +109,14 @@ const BaseAnalysis = (): JSX.Element => {
         })
         .catch(e => console.log('failed to register geostore', e));
     }
-  }, [activeFeatures, activeFeatureIndex, selectedAnalysis]);
-
-  function generateWidgetURL(
-    analysisId: string,
-    uiParams: 'none' | unknown[],
-    widgetID: string,
-    geostoreID?: string
-  ): string {
-    let baseURL = 'https://api.resourcewatch.org/v1/widget/';
-    //1. Add Widget ID
-    baseURL = baseURL.concat(`${widgetID}?`);
-
-    //2. Add Geostore ID
-    baseURL = baseURL.concat(`&geostore_id=${geostoreID}&geostore_origin=rw`);
-
-    console.log(analysisId);
-    //3. Add SQL Query if it is defined in the configuration
-    if (analysisId === 'VIIRS_FIRES' || analysisId === 'GLAD_ALERTS') {
-      let sqlQuery = analysisSQLConfigs[analysisId];
-      sqlQuery = sqlQuery.replace('{startDate}', `'${analysisDateRange[0]}'`);
-      sqlQuery = sqlQuery.replace('{endDate}', `'${analysisDateRange[1]}'`);
-      baseURL = baseURL.concat(`&sql=${sqlQuery}`);
-    }
-
-    console.log(baseURL);
-
-    return baseURL;
-  }
+  }, [dispatch, activeFeatures, activeFeatureIndex, selectedAnalysis]);
 
   //Main Func to run the analysis with selected option and geometry
   function runAnalysis(): void {
     setBase64ChartURL('');
     setChartLoading(true);
     setVegaSpec(null);
-    const mod = analysisModules.find(module => module.analysisId === selectedAnalysis);
+    const mod = defaultAnalysisModules.find(module => module.analysisId === selectedAnalysis) as AnalysisModule;
     if (!mod) return;
     setBaseConfig(mod);
     const activeLayer = activeFeatures[activeFeatureIndex[0]];
@@ -155,12 +124,15 @@ const BaseAnalysis = (): JSX.Element => {
 
     //Generate GFW Widget URL for the request
     if (mod.widgetId) {
-      const widgetURL = generateWidgetURL(
-        mod.analysisId,
-        mod.uiParams,
-        mod.widgetId,
-        activeFeature.attributes.geostoreId
-      );
+      const widgetURL = generateWidgetURL({
+        analysisId: mod.analysisId,
+        widgetId: mod.widgetId,
+        geostoreId: activeFeature.attributes.geostoreId!,
+        sqlString: mod.sqlString,
+        startDate: analysisDateRange[0],
+        endDate: analysisDateRange[1],
+        density: density
+      });
       fetchGFWWidgetConfig(widgetURL).then(res => {
         //Send attributes over for processing
         setVegaSpec(res);
@@ -191,17 +163,17 @@ const BaseAnalysis = (): JSX.Element => {
     }
   }
 
-  const renderInputComponent = (props: UIParams, analysisConfig: AnalysisModule): JSX.Element | null | undefined => {
-    const { bounds } = props;
-    if (props.inputType === 'rangeSlider') {
+  const renderInputComponent = (props: AnalysisParam, analysisConfig: AnalysisModule): JSX.Element | null => {
+    const { bounds, type } = props;
+    if (type === 'rangeSlider') {
       if (bounds) return <MemoRangeSlider yearRange={bounds} />;
     }
 
-    if (props.inputType === 'tcd') {
+    if (type === 'tcd') {
       return <CanopyDensityPicker />;
     }
 
-    if (props.inputType === 'datepicker' && analysisConfig.analysisId !== 'VIIRS_FIRES') {
+    if (type === 'date-picker') {
       return <DateRangePicker />;
     }
 
@@ -210,7 +182,7 @@ const BaseAnalysis = (): JSX.Element => {
 
   const AnalysisInstructions = React.useMemo(
     () => (): JSX.Element | null => {
-      const currentAnalysis = analysisModules.find(module => module.analysisId === selectedAnalysis);
+      const currentAnalysis = defaultAnalysisModules.find(module => module.analysisId === selectedAnalysis);
       if (selectedAnalysis === 'default') {
         return (
           <>
@@ -227,44 +199,26 @@ const BaseAnalysis = (): JSX.Element => {
             <p style={{ fontWeight: 'bold', fontSize: '16px' }}>{currentAnalysis?.title[selectedLanguage]}</p>
             <p style={{ fontSize: '12px' }}>{currentAnalysis?.description[selectedLanguage]}</p>
             <div>
-              {currentAnalysis?.uiParams &&
-                currentAnalysis.uiParams !== 'none' &&
-                currentAnalysis.analysisId !== 'VIIRS_FIRES' &&
-                currentAnalysis.uiParams.map((uiParam: any, i: number) => {
+              {currentAnalysis?.analysisParams.length !== 0 &&
+                currentAnalysis?.analysisParams.map((param: AnalysisParam, i: number) => {
                   return (
                     <div className="ui-analysis-wrapper" key={i}>
                       <div className="ui-description">
                         <div className="number">
                           <p>{i + 1}</p>
                         </div>
-                        <p>{uiParam.label[selectedLanguage]}</p>
+                        <p>{param.label[selectedLanguage]}</p>
                       </div>
-                      <div className="analysis-input">{renderInputComponent(uiParam, currentAnalysis)}</div>
+                      <div className="analysis-input">{renderInputComponent(param, currentAnalysis)}</div>
                     </div>
                   );
                 })}
-              {(currentAnalysis?.uiParams && currentAnalysis.analysisId === 'VIIRS_FIRES') ||
-                (currentAnalysis?.analysisId === 'GLAD_ALERTS' && (
-                  <div>
-                    <div className="ui-analysis-wrapper">
-                      <div className="ui-description">
-                        <div className="number">
-                          <p>{1}</p>
-                        </div>
-                        <p>Select range for analysis</p>
-                      </div>
-                      <div className="analysis-input">
-                        <DateRangePicker />
-                      </div>
-                    </div>
-                  </div>
-                ))}
             </div>
           </>
         );
       }
     },
-    [analysisModules, selectedAnalysis, selectedLanguage, analysisDateRange]
+    [selectedAnalysis, selectedLanguage]
   );
 
   const AnalysisOptions = (): JSX.Element => {
@@ -277,13 +231,20 @@ const BaseAnalysis = (): JSX.Element => {
     return (
       <select className="analysis-select" value={selectedAnalysis || 'default'} onChange={handleAnalysisOptionChange}>
         <option value="default">{analysisTranslations.defaultAnalysisLabel[selectedLanguage]}</option>
-        {analysisModules.map((module: any, i: number) => {
-          return (
-            <option value={module.analysisId} key={i}>
-              {module.label[selectedLanguage] || `Untranslated ${module.analysisId}`}
-            </option>
-          );
-        })}
+        {defaultAnalysisModules
+          .filter(m => {
+            if (disabledAnalysisModules?.length) {
+              return !disabledAnalysisModules.includes(m.analysisId);
+            }
+            return true;
+          })
+          .map((module, i: number) => {
+            return (
+              <option value={module.analysisId} key={i}>
+                {module.label[selectedLanguage] || `Untranslated ${module.analysisId}`}
+              </option>
+            );
+          })}
       </select>
     );
   };
@@ -323,6 +284,47 @@ const BaseAnalysis = (): JSX.Element => {
   function handlePNGURL(base64: string): void {
     setBase64ChartURL(base64);
     setChartLoading(false);
+  }
+
+  function handleChartError() {
+    setChartError(true);
+    setDownloadOptionsVisible(false);
+    setVegaSpec(null);
+  }
+
+  function analysisDateRangeHeader() {
+    if (selectedAnalysis === 'TC_LOSS_TOTAL') {
+      return (
+        <div
+          style={{
+            textAlign: 'center',
+            marginTop: 15,
+            marginBottom: -20
+          }}
+        >
+          <span style={{ fontWeight: 600 }}>From: </span>
+          <span>{2001}</span>
+          <span style={{ fontWeight: 600 }}> to: </span>
+          <span>{2020}</span>
+        </div>
+      );
+    }
+    if (selectedAnalysis === 'VIIRS_FIRES' || selectedAnalysis === 'GLAD_ALERTS') {
+      return (
+        <div
+          style={{
+            textAlign: 'center',
+            marginTop: 15,
+            marginBottom: -20
+          }}
+        >
+          <span style={{ fontWeight: 600 }}>From: </span>
+          <span>{analysisDateRange[0]}</span>
+          <span style={{ fontWeight: 600 }}> to: </span>
+          <span>{analysisDateRange[1]}</span>
+        </div>
+      );
+    }
   }
 
   const returnButtons = (): JSX.Element | undefined => {
@@ -378,9 +380,23 @@ const BaseAnalysis = (): JSX.Element => {
             {returnButtons()}
           </div>
           {!chartLoading && <AnalysisOptions />}
-          {!vegaSpec && (
+          {!vegaSpec && !chartError && (
             <div className="analysis-instructions" style={{ height: 300 }}>
               {!chartLoading && <AnalysisInstructions />}
+            </div>
+          )}
+          {chartError && (
+            <div
+              style={{
+                height: 368,
+                justifyContent: 'center',
+                display: 'flex',
+                alignContent: 'center',
+                alignItems: 'center',
+                color: 'red'
+              }}
+            >
+              Error loading chart analysis.
             </div>
           )}
           {chartLoading && (
@@ -413,38 +429,30 @@ const BaseAnalysis = (): JSX.Element => {
                   />
                 )}
               </div>
-              <div
-                style={{
-                  textAlign: 'center',
-                  marginTop: 15,
-                  marginBottom: -20
-                }}
-              >
-                <span style={{ fontWeight: 600 }}>From: </span>
-                <span>{analysisDateRange[0]}</span>
-                <span style={{ fontWeight: 600 }}> to: </span>
-                <span>{analysisDateRange[1]}</span>
-              </div>
+              {analysisDateRangeHeader()}
               <VegaChart
                 spec={vegaSpec}
                 language={selectedLanguage}
                 baseConfig={baseConfig}
                 sendBackURL={handlePNGURL}
+                sendError={handleChartError}
               />
             </>
           )}
-          <span data-tip={'Analysis disabled for point and line features'} data-offset="{'top': -5}">
-            <button
-              disabled={selectedAnalysis === 'default' || featureIsNotAllowed}
-              style={selectedAnalysis !== 'default' ? { backgroundColor: customColorTheme } : {}}
-              className={
-                selectedAnalysis === 'default' || featureIsNotAllowed ? 'orange-button disabled' : 'orange-button'
-              }
-              onClick={runAnalysis}
-            >
-              {analysisTranslations.runAnalysisButton[selectedLanguage]}
-            </button>
-          </span>
+          {!chartError && (
+            <span data-tip={'Analysis disabled for point and line features'} data-offset="{'top': -5}">
+              <button
+                disabled={selectedAnalysis === 'default' || featureIsNotAllowed}
+                style={selectedAnalysis !== 'default' ? { backgroundColor: customColorTheme } : {}}
+                className={
+                  selectedAnalysis === 'default' || featureIsNotAllowed ? 'orange-button disabled' : 'orange-button'
+                }
+                onClick={runAnalysis}
+              >
+                {analysisTranslations.runAnalysisButton[selectedLanguage]}
+              </button>
+            </span>
+          )}
           <ReactTooltip effect="solid" className="tab-tooltip" disable={!featureIsNotAllowed} />
           <DataTabFooter />
         </div>
