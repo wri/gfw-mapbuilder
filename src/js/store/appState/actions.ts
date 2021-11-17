@@ -28,6 +28,7 @@ import {
   SET_VERSIONED_LAYER,
   SET_TREE_HEIGHT,
   SET_MULTI_POLYGON_SELECTION_MODE,
+  SET_ACTIVE_MULTI_INPUT,
   SET_ANALYSIS_FEATURE_LIST
 } from './types';
 
@@ -216,6 +217,13 @@ export function setVersionedLayer(payload: any) {
 export function setMultiPolygonSelectionMode(payload: any) {
   return {
     type: SET_MULTI_POLYGON_SELECTION_MODE as typeof SET_MULTI_POLYGON_SELECTION_MODE,
+    payload: payload
+  };
+}
+
+export function setActiveMultiInput(payload: any) {
+  return {
+    type: SET_ACTIVE_MULTI_INPUT as typeof SET_ACTIVE_MULTI_INPUT,
     payload: payload
   };
 }

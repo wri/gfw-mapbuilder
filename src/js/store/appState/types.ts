@@ -60,7 +60,8 @@ export interface AppState {
   renderPopup: boolean;
   areaImages: string[];
   multiPolygonSelectionMode: boolean;
-  analysisFeatureList: [] | LayerFeatureResult[];
+  activeMultiInput: number;
+  analysisFeatureList: any[] | LayerFeatureResult[];
 }
 
 //Action names available
@@ -91,6 +92,7 @@ export const SET_AREA_IMAGES = 'SET_AREA_IMAGES';
 export const SET_VERSIONED_LAYER = 'SET_VERSIONED_LAYER';
 export const SET_TREE_HEIGHT = 'SET_TREE_HEIGHT';
 export const SET_MULTI_POLYGON_SELECTION_MODE = 'SET_MULTI_POLYGON_SELECTION_MODE';
+export const SET_ACTIVE_MULTI_INPUT = 'SET_ACTIVE_MULTI_INPUT';
 export const SET_ANALYSIS_FEATURE_LIST = 'SET_ANALYSIS_FEATURE_LIST';
 
 interface SetSelectedSearchWidgetLayer {
@@ -228,6 +230,11 @@ interface SetMultiPolygonSelectionMode {
   payload: boolean;
 }
 
+interface SetActiveMultiInput {
+  type: typeof SET_ACTIVE_MULTI_INPUT;
+  payload: number;
+}
+
 interface SetAnalysisFeatureList {
   type: typeof SET_ANALYSIS_FEATURE_LIST;
   payload: any;
@@ -260,5 +267,6 @@ export type AppStateTypes =
   | SetAreaImages
   | SetVersionedLayer
   | SetMultiPolygonSelectionMode
+  | SetActiveMultiInput
   | SetTreeHeight
   | SetAnalysisFeatureList;

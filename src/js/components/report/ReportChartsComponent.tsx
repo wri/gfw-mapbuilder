@@ -50,7 +50,6 @@ function generateWidgetURL(
   analysisId: string,
   queryParams?: { name: string; value: string }[]
 ): string {
-  debugger;
   let baseURL = 'https://api.resourcewatch.org/v1/widget/';
   //Add Widget ID
   baseURL = baseURL.concat(`${widgetID}?`);
