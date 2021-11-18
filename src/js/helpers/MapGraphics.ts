@@ -85,6 +85,13 @@ export async function removeIntersectingGraphic() {
   }
 }
 
+export async function clearMultiPolygonLayer() {
+  const graphicsLayer = mapController._map?.findLayerById('multi_poly_graphics') as __esri.GraphicsLayer;
+  if (graphicsLayer) {
+    graphicsLayer.removeAll();
+  }
+}
+
 export async function drawIntersectingGraphic(geometry: __esri.Geometry | __esri.Geometry[]): Promise<void> {
   const [GraphicsLayer, Graphic] = await loadModules(['esri/layers/GraphicsLayer', 'esri/Graphic']);
 

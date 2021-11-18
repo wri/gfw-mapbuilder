@@ -367,8 +367,8 @@ const BaseAnalysis = (): JSX.Element => {
   };
 
   //Analysis is disabled for point and polyline features
-  const selectedFeature = activeFeatures[activeFeatureIndex[0]].features[activeFeatureIndex[1]];
-  const selectedFeatureType = selectedFeature.geometry.type;
+  const selectedFeature = activeFeatures[activeFeatureIndex[0]]?.features[activeFeatureIndex[1]] || null;
+  const selectedFeatureType = selectedFeature?.geometry?.type;
   const featureIsNotAllowed = selectedFeatureType === 'point' || selectedFeatureType === 'polyline';
 
   return (

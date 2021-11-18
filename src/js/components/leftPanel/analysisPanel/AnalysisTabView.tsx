@@ -11,7 +11,6 @@ import { PenIcon } from '../../../../images/penIcon';
 import { SelectionIcon } from '../../../../images/selectionIcon';
 import { PlusIcon } from '../../../../images/plusIcon';
 import { createSelector } from 'reselect';
-import analysisTranslations from './analysisTranslations';
 import BaseButton from '../../ui/BaseButton';
 import MultiPolygonAnalysis from './MultiPolygonAnalysis';
 
@@ -54,6 +53,7 @@ const AnalysisTabView = (props: TabProps): JSX.Element => {
   const activeFeaturesLength = useSelector(selectActiveFeaturesLength);
 
   const tabview = useSelector(selectTabview);
+  const [multiPolyAnalysisReady, setMultiPolyAnalysisReady] = React.useState(false);
   const tabViewIsVisible = tabview && activeTab === props.label;
 
   const returnFirstInstruction = (type?): JSX.Element => {
@@ -184,11 +184,18 @@ const AnalysisTabView = (props: TabProps): JSX.Element => {
     </div>
   );
 
+  function initAnalyze(val) {
+    setMultiPolyAnalysisReady(val);
+  }
+
   return (
     <>
       {tabViewIsVisible && activeFeaturesLength !== 0 && !multiPolygonSelection && <BaseAnalysis />}
       {tabViewIsVisible && activeFeaturesLength == 0 && !multiPolygonSelection && <DefaultAnalysisContent />}
-      {tabViewIsVisible && multiPolygonSelection && <MultiPolygonAnalysis />}
+      {tabViewIsVisible && multiPolygonSelection && <MultiPolygonAnalysis initAnalyze={initAnalyze} />}
+      {tabViewIsVisible && multiPolygonSelection && multiPolyAnalysisReady && activeFeaturesLength !== 0 && (
+        <BaseAnalysis />
+      )}
     </>
   );
 };

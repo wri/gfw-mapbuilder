@@ -17,11 +17,15 @@ import { mapController } from '../../../controllers/mapController';
 import UploadFile from '../../sharedComponents/UploadFile';
 import MethodSelection from './multiPolyAnalysis/MethodSelection';
 import { DeleteIcon } from '../../../../images/deleteIcon';
-import { removeIntersectingGraphic } from '../../../helpers/MapGraphics';
+import { clearMultiPolygonLayer, removeIntersectingGraphic } from '../../../helpers/MapGraphics';
 import { AnalyzingIcon } from '../../../../images/analyzingIcon';
 import { ErrorIcon } from '../../../../images/errorIcon';
+import { setActiveFeatures } from '../../../store/mapview/actions';
 
-const MultiPolygonAnalysis = () => {
+interface Props {
+  initAnalyze: (val: boolean) => void;
+}
+const MultiPolygonAnalysis = ({ initAnalyze }: Props) => {
   const dispatch = useDispatch();
   const selectedLanguage = useSelector((store: RootState) => store.appState.selectedLanguage);
 
@@ -91,6 +95,7 @@ const MultiPolygonAnalysis = () => {
       const oldState = [...analysisFeatureList];
       oldState[inputIndex] = undefined;
       dispatch(setAnalysisFeatureList(oldState));
+      initAnalyze(false);
     }, []);
 
     const Container = styled.div`
@@ -187,7 +192,7 @@ const MultiPolygonAnalysis = () => {
           <SelectedShapeContainer inputIndex={1} label="Selected shape 2" />
         )}
         {overlap === 'analyzing' && (
-          <AnalyzingStatus style={{ color: '#e8a600' }}>
+          <AnalyzingStatus>
             <AnalyzingIcon width={20} height={20} />
             <p>Detecting Overlapping Area ...</p>
           </AnalyzingStatus>
@@ -203,6 +208,11 @@ const MultiPolygonAnalysis = () => {
         <BackButton
           onClick={() => {
             dispatch(setMultiPolygonSelectionMode(false));
+            //clear polygons from redux and the map
+            dispatch(setAnalysisFeatureList([undefined, undefined]));
+            dispatch(setActiveFeatures([]));
+            removeIntersectingGraphic();
+            clearMultiPolygonLayer();
           }}
         >
           <BackIcon height={12} width={12} fill={customColorTheme} />
@@ -212,7 +222,7 @@ const MultiPolygonAnalysis = () => {
           customColorTheme={customColorTheme}
           disabled={overlap !== 'intersect'}
           onClick={() => {
-            console.log('analyze?');
+            initAnalyze(true);
           }}
         >
           {'ANALYZE'}
