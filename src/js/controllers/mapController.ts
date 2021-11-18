@@ -1515,9 +1515,8 @@ export class MapController {
 
     return mapPDF;
   };
-  // let GraphicsLayer
-  setPolygon = (points: Array<__esri.Point>): void => {
-    // import GraphicsLayer from 'esri/layers/GraphicsLayer';
+
+  setPolygon = async (points: Array<__esri.Point>): Promise<void> => {
     const userLayer = this._map?.findLayerById('user_features') as __esri.GraphicsLayer;
     if (userLayer) {
       userLayer.graphics.removeAll();
@@ -1559,8 +1558,6 @@ export class MapController {
     drawnGraphic.symbol.outline.color = [115, 252, 253];
     drawnGraphic.symbol.color = [0, 0, 0, 0];
 
-    userLayer.graphics.add(drawnGraphic);
-
     this._mapview?.goTo(
       {
         target: graphic
@@ -1576,12 +1573,33 @@ export class MapController {
       features: [drawnGraphic],
       fieldNames: null
     };
+    const multiPolyMethod = store.getState().appState.multiPolygonSelectionMode;
+    if (multiPolyMethod) {
+      const activeMultiInput = store.getState().appState.activeMultiInput;
+      const analysisFeatureList = store.getState().appState.analysisFeatureList;
+      //add graphics to the layer and add graphics to the array
+      let gLayer = this._map?.findLayerById('multi_poly_graphics') as __esri.GraphicsLayer;
+      if (!gLayer) {
+        const [GraphicsLayer] = await loadModules(['esri/layers/GraphicsLayer']);
+        gLayer = new GraphicsLayer({
+          id: 'multi_poly_graphics'
+        });
+        this._map?.add(gLayer);
+      }
+      gLayer.graphics.add(drawnGraphic);
+      drawnFeatures.features[0].attributes.inputIndex = activeMultiInput;
+      const oldList = [...analysisFeatureList];
+      oldList[activeMultiInput] = drawnFeatures;
+      store.dispatch(setAnalysisFeatureList(oldList));
+      store.dispatch(renderModal(''));
+    } else {
+      userLayer.graphics.add(drawnGraphic);
+      store.dispatch(setActiveFeatures([drawnFeatures]));
+      store.dispatch(setActiveFeatureIndex([0, 0]));
+      store.dispatch(selectActiveTab('analysis'));
 
-    store.dispatch(setActiveFeatures([drawnFeatures]));
-    store.dispatch(setActiveFeatureIndex([0, 0]));
-    store.dispatch(selectActiveTab('analysis'));
-
-    store.dispatch(renderModal(''));
+      store.dispatch(renderModal(''));
+    }
   };
 
   async initializeSearchWidget(searchRef: RefObject<any>): Promise<void> {

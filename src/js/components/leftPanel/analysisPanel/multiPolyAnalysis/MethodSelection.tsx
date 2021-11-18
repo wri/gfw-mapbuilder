@@ -2,9 +2,12 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { analysisContent } from '../../../../../../configs/translations/leftPanel.translations';
+import { penContent } from '../../../../../../configs/translations/modal.tanslations';
 import { PenIcon } from '../../../../../images/penIcon';
+import { PlusIcon } from '../../../../../images/plusIcon';
 import { PolygonIcon } from '../../../../../images/PolygonIcon';
 import { mapController } from '../../../../controllers/mapController';
+import { renderModal } from '../../../../store/appState/actions';
 import UploadFile from '../../../sharedComponents/UploadFile';
 
 const DrawWrap = styled.div`
@@ -73,6 +76,7 @@ const SelectWrap = styled.div`
 const MethodSelection = ({ placeholder, inputIndex, selectedLanguage, customColorTheme, handleInputSelection }) => {
   const [activeInput, setActiveInput] = React.useState<string>('none');
 
+  const { coordinatesTitle, coordinatesInstructions } = penContent[selectedLanguage];
   const {
     analyzeExistingShapeTitle,
     analyzeExistingShapeDirections,
@@ -121,6 +125,33 @@ const MethodSelection = ({ placeholder, inputIndex, selectedLanguage, customColo
     }
   };
 
+  const CoordinatesMethod = () => {
+    const dispatch = useDispatch();
+    return (
+      <DrawWrap>
+        <figure>
+          <figcaption className="title">
+            <h4>{coordinatesTitle}</h4>
+          </figcaption>
+          <ol>
+            {coordinatesInstructions.map((direction: string, i: number) => (
+              <li key={i}>{direction}</li>
+            ))}
+          </ol>
+        </figure>
+        <button
+          className="orange-button"
+          style={{
+            backgroundColor: customColorTheme
+          }}
+          onClick={() => dispatch(renderModal('PenWidget-CoordinatesForm'))}
+        >
+          <PlusIcon fill={'#fff'} height={25} width={25} />
+          {coordinatesButton}
+        </button>
+      </DrawWrap>
+    );
+  };
   const DrawMethod = () => {
     return (
       <DrawWrap>
@@ -137,7 +168,9 @@ const MethodSelection = ({ placeholder, inputIndex, selectedLanguage, customColo
         </figure>
         <PolygonIcon height={100} width={100} customColorTheme={customColorTheme} />
         <button
-          style={{ backgroundColor: customColorTheme }}
+          style={{
+            backgroundColor: customColorTheme
+          }}
           className="orange-button"
           onClick={() => mapController.initSketchForMultiple(inputIndex)}
         >
@@ -164,10 +197,12 @@ const MethodSelection = ({ placeholder, inputIndex, selectedLanguage, customColo
         <option value="select">Analyze a shape on the map</option>
         <option value="draw">Analyze your own shape</option>
         <option value="upload">Upload Shape file</option>
+        <option value="coordinates">Enter Coordinates for your shape</option>
       </StyledSelect>
       {activeInput === 'select' && <ExistingShapeInstruction />}
       {activeInput === 'draw' && <DrawMethod />}
       {activeInput === 'upload' && <UploadFile />}
+      {activeInput === 'coordinates' && <CoordinatesMethod />}
     </SelectWrap>
   );
 };

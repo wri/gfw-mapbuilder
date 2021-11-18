@@ -382,7 +382,7 @@ const BaseAnalysis = (): JSX.Element => {
           <AnalysisOptions />
           {!vegaSpec && !chartError && (
             <div className="analysis-instructions" style={{ height: 300 }}>
-              {!chartLoading && <AnalysisInstructions />}
+              <AnalysisInstructions />
             </div>
           )}
           {chartError && (
