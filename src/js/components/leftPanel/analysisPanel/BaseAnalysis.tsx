@@ -379,7 +379,7 @@ const BaseAnalysis = (): JSX.Element => {
             <span>{title === null ? 'User Drawn Feature' : title}</span>
             {returnButtons()}
           </div>
-          {!chartLoading && <AnalysisOptions />}
+          <AnalysisOptions />
           {!vegaSpec && !chartError && (
             <div className="analysis-instructions" style={{ height: 300 }}>
               {!chartLoading && <AnalysisInstructions />}
