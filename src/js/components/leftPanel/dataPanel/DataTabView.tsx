@@ -2,7 +2,11 @@ import * as React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../../../js/store';
 import { setActiveFeatureIndex, setActiveFeatures, setDocuments } from '../../../../js/store/mapview/actions';
-import { setAnalysisFeatureList, setMultiPolygonSelectionMode } from '../../../../js/store/appState/actions';
+import {
+  selectActiveTab,
+  setAnalysisFeatureList,
+  setMultiPolygonSelectionMode
+} from '../../../../js/store/appState/actions';
 import DataTabFooter from './DataTabFooter';
 import DefaultTabView from './DefaultTabView';
 import LayerSelector from './LayerSelector';
@@ -10,6 +14,9 @@ import { mapController } from '../../../../js/controllers/mapController';
 import { LayerFeatureResult } from '../../../../js/store/mapview/types';
 import { getDocuments } from '../../../../js/helpers/mapController/documentsQuery';
 import { CloseIcon } from '../../../../images/closeIcon';
+import BaseButton from '../../ui/BaseButton';
+import styled from 'styled-components';
+import { addToMultiPolygonLayer, clearGraphics, clearUserGraphics } from '../../../helpers/MapGraphics';
 
 //Constructs layer tile based on sublayer existance
 function generateLayerTitle(activeLayerInfo: any): string {
@@ -38,10 +45,13 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
   const customColorTheme = useSelector((store: RootState) => store.appSettings.customColorTheme);
   const multiPolygonSelection = useSelector((store: RootState) => store.appState.multiPolygonSelectionMode);
   const analysisFeatureList = useSelector((store: RootState) => store.appState.analysisFeatureList);
+  const activeMultiInput = useSelector((store: RootState) => store.appState.activeMultiInput);
   console.log(analysisFeatureList);
 
   const FeatureDataView = (): JSX.Element => {
     const activeLayerInfo = activeFeatures[activeFeatureIndex[0]];
+    //short circuit component in case no feature is found
+    if (!activeLayerInfo) return <></>;
 
     //If layer has sublayers, we are using sublayerID to compare, otherwise it is layerID
     function findLayer(f: LayerFeatureResult): boolean {
@@ -56,6 +66,7 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
       if (
         activeLayerInfo.layerID !== 'user_features' &&
         activeLayerInfo.layerID !== 'upload_file_features' &&
+        activeLayerInfo.layerID !== 'multi_poly_graphics' &&
         activeLayerInfo.layerID !== 'overlap-feature-layer'
       ) {
         mapController.drawGraphic(activeFeature);
@@ -194,6 +205,22 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
           .catch(e => dispatch(setDocuments(null)));
       }, [activeFeatures, activeFeatureIndex]);
 
+      const TopWrap = styled.div`
+        display: flex;
+        align-items: center;
+      `;
+
+      const AddToAnalysisButton = styled(BaseButton)`
+        margin: 0;
+        background-color: ${customColorTheme};
+        color: white;
+        font-size: 0.7rem;
+        min-height: 15px;
+        padding: 5px 0px 5px 0px;
+        margin-left: 5px;
+        width: 150px;
+      `;
+
       return (
         <div className="layer-feature-group">
           <div className="layer-control-container">
@@ -229,9 +256,35 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
               </button>
             </div>
           </div>
-          <div className="page-numbers">
-            {page + 1} / {props.activeLayerInfo.features.length}
-          </div>
+          <TopWrap>
+            {multiPolygonSelection && (
+              <AddToAnalysisButton
+                onClick={() => {
+                  clearGraphics();
+                  clearUserGraphics();
+
+                  const activeFeature = activeFeatures[activeFeatureIndex[0]].features[activeFeatureIndex[1]];
+
+                  const formatFeatures: LayerFeatureResult = {
+                    layerID: 'multi_poly_graphics',
+                    layerTitle: 'Multi Polygon Features',
+                    features: [activeFeature],
+                    fieldNames: null
+                  };
+                  const oldList = [...analysisFeatureList];
+                  oldList[activeMultiInput] = formatFeatures;
+                  dispatch(setAnalysisFeatureList(oldList));
+                  addToMultiPolygonLayer(activeFeature.geometry);
+                  dispatch(selectActiveTab('analysis'));
+                }}
+              >
+                add to analysis
+              </AddToAnalysisButton>
+            )}
+            <div className="page-numbers">
+              {page + 1} / {props.activeLayerInfo.features.length}
+            </div>
+          </TopWrap>
           <div className="layer-title">{layerTitle}</div>
           <hr />
           <AttributeTable attributes={props.activeLayerInfo.features[page].attributes} />

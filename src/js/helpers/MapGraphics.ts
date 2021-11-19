@@ -78,6 +78,14 @@ export function clearGraphics() {
   }
 }
 
+export function clearUserGraphics() {
+  if (!mapController._map) return;
+  const graphicsLayer = mapController._map.findLayerById('user_features') as __esri.GraphicsLayer;
+  if (graphicsLayer) {
+    graphicsLayer.removeAll();
+  }
+}
+
 export async function removeIntersectingGraphic() {
   const graphicsLayer = mapController._map?.findLayerById('overlap-feature-layer') as __esri.GraphicsLayer;
   if (graphicsLayer) {
@@ -90,6 +98,31 @@ export async function clearMultiPolygonLayer() {
   if (graphicsLayer) {
     graphicsLayer.removeAll();
   }
+}
+
+export async function addToMultiPolygonLayer(geometry: __esri.Geometry) {
+  const [GraphicsLayer, Graphic] = await loadModules(['esri/layers/GraphicsLayer', 'esri/Graphic']);
+  let graphicsLayer = mapController._map?.findLayerById('multi_poly_graphics') as __esri.GraphicsLayer;
+  if (!graphicsLayer) {
+    graphicsLayer = new GraphicsLayer({
+      id: 'multi_poly_graphics'
+    });
+  }
+  if (!mapController._map) return;
+  mapController._map.add(graphicsLayer);
+
+  const graphic = new Graphic({
+    geometry: geometry,
+    symbol: {
+      type: 'simple-fill',
+      color: [0, 0, 0, 0],
+      outline: {
+        color: [115, 252, 253],
+        width: 1
+      }
+    }
+  });
+  graphicsLayer.add(graphic);
 }
 
 export async function drawIntersectingGraphic(geometry: __esri.Geometry | __esri.Geometry[]): Promise<void> {
