@@ -5,7 +5,7 @@ import { createSelector } from 'reselect';
 import ReactTooltip from 'react-tooltip';
 import { RootState } from '../../../../js/store';
 import { setActiveFeatures } from '../../../../js/store/mapview/actions';
-import { setRenderPopup } from '../../../../js/store/appState/actions';
+import { setRenderPopup, setMultiPolygonSelectionMode } from '../../../../js/store/appState/actions';
 
 import { registerGeometry } from '../../../../js/helpers/geometryRegistration';
 import fragmentationSpec from './fragmentationVegaSpec';
@@ -84,6 +84,8 @@ const BaseAnalysis = (): JSX.Element => {
   const customColorTheme = useSelector((store: RootState) => store.appSettings.customColorTheme);
 
   const disabledAnalysisModules = useSelector((store: RootState) => store.appSettings.disabledAnalysisModules);
+
+  const multiPolygonSelection = useSelector((store: RootState) => store.appState.multiPolygonSelectionMode);
 
   useEffect(() => {
     const activeLayer = activeFeatures[activeFeatureIndex[0]];
@@ -451,6 +453,17 @@ const BaseAnalysis = (): JSX.Element => {
               >
                 {analysisTranslations.runAnalysisButton[selectedLanguage]}
               </button>
+              {!multiPolygonSelection && (
+                <button
+                  style={{ backgroundColor: customColorTheme }}
+                  className={'orange-button'}
+                  onClick={() => {
+                    dispatch(setMultiPolygonSelectionMode(true));
+                  }}
+                >
+                  Analyze overlapping area
+                </button>
+              )}
             </span>
           )}
           <ReactTooltip effect="solid" className="tab-tooltip" disable={!featureIsNotAllowed} />
