@@ -88,6 +88,20 @@ export const defaultAPIFlagshipLayers = [
   }
 ];
 
+export const resourcewatchLayers = [
+  {
+    groupId: 'GROUP_LC',
+    id: 'DRY_SPELLS',
+    datasetURL: 'https://data-api.globalforestwatch.org/dataset/nexgddp_change_dry_spells_2000_2080/latest',
+    datasetLegendConfigURL:
+      'https://api.resourcewatch.org/v1/layer/7c497efb-1671-49bf-87a2-3c96ddb9ff88?filterIncludesByEnv=true&includes=vocabulary,metadata&env=production',
+    type: 'resourcewatch',
+    order: 1,
+    origin: 'rw-api',
+    opacity: 1
+  }
+];
+
 //Layer controls (IDS)
 export const densityEnabledLayers = ['TREE_COVER_LOSS', 'AG_BIOMASS', 'TREE_COVER'];
 

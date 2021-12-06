@@ -1,5 +1,5 @@
 //Helper for determining layer opacity that we start with. Depending on the URL hash, resources file and API response those can be diffent
-import { defaultAPIFlagshipLayers } from '../../../../configs/layer-config';
+import { defaultAPIFlagshipLayers, resourcewatchLayers } from '../../../../configs/layer-config';
 import { LayerInfo } from '../../../../src/js/helpers/shareFunctionality';
 import { LayerProps } from '../../../js/store/mapview/types';
 import store from '../../store';
@@ -270,6 +270,18 @@ export async function getRemoteAndServiceLayers(): Promise<any> {
     });
   });
 
+  resourcewatchLayers.forEach(layer => {
+    remoteDataLayers.push({
+      order: layer.order,
+      layerGroupId: layer.groupId,
+      dataLayer: layer,
+      origin: layer.origin,
+      layerType: layer.type,
+      id: layer.id,
+      opacity: layer.opacity
+    });
+  });
+
   function fetchRemoteApiLayer(item): Promise<any> {
     const baseURL = `https://production-api.globalforestwatch.org/v1/layer/${item?.dataLayer?.uuid}`;
     return fetch(baseURL)
@@ -336,9 +348,68 @@ export async function getRemoteAndServiceLayers(): Promise<any> {
     //
   }
 
+  function getLegendConfig(layer, config) {
+    const configObject = {
+      name: { en: layer.metadata.title },
+      type: config.attributes.legendConfig.type
+    };
+
+    const items = config.attributes.legendConfig.items.map(item => {
+      return {
+        color: item.color,
+        id: item.id,
+        name: {
+          en: item.name
+        }
+      };
+    });
+    configObject['items'] = items;
+    return configObject;
+  }
+
+  function fetchRWLayer(item): Promise<any> {
+    return fetch(item.dataLayer.datasetURL)
+      .then(response => response.json())
+      .then(json => json.data)
+      .then(layer => {
+        return fetch(item.dataLayer.datasetLegendConfigURL)
+          .then(response => response.json())
+          .then(json => json.data)
+          .then(config => {
+            item.groupId = item.layerGroupId;
+            const newItem = {
+              dataLayer: item,
+              layer: {
+                id: item.id,
+                opacity: item.opacity,
+                order: item.order,
+                url: layer.assets.find(a => a[0] === 'Raster tile cache')[1],
+                type: 'webtiled',
+                label: { en: layer.metadata.title },
+                sublabel: layer.metadata.subtile,
+                layerGroupId: item.layerGroupId,
+                group: item.layerGroupId,
+                metadata: {
+                  metadata: layer.metadata,
+                  legendConfig: getLegendConfig(layer, config)
+                }
+              },
+              dashboardURL: null,
+              group: item.layerGroupId,
+              order: item.order,
+              layerGroupId: item.layerGroupId
+            };
+            return newItem;
+          });
+      })
+      .catch(error => console.error(error));
+  }
+
   const remoteDataLayerRequests = remoteDataLayers.map((item: any) => {
     if (item?.origin === 'gfw-api') {
       return fetchFlaghshipLayer(item);
+    } else if (item?.origin === 'rw-api') {
+      return fetchRWLayer(item);
     } else {
       return fetchRemoteApiLayer(item);
     }
