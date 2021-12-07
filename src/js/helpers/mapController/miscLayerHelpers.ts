@@ -270,17 +270,19 @@ export async function getRemoteAndServiceLayers(): Promise<any> {
     });
   });
 
-  resourcewatchLayers.forEach(layer => {
-    remoteDataLayers.push({
-      order: layer.order,
-      layerGroupId: layer.groupId,
-      dataLayer: layer,
-      origin: layer.origin,
-      layerType: layer.type,
-      id: layer.id,
-      opacity: layer.opacity
+  resourcewatchLayers
+    .filter(rwLayer => appSettings.enabledRWLayers?.includes(rwLayer.id))
+    .forEach(layer => {
+      remoteDataLayers.push({
+        order: layer.order,
+        layerGroupId: layer.groupId,
+        dataLayer: layer,
+        origin: layer.origin,
+        layerType: layer.type,
+        id: layer.id,
+        opacity: layer.opacity
+      });
     });
-  });
 
   function fetchRemoteApiLayer(item): Promise<any> {
     const baseURL = `https://production-api.globalforestwatch.org/v1/layer/${item?.dataLayer?.uuid}`;
