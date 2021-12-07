@@ -99,6 +99,28 @@ export const resourcewatchLayers = [
     order: 1,
     origin: 'rw-api',
     opacity: 1
+  },
+  {
+    groupId: 'GROUP_LC',
+    id: 'AIR_QUALITY',
+    datasetURL: 'https://data-api.globalforestwatch.org/dataset/tropomi_avg_nitrogen_dioxide_last_month/latest',
+    datasetLegendConfigURL:
+      'https://api.resourcewatch.org/v1/layer/61989f1f-65af-40e7-bf45-49b27eb2b9da?filterIncludesByEnv=true&includes=vocabulary,metadata&env=production',
+    type: 'resourcewatch',
+    order: 1,
+    origin: 'rw-api',
+    opacity: 1
+  },
+  {
+    groupId: 'GROUP_LC',
+    id: 'WIND_SPEED',
+    datasetURL: 'https://data-api.globalforestwatch.org/dataset/dtu_wb_wind_speed_potential_2001_2010/latest',
+    datasetLegendConfigURL:
+      'https://api.resourcewatch.org/v1/layer/1ae1f58f-569d-4a21-9835-3e9bdd93759b?filterIncludesByEnv=true&includes=vocabulary,metadata&env=production',
+    type: 'resourcewatch',
+    order: 1,
+    origin: 'rw-api',
+    opacity: 1
   }
 ];
 
