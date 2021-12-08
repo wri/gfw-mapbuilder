@@ -90,7 +90,7 @@ export const defaultAPIFlagshipLayers = [
 
 export const resourcewatchLayers = [
   {
-    groupId: 'GROUP_LC',
+    groupId: 'GROUP_CLIMATE',
     id: 'DRY_SPELLS',
     datasetURL: 'https://data-api.globalforestwatch.org/dataset/nexgddp_change_dry_spells_2000_2080/latest',
     datasetLegendConfigURL:
@@ -101,7 +101,7 @@ export const resourcewatchLayers = [
     opacity: 1
   },
   {
-    groupId: 'GROUP_LC',
+    groupId: 'GROUP_CLIMATE',
     id: 'AIR_QUALITY',
     datasetURL: 'https://data-api.globalforestwatch.org/dataset/tropomi_avg_nitrogen_dioxide_last_month/latest',
     datasetLegendConfigURL:
@@ -112,7 +112,7 @@ export const resourcewatchLayers = [
     opacity: 1
   },
   {
-    groupId: 'GROUP_LC',
+    groupId: 'GROUP_CLIMATE',
     id: 'WIND_SPEED',
     datasetURL: 'https://data-api.globalforestwatch.org/dataset/dtu_wb_wind_speed_potential_2001_2010/latest',
     datasetLegendConfigURL:
