@@ -1,5 +1,4 @@
 //Helper for determining layer opacity that we start with. Depending on the URL hash, resources file and API response those can be diffent
-import { defaultAPIFlagshipLayers, resourcewatchLayers } from '../../../../configs/layer-config';
 import { LayerInfo } from '../../../../src/js/helpers/shareFunctionality';
 import { LayerProps } from '../../../js/store/mapview/types';
 import store from '../../store';
@@ -7,7 +6,8 @@ import {
   CustomLayerConfig,
   FlagshipLayerConfig,
   RecentImageryLayerConfig,
-  RemoteApiLayerConfig
+  RemoteApiLayerConfig,
+  RWLayerConfig
 } from '../../types/layersTypes';
 import { fetchLegendInfo } from '../legendInfo';
 
@@ -181,7 +181,13 @@ export async function extractWebmapLayerObjects(esriMap?: __esri.Map): Promise<L
   return mapLayerObjects;
 }
 
-type AllLayersConfig = RemoteApiLayerConfig | RecentImageryLayerConfig | CustomLayerConfig | FlagshipLayerConfig;
+type AllLayersConfig =
+  | RemoteApiLayerConfig
+  | RecentImageryLayerConfig
+  | CustomLayerConfig
+  | FlagshipLayerConfig
+  | RWLayerConfig
+  | any; //TODO fix this any
 export async function getRemoteAndServiceLayers(): Promise<any> {
   const { appSettings } = store.getState();
   const { layerPanel } = appSettings;
@@ -249,39 +255,33 @@ export async function getRemoteAndServiceLayers(): Promise<any> {
           layerGroupId: layer.groupId,
           dataLayer: layer
         });
+      } else if (layer.type === 'flagship') {
+        remoteDataLayers.push({
+          order: layer.order,
+          layerGroupId: layer.groupId,
+          dataLayer: layer,
+          origin: layer.origin,
+          uuid: layer.uuid,
+          label: layer.label,
+          layerType: layer.layerType,
+          id: layer.id,
+          opacity: layer.opacity,
+          legend: layer.legend,
+          sublabel: layer.sublabel
+        });
+      } else if (layer.type === 'resourcewatch' && appSettings?.enabledRWLayers?.includes(layer.id)) {
+        remoteDataLayers.push({
+          order: layer.order,
+          layerGroupId: layer.groupId,
+          dataLayer: layer,
+          origin: layer.origin,
+          layerType: layer.type,
+          id: layer.id,
+          opacity: layer.opacity
+        });
       } else {
         detailedLayers.push(layer);
       }
-    });
-
-  defaultAPIFlagshipLayers.forEach(layer => {
-    remoteDataLayers.push({
-      order: layer.order,
-      layerGroupId: layer.groupId,
-      dataLayer: layer,
-      origin: layer.origin,
-      uuid: layer.uuid,
-      label: layer.label,
-      layerType: layer.layerType,
-      id: layer.id,
-      opacity: layer.opacity,
-      legend: layer.legend,
-      sublabel: layer.sublabel
-    });
-  });
-
-  resourcewatchLayers
-    .filter(rwLayer => appSettings.enabledRWLayers?.includes(rwLayer.id))
-    .forEach(layer => {
-      remoteDataLayers.push({
-        order: layer.order,
-        layerGroupId: layer.groupId,
-        dataLayer: layer,
-        origin: layer.origin,
-        layerType: layer.type,
-        id: layer.id,
-        opacity: layer.opacity
-      });
     });
 
   function fetchRemoteApiLayer(item): Promise<any> {
