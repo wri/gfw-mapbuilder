@@ -112,8 +112,11 @@ const AnalysisTabView = (props: TabProps): JSX.Element => {
           </figcaption>
           <ol>
             <li>Use the layers tab to turn on data layer</li>
-            <li>Select 2 shapes.</li>
-            <li>Click on the analyze button.</li>
+            <li>Select first shape</li>
+            <li>Click on Add to Analysis under Data Tab</li>
+            <li>Select second shape</li>
+            <li>Click on Add to Analysis under Data Tab</li>
+            <li>Click on the analyze button</li>
           </ol>
         </figure>
         <BaseButton

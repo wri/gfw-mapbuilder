@@ -1,12 +1,8 @@
 import * as React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../../../../js/store';
+import { RootState } from '../../../store';
 import { setActiveFeatureIndex, setActiveFeatures, setDocuments } from '../../../../js/store/mapview/actions';
-import {
-  selectActiveTab,
-  setAnalysisFeatureList,
-  setMultiPolygonSelectionMode
-} from '../../../../js/store/appState/actions';
+import { selectActiveTab, setAnalysisFeatureList } from '../../../../js/store/appState/actions';
 import DataTabFooter from './DataTabFooter';
 import DefaultTabView from './DefaultTabView';
 import LayerSelector from './LayerSelector';
@@ -46,7 +42,6 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
   const multiPolygonSelection = useSelector((store: RootState) => store.appState.multiPolygonSelectionMode);
   const analysisFeatureList = useSelector((store: RootState) => store.appState.analysisFeatureList);
   const activeMultiInput = useSelector((store: RootState) => store.appState.activeMultiInput);
-  console.log(analysisFeatureList);
 
   const FeatureDataView = (): JSX.Element => {
     const activeLayerInfo = activeFeatures[activeFeatureIndex[0]];
@@ -259,6 +254,7 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
           <TopWrap>
             {multiPolygonSelection && (
               <AddToAnalysisButton
+                customColorTheme={customColorTheme}
                 onClick={() => {
                   clearGraphics();
                   clearUserGraphics();
@@ -302,8 +298,6 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
   };
 
   const tabViewIsVisible = tabViewVisible && activeTab === props.label;
-
-  console.log(multiPolygonSelection);
 
   return (
     <div className={tabViewIsVisible ? 'tabview-container' : 'hide tabview-container'}>
