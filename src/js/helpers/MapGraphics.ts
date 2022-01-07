@@ -31,8 +31,7 @@ const setGeometry = async (symbolType: string, geometry: __esri.Geometry): Promi
 
 //Helper for Report graphics in order to add POINT to the map
 export async function addPointGraphic(map: __esri.Map, feature: any): Promise<void> {
-  const [Map, GraphicsLayer, Graphic, Point] = await loadModules([
-    'esri/Map',
+  const [GraphicsLayer, Graphic, Point] = await loadModules([
     'esri/layers/GraphicsLayer',
     'esri/Graphic',
     'esri/geometry/Point'
@@ -118,7 +117,7 @@ export async function addToMultiPolygonLayer(geometry: __esri.Geometry) {
       color: [0, 0, 0, 0],
       outline: {
         color: [115, 252, 253],
-        width: 1
+        width: 2
       }
     }
   });

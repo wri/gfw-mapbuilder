@@ -200,6 +200,14 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
           .catch(e => dispatch(setDocuments(null)));
       }, [activeFeatures, activeFeatureIndex]);
 
+      React.useEffect(() => {
+        console.log(multiPolygonSelection);
+        if (multiPolygonSelection && !(analysisFeatureList[0] && analysisFeatureList[1])) {
+          const activeFeature = activeFeatures[activeFeatureIndex[0]].features[activeFeatureIndex[1]];
+          addToMultiPolygonLayer(activeFeature.geometry);
+        }
+      }, []);
+
       const TopWrap = styled.div`
         display: flex;
         align-items: center;
@@ -252,7 +260,7 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
             </div>
           </div>
           <TopWrap>
-            {multiPolygonSelection && (
+            {multiPolygonSelection && !(analysisFeatureList[0] && analysisFeatureList[1]) && (
               <AddToAnalysisButton
                 customColorTheme={customColorTheme}
                 onClick={() => {
@@ -260,7 +268,6 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
                   clearUserGraphics();
 
                   const activeFeature = activeFeatures[activeFeatureIndex[0]].features[activeFeatureIndex[1]];
-
                   const formatFeatures: LayerFeatureResult = {
                     layerID: 'multi_poly_graphics',
                     layerTitle: 'Multi Polygon Features',

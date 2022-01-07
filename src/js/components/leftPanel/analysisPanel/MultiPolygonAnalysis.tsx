@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useSelector, useDispatch, shallowEqual } from 'react-redux';
-import { createSelector } from 'reselect';
 import { RootState } from '../../../store';
 import BaseButton from '../../ui/BaseButton';
 import { BackIcon } from '../../../../images/backIcon';
@@ -10,11 +9,7 @@ import {
   setActiveMultiInput,
   setAnalysisFeatureList
 } from '../../../store/appState/actions';
-import { PenIcon } from '../../../../images/penIcon';
-import { PolygonIcon } from '../../../../images/PolygonIcon';
-import { analysisContent } from '../../../../../configs/translations/leftPanel.translations';
 import { mapController } from '../../../controllers/mapController';
-import UploadFile from '../../sharedComponents/UploadFile';
 import MethodSelection from './multiPolyAnalysis/MethodSelection';
 import { DeleteIcon } from '../../../../images/deleteIcon';
 import { clearMultiPolygonLayer, removeIntersectingGraphic } from '../../../helpers/MapGraphics';
@@ -66,7 +61,6 @@ const MultiPolygonAnalysis = ({ initAnalyze }: Props) => {
     gap: 10px;
     color: #767676;
     p {
-      padding: 0;
       border-bottom: 1px solid gray;
       margin: 0 auto;
       padding: 10px 0 10px 0;
@@ -164,6 +158,10 @@ const MultiPolygonAnalysis = ({ initAnalyze }: Props) => {
       line-height: 20px;
     }
   `;
+  let analysisFeatureLabel1 = 'Selected shape 1';
+  if (analysisFeatureList[0]) {
+    analysisFeatureLabel1 = analysisFeatureList[0].features[0].objectid;
+  }
 
   return (
     <div>
@@ -178,7 +176,7 @@ const MultiPolygonAnalysis = ({ initAnalyze }: Props) => {
             inputIndex={0}
           />
         ) : (
-          <SelectedShapeContainer inputIndex={0} label="Selected shape 1" />
+          <SelectedShapeContainer inputIndex={0} label={analysisFeatureLabel1} />
         )}
         {!analysisFeatureList[1] ? (
           <MethodSelection
