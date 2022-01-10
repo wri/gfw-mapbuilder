@@ -261,7 +261,8 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
 
                   const activeFeature = activeFeatures[activeFeatureIndex[0]].features[activeFeatureIndex[1]];
                   const formatFeatures: LayerFeatureResult = {
-                    layerID: `multi_poly_graphics-${activeFeature.objectid}`,
+                    layerID: `multi_poly_graphics`,
+                    featureID: `multi_poly_graphics-${activeFeature.objectid}`,
                     layerTitle: 'Multi Polygon Features',
                     features: [activeFeature],
                     fieldNames: null

@@ -1,16 +1,13 @@
 import { loadModules } from 'esri-loader';
-import store from '../store';
 
 export const getCustomSymbol = async (): Promise<__esri.SimpleFillSymbol> => {
   const [SimpleFillSymbol] = await loadModules(['esri/symbols/SimpleFillSymbol']);
-  const multiPolygonSelection = store.getState().appState.multiPolygonSelectionMode;
-  const color = multiPolygonSelection ? [1, 200, 20, 0.0] : [3, 188, 255];
 
   return new SimpleFillSymbol({
     style: 'solid',
     color: [210, 210, 210, 0.0],
     outline: {
-      color: color,
+      color: [3, 188, 255],
       width: 3
     }
   });

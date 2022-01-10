@@ -100,9 +100,9 @@ export async function clearMultiPolygonLayer() {
 }
 
 export async function deleteMultiPolygonLayer(activeAnalysisFeatures: any) {
-  const graphicsLayer = mapController._map?.findLayerById(activeAnalysisFeatures.layerID) as __esri.GraphicsLayer;
+  const graphicsLayer = mapController._map?.findLayerById(activeAnalysisFeatures.featureID) as __esri.GraphicsLayer;
   if (graphicsLayer) {
-    graphicsLayer.removeAll();
+    graphicsLayer.destroy();
   }
 }
 

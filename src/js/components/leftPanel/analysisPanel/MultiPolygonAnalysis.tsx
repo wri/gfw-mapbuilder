@@ -94,7 +94,10 @@ const MultiPolygonAnalysis = ({ initAnalyze }: Props) => {
       const oldState = [...analysisFeatureList];
       oldState[inputIndex] = undefined;
       dispatch(setAnalysisFeatureList(oldState));
-      dispatch(setMultiPolygonSelectionMode(false));
+      if (!(analysisFeatureList[0] && analysisFeatureList[1])) {
+        dispatch(setMultiPolygonSelectionMode(false));
+      }
+
       initAnalyze(false);
     }, []);
 
@@ -164,10 +167,6 @@ const MultiPolygonAnalysis = ({ initAnalyze }: Props) => {
       line-height: 20px;
     }
   `;
-  let analysisFeatureLabel1 = 'Selected shape 1';
-  if (analysisFeatureList[0]) {
-    analysisFeatureLabel1 = analysisFeatureList[0].features[0].objectid;
-  }
 
   return (
     <div>
@@ -182,7 +181,7 @@ const MultiPolygonAnalysis = ({ initAnalyze }: Props) => {
             inputIndex={0}
           />
         ) : (
-          <SelectedShapeContainer inputIndex={0} label={analysisFeatureLabel1} />
+          <SelectedShapeContainer inputIndex={0} label="Selected shape 1" />
         )}
         {!analysisFeatureList[1] ? (
           <MethodSelection
