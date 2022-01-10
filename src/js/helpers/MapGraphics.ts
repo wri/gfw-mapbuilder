@@ -3,6 +3,7 @@ import { loadModules } from 'esri-loader';
 import { mapController } from '../../js/controllers/mapController';
 import { getCustomSymbol, getPointSymbol } from '../../js/helpers/generateSymbol';
 import { FeatureResult } from '../../js/store/mapview/types';
+import store from '../store';
 
 const setSymbol = (symbolType: string): Promise<__esri.SimpleFillSymbol | __esri.SimpleMarkerSymbol> => {
   switch (symbolType) {
@@ -91,9 +92,21 @@ export async function removeIntersectingGraphic() {
     graphicsLayer.removeAll();
   }
 }
-
+export async function clearMultiPolygonGraphic() {
+  const analysisFeatureList = store.getState().appState.analysisFeatureList;
+  if (!analysisFeatureList[1]) {
+    const graphicsLayer = mapController._map?.layers.find((layer: any) =>
+      layer.id.includes('multi_poly_graphics')
+    ) as __esri.GraphicsLayer;
+    if (graphicsLayer) {
+      graphicsLayer.destroy();
+    }
+  }
+}
 export async function clearMultiPolygonLayer() {
-  const graphicsLayer = mapController._map?.findLayerById('multi_poly_graphics') as __esri.GraphicsLayer;
+  const graphicsLayer = mapController._map?.layers.find((layer: any) =>
+    layer.id.includes('multi_poly_graphics')
+  ) as __esri.GraphicsLayer;
   if (graphicsLayer) {
     graphicsLayer.removeAll();
   }
@@ -106,20 +119,19 @@ export async function deleteMultiPolygonLayer(activeAnalysisFeatures: any) {
   }
 }
 
-export async function addToMultiPolygonLayer(geometry: __esri.Geometry, activeFeature: any) {
+export async function addToMultiPolygonLayer(activeFeature: any) {
   const [GraphicsLayer, Graphic] = await loadModules(['esri/layers/GraphicsLayer', 'esri/Graphic']);
-  let graphicsLayer = mapController._map?.findLayerById('multi_poly_graphics') as __esri.GraphicsLayer;
+  clearMultiPolygonGraphic();
 
-  if (!graphicsLayer) {
-    graphicsLayer = new GraphicsLayer({
-      id: `multi_poly_graphics-${activeFeature.objectid}`
-    });
-  }
+  const graphicsLayer = new GraphicsLayer({
+    id: `multi_poly_graphics-${activeFeature.objectid}`
+  });
+
   if (!mapController._map) return;
   mapController._map.add(graphicsLayer);
 
   const graphic = new Graphic({
-    geometry: geometry,
+    geometry: activeFeature.geometry,
     symbol: {
       type: 'simple-fill',
       color: [0, 0, 0, 0],

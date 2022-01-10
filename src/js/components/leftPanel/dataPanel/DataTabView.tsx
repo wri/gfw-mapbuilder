@@ -270,7 +270,7 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
                   const oldList = [...analysisFeatureList];
                   oldList[activeMultiInput] = formatFeatures;
                   dispatch(setAnalysisFeatureList(oldList));
-                  addToMultiPolygonLayer(activeFeature.geometry, activeFeature);
+                  addToMultiPolygonLayer(activeFeature);
                   dispatch(selectActiveTab('analysis'));
                 }}
               >
