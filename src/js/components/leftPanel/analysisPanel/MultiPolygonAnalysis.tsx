@@ -12,7 +12,11 @@ import {
 import { mapController } from '../../../controllers/mapController';
 import MethodSelection from './multiPolyAnalysis/MethodSelection';
 import { DeleteIcon } from '../../../../images/deleteIcon';
-import { clearMultiPolygonLayer, removeIntersectingGraphic } from '../../../helpers/MapGraphics';
+import {
+  clearMultiPolygonLayer,
+  deleteMultiPolygonLayer,
+  removeIntersectingGraphic
+} from '../../../helpers/MapGraphics';
 import { AnalyzingIcon } from '../../../../images/analyzingIcon';
 import { ErrorIcon } from '../../../../images/errorIcon';
 import { setActiveFeatures } from '../../../store/mapview/actions';
@@ -83,12 +87,14 @@ const MultiPolygonAnalysis = ({ initAnalyze }: Props) => {
 
       mapController.clearGraphicFromMultiSelection(inputIndex);
       console.log('clear');
-      //because we are removing one of the geometry selections, by definition we wont have any geometries intersecting, so newly drawn intersection grahic needs to go away
+      //because we are removing one of the geometry selections, by definition we wont have any geometries intersecting, so newly drawn intersection graphic needs to go away
       removeIntersectingGraphic();
+      deleteMultiPolygonLayer(analysisFeatureList[inputIndex]);
 
       const oldState = [...analysisFeatureList];
       oldState[inputIndex] = undefined;
       dispatch(setAnalysisFeatureList(oldState));
+      dispatch(setMultiPolygonSelectionMode(false));
       initAnalyze(false);
     }, []);
 

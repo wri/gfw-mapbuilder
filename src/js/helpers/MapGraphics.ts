@@ -99,12 +99,20 @@ export async function clearMultiPolygonLayer() {
   }
 }
 
-export async function addToMultiPolygonLayer(geometry: __esri.Geometry) {
+export async function deleteMultiPolygonLayer(activeAnalysisFeatures: any) {
+  const graphicsLayer = mapController._map?.findLayerById(activeAnalysisFeatures.layerID) as __esri.GraphicsLayer;
+  if (graphicsLayer) {
+    graphicsLayer.removeAll();
+  }
+}
+
+export async function addToMultiPolygonLayer(geometry: __esri.Geometry, activeFeature: any) {
   const [GraphicsLayer, Graphic] = await loadModules(['esri/layers/GraphicsLayer', 'esri/Graphic']);
   let graphicsLayer = mapController._map?.findLayerById('multi_poly_graphics') as __esri.GraphicsLayer;
+
   if (!graphicsLayer) {
     graphicsLayer = new GraphicsLayer({
-      id: 'multi_poly_graphics'
+      id: `multi_poly_graphics-${activeFeature.objectid}`
     });
   }
   if (!mapController._map) return;
@@ -116,7 +124,7 @@ export async function addToMultiPolygonLayer(geometry: __esri.Geometry) {
       type: 'simple-fill',
       color: [0, 0, 0, 0],
       outline: {
-        color: [115, 252, 253],
+        color: 'red',
         width: 2
       }
     }

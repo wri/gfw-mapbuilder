@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import UploadFile from '../../../../js/components/sharedComponents/UploadFile';
 import { mapController } from '../../../../js/controllers/mapController';
-import { renderModal } from '../../../../js/store/appState/actions';
+import { renderModal, setMultiPolygonSelectionMode } from '../../../../js/store/appState/actions';
 import { RootState } from '../../../../js/store';
 import BaseAnalysis from '../../../../js/components/leftPanel/analysisPanel/BaseAnalysis';
 import { analysisContent } from '../../../../../configs/translations/leftPanel.translations';
@@ -122,7 +122,7 @@ const AnalysisTabView = (props: TabProps): JSX.Element => {
         <BaseButton
           customColorTheme={customColorTheme}
           style={{ width: '15rem' }}
-          //onClick={() => dispatch(setMultiPolygonSelectionMode(true))}
+          onClick={() => dispatch(setMultiPolygonSelectionMode(true))}
         >
           <SelectionIcon height={18} width={18} fill={'#555'} />
           {'Start Selecting'}
