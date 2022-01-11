@@ -28,7 +28,10 @@ import {
   SET_RENDER_POPUP,
   SET_AREA_IMAGES,
   SET_VERSIONED_LAYER,
-  SET_TREE_HEIGHT
+  SET_TREE_HEIGHT,
+  SET_MULTI_POLYGON_SELECTION_MODE,
+  SET_ACTIVE_MULTI_INPUT,
+  SET_ANALYSIS_FEATURE_LIST
 } from './types';
 
 const initialState: AppState = {
@@ -47,10 +50,7 @@ const initialState: AppState = {
     activeTab: 'layers',
     openLayerGroup: 'GROUP_WEBMAP',
     density: 5,
-    analysisDateRange: [
-      format(new Date(Date.now()), 'yyyy-MM-dd'),
-      format(new Date(Date.now()), 'yyyy-MM-dd')
-    ],
+    analysisDateRange: [format(new Date(Date.now()), 'yyyy-MM-dd'), format(new Date(Date.now()), 'yyyy-MM-dd')],
     analysisYearRange: [2001, 2018],
     gladConfirmed: false,
     gladStart: '2015-01-01',
@@ -70,13 +70,13 @@ const initialState: AppState = {
     coordinatePointerMoveResults: {}
   },
   renderPopup: false,
-  areaImages: []
+  areaImages: [],
+  multiPolygonSelectionMode: false,
+  activeMultiInput: 0,
+  analysisFeatureList: [undefined, undefined]
 };
 
-export function appStateReducer(
-  state = initialState,
-  action: AppStateTypes
-): AppState {
+export function appStateReducer(state = initialState, action: AppStateTypes): AppState {
   switch (action.type) {
     case SET_SELECTED_SEARCH_WIDGET_LAYER:
       return {
@@ -112,6 +112,13 @@ export function appStateReducer(
       };
     case SET_LANGUAGE:
       return { ...state, selectedLanguage: action.payload };
+    case SET_MULTI_POLYGON_SELECTION_MODE:
+      return { ...state, multiPolygonSelectionMode: action.payload };
+    case SET_ACTIVE_MULTI_INPUT:
+      return { ...state, activeMultiInput: action.payload };
+    case SET_ANALYSIS_FEATURE_LIST:
+      //TODO:check if feature is already in list
+      return { ...state, analysisFeatureList: action.payload };
     case SET_LOGGED_IN:
       return { ...state, isLoggedIn: action.payload };
     case SET_OPEN_LAYER_GROUP:
@@ -244,13 +251,9 @@ export function appStateReducer(
       };
     case SET_AREA_IMAGES: {
       const newAreaImages = state.areaImages;
-      const incomingArea = newAreaImages.find(
-        areaID => areaID === action.payload
-      );
+      const incomingArea = newAreaImages.find(areaID => areaID === action.payload);
       if (incomingArea) {
-        const index = newAreaImages.findIndex(
-          areaID => areaID === action.payload
-        );
+        const index = newAreaImages.findIndex(areaID => areaID === action.payload);
         newAreaImages.splice(index, 0, action.payload);
       } else {
         newAreaImages.push(action.payload);
