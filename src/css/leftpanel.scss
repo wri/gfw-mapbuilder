@@ -533,6 +533,10 @@
   }
 }
 
+.draggable-card {
+  animation: slide-down 1s ease;
+}
+
 .layers-control-container {
   color: $dark-grey;
 
@@ -690,7 +694,6 @@
 .transparency-slider {
   display: flex;
   flex-wrap: wrap;
-  padding: 0 2rem;
 }
 
 .info-icon-container {
@@ -929,6 +932,7 @@
       justify-content: flex-end;
       font-size: 0.85rem;
       margin-right: 1rem;
+      flex: auto;
     }
     .layer-title {
       color: #6f6f6f;
@@ -1317,7 +1321,7 @@
   flex-wrap: wrap;
   margin-top: 1rem;
   flex-direction: row;
-  gap: 33px;
+  gap: 5px;
   .date-section-wrapper {
     display: grid;
     grid-template-columns: 1fr;
@@ -1351,11 +1355,7 @@
 }
 
 @media screen and (max-width: $mobile-device) {
-  .left-panel
-    > .analysis-tab-container
-    > .directions
-    > .drop-shapefile-container
-    h4 {
+  .left-panel > .analysis-tab-container > .directions > .drop-shapefile-container h4 {
     display: none;
   }
 

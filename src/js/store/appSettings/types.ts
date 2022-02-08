@@ -17,11 +17,13 @@ export interface AppSettings {
   printServiceUrl?: string;
   narrative: string;
   alternativeNarrative: string;
-  analysisModules: AnalysisModule[];
   alternativeLanguageTitle: string;
   alternativeLanguageSubtitle: string;
   iso: string;
   hideFooter?: boolean;
+  disabledAnalysisModules?:
+    | ['VIIRS_FIRES', 'GLAD_ALERTS', 'TC_LOSS', 'IFL', 'LCC', 'TC_LOSS_TOTAL', 'TC_GAIN_TOTAL']
+    | [];
   hideHeader?: boolean;
   hideLegend?: boolean;
   navLinksInNewTab?: boolean;
@@ -47,20 +49,14 @@ export interface AppSettings {
 
 type FooterLink = { label: string; link: string };
 
-type LayerGroupKey =
-  | 'GROUP_WEBMAP'
-  | 'GROUP_BASEMAP'
-  | 'GROUP_LC'
-  | 'GROUP_LCD'
-  | 'GROUP_IMAGERY'
-  | 'extraLayers';
+type LayerGroupKey = 'GROUP_WEBMAP' | 'GROUP_BASEMAP' | 'GROUP_LC' | 'GROUP_LCD' | 'GROUP_IMAGERY' | 'extraLayers';
 
 type LayerGroup = {
   [key in LayerGroupKey]: LayerGroupInfo;
 };
 
 export interface AnalysisModule {
-  analysisId: string;
+  analysisId: 'VIIRS_FIRES' | 'GLAD_ALERTS' | 'TC_LOSS' | 'IFL' | 'LCC' | 'TC_LOSS_TOTAL' | 'TC_GAIN_TOTAL';
   chartType: string;
   label: { [key: string]: string };
   title: {
@@ -71,10 +67,18 @@ export interface AnalysisModule {
   };
   useGfwWidget: boolean;
   widgetId: string;
-  uiParams: any;
-  params: { name: string; value: string }[];
+  analysisParams: AnalysisParam[] | [];
   analysisUrl?: string;
   attributes?: any;
+  sqlString: string;
+}
+
+export interface AnalysisParam {
+  type: 'tcd' | 'rangeSlider' | 'date-picker';
+  bounds?: [number, number];
+  label: {
+    [key: string]: string;
+  };
 }
 
 export interface LayerGroupInfo {
@@ -119,7 +123,4 @@ interface SetHideLegendAction {
   payload: boolean;
 }
 
-export type AppSettingsTypes =
-  | OverwriteSettingsAction
-  | OverwriteColorThemeAction
-  | SetHideLegendAction;
+export type AppSettingsTypes = OverwriteSettingsAction | OverwriteColorThemeAction | SetHideLegendAction;

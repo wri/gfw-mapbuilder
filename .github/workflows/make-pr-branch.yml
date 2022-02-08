@@ -19,11 +19,6 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: '14.x'
-      - name: Cypress run
-        uses: cypress-io/github-action@v2
-        with:
-          start: npm start
-          wait-on: 'http://localhost:8080'
       - name: Create Build
         run: |
           npm install

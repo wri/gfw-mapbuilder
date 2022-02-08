@@ -11,12 +11,8 @@ export function generateAndAttachVegaChart(
 ): void {
   //lang awareness
   if (spec.signals && spec.signals.length > 0) {
-    const signalLanguage = spec.signals.find(
-      (signal: any) => signal.name === 'language'
-    );
-    const signalIndex = spec.signals.findIndex(
-      (signal: any) => signal.name === 'language'
-    );
+    const signalLanguage = spec.signals.find((signal: any) => signal.name === 'language');
+    const signalIndex = spec.signals.findIndex((signal: any) => signal.name === 'language');
     if (signalLanguage && signalLanguage.value !== language) {
       spec.signals[signalIndex].value = language;
     }
@@ -30,7 +26,13 @@ export function generateAndAttachVegaChart(
       .hover()
       .run()
       .toImageURL('png')
-      .then((url: string) => callback(url));
+      .then((url: string) => {
+        callback(url);
+      })
+      .catch(e => {
+        console.error(e);
+        callback({ error: 'failed to retrieve chart analysis' });
+      });
   }
 
   if (spec.featureDataFieldsToPass && spec.attributes) {
@@ -38,22 +40,14 @@ export function generateAndAttachVegaChart(
     let queryParams = encodeURI(
       spec.featureDataFieldsToPass
         .filter((fieldName: any) => {
-          const fieldToSubstitute = baseConfig.fieldToSubstitute
-            ? baseConfig.fieldToSubstitute
-            : 'analyticId';
-          return spec.attributes[
-            fieldName === 'analyticid' ? fieldToSubstitute : fieldName
-          ];
+          const fieldToSubstitute = baseConfig.fieldToSubstitute ? baseConfig.fieldToSubstitute : 'analyticId';
+          return spec.attributes[fieldName === 'analyticid' ? fieldToSubstitute : fieldName];
         })
         .map((fieldName: any) => {
-          const fieldToSubstitute = baseConfig.fieldToSubstitute
-            ? baseConfig.fieldToSubstitute
-            : 'analyticId';
-          fieldName =
-            fieldName === 'analyticid' ? fieldToSubstitute : fieldName;
+          const fieldToSubstitute = baseConfig.fieldToSubstitute ? baseConfig.fieldToSubstitute : 'analyticId';
+          fieldName = fieldName === 'analyticid' ? fieldToSubstitute : fieldName;
           const value = spec.attributes[fieldName];
-          fieldName =
-            fieldName === fieldToSubstitute ? 'analyticid' : fieldName;
+          fieldName = fieldName === fieldToSubstitute ? 'analyticid' : fieldName;
           return `${fieldName}=${value}`;
         })
         .join('&')

@@ -29,7 +29,10 @@ import {
   SET_RENDER_POPUP,
   SET_AREA_IMAGES,
   SET_VERSIONED_LAYER,
-  SET_TREE_HEIGHT
+  SET_TREE_HEIGHT,
+  SET_MULTI_POLYGON_SELECTION_MODE,
+  SET_ACTIVE_MULTI_INPUT,
+  SET_ANALYSIS_FEATURE_LIST
 } from './types';
 
 const initialState: AppState = {
@@ -69,7 +72,10 @@ const initialState: AppState = {
     coordinatePointerMoveResults: {}
   },
   renderPopup: false,
-  areaImages: []
+  areaImages: [],
+  multiPolygonSelectionMode: false,
+  activeMultiInput: 0,
+  analysisFeatureList: [undefined, undefined]
 };
 
 export function appStateReducer(state = initialState, action: AppStateTypes): AppState {
@@ -108,6 +114,13 @@ export function appStateReducer(state = initialState, action: AppStateTypes): Ap
       };
     case SET_LANGUAGE:
       return { ...state, selectedLanguage: action.payload };
+    case SET_MULTI_POLYGON_SELECTION_MODE:
+      return { ...state, multiPolygonSelectionMode: action.payload };
+    case SET_ACTIVE_MULTI_INPUT:
+      return { ...state, activeMultiInput: action.payload };
+    case SET_ANALYSIS_FEATURE_LIST:
+      //TODO:check if feature is already in list
+      return { ...state, analysisFeatureList: action.payload };
     case SET_LOGGED_IN:
       return { ...state, isLoggedIn: action.payload };
     case SET_IS_PROFILE_COMPLETE:

@@ -206,6 +206,7 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
         id: layerConfig.id,
         visible: true,
         url: layerConfig.url,
+        //@ts-ignore
         opacity: layerConfig.opacity
       };
       if (layerConfig.layerIds) {

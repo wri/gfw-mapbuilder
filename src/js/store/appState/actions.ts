@@ -27,7 +27,10 @@ import {
   SET_RENDER_POPUP,
   SET_AREA_IMAGES,
   SET_VERSIONED_LAYER,
-  SET_TREE_HEIGHT
+  SET_TREE_HEIGHT,
+  SET_MULTI_POLYGON_SELECTION_MODE,
+  SET_ACTIVE_MULTI_INPUT,
+  SET_ANALYSIS_FEATURE_LIST
 } from './types';
 
 export function setSelectedSearchWidgetLayer(payload: AppState['selectedSearchWidgetLayer']) {
@@ -215,6 +218,27 @@ export function setTreeHeight(payload: number) {
 export function setVersionedLayer(payload: any) {
   return {
     type: SET_VERSIONED_LAYER as typeof SET_VERSIONED_LAYER,
+    payload: payload
+  };
+}
+
+export function setMultiPolygonSelectionMode(payload: any) {
+  return {
+    type: SET_MULTI_POLYGON_SELECTION_MODE as typeof SET_MULTI_POLYGON_SELECTION_MODE,
+    payload: payload
+  };
+}
+
+export function setActiveMultiInput(payload: any) {
+  return {
+    type: SET_ACTIVE_MULTI_INPUT as typeof SET_ACTIVE_MULTI_INPUT,
+    payload: payload
+  };
+}
+
+export function setAnalysisFeatureList(payload: any) {
+  return {
+    type: SET_ANALYSIS_FEATURE_LIST as typeof SET_ANALYSIS_FEATURE_LIST,
     payload: payload
   };
 }

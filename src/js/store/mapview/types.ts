@@ -57,12 +57,26 @@ interface LegendConfig {
 }
 export type LayerOrigin = 'webmap' | 'service' | 'remote'; //where the layer originate from (GFW API, WEBMAP, SERVICE)
 
+export type LayerTypes =
+  | __esri.BaseTileLayer
+  | __esri.GraphicsLayer
+  | __esri.MapImageLayer
+  | __esri.TileLayer
+  | __esri.Sublayer
+  | __esri.FeatureLayer;
+
 export interface LayerProps {
   id: string;
   visible: boolean;
   title?: string;
   order?: number;
-  opacity: number;
+  opacity: {
+    combined: number;
+    fill: number;
+    outline: number;
+  };
+  fillOpacity?: number;
+  outlineOpacity?: number;
   definitionExpression?: string;
   group: string;
   type: string;
@@ -111,6 +125,7 @@ export interface FieldName {
 export interface LayerFeatureResult {
   layerTitle: string;
   layerID: string;
+  featureID?: string;
   sublayerTitle?: string;
   sublayerID?: string;
   features: FeatureResult[];
