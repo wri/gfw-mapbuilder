@@ -115,7 +115,9 @@ const App = (props: AppSettings | any): JSX.Element => {
                   console.log('Err:', dataRes.errorMsg);
                   dispatch(setIsProfileComplete(false));
                 } else if (dataRes?.userData) {
-                  dispatch(setIsProfileComplete(allRequiredFieldsPresent(dataRes?.userData).length === 0));
+                  if (dataRes?.userData) {
+                    dispatch(setIsProfileComplete(true));
+                  }
                 }
               });
             });

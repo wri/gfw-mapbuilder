@@ -1,4 +1,4 @@
-export const CHECK_LOGGED_URL = 'https://production-api.globalforestwatch.org/auth/check-logged';
+export const CHECK_LOGGED_URL = 'https://api.resourcewatch.org/auth/check-logged';
 
 //TODO: export to type files
 export interface UserData {
@@ -56,7 +56,11 @@ interface GetUserData {
   error: boolean;
   errorMsg: string;
 }
-export async function getUserData(userID?: string | null, userToken?: string | null): Promise<GetUserData> {
+export async function getUserData(
+  userID?: string | null,
+  userToken?: string | null,
+  type?: string
+): Promise<GetUserData> {
   const result: GetUserData = {
     userData: null,
     error: false,
@@ -66,8 +70,12 @@ export async function getUserData(userID?: string | null, userToken?: string | n
   const BASE_PROFILE_URL = `https://production-api.globalforestwatch.org/user/${userID}`;
   let error = false;
   let errorMsg = '';
+  let method = 'GET';
+  if (type === 'user-profile') {
+    method = 'PATCH';
+  }
   const userData = (await fetch(BASE_PROFILE_URL, {
-    method: 'PATCH',
+    method: method,
     credentials: 'include',
     headers: {
       Authorization: `Bearer ${userToken}`
