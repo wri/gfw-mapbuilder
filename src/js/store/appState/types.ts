@@ -56,6 +56,7 @@ export interface AppState {
   measureContent: MeasureContent;
   hideWidgetActive: boolean;
   isLoggedIn: boolean;
+  isProfileComplete: boolean;
   selectedSearchWidgetLayer: SelectedSearchWidgetLayer;
   renderPopup: boolean;
   areaImages: string[];
@@ -73,6 +74,7 @@ export const SET_LANGUAGE = 'SET_LANGUAGE';
 export const TOGGLE_TABVIEW_PANEL = 'TOGGLE_TABVIEW_PANEL';
 export const SET_OPEN_LAYER_GROUP = 'SET_OPEN_LAYER_GROUP';
 export const SET_LOGGED_IN = 'SET_LOGGED_IN';
+export const SET_IS_PROFILE_COMPLETE = 'SET_IS_PROFILE_COMPLETE';
 export const SET_MEASURE_RESULTS = 'SET_MEASURE_RESULTS';
 export const SET_ACTIVE_MEASURE_BUTTON = 'SET_ACTIVE_MEASURE_BUTTON';
 export const SET_HIDE_WIDGET = 'SET_HIDE_WIDGET';
@@ -138,6 +140,11 @@ interface RenderGFWDropdownAction {
 interface SetLoggedIn {
   type: typeof SET_LOGGED_IN;
   payload: AppState['isLoggedIn'];
+}
+
+interface SetIsProfileComplete {
+  type: typeof SET_IS_PROFILE_COMPLETE;
+  payload: AppState['isProfileComplete'];
 }
 
 interface SelectActiveTab {
@@ -249,6 +256,7 @@ export type AppStateTypes =
   | SetLanguageAction
   | SetOpenLayerGroup
   | SetLoggedIn
+  | SetIsProfileComplete
   | SetMeasureResults
   | SetActiveMeasureButton
   | SetHideWidget

@@ -8,6 +8,7 @@ import {
   SET_OPEN_LAYER_GROUP,
   SET_HIDE_WIDGET,
   SET_LOGGED_IN,
+  SET_IS_PROFILE_COMPLETE,
   AppState,
   LeftPanel,
   SET_MEASURE_RESULTS,
@@ -84,6 +85,13 @@ export function setRenderGFWDropdown(payload: AppState['renderGFWDropdown']) {
 export function setLoggedIn(payload: AppState['isLoggedIn']) {
   return {
     type: SET_LOGGED_IN as typeof SET_LOGGED_IN,
+    payload: payload
+  };
+}
+
+export function setIsProfileComplete(payload: AppState['isProfileComplete']) {
+  return {
+    type: SET_IS_PROFILE_COMPLETE as typeof SET_IS_PROFILE_COMPLETE,
     payload: payload
   };
 }

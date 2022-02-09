@@ -11,6 +11,7 @@ import {
   RENDER_GFW_DROPDOWN,
   SET_OPEN_LAYER_GROUP,
   SET_LOGGED_IN,
+  SET_IS_PROFILE_COMPLETE,
   SET_MEASURE_RESULTS,
   SET_ACTIVE_MEASURE_BUTTON,
   SET_HIDE_WIDGET,
@@ -41,6 +42,7 @@ const initialState: AppState = {
   infoModalLayerID: '',
   hideWidgetActive: false,
   isLoggedIn: false,
+  isProfileComplete: false,
   selectedSearchWidgetLayer: {
     displayField: '',
     layerTitle: ''
@@ -121,6 +123,8 @@ export function appStateReducer(state = initialState, action: AppStateTypes): Ap
       return { ...state, analysisFeatureList: action.payload };
     case SET_LOGGED_IN:
       return { ...state, isLoggedIn: action.payload };
+    case SET_IS_PROFILE_COMPLETE:
+      return { ...state, isProfileComplete: action.payload };
     case SET_OPEN_LAYER_GROUP:
       return {
         ...state,

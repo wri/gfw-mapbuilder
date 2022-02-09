@@ -32,24 +32,22 @@ const CountryPicker = (props: CountryPickerProps) => {
   const menuItems = useMenuItemStyles();
   const defaultCountry = props.defaultCountry ? props.defaultCountry : '';
 
-  const countryItemsList = Object.keys(countryList).map(
-    (iso: string, i: number) => {
-      return (
-        <option
-          selected={defaultCountry === iso}
-          className={clsx(selectClasses.root, menuItems.root)}
-          key={i}
-          value={iso}
-        >
-          {countryList[iso]}
-        </option>
-      );
-    }
-  );
+  const countryItemsList = Object.keys(countryList).map((iso: string, i: number) => {
+    return (
+      <option
+        selected={defaultCountry === iso}
+        className={clsx(selectClasses.root, menuItems.root)}
+        key={i}
+        value={iso}
+      >
+        {countryList[iso]}
+      </option>
+    );
+  });
 
   return (
     <div className="form-section">
-      <p className="input-label">{props.countryLabel}</p>
+      <p className="input-label">{props.countryLabel} *</p>
       <Select
         native
         variant="outlined"
