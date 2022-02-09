@@ -67,6 +67,7 @@ export async function getUserData(userID?: string | null, userToken?: string | n
   let error = false;
   let errorMsg = '';
   const userData = (await fetch(BASE_PROFILE_URL, {
+    method: 'PATCH',
     credentials: 'include',
     headers: {
       Authorization: `Bearer ${userToken}`

@@ -180,7 +180,7 @@ function ProfileForm({ selectedLanguage, isProfileComplete, onSubmit, customColo
             </label>
             <input
               {...register('lastName', { required: true })}
-              defaultValue={'lastlastlast'}
+              defaultValue={defaultValues.lastName}
               className="input-text"
               type="lastName"
               placeholder="Last Name"
