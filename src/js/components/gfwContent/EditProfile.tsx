@@ -70,10 +70,13 @@ const EditProfile = (): JSX.Element => {
       id: userInfo.userID,
       loggedIn: true
     };
-
-    if (payload.subsector.toLowerCase().includes('other') && data?.roleOther?.length !== 0) {
-      payload.subsector = `Other:${data.roleOther}`;
+    console.log(payload);
+    if (payload.subsector) {
+      if (payload.subsector.toLowerCase().includes('other') && data?.roleOther?.length !== 0) {
+        payload.subsector = `Other:${data.roleOther}`;
+      }
     }
+
     if (payload.howDoYouUse.includes('Other') && data?.usageOther?.length !== 0) {
       const usageArr = payload.howDoYouUse.map(usage => {
         if (usage === 'Other') {
@@ -101,10 +104,12 @@ const EditProfile = (): JSX.Element => {
           setUpdateError(msg.errors[0].detail);
           dispatch(setIsProfileComplete(true));
         } else {
+          console.log('hit');
           setUpdateSuccess(true);
         }
       })
       .catch(e => {
+        console.log(e);
         setUpdateError(e);
       });
   };
