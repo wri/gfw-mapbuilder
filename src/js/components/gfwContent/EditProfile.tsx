@@ -65,6 +65,8 @@ const EditProfile = (): JSX.Element => {
   }, []);
 
   const onSubmit = (data: any): void => {
+    const userID = localStorage.getItem('userID');
+    const userToken = localStorage.getItem('userToken');
     const payload = {
       ...data,
       id: userInfo.userID,
@@ -87,13 +89,15 @@ const EditProfile = (): JSX.Element => {
       });
       payload.howDoYouUse = usageArr;
     }
-
+    let profileURL: any = userInfo.profileURL;
+    if (!userInfo.profileURL) {
+      profileURL = `https://production-api.globalforestwatch.org/user/${userID}`;
+    }
     //Update the API
-    if (!userInfo.profileURL) return;
-    fetch(userInfo.profileURL, {
+    fetch(profileURL, {
       method: 'PATCH',
       headers: {
-        Authorization: `Bearer ${userInfo.userToken}`,
+        Authorization: `Bearer ${userInfo.userToken || userToken}`,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(payload)
@@ -106,6 +110,7 @@ const EditProfile = (): JSX.Element => {
         } else {
           console.log('hit');
           setUpdateSuccess(true);
+          dispatch(setIsProfileComplete(allRequiredFieldsPresent(msg?.data).length === 0));
         }
       })
       .catch(e => {

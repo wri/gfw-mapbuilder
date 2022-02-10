@@ -111,12 +111,12 @@ const App = (props: AppSettings | any): JSX.Element => {
               getUserData(data.id, userToken).then(dataRes => {
                 console.log('userData', dataRes);
                 if (dataRes?.error) {
-                  //hande error
+                  //handle error
                   console.log('Err:', dataRes.errorMsg);
                   dispatch(setIsProfileComplete(false));
                 } else if (dataRes?.userData) {
                   if (dataRes?.userData) {
-                    dispatch(setIsProfileComplete(true));
+                    dispatch(setIsProfileComplete(allRequiredFieldsPresent(dataRes?.userData).length === 0));
                   }
                 }
               });
