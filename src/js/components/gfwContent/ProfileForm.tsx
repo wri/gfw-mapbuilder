@@ -261,7 +261,7 @@ function ProfileForm({ selectedLanguage, isProfileComplete, onSubmit, customColo
           </div>
           <div className="form-section">
             <label htmlFor="company" className="input-label">
-              {editProfileTranslations[selectedLanguage].company}
+              {editProfileTranslations[selectedLanguage].company} *
             </label>
             <input
               {...register('company', { required: true })}
