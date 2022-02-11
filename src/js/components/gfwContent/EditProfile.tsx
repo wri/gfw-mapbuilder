@@ -72,7 +72,7 @@ const EditProfile = (): JSX.Element => {
       id: userInfo.userID,
       loggedIn: true
     };
-    console.log(payload);
+
     if (payload.subsector) {
       if (payload.subsector.toLowerCase().includes('other') && data?.roleOther?.length !== 0) {
         payload.subsector = `Other:${data.roleOther}`;

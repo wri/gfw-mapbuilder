@@ -141,7 +141,6 @@ function ProfileForm({ selectedLanguage, isProfileComplete, onSubmit, customColo
     const optionValues = options.map((o: any) => o.value);
     setActiveUsage(optionValues);
   }
-  console.log(defaultValues);
   return (
     <>
       <h2>{editProfileTranslations[selectedLanguage].profileHeader}</h2>
