@@ -277,9 +277,6 @@ function ProfileForm({ selectedLanguage, isProfileComplete, onSubmit, customColo
 
           <h4>{editProfileTranslations[selectedLanguage].located}</h4>
           <MemoCountryPicker
-            formErrors={errors}
-            required={editProfileTranslations[selectedLanguage].required}
-            register={register}
             countryLabel={editProfileTranslations[selectedLanguage].country}
             defaultCountry={defaultValues.country}
             activeCountryCallback={(id: string) => setActiveCountry(id)}
@@ -313,9 +310,6 @@ function ProfileForm({ selectedLanguage, isProfileComplete, onSubmit, customColo
           </div>
           <h4>{editProfileTranslations[selectedLanguage].interest}</h4>
           <MemoCountryPicker
-            formErrors={errors}
-            required={editProfileTranslations[selectedLanguage].required}
-            register={register}
             countryLabel={editProfileTranslations[selectedLanguage].country}
             defaultCountry={defaultValues?.aoiCountry}
             activeCountryCallback={(id: any): any => setInterestActiveCountry(id)}

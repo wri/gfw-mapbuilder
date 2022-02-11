@@ -23,12 +23,9 @@ const useMenuItemStyles = makeStyles({
 });
 
 type CountryPickerProps = {
-  formErrors: any;
   activeCountryCallback: (e: any) => void;
   defaultCountry: string | undefined;
   countryLabel: string;
-  register: any;
-  required: any;
 };
 
 const CountryPicker = (props: CountryPickerProps) => {
@@ -53,7 +50,6 @@ const CountryPicker = (props: CountryPickerProps) => {
     <div className="form-section">
       <p className="input-label">{props.countryLabel} *</p>
       <Select
-        {...props.register('aoiCountry' || 'country', { required: true })}
         native
         variant="outlined"
         className={clsx(selectClasses.root)}
@@ -61,7 +57,6 @@ const CountryPicker = (props: CountryPickerProps) => {
       >
         {countryItemsList}
       </Select>
-      {props.formErrors.aoiCountry && <p className="input-error">{props.required}</p>}
     </div>
   );
 };
