@@ -108,8 +108,8 @@ const EditProfile = (): JSX.Element => {
           setUpdateError(msg.errors[0].detail);
           dispatch(setIsProfileComplete(true));
         } else {
-          console.log('hit');
           setUpdateSuccess(true);
+          setExistingProfileInfo(msg?.data.attributes);
           dispatch(setIsProfileComplete(allRequiredFieldsPresent(msg?.data).length === 0));
         }
       })

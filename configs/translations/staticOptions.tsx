@@ -6,10 +6,6 @@ type Sector = { label: string; value: string };
 export const sectors: SectorsObject = {
   en: [
     {
-      sector: { label: 'Select...', value: 'Select' },
-      subsectors: []
-    },
-    {
       sector: { label: 'Government', value: 'Government' },
       subsectors: [
         {
@@ -215,10 +211,6 @@ export const sectors: SectorsObject = {
     }
   ],
   az: [
-    {
-      sector: { label: 'Select...', value: 'Select' },
-      subsectors: []
-    },
     {
       sector: { label: 'Government', value: 'Government' },
       subsectors: [
@@ -427,10 +419,6 @@ export const sectors: SectorsObject = {
   nl: [
     // * NOTE: translation was not provided
     {
-      sector: { label: 'Select...', value: 'Select' },
-      subsectors: []
-    },
-    {
       sector: { label: 'Government', value: 'Government' },
       subsectors: [
         {
@@ -638,10 +626,6 @@ export const sectors: SectorsObject = {
   hy: [
     // * NOTE: translation was not provided
     {
-      sector: { label: 'Select...', value: 'Select' },
-      subsectors: []
-    },
-    {
       sector: { label: 'Government', value: 'Government' },
       subsectors: [
         {
@@ -847,10 +831,6 @@ export const sectors: SectorsObject = {
     }
   ],
   fr: [
-    {
-      sector: { label: 'Select...', value: 'Select' },
-      subsectors: []
-    },
     {
       sector: { label: 'Gouvernement', value: 'Government' },
       subsectors: [
@@ -1058,10 +1038,6 @@ export const sectors: SectorsObject = {
   ],
   es: [
     {
-      sector: { label: 'Select...', value: 'Select' },
-      subsectors: []
-    },
-    {
       sector: { label: 'Gobierno', value: 'Government' },
       subsectors: [
         {
@@ -1267,10 +1243,6 @@ export const sectors: SectorsObject = {
     }
   ],
   pt: [
-    {
-      sector: { label: 'Select...', value: 'Select' },
-      subsectors: []
-    },
     {
       sector: { label: 'Governo', value: 'Government' },
       subsectors: [
@@ -1478,10 +1450,6 @@ export const sectors: SectorsObject = {
   ],
   ka: [
     {
-      sector: { label: 'Select...', value: 'Select' },
-      subsectors: []
-    },
-    {
       sector: { label: 'Government', value: 'Government' },
       subsectors: [
         {
@@ -1688,10 +1656,6 @@ export const sectors: SectorsObject = {
   ],
   zh: [
     {
-      sector: { label: 'Select...', value: 'Select' },
-      subsectors: []
-    },
-    {
       sector: { label: '政府', value: 'Government' },
       subsectors: [
         {
@@ -1897,10 +1861,6 @@ export const sectors: SectorsObject = {
     }
   ],
   id: [
-    {
-      sector: { label: 'Select...', value: 'Select' },
-      subsectors: []
-    },
     {
       sector: { label: 'Pemerintah', value: 'Government' },
       subsectors: [
