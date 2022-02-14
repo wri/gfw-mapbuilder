@@ -186,6 +186,12 @@ export default {
           order: 8,
           type: 'remoteDataLayer',
           uuid: '8ae39d34-a5e5-4742-b06e-6e913a8f1eb8'
+        },
+        {
+          id: 'INTEGRATED_DEFORESTATION_ALERT',
+          order: 9,
+          type: 'remoteDataLayer',
+          uuid: 'bd58f25d-d3bb-4d59-9daa-cecddd27d9f4'
         }
       ]
     },

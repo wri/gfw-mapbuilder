@@ -1,0 +1,26 @@
+{
+  "data": {
+    "id": "bd58f25d-d3bb-4d59-9daa-cecddd27d9f4",
+    "type": "layer",
+    "attributes": {
+      "name": "GFW Integrated Deforestation Alert",
+      "slug": "GFW-Integrated-Deforestation-Alert",
+      "dataset": "5f6586aa-7e6d-4b60-9adc-8b127081153f",
+      "description": "Combines the GLAD-S, GLAD and RADD alert layers",
+      "application": ["forest-atlas"],
+      "iso": [],
+      "userId": "5b3a57251b3a8854b6338faa",
+      "default": false,
+      "protected": false,
+      "published": true,
+      "env": "production",
+      "layerConfig": {},
+      "legendConfig": {},
+      "interactionConfig": {},
+      "applicationConfig": {},
+      "staticImageConfig": {},
+      "createdAt": "2022-02-11T20:17:05.398Z",
+      "updatedAt": "2022-02-11T20:17:05.398Z"
+    }
+  }
+}
