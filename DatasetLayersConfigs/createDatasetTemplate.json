@@ -2,9 +2,9 @@
   "dataset": {
     "name": "GFW Integrated Deforestation Alert",
     "subtitle": "Combines the GLAD-S, GLAD and RADD alert layers",
-    "application": ["gfw"],
+    "application": ["forest-atlas"],
     "connectorType": "wms",
     "provider": "wms",
-    "connectorUrl": "https://dev-tiles.globalforestwatch.org/gfw_integrated_alerts/latest/default/%7Bz%7D/%7Bx%7D/%7By%7D.png"
+    "connectorUrl": "https://tiles.globalforestwatch.org/gfw_integrated_alerts/latest/default/{z}/{x}/{y}.png"
   }
 }
