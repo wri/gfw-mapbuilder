@@ -3,7 +3,6 @@ import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import { countryList } from './countryList';
 import { Select } from '@material-ui/core';
-import { editProfileTranslations } from '../../../../configs/translations/staticOptions';
 
 const useSelectStyles = makeStyles({
   root: {
