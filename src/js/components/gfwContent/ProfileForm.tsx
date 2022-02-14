@@ -45,9 +45,9 @@ function ProfileForm({ selectedLanguage, isProfileComplete, onSubmit, customColo
 
   const [activeUsage, setActiveUsage] = React.useState<string[]>([]);
   const [activeTopics, setActiveTopics] = React.useState<string[]>([]);
-  const [activeCountry, setActiveCountry] = useState(defaultValues?.country || '');
+  const [activeCountry, setActiveCountry] = useState('');
 
-  const [interestActiveCountry, setInterestActiveCountry] = useState(defaultValues?.aoiCountry || '');
+  const [interestActiveCountry, setInterestActiveCountry] = useState('');
   const watchSector = watch('sector'); // you can supply default value as second argument
   const watchRole = watch('subsector'); // you can supply default value as second argument
 
@@ -141,7 +141,6 @@ function ProfileForm({ selectedLanguage, isProfileComplete, onSubmit, customColo
     const optionValues = options.map((o: any) => o.value);
     setActiveUsage(optionValues);
   }
-
   return (
     <>
       <h2>{editProfileTranslations[selectedLanguage].profileHeader}</h2>
@@ -154,10 +153,10 @@ function ProfileForm({ selectedLanguage, isProfileComplete, onSubmit, customColo
           onSubmit={handleSubmit(data =>
             onSubmit({
               ...data,
-              country: activeCountry,
-              aoiCountry: interestActiveCountry,
-              interests: activeTopics,
-              howDoYouUse: activeUsage
+              country: activeCountry !== '' ? activeCountry : 'AFG',
+              aoiCountry: interestActiveCountry !== '' ? interestActiveCountry : 'AFG',
+              interests: activeTopics.length > 0 ? activeTopics : ['Agricultural_supply_chains'],
+              howDoYouUse: activeUsage.length > 0 ? activeUsage : ['Advocacy/campaigning']
             })
           )}
         >
@@ -180,7 +179,7 @@ function ProfileForm({ selectedLanguage, isProfileComplete, onSubmit, customColo
             </label>
             <input
               {...register('lastName', { required: true })}
-              defaultValue={'lastlastlast'}
+              defaultValue={defaultValues.lastName}
               className="input-text"
               type="lastName"
               placeholder="Last Name"
@@ -203,8 +202,9 @@ function ProfileForm({ selectedLanguage, isProfileComplete, onSubmit, customColo
             {errors.email && <p className="input-error">{editProfileTranslations[selectedLanguage].required}</p>}
           </div>
           <div className="form-section">
-            <p className="input-label">{editProfileTranslations[selectedLanguage].sector}</p>
+            <p className="input-label">{editProfileTranslations[selectedLanguage].sector} *</p>
             <Controller
+              {...register('sector', { required: true })}
               control={control}
               name="sector"
               defaultValue={defaultValues?.sector}
@@ -214,6 +214,7 @@ function ProfileForm({ selectedLanguage, isProfileComplete, onSubmit, customColo
                 </Select>
               )}
             />
+            {errors.sector && <p className="input-error">{editProfileTranslations[selectedLanguage].required}</p>}
           </div>
           <div className="form-section">
             <p className="input-label">{editProfileTranslations[selectedLanguage].role} *</p>
@@ -261,7 +262,7 @@ function ProfileForm({ selectedLanguage, isProfileComplete, onSubmit, customColo
           </div>
           <div className="form-section">
             <label htmlFor="company" className="input-label">
-              {editProfileTranslations[selectedLanguage].company}
+              {editProfileTranslations[selectedLanguage].company} *
             </label>
             <input
               {...register('company', { required: true })}
@@ -280,6 +281,7 @@ function ProfileForm({ selectedLanguage, isProfileComplete, onSubmit, customColo
             defaultCountry={defaultValues.country}
             activeCountryCallback={(id: string) => setActiveCountry(id)}
           />
+
           <div className="form-section">
             <label htmlFor="city" className="input-label">
               {editProfileTranslations[selectedLanguage].city}
@@ -312,6 +314,7 @@ function ProfileForm({ selectedLanguage, isProfileComplete, onSubmit, customColo
             defaultCountry={defaultValues?.aoiCountry}
             activeCountryCallback={(id: any): any => setInterestActiveCountry(id)}
           />
+
           <div className="form-section">
             <label htmlFor="aoiCity" className="input-label">
               {editProfileTranslations[selectedLanguage].city}
@@ -341,7 +344,13 @@ function ProfileForm({ selectedLanguage, isProfileComplete, onSubmit, customColo
           <div className="form-section">
             <p className="input-label">{editProfileTranslations[selectedLanguage].topics} *</p>
             <p className="input-sublabel">{editProfileTranslations[selectedLanguage].selectAll}</p>
-            <select className="multi-select" multiple onChange={handleTopics}>
+
+            <select
+              {...register('interests', { required: true })}
+              className="multi-select"
+              multiple
+              onChange={handleTopics}
+            >
               {topics[selectedLanguage].map((topic, i: number) => {
                 return (
                   <option
@@ -355,11 +364,17 @@ function ProfileForm({ selectedLanguage, isProfileComplete, onSubmit, customColo
                 );
               })}
             </select>
+            {errors.interests && <p className="input-error">{editProfileTranslations[selectedLanguage].required}</p>}
           </div>
           <div className="form-section">
             <p className="input-label">{editProfileTranslations[selectedLanguage].howUse} *</p>
             <p className="input-sublabel">{editProfileTranslations[selectedLanguage].selectAll}</p>
-            <select className="multi-select" multiple onChange={handleUsage}>
+            <select
+              {...register('howDoYouUse', { required: true })}
+              className="multi-select"
+              multiple
+              onChange={handleUsage}
+            >
               {usage[selectedLanguage].map((usage, i: number) => {
                 return (
                   <option
@@ -382,6 +397,7 @@ function ProfileForm({ selectedLanguage, isProfileComplete, onSubmit, customColo
                 name="usageOther"
               />
             )}
+            {errors.howDoYouUse && <p className="input-error">{editProfileTranslations[selectedLanguage].required}</p>}
           </div>
           {/* {updateError && <p className="input-error">{updateError}</p>} */}
           <input
