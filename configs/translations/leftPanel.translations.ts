@@ -466,7 +466,7 @@ export const treesMosaicConfig = {
     displayLabel: ['Exibindo', 'densidade de dossel']
   },
   id: {
-    displayLabel: ['Displaying', 'canopy density.']
+    displayLabel: ['Displaying Trees in Mosaic Landscapes with', 'tree cover.']
   },
   zh: {
     displayLabel: ['显示中', '林冠覆盖密度']
