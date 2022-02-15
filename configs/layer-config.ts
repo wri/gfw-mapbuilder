@@ -90,7 +90,7 @@ export const defaultAPIFlagshipLayers = [
 ];
 
 //Layer controls (IDS)
-export const densityEnabledLayers = ['TREE_COVER_LOSS', 'AG_BIOMASS', 'TREE_COVER'];
+export const densityEnabledLayers = ['TREE_COVER_LOSS', 'AG_BIOMASS', 'TREE_COVER', 'TREES_MOSAIC_LANDSCAPES'];
 
 export const landsatBaselayerURL =
   'https://production-api.globalforestwatch.org/v2/landsat-tiles/2017/{level}/{col}/{row}';

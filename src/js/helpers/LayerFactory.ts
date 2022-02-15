@@ -1,18 +1,16 @@
 /* eslint-disable no-case-declarations */
 import { loadModules } from 'esri-loader';
-import { createTCL } from '../../js/layers/TreeCoverLossLayer';
-import { createTreeCover } from '../../js/layers/TreeCoverLayer';
-import { createGlad } from '../../js/layers/GladLayer';
-import { createHeight } from '../../js/layers/TreeCoverHeightLayer';
-import { createPrimary } from '../../js/layers/PrimaryForestLayer';
-import { createGain } from '../../js/layers/TreeCoverGainLayer';
-import {
-  markValueMap,
-  treeMosaicDensityValue
-} from '../../js/components/mapWidgets/widgetContent/CanopyDensityContent';
+import { createTCL } from '../layers/TreeCoverLossLayer';
+import { createTreeCover } from '../layers/TreeCoverLayer';
+import { createGlad } from '../layers/GladLayer';
+import { createHeight } from '../layers/TreeCoverHeightLayer';
+import { createGain } from '../layers/TreeCoverGainLayer';
+import { markValueMap } from '../components/mapWidgets/widgetContent/CanopyDensityContent';
+import { treeMosaicDensityValue } from '../components/mapWidgets/widgetContent/TreeMosaicContent';
 import store from '../../js/store/index';
-import { LayerProps } from '../../js/store/mapview/types';
+import { LayerProps } from '../store/mapview/types';
 import viirsLayer from './viirsLayerUtil';
+import { createTreeMosaicCover } from '../layers/TreeMosaicLayer';
 
 interface LayerOptions {
   id: string;
@@ -109,7 +107,7 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
       break;
     case 'loss':
       const densityValue = markValueMap[appState.leftPanel.density];
-      layerConfig.url = layerConfig.url.replace(/(tcd_)(?:[^\/]+)/, `tcd_${densityValue}`);
+      layerConfig.url = layerConfig.url.replace(/(tcd_)(?:[^/]+)/, `tcd_${densityValue}`);
       const yearRange = mapviewState.timeSlider;
       const tclConstructor = await createTCL();
       const tclLayer = new tclConstructor({
@@ -126,20 +124,16 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
       break;
     case 'tree-mosaic':
       const treeDensityValue = treeMosaicDensityValue[appState.leftPanel.density];
-      layerConfig.url = layerConfig.url.replace(/(tcd_)(?:[^\/]+)/, `tcd_${treeDensityValue}`);
-      const treeYearRange = mapviewState.timeSlider;
-      const constructor = await createTCL();
-      const layer = new constructor({
+      layerConfig.url = layerConfig.url.replace(/(tcd_)(?:[^/]+)/, `tcd_${treeDensityValue}`);
+      const constructor = await createTreeMosaicCover();
+      const treeMosaicLayer = new constructor({
         id: layerConfig.id,
         title: layerConfig.title,
         visible: layerConfig.visible,
         urlTemplate: layerConfig.url,
         view: mapView
       });
-      esriLayer = layer;
-      esriLayer.minYear = treeYearRange[0];
-      esriLayer.maxYear = treeYearRange[1];
-      esriLayer.refresh();
+      esriLayer = treeMosaicLayer;
       break;
     case 'gain':
       const gainConstructor = await createGain();
@@ -211,9 +205,9 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
       });
       esriLayer = gladLayer;
       esriLayer.confirmed = appState.leftPanel.gladConfirmed;
-      // //@ts-ignore
+      //@ts-ignore
       const startDate: any = new Date(appState.leftPanel.gladStart).getJulian() as any;
-      // //@ts-ignore
+      //@ts-ignore
       const endDate = new Date(appState.leftPanel.gladEnd).getJulian();
       esriLayer.julianFrom = startDate;
       esriLayer.julianTo = endDate;
