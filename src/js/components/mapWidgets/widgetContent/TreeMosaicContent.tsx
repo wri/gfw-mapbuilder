@@ -14,14 +14,12 @@ const SliderWithTooltip = createSliderWithTooltip(Slider);
 //TODO: This needs to be Language aware
 
 export const treeMosaicDensityValue = {
-  1: 0,
   2: 20,
   3: 40,
   4: 60,
   5: 80
 };
 const marks = {
-  1: { label: '0%', style: {} },
   2: { label: '20%', style: {} },
   3: { label: '40%', style: {} },
   4: { label: '60%', style: {} },
