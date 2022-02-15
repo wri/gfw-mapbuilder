@@ -30,7 +30,6 @@ const CanopyDensityPicker = (props: CanopyDensityProps): JSX.Element => {
       dispatch(renderModal('CanopyDensity'));
     }
   }
-  console.log(displayLabel);
   return (
     <div className="canopy-density-picker-wrapper">
       <span>{displayLabel[0]} </span>
