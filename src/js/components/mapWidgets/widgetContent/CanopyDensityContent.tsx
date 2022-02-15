@@ -33,7 +33,13 @@ export const markValueMap = {
   6: 50,
   7: 75
 };
-
+export const treeMosaicDensityValue = {
+  1: 0,
+  2: 20,
+  3: 40,
+  4: 60,
+  5: 80
+};
 const marks = {
   1: { label: '10%', style: {} },
   2: { label: '15%', style: {} },
@@ -46,16 +52,10 @@ const marks = {
 
 const CanopyDensityContent = (): JSX.Element => {
   const dispatch = useDispatch();
-  const density = useSelector(
-    (store: RootState) => store.appState.leftPanel.density
-  );
-  const customColorTheme = useSelector(
-    (store: RootState) => store.appSettings.customColorTheme
-  );
+  const density = useSelector((store: RootState) => store.appState.leftPanel.density);
+  const customColorTheme = useSelector((store: RootState) => store.appSettings.customColorTheme);
 
-  const selectedLanguage = useSelector(
-    (store: RootState) => store.appState.selectedLanguage
-  );
+  const selectedLanguage = useSelector((store: RootState) => store.appState.selectedLanguage);
 
   const { directions } = canopyDensityContentConfig[selectedLanguage];
 
@@ -64,9 +64,7 @@ const CanopyDensityContent = (): JSX.Element => {
     //send % value to modify the layer
     mapController.updateDensityValue(markValueMap[value]);
     mapController.updateBiodensityValue(value);
-    const eventHandler = await mapController.updateTreeCoverValue(
-      markValueMap[value]
-    );
+    const eventHandler = await mapController.updateTreeCoverValue(markValueMap[value]);
     eventHandler.remove();
   }
 

@@ -2,6 +2,7 @@ export const supportedLayers = [
   'feature',
   'dynamic',
   'loss',
+  'tree-mosaic',
   'gain',
   'image',
   'webtiled',

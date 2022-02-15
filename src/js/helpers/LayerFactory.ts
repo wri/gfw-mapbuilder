@@ -6,7 +6,10 @@ import { createGlad } from '../../js/layers/GladLayer';
 import { createHeight } from '../../js/layers/TreeCoverHeightLayer';
 import { createPrimary } from '../../js/layers/PrimaryForestLayer';
 import { createGain } from '../../js/layers/TreeCoverGainLayer';
-import { markValueMap } from '../../js/components/mapWidgets/widgetContent/CanopyDensityContent';
+import {
+  markValueMap,
+  treeMosaicDensityValue
+} from '../../js/components/mapWidgets/widgetContent/CanopyDensityContent';
 import store from '../../js/store/index';
 import { LayerProps } from '../../js/store/mapview/types';
 import viirsLayer from './viirsLayerUtil';
@@ -119,6 +122,23 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
       esriLayer = tclLayer;
       esriLayer.minYear = yearRange[0];
       esriLayer.maxYear = yearRange[1];
+      esriLayer.refresh();
+      break;
+    case 'tree-mosaic':
+      const treeDensityValue = treeMosaicDensityValue[appState.leftPanel.density];
+      layerConfig.url = layerConfig.url.replace(/(tcd_)(?:[^\/]+)/, `tcd_${treeDensityValue}`);
+      const treeYearRange = mapviewState.timeSlider;
+      const constructor = await createTCL();
+      const layer = new constructor({
+        id: layerConfig.id,
+        title: layerConfig.title,
+        visible: layerConfig.visible,
+        urlTemplate: layerConfig.url,
+        view: mapView
+      });
+      esriLayer = layer;
+      esriLayer.minYear = treeYearRange[0];
+      esriLayer.maxYear = treeYearRange[1];
       esriLayer.refresh();
       break;
     case 'gain':
