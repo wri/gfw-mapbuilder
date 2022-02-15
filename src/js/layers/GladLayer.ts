@@ -24,10 +24,7 @@ Date.prototype.getJulian = function() {
 };
 
 export const createGlad = async () => {
-  const [esriRequest, BaseTileLayer] = await loadModules([
-    'esri/request',
-    'esri/layers/BaseTileLayer'
-  ]);
+  const [esriRequest, BaseTileLayer] = await loadModules(['esri/request', 'esri/layers/BaseTileLayer']);
   const GladLayer = BaseTileLayer.createSubclass({
     properties: {
       julianFrom: '15000',
@@ -67,7 +64,6 @@ export const createGlad = async () => {
             const context = canvas.getContext('2d');
             canvas.width = width;
             canvas.height = height;
-
             // Draw the blended image onto the canvas.
             context.drawImage(image, 0, 0, width, height);
 
@@ -93,6 +89,7 @@ export const createGlad = async () => {
       const towoWeeksAgo = new Date();
       towoWeeksAgo.setDate(towoWeeksAgo.getDate() - 14);
       const weekAgoJulian = towoWeeksAgo.getJulian();
+
       for (let i = 0; i < data.length; i += 4) {
         // Decode the rgba/pixel so I can filter on confidence and date ranges
         const slice = [data[i], data[i + 1], data[i + 2]];

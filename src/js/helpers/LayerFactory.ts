@@ -189,6 +189,7 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
         urlTemplate: layerConfig.url,
         view: mapView
       });
+      console.log(gladLayer);
       esriLayer = gladLayer;
       esriLayer.confirmed = appState.leftPanel.gladConfirmed;
       // //@ts-ignore

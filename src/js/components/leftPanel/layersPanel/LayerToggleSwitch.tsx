@@ -25,13 +25,12 @@ interface LayerToggleProps {
 }
 
 const LayerToggleSwitch = (props: LayerToggleProps): React.ReactElement => {
-  const customColorTheme = useSelector(
-    (store: RootState) => store.appSettings.customColorTheme
-  );
+  const customColorTheme = useSelector((store: RootState) => store.appSettings.customColorTheme);
 
   const { layerIsVisible, layerID, sublayer, parentID } = props;
 
   const toggleVisibility = (): void => {
+    console.log('hit');
     if (layerID === 'MODIS_ACTIVE_FIRES') {
       mapController.toggleVIIRSorMODIS(layerID);
     } else {
@@ -50,10 +49,7 @@ const LayerToggleSwitch = (props: LayerToggleProps): React.ReactElement => {
           checked={layerIsVisible}
           onChange={(): void => toggleVisibility()}
         />
-        <label
-          className="styled-checkboxlabel"
-          htmlFor={`layer-checkbox-${layerID}`}
-        >
+        <label className="styled-checkboxlabel" htmlFor={`layer-checkbox-${layerID}`}>
           {layerID}
         </label>
       </div>
