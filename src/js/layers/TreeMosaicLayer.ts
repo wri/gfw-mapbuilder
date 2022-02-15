@@ -56,70 +56,24 @@ export const createTreeMosaicCover = async () => {
         allowImageDataAccess: true
       }).then(
         function(response) {
-          // We use a promise because we can't return an empty canvas before the image data has loaded, been filtered, and properly colored
-          return new Promise(resolve => {
-            // when esri request resolves successfully
-            // get the image from the response
-            const image = response.data;
-            const width = this.tileInfo.size[0];
-            const height = this.tileInfo.size[0];
+          // when esri request resolves successfully
+          // get the image from the response
+          const image = response.data;
+          const width = this.tileInfo.size[0];
+          const height = this.tileInfo.size[0];
 
-            // create a canvas with 2D rendering context
-            const canvas = document.createElement('canvas');
-            const context = canvas.getContext('2d');
-            canvas.width = width;
-            canvas.height = height;
+          // create a canvas with 2D rendering context
+          const canvas = document.createElement('canvas');
+          const context = canvas.getContext('2d');
+          canvas.width = width;
+          canvas.height = height;
 
-            // Draw the blended image onto the canvas.
-            context.drawImage(image, 0, 0, width, height);
+          // Draw the blended image onto the canvas.
+          context.drawImage(image, 0, 0, width, height);
 
-            const imageObject = new Image();
-            imageObject.crossOrigin = 'Anonymous';
-
-            imageObject.onload = () => {
-              context.drawImage(imageObject, 0, 0, width, height);
-              const imageData = context.getImageData(0, 0, width, height);
-              imageData.data.set(this.filter(imageData.data));
-              context.putImageData(imageData, 0, 0);
-              resolve(canvas);
-            };
-            imageObject.src = image.src;
-          });
+          return canvas;
         }.bind(this)
       );
-    },
-
-    filter: function(data) {
-      const z = this.view.zoom;
-
-      for (let i = 0; i < data.length; i += 4) {
-        // Decode the rgba/pixel so I can filter on date ranges
-        const slice = [data[i], data[i + 1], data[i + 2]];
-        const values = this.decodeIntensity(slice);
-
-        data[i] =
-          intensityBank[z] && intensityBank[z][values.intensity] && intensityBank[z][values.intensity][0]
-            ? intensityBank[z][values.intensity][0]
-            : 0;
-        data[i + 1] =
-          intensityBank[z] && intensityBank[z][values.intensity] && intensityBank[z][values.intensity][1]
-            ? intensityBank[z][values.intensity][1]
-            : 0;
-        data[i + 2] =
-          intensityBank[z] && intensityBank[z][values.intensity] && intensityBank[z][values.intensity][2]
-            ? intensityBank[z][values.intensity][2]
-            : 0;
-        data[i + 3] =
-          intensityBank[z] && intensityBank[z][values.intensity] && intensityBank[z][values.intensity][3]
-            ? intensityBank[z][values.intensity][3]
-            : 0;
-      }
-      return data;
-    },
-
-    decodeIntensity: function(pixel) {
-      const intensity = pixel[1];
-      return { intensity: intensity };
     }
   });
 };
