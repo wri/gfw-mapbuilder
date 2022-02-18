@@ -1,14 +1,13 @@
 /* eslint-disable no-case-declarations */
 import { loadModules } from 'esri-loader';
-import { createTCL } from '../../js/layers/TreeCoverLossLayer';
-import { createTreeCover } from '../../js/layers/TreeCoverLayer';
-import { createGlad } from '../../js/layers/GladLayer';
-import { createHeight } from '../../js/layers/TreeCoverHeightLayer';
-import { createPrimary } from '../../js/layers/PrimaryForestLayer';
-import { createGain } from '../../js/layers/TreeCoverGainLayer';
-import { markValueMap } from '../../js/components/mapWidgets/widgetContent/CanopyDensityContent';
+import { createTCL } from '../layers/TreeCoverLossLayer';
+import { createTreeCover } from '../layers/TreeCoverLayer';
+import { createGlad } from '../layers/GladLayer';
+import { createHeight } from '../layers/TreeCoverHeightLayer';
+import { createGain } from '../layers/TreeCoverGainLayer';
+import { markValueMap } from '../components/mapWidgets/widgetContent/CanopyDensityContent';
 import store from '../../js/store/index';
-import { LayerProps } from '../../js/store/mapview/types';
+import { LayerProps } from '../store/mapview/types';
 import viirsLayer from './viirsLayerUtil';
 
 interface LayerOptions {
@@ -87,6 +86,7 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
         esriLayer.renderingRule = colorRF;
       }
       if (layerConfig.id === 'AG_BIOMASS') {
+        esriLayer.opacity = layerConfig.opacity.combined;
         //biomass layer expects object id that maps to canopy density values
         esriLayer.mosaicRule = new MosaicRule({
           where: `OBJECTID = ${appState.leftPanel.density}`
@@ -106,7 +106,7 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
       break;
     case 'loss':
       const densityValue = markValueMap[appState.leftPanel.density];
-      layerConfig.url = layerConfig.url.replace(/(tcd_)(?:[^\/]+)/, `tcd_${densityValue}`);
+      layerConfig.url = layerConfig.url.replace(/(tcd_)(?:[^/]+)/, `tcd_${densityValue}`);
       const yearRange = mapviewState.timeSlider;
       const tclConstructor = await createTCL();
       const tclLayer = new tclConstructor({
@@ -168,6 +168,13 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
         urlTemplate: layerConfig.url,
         opacity: layerConfig.opacity
       });
+      if (
+        layerConfig.id === 'LAND_COVER' ||
+        layerConfig.id === 'PRIMARY_FORESTS' ||
+        layerConfig.id === 'CARBON_EMISSIONS'
+      ) {
+        esriLayer.opacity = layerConfig.opacity.combined;
+      }
       break;
     case 'imagery':
       const imageConstructor = await createGain();
@@ -191,9 +198,9 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
       });
       esriLayer = gladLayer;
       esriLayer.confirmed = appState.leftPanel.gladConfirmed;
-      // //@ts-ignore
+      // @ts-ignore
       const startDate: any = new Date(appState.leftPanel.gladStart).getJulian() as any;
-      // //@ts-ignore
+      // @ts-ignore
       const endDate = new Date(appState.leftPanel.gladEnd).getJulian();
       esriLayer.julianFrom = startDate;
       esriLayer.julianTo = endDate;
@@ -227,10 +234,12 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
           opacity: layerConfig.opacity
         });
       }
+      if (layerConfig.id === 'IFL') {
+        esriLayer.opacity = layerConfig.opacity.combined;
+      }
       break;
     default:
       break;
   }
-
   return esriLayer;
 }
