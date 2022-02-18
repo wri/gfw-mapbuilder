@@ -191,9 +191,9 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
       });
       esriLayer = gladLayer;
       esriLayer.confirmed = appState.leftPanel.gladConfirmed;
-      // //@ts-ignore
+      // @ts-ignore
       const startDate: any = new Date(appState.leftPanel.gladStart).getJulian() as any;
-      // //@ts-ignore
+      // @ts-ignore
       const endDate = new Date(appState.leftPanel.gladEnd).getJulian();
       esriLayer.julianFrom = startDate;
       esriLayer.julianTo = endDate;
