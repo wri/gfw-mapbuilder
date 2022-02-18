@@ -10,6 +10,7 @@ import { markValueMap } from '../../js/components/mapWidgets/widgetContent/Canop
 import store from '../../js/store/index';
 import { LayerProps } from '../../js/store/mapview/types';
 import viirsLayer from './viirsLayerUtil';
+import { createGFWIntegratedLayer } from '../layers/GFWIntegratedLayer';
 
 interface LayerOptions {
   id: string;
@@ -189,15 +190,35 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
         urlTemplate: layerConfig.url,
         view: mapView
       });
-      console.log(gladLayer);
       esriLayer = gladLayer;
       esriLayer.confirmed = appState.leftPanel.gladConfirmed;
-      // //@ts-ignore
+      //@ts-ignore
       const startDate: any = new Date(appState.leftPanel.gladStart).getJulian() as any;
-      // //@ts-ignore
+      //@ts-ignore
       const endDate = new Date(appState.leftPanel.gladEnd).getJulian();
       esriLayer.julianFrom = startDate;
       esriLayer.julianTo = endDate;
+      break;
+    case 'integrated-alert-layer':
+      const integratedAlertConstructor = await createGFWIntegratedLayer();
+      const integratedAlertLayer = new integratedAlertConstructor({
+        id: layerConfig.id,
+        title: layerConfig.title,
+        visible: layerConfig.visible,
+        urlTemplate: layerConfig.url,
+        view: mapView
+      });
+      console.log(integratedAlertLayer);
+      esriLayer = integratedAlertLayer;
+      esriLayer.confirmed = appState.leftPanel.gladConfirmed;
+      //@ts-ignore
+      const integratedAlertStartDate: any = new Date(appState.leftPanel.gladStart).getJulian() as any;
+      console.log(appState.leftPanel.gladStart);
+      console.log(appState.leftPanel.gladEnd);
+      //@ts-ignore
+      const integratedAlertEndDate = new Date(appState.leftPanel.gladEnd).getJulian();
+      esriLayer.julianFrom = integratedAlertStartDate;
+      esriLayer.julianTo = integratedAlertEndDate;
       break;
     case 'MASK':
       const { appSettings } = store.getState();

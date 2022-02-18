@@ -7,6 +7,7 @@ export const supportedLayers = [
   'webtiled',
   'imagery',
   'glad',
+  'integrated-alert-layer',
   'primed',
   'tree-cover',
   'tree-cover-height',

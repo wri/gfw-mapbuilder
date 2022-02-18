@@ -401,6 +401,7 @@ export async function getRemoteAndServiceLayers(): Promise<any> {
               order: item.order,
               layerGroupId: item.layerGroupId
             };
+            console.log(newItem);
             return newItem;
           });
       })

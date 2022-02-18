@@ -285,6 +285,7 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
   const altLayerName = layer.label && layer.label[selectedLanguage];
 
   const returnTimeSlider = (id: string): any => {
+    console.log(id);
     switch (id) {
       case 'TREE_COVER_LOSS':
         return <TimeSlider layerID={id} />;

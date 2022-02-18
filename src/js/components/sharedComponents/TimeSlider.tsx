@@ -106,15 +106,11 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
   const dispatch = useDispatch();
   const timeSliderRef = useRef();
   const { layerID } = props;
-  const timeSlider = useSelector(
-    (store: RootState) => store.mapviewState.timeSlider
-  );
+  const timeSlider = useSelector((store: RootState) => store.mapviewState.timeSlider);
   const [range, setRange] = useState(timeSlider);
   const [playButton, setPlayButton] = useState(true);
   const [startTimeSlider, setStartTimeSlider] = useState(false);
-  const customColorTheme = useSelector(
-    (store: RootState) => store.appSettings.customColorTheme
-  );
+  const customColorTheme = useSelector((store: RootState) => store.appSettings.customColorTheme);
   const [marks, setMarks] = useState(defaultMarks);
 
   useEffect(() => {
@@ -196,16 +192,11 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
   return (
     <div className="time-slider-container">
       {playButton ? (
-        <button
-          style={{ color: customColorTheme }}
-          onClick={(): void => playOrPauseTimeSlider(true)}
-        >
+        <button style={{ color: customColorTheme }} onClick={(): void => playOrPauseTimeSlider(true)}>
           &#9658;
         </button>
       ) : (
-        <button onClick={(): void => playOrPauseTimeSlider(false)}>
-          &#10074;&#10074;
-        </button>
+        <button onClick={(): void => playOrPauseTimeSlider(false)}>&#10074;&#10074;</button>
       )}
       <SliderWithTooltip
         min={2000}

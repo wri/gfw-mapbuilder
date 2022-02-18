@@ -124,6 +124,17 @@ export default {
           origin: 'rw-api',
           opacity: 1
         }
+        /*    {
+          groupId: 'GROUP_CLIMATE',
+          id: 'GFW_INTEGRATED_ALERTS',
+          datasetURL: 'https://data-api.globalforestwatch.org/dataset/gfw_integrated_alerts/latest',
+          datasetLegendConfigURL:
+            'https://api.resourcewatch.org/v1/layer/bd58f25d-d3bb-4d59-9daa-cecddd27d9f4?filterIncludesByEnv=true&includes=vocabulary,metadata&env=production',
+          type: 'resourcewatch',
+          order: 6,
+          origin: 'rw-api',
+          opacity: 1
+        }*/
       ]
     },
     GROUP_LCD: {
