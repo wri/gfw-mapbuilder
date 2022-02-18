@@ -320,9 +320,15 @@ const LegendItems = (props: LegendItemProps): JSX.Element => {
           );
         });
       }
+      console.log(title);
       return (
         <div className="layer-item" key={layer.id + `${i}`}>
-          <p className="layer-title">{title ? title : layer.title}</p>
+          {title === 'Wind Speed Potential' ? (
+            <p className="layer-title">{title ? `${title} at 50m (m/s)` : `${layer.title} at 50m (m/s)`}</p>
+          ) : (
+            <p className="layer-title">{title ? title : layer.title}</p>
+          )}
+
           {labelIcons}
         </div>
       );

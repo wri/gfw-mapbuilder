@@ -35,6 +35,7 @@ import { OpacityIcon } from '../../../../images/opacityIcon';
 import { DragIcon } from '../../../../images/dragIcon';
 
 import 'react-datepicker/dist/react-datepicker.css';
+import WindSpeedPicker from '../../sharedComponents/WindSpeedPicker';
 
 //Dynamic custom theme override using styled-components lib
 interface CheckBoxWrapperProps {
@@ -475,6 +476,7 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
         {layer?.visible && returnTimeSlider(props.id)}
         {layer?.visible && densityPicker && <CanopyDensityPicker />}
         {layer?.visible && layer.id === 'TREE_COVER_HEIGHT' && <TreeHeightPicker />}
+        {layer?.visible && layer.id === 'WIND_SPEED' && <WindSpeedPicker />}
         {layer?.visible && layer.versions && (
           <LayerVersionPicker layerInfo={layer} selectedLanguage={selectedLanguage} />
         )}

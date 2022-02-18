@@ -506,3 +506,35 @@ export const treeHeightConfig = {
     displayLabel: ['Displaying Tree cover height with', 'canopy height']
   }
 };
+export const windSpeedConfig = {
+  en: {
+    displayLabel: ['Displaying wind speed potential at', 'meters']
+  },
+  az: {
+    displayLabel: ['Displaying Tree cover height with', 'canopy height']
+  },
+  nl: {
+    displayLabel: ['Displaying Tree cover height with', 'canopy height']
+  },
+  hy: {
+    displayLabel: ['Displaying Tree cover height with է ', 'canopy height']
+  },
+  ka: {
+    displayLabel: ['Displaying Tree cover height with', 'canopy height']
+  },
+  fr: {
+    displayLabel: ['Displaying Tree cover height with', 'canopy height']
+  },
+  es: {
+    displayLabel: ['Displaying Tree cover height with', 'canopy height']
+  },
+  pt: {
+    displayLabel: ['Displaying Tree cover height with', 'canopy height']
+  },
+  id: {
+    displayLabel: ['Displaying Tree cover height with', 'canopy height']
+  },
+  zh: {
+    displayLabel: ['Displaying Tree cover height with', 'canopy height']
+  }
+};
