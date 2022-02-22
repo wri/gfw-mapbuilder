@@ -222,7 +222,7 @@ const LegendItems = (props: LegendItemProps): JSX.Element => {
         'January 13, 2022 - February 12, 2022 Average Tropospheric Nitrogen Dioxide (NO₂) (mol/m², millionths)';
     } else if (layerID === 'DRY_SPELLS') {
       const drySpelllayer: any = mapController._map?.findLayerById(layerID);
-      layerTitle = `${drySpelllayer.endDate ? drySpelllayer.endDate : 2080} Projected Change in Dry Spells`;
+      layerTitle = `${drySpelllayer.endDate ? drySpelllayer.endDate : 2030} Projected Change in Dry Spells`;
     }
     return layerTitle;
   };
