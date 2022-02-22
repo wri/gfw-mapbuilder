@@ -74,7 +74,7 @@ export const createGFWIntegratedLayer = async () => {
             imageObject.onload = () => {
               context.drawImage(imageObject, 0, 0, width, height);
               const imageData = context.getImageData(0, 0, width, height);
-              // imageData.data.set(this.filter(imageData.data));
+              imageData.data.set(this.filter(imageData.data));
               context.putImageData(imageData, 0, 0);
               resolve(canvas);
             };
