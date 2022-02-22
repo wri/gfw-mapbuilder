@@ -26,12 +26,11 @@ import {
   SET_RENDER_POPUP,
   SET_AREA_IMAGES,
   SET_VERSIONED_LAYER,
-  SET_TREE_HEIGHT
+  SET_TREE_HEIGHT,
+  SET_WIND_SPEED_POTENTIAL
 } from './types';
 
-export function setSelectedSearchWidgetLayer(
-  payload: AppState['selectedSearchWidgetLayer']
-) {
+export function setSelectedSearchWidgetLayer(payload: AppState['selectedSearchWidgetLayer']) {
   return {
     type: SET_SELECTED_SEARCH_WIDGET_LAYER as typeof SET_SELECTED_SEARCH_WIDGET_LAYER,
     payload: payload
@@ -115,36 +114,28 @@ export function setMeasureResults(payload: AppState['measureContent']) {
   };
 }
 
-export function setActiveMeasureButton(
-  payload: AppState['measureContent']['activeButton']
-) {
+export function setActiveMeasureButton(payload: AppState['measureContent']['activeButton']) {
   return {
     type: SET_ACTIVE_MEASURE_BUTTON as typeof SET_ACTIVE_MEASURE_BUTTON,
     payload: payload
   };
 }
 
-export function setAnalysisDateRange(
-  payload: AppState['leftPanel']['analysisDateRange']
-) {
+export function setAnalysisDateRange(payload: AppState['leftPanel']['analysisDateRange']) {
   return {
     type: SET_ANALYSIS_DATE as typeof SET_ANALYSIS_DATE,
     payload: payload
   };
 }
 
-export function setAnalysisYearRange(
-  payload: AppState['leftPanel']['analysisYearRange']
-) {
+export function setAnalysisYearRange(payload: AppState['leftPanel']['analysisYearRange']) {
   return {
     type: SET_ANALYSIS_YEAR_RANGE as typeof SET_ANALYSIS_YEAR_RANGE,
     payload: payload
   };
 }
 
-export function setGladConfirmed(
-  payload: AppState['leftPanel']['gladConfirmed']
-) {
+export function setGladConfirmed(payload: AppState['leftPanel']['gladConfirmed']) {
   return {
     type: SET_GLAD_CONFIRMED as typeof SET_GLAD_CONFIRMED,
     payload: payload
@@ -210,6 +201,13 @@ export function setAreaImages(payload: string) {
 export function setTreeHeight(payload: number) {
   return {
     type: SET_TREE_HEIGHT as typeof SET_TREE_HEIGHT,
+    payload: payload
+  };
+}
+
+export function setWindSpeedPotential(payload: number) {
+  return {
+    type: SET_WIND_SPEED_POTENTIAL as typeof SET_WIND_SPEED_POTENTIAL,
     payload: payload
   };
 }

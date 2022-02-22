@@ -1,21 +1,21 @@
 import * as React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../../../js/store';
+import { RootState } from '../../store';
 
 import { windSpeedConfig } from '../../../../configs/translations/leftPanel.translations';
-import { setTreeHeight } from '../../store/appState/actions';
+import { setWindSpeedPotential } from '../../store/appState/actions';
 import { mapController } from '../../controllers/mapController';
 
 const WindSpeedPicker = (): JSX.Element => {
   const dispatch = useDispatch();
   const customColorTheme = useSelector((store: RootState) => store.appSettings.customColorTheme);
-  const treeHeight = useSelector((store: RootState) => store.appState.leftPanel.treeHeight);
+  const windSpeedPotential = useSelector((store: RootState) => store.appState.leftPanel.windSpeedPotential);
   const selectedLanguage = useSelector((store: RootState) => store.appState.selectedLanguage);
   const { displayLabel } = windSpeedConfig[selectedLanguage];
 
   function handleDensityButtonClick(e): void {
-    mapController.updateTreeHeightValue(e.target.value);
-    dispatch(setTreeHeight(e.target.value));
+    mapController.updateWindSpeedPotentialValue(e.target.value);
+    dispatch(setWindSpeedPotential(e.target.value));
   }
 
   return (
@@ -32,7 +32,7 @@ const WindSpeedPicker = (): JSX.Element => {
         className="date-time-toggle"
         style={{ border: `1px solid ${customColorTheme}`, width: '2.4rem', fontWeight: 600 }}
         onChange={(e): void => handleDensityButtonClick(e)}
-        value={treeHeight}
+        value={windSpeedPotential}
       >
         <option value={50}>50</option>
         <option value={100}>100</option>

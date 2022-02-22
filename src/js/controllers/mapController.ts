@@ -1,15 +1,15 @@
 import { setDefaultOptions, loadModules } from 'esri-loader';
 import { format, subDays, parse } from 'date-fns';
 import { debounce } from 'lodash-es';
-import { getMaxDateForViirsTiles } from '../../js/helpers/viirsLayerUtil';
+import { getMaxDateForViirsTiles } from '../helpers/viirsLayerUtil';
 import { landsatBaselayerURL, WRIBasemapConfig } from '../../../configs/layer-config';
 import { RefObject } from 'react';
 import { densityEnabledLayers } from '../../../configs/layer-config';
 import store from '../store/index';
-import { LayerFactory } from '../../js/helpers/LayerFactory';
-import { setLayerSearchSource } from '../../js/helpers/mapController/searchSources';
-import { getSortedLayers } from '../../js/helpers/mapController/layerSorting';
-import { addPointGraphic } from '../../js/helpers/MapGraphics';
+import { LayerFactory } from '../helpers/LayerFactory';
+import { setLayerSearchSource } from '../helpers/mapController/searchSources';
+import { getSortedLayers } from '../helpers/mapController/layerSorting';
+import { addPointGraphic } from '../helpers/MapGraphics';
 import {
   allAvailableLayers,
   mapError,
@@ -21,9 +21,9 @@ import {
   setLayersLoading,
   setUserCoordinates,
   setDocuments
-} from '../../js/store/mapview/actions';
+} from '../store/mapview/actions';
 
-import { setSelectedBasemap } from '../../js/store/mapview/actions';
+import { setSelectedBasemap } from '../store/mapview/actions';
 import {
   renderModal,
   selectActiveTab,
@@ -36,24 +36,24 @@ import {
   setViirsEnd,
   setGladStart,
   setGladEnd
-} from '../../js/store/appState/actions';
-import { LayerProps, LayerFeatureResult, FeatureResult, LayerTypes } from '../../js/store/mapview/types';
+} from '../store/appState/actions';
+import { LayerProps, LayerFeatureResult, FeatureResult } from '../store/mapview/types';
 import { OptionType } from '../types/measureWidget';
-import { queryLayersForFeatures } from '../../js/helpers/dataPanel/DataPanel';
-import { setNewGraphic } from '../../js/helpers/MapGraphics';
+import { queryLayersForFeatures } from '../helpers/dataPanel/DataPanel';
+import { setNewGraphic } from '../helpers/MapGraphics';
 
 import { MODISLayerIDs } from '../../../configs/modis-viirs';
 import { supportedLayers } from '../../../configs/layer-config';
-import { parseURLandApplyChanges, getLayerInfoFromURL, LayerInfo } from '../../js/helpers/shareFunctionality';
+import { parseURLandApplyChanges, getLayerInfoFromURL, LayerInfo } from '../helpers/shareFunctionality';
 import {
   determineLayerOpacity,
   determineLayerVisibility,
   extractWebmapLayerObjects,
   getRemoteAndServiceLayers
-} from '../../js/helpers/mapController/miscLayerHelpers';
-import { fetchLegendInfo } from '../../js/helpers/legendInfo';
-import { parseExtentConfig } from '../../js/helpers/mapController/configParsing';
-import { overwriteColorTheme } from '../../js/store/appSettings/actions';
+} from '../helpers/mapController/miscLayerHelpers';
+import { fetchLegendInfo } from '../helpers/legendInfo';
+import { parseExtentConfig } from '../helpers/mapController/configParsing';
+import { overwriteColorTheme } from '../store/appSettings/actions';
 
 setDefaultOptions({ css: true, version: '4.18' });
 
@@ -366,7 +366,7 @@ export class MapController {
                 const id = String(l.sublayerID ? l.sublayerID : l.layerID);
                 return id === String(layerObject.id);
               });
-              layerObject.visible = urlLayer ? true : false;
+              layerObject.visible = !!urlLayer;
             });
 
             //Sync esri map visibility
@@ -1557,7 +1557,7 @@ export class MapController {
     densityEnabledLayers.forEach((layerId: string) => {
       const layer: any = this._map?.findLayerById(layerId);
       if (layer && layer.id !== 'AG_BIOMASS' && layer.urlTemplate) {
-        layer.urlTemplate = layer.urlTemplate.replace(/(tcd_)(?:[^\/]+)/, `tcd_${value}`);
+        layer.urlTemplate = layer.urlTemplate.replace(/(tcd_)(?:[^/]+)/, `tcd_${value}`);
         layer.refresh();
       }
     });
@@ -1600,6 +1600,14 @@ export class MapController {
     if (treeLayer) {
       treeLayer.height = value;
       treeLayer.refresh();
+    }
+  }
+
+  async updateWindSpeedPotentialValue(value: number): Promise<any> {
+    const windSpeedLayerLayer: any = this._map?.findLayerById('WIND_SPEED');
+    if (windSpeedLayerLayer) {
+      windSpeedLayerLayer.height = value;
+      windSpeedLayerLayer.refresh();
     }
   }
 
@@ -1766,11 +1774,7 @@ export class MapController {
           MODISLayerIDs.forEach(({ id }) => {
             const modisLayer = this._map?.findLayerById(id);
             if (modisLayer) {
-              if (modisLayer.id === 'MODIS48') {
-                modisLayer.visible = true;
-              } else {
-                modisLayer.visible = false;
-              }
+              modisLayer.visible = modisLayer.id === 'MODIS48';
             }
           });
         }
@@ -1781,11 +1785,7 @@ export class MapController {
           MODISLayerIDs.forEach(({ id }) => {
             const modisLayer = this._map?.findLayerById(id);
             if (modisLayer) {
-              if (modisLayer.id === 'MODIS72') {
-                modisLayer.visible = true;
-              } else {
-                modisLayer.visible = false;
-              }
+              modisLayer.visible = modisLayer.id === 'MODIS72';
             }
           });
         }
@@ -1796,11 +1796,7 @@ export class MapController {
           MODISLayerIDs.forEach(({ id }) => {
             const modisLayer = this._map?.findLayerById(id);
             if (modisLayer) {
-              if (modisLayer.id === 'MODIS7D') {
-                modisLayer.visible = true;
-              } else {
-                modisLayer.visible = false;
-              }
+              modisLayer.visible = modisLayer.id === 'MODIS7D';
             }
           });
         }

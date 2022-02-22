@@ -1,10 +1,10 @@
 import * as React from 'react';
 
-import { LayerProps } from '../../../js/store/mapview/types';
+import { LayerProps } from '../../store/mapview/types';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../../js/store';
+import { RootState } from '../../store';
 import { PointItem, BasicItem, PolyFromMapServer, LineItem, GradientItem } from './LegendLabelComponents';
-import { mapController } from '../../../js/controllers/mapController';
+import { mapController } from '../../controllers/mapController';
 
 interface LegendItemProps {
   visibleLayers: LayerProps[];
@@ -128,13 +128,13 @@ function getLegendInfoFromRenderer(layer: LayerProps): any {
         break;
       }
       case 'image':
-        symbolDOMElement = <img style={style} className="legend-symbol" src={symbol.url} />;
+        symbolDOMElement = <img style={style} className="legend-symbol" alt="legend symbol" src={symbol.url} />;
         break;
     }
     if (symbol.type === 'picture-marker') {
       style.width = 12;
       style.height = 12;
-      symbolDOMElement = <img style={style} className="legend-symbol" src={symbol.url} />;
+      symbolDOMElement = <img style={style} className="legend-symbol" alt="legend symbol" src={symbol.url} />;
     }
     return symbolDOMElement;
   }
@@ -212,6 +212,7 @@ function getLegendInfoFromRenderer(layer: LayerProps): any {
 const LegendItems = (props: LegendItemProps): JSX.Element => {
   const { language } = props;
   const timeSlider = useSelector((store: RootState) => store.mapviewState.timeSlider);
+  const windSpeedPotential = useSelector((store: RootState) => store.appState.leftPanel.windSpeedPotential);
   const items = props.visibleLayers.map((layer, i) => {
     if (!layer.legendInfo) {
       //No legend Info available, that usually means that we are dealing with FeatureServer layers and need to attempt to create legend symbols manually
@@ -320,15 +321,16 @@ const LegendItems = (props: LegendItemProps): JSX.Element => {
           );
         });
       }
-      console.log(title);
+      let layerTitle = title;
+      if (title === 'Wind Speed Potential') {
+        layerTitle = `${title} at ${windSpeedPotential}m (m/s)`;
+      } else if (title === 'Air Quality: Nitrogen Dioxide (NO₂) Satellite Measurements') {
+        layerTitle =
+          'January 13, 2022 - February 12, 2022 Average Tropospheric Nitrogen Dioxide (NO₂) (mol/m², millionths)';
+      }
       return (
         <div className="layer-item" key={layer.id + `${i}`}>
-          {title === 'Wind Speed Potential' ? (
-            <p className="layer-title">{title ? `${title} at 50m (m/s)` : `${layer.title} at 50m (m/s)`}</p>
-          ) : (
-            <p className="layer-title">{title ? title : layer.title}</p>
-          )}
-
+          <p className="layer-title">{title ? layerTitle : layer.title}</p>
           {labelIcons}
         </div>
       );

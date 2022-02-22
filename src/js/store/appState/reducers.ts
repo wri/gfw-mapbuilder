@@ -28,7 +28,8 @@ import {
   SET_RENDER_POPUP,
   SET_AREA_IMAGES,
   SET_VERSIONED_LAYER,
-  SET_TREE_HEIGHT
+  SET_TREE_HEIGHT,
+  SET_WIND_SPEED_POTENTIAL
 } from './types';
 
 const initialState: AppState = {
@@ -47,10 +48,7 @@ const initialState: AppState = {
     activeTab: 'layers',
     openLayerGroup: 'GROUP_WEBMAP',
     density: 5,
-    analysisDateRange: [
-      format(new Date(Date.now()), 'yyyy-MM-dd'),
-      format(new Date(Date.now()), 'yyyy-MM-dd')
-    ],
+    analysisDateRange: [format(new Date(Date.now()), 'yyyy-MM-dd'), format(new Date(Date.now()), 'yyyy-MM-dd')],
     analysisYearRange: [2001, 2018],
     gladConfirmed: false,
     gladStart: '2015-01-01',
@@ -60,7 +58,8 @@ const initialState: AppState = {
     viirsEnd: format(new Date(Date.now()), 'yyyy-MM-dd'),
     viirsStart: format(subYears(new Date(Date.now()), 1), 'yyyy-MM-dd'),
     versionedLayer: {},
-    treeHeight: 3
+    treeHeight: 3,
+    windSpeedPotential: 50
   },
   measureContent: {
     activeButton: '',
@@ -73,10 +72,7 @@ const initialState: AppState = {
   areaImages: []
 };
 
-export function appStateReducer(
-  state = initialState,
-  action: AppStateTypes
-): AppState {
+export function appStateReducer(state = initialState, action: AppStateTypes): AppState {
   switch (action.type) {
     case SET_SELECTED_SEARCH_WIDGET_LAYER:
       return {
@@ -225,6 +221,14 @@ export function appStateReducer(
           treeHeight: action.payload
         }
       };
+    case SET_WIND_SPEED_POTENTIAL:
+      return {
+        ...state,
+        leftPanel: {
+          ...state.leftPanel,
+          windSpeedPotential: action.payload
+        }
+      };
     case SET_VERSIONED_LAYER: {
       const versionedState = state.leftPanel.versionedLayer;
       const val = Object.values(action.payload)[0] as string;
@@ -244,13 +248,9 @@ export function appStateReducer(
       };
     case SET_AREA_IMAGES: {
       const newAreaImages = state.areaImages;
-      const incomingArea = newAreaImages.find(
-        areaID => areaID === action.payload
-      );
+      const incomingArea = newAreaImages.find(areaID => areaID === action.payload);
       if (incomingArea) {
-        const index = newAreaImages.findIndex(
-          areaID => areaID === action.payload
-        );
+        const index = newAreaImages.findIndex(areaID => areaID === action.payload);
         newAreaImages.splice(index, 0, action.payload);
       } else {
         newAreaImages.push(action.payload);
