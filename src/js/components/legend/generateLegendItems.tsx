@@ -213,6 +213,19 @@ const LegendItems = (props: LegendItemProps): JSX.Element => {
   const { language } = props;
   const timeSlider = useSelector((store: RootState) => store.mapviewState.timeSlider);
   const windSpeedPotential = useSelector((store: RootState) => store.appState.leftPanel.windSpeedPotential);
+  const getLayerTitle = (title: string, layerID: string) => {
+    let layerTitle = title;
+    if (layerID === 'WIND_SPEED') {
+      layerTitle = `${title} at ${windSpeedPotential}m (m/s)`;
+    } else if (layerID === 'AIR_QUALITY') {
+      layerTitle =
+        'January 13, 2022 - February 12, 2022 Average Tropospheric Nitrogen Dioxide (NO₂) (mol/m², millionths)';
+    } else if (layerID === 'DRY_SPELLS') {
+      const drySpelllayer: any = mapController._map?.findLayerById(layerID);
+      layerTitle = `${drySpelllayer.endDate ? drySpelllayer.endDate : 2080} Projected Change in Dry Spells`;
+    }
+    return layerTitle;
+  };
   const items = props.visibleLayers.map((layer, i) => {
     if (!layer.legendInfo) {
       //No legend Info available, that usually means that we are dealing with FeatureServer layers and need to attempt to create legend symbols manually
@@ -321,13 +334,7 @@ const LegendItems = (props: LegendItemProps): JSX.Element => {
           );
         });
       }
-      let layerTitle = title;
-      if (title === 'Wind Speed Potential') {
-        layerTitle = `${title} at ${windSpeedPotential}m (m/s)`;
-      } else if (title === 'Air Quality: Nitrogen Dioxide (NO₂) Satellite Measurements') {
-        layerTitle =
-          'January 13, 2022 - February 12, 2022 Average Tropospheric Nitrogen Dioxide (NO₂) (mol/m², millionths)';
-      }
+      const layerTitle = getLayerTitle(title, layer.id);
       return (
         <div className="layer-item" key={layer.id + `${i}`}>
           <p className="layer-title">{title ? layerTitle : layer.title}</p>

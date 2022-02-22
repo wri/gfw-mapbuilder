@@ -12,22 +12,22 @@ import TimeSlider from '../../../../js/components/sharedComponents/TimeSlider';
 import DateRangeModis from './DateRangeModis';
 import DateRangeViirs from './DateRangeVIIRS';
 import { format } from 'date-fns';
-import { esriQuery } from '../../../../js/helpers/dataPanel/esriQuery';
+import { esriQuery } from '../../../helpers/dataPanel/esriQuery';
 import {
   renderModal,
   setInfoModalLayerID,
   setGladStart,
   setGladEnd,
   setGladConfirmed
-} from '../../../../js/store/appState/actions';
-import { RootState } from '../../../../js/store';
-import { LayerProps } from '../../../../js/store/mapview/types';
-import { mapController } from '../../../../js/controllers/mapController';
+} from '../../../store/appState/actions';
+import { RootState } from '../../../store';
+import { LayerProps } from '../../../store/mapview/types';
+import { mapController } from '../../../controllers/mapController';
 import { densityEnabledLayers } from '../../../../../configs/layer-config';
 import { InfoIcon } from '../../../../images/infoIcon';
 import { DashboardIcon } from '../../../../images/dashboardIcon';
 import { LayerVersionPicker } from './LayerVersionPicker';
-import { LayerFactory } from '../../../../js/helpers/LayerFactory';
+import { LayerFactory } from '../../../helpers/LayerFactory';
 import { layerControlsTranslations } from '../../../../../configs/translations/leftPanel.translations';
 import DatePicker from 'react-datepicker';
 import TreeHeightPicker from '../../sharedComponents/TreeHeightPicker';
@@ -36,6 +36,7 @@ import { DragIcon } from '../../../../images/dragIcon';
 
 import 'react-datepicker/dist/react-datepicker.css';
 import WindSpeedPicker from '../../sharedComponents/WindSpeedPicker';
+import { setTimeSlider } from '../../../store/mapview/actions';
 
 //Dynamic custom theme override using styled-components lib
 interface CheckBoxWrapperProps {
@@ -286,9 +287,132 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
   const altLayerName = layer.label && layer.label[selectedLanguage];
 
   const returnTimeSlider = (id: string): any => {
+    const defaultMarks: any = {
+      '2000': {
+        label: '2000',
+        style: {}
+      },
+      '2001': {
+        label: '2001',
+        style: { display: 'none' }
+      },
+      '2002': {
+        label: '2002',
+        style: { display: 'none' }
+      },
+      '2003': {
+        label: '2003',
+        style: { display: 'none' }
+      },
+      '2004': {
+        label: '2004',
+        style: { display: 'none' }
+      },
+      '2005': {
+        label: '2005',
+        style: {}
+      },
+      '2006': {
+        label: '2006',
+        style: { display: 'none' }
+      },
+      '2007': {
+        label: '2007',
+        style: { display: 'none' }
+      },
+      '2008': {
+        label: '2008',
+        style: { display: 'none' }
+      },
+      '2009': {
+        label: '2009',
+        style: { display: 'none' }
+      },
+      '2010': {
+        label: '2010',
+        style: {}
+      },
+      '2011': {
+        label: '2011',
+        style: { display: 'none' }
+      },
+      '2012': {
+        label: '2012',
+        style: { display: 'none' }
+      },
+      '2013': {
+        label: '2013',
+        style: { display: 'none' }
+      },
+      '2014': {
+        label: '2014',
+        style: { display: 'none' }
+      },
+      '2015': {
+        label: '2015',
+        style: {}
+      },
+      '2016': {
+        label: '2016',
+        style: { display: 'none' }
+      },
+      '2017': {
+        label: '2017',
+        style: { display: 'none' }
+      },
+      '2018': {
+        label: '2018',
+        style: { display: 'none' }
+      },
+      '2019': {
+        label: '2019',
+        style: { display: 'none' }
+      },
+      '2020': {
+        label: '2020',
+        style: {}
+      }
+    };
+    const drySpellMarks = {
+      '2030': {
+        label: '2030',
+        style: {}
+      },
+      '2050': {
+        label: '2050',
+        style: {}
+      },
+      '2080': {
+        label: '2080',
+        style: {}
+      }
+    };
     switch (id) {
       case 'TREE_COVER_LOSS':
-        return <TimeSlider layerID={id} />;
+        return (
+          <TimeSlider
+            layerID={id}
+            defaultMarks={defaultMarks}
+            min={2000}
+            max={2020}
+            defaultValue={[2000, 2020]}
+            steps={1}
+            included={true}
+          />
+        );
+      case 'DRY_SPELLS':
+        dispatch(setTimeSlider([2030]));
+        return (
+          <TimeSlider
+            layerID={id}
+            defaultMarks={drySpellMarks}
+            min={2030}
+            max={2080}
+            defaultValue={[2030]}
+            steps={100}
+            included={false}
+          />
+        );
       default:
         return null;
     }

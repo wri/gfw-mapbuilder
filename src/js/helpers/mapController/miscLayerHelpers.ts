@@ -1,6 +1,6 @@
 //Helper for determining layer opacity that we start with. Depending on the URL hash, resources file and API response those can be diffent
-import { LayerInfo } from '../../../../src/js/helpers/shareFunctionality';
-import { LayerProps } from '../../../js/store/mapview/types';
+import { LayerInfo } from '../shareFunctionality';
+import { LayerProps } from '../../store/mapview/types';
 import store from '../../store';
 import {
   CustomLayerConfig,
@@ -310,7 +310,7 @@ export async function getRemoteAndServiceLayers(): Promise<any> {
       .catch(error => console.error(error));
   }
 
-  function fetchFlaghshipLayer(item): Promise<any> {
+  function fetchFlagshipLayer(item): Promise<any> {
     const baseURL = `https://api.resourcewatch.org/v1/layer/${item.uuid}`;
     const baseMetadataURL = 'https://api.resourcewatch.org/v1/gfw-metadata/'; //append metadata id to the url to retrieve it, attributes.applicationConfig.metadata
     return fetch(baseURL)
@@ -401,6 +401,10 @@ export async function getRemoteAndServiceLayers(): Promise<any> {
               order: item.order,
               layerGroupId: item.layerGroupId
             };
+            if (layer.dataset.includes('dry_spells')) {
+              newItem.layer.url =
+                'https://tiles.globalforestwatch.org/nexgddp_change_dry_spells_2000_2080/v20211015/Change_Num_Dry_Spells_2030/{z}/{x}/{y}.png';
+            }
             return newItem;
           });
       })
@@ -409,7 +413,7 @@ export async function getRemoteAndServiceLayers(): Promise<any> {
 
   const remoteDataLayerRequests = remoteDataLayers.map((item: any) => {
     if (item?.origin === 'gfw-api') {
-      return fetchFlaghshipLayer(item);
+      return fetchFlagshipLayer(item);
     } else if (item?.origin === 'rw-api') {
       return fetchRWLayer(item);
     } else {

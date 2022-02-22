@@ -1688,12 +1688,17 @@ export class MapController {
 
   updateBaseTile(id: string, range: Array<number>): void {
     const [startYear, endYear] = range;
-    const treeCoverLossLayer: any = this._map?.findLayerById(id);
+    const layer: any = this._map?.findLayerById(id);
 
-    if (treeCoverLossLayer) {
-      treeCoverLossLayer.minYear = startYear;
-      treeCoverLossLayer.maxYear = endYear;
-      treeCoverLossLayer.refresh();
+    if (layer) {
+      if (id === 'DRY_SPELLS') {
+        layer.urlTemplate = `https://tiles.globalforestwatch.org/nexgddp_change_dry_spells_2000_2080/v20211015/Change_Num_Dry_Spells_${startYear}/{z}/{x}/{y}.png`;
+        layer.endDate = startYear;
+      } else {
+        layer.minYear = startYear;
+        layer.maxYear = endYear;
+      }
+      layer.refresh();
     }
   }
 
