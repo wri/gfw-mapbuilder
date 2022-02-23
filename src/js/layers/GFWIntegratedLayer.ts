@@ -87,6 +87,7 @@ export const createGFWIntegratedLayer = async () => {
 
     filter: function(data) {
       let count = 0;
+      // loops through all the pixels. They are a flat array of values for [r,g,b,a] sequentially from top left to bottom right. So every four entries forms one pixel.
       for (let i = 0; i < data.length; i += 4) {
         count++;
         // if (count > 0 && count < 100000) {
