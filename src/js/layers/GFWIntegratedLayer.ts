@@ -4,34 +4,34 @@ import { loadModules } from 'esri-loader';
 import { floor } from 'lodash-es';
 
 // Modify the JS Date object
-Date.prototype.getJulian = function() {
-  // Convert date into moment Object
-  const date = moment(this);
-  // Get the year
-  const year = date.year();
-  // Create a moment object of the beginning of the year
-  const startOfYear = moment(`${year}/01/01`, 'YYYY/MM/DD');
-  // Find number of days passed
-  const daysPassed = date.diff(startOfYear, 'days');
-  // Append leading zeros if needed
-  let daysPassedFormatted = daysPassed.toString();
-  if (daysPassedFormatted.length < 3) {
-    while (daysPassedFormatted.length < 3) {
-      daysPassedFormatted = `0${daysPassedFormatted}`;
-    }
-  }
-  // Return the correct Julian
-  return `${date.format('YY')}${daysPassedFormatted}`;
-};
+// Date.prototype.getJulian = function() {
+//   // Convert date into moment Object
+//   const date = moment(this);
+//   // Get the year
+//   const year = date.year();
+//   // Create a moment object of the beginning of the year
+//   const startOfYear = moment(`${year}/01/01`, 'YYYY/MM/DD');
+//   // Find number of days passed
+//   const daysPassed = date.diff(startOfYear, 'days');
+//   // Append leading zeros if needed
+//   let daysPassedFormatted = daysPassed.toString();
+//   if (daysPassedFormatted.length < 3) {
+//     while (daysPassedFormatted.length < 3) {
+//       daysPassedFormatted = `0${daysPassedFormatted}`;
+//     }
+//   }
+//   // Return the correct Julian
+//   return `${date.format('YY')}${daysPassedFormatted}`;
+// };
 
 export const createGFWIntegratedLayer = async () => {
   const [esriRequest, BaseTileLayer] = await loadModules(['esri/request', 'esri/layers/BaseTileLayer']);
   return BaseTileLayer.createSubclass({
-    properties: {
-      julianFrom: '10000',
-      julianTo: new Date().getJulian(),
-      confirmed: false
-    },
+    // properties: {
+    //   julianFrom: '10000',
+    //   julianTo: new Date().getJulian(),
+    //   confirmed: false
+    // },
 
     getTileUrl: function(level, row, column) {
       return this.urlTemplate
@@ -43,7 +43,8 @@ export const createGFWIntegratedLayer = async () => {
     fetchTile: function(level, row, column) {
       // call getTileUrl() method to construct the URL to tiles
       // for a given level, row and col provided by the LayerView
-      const url = this.getTileUrl(level, row, column);
+      const url = this.getTileUrl(3, 3, 3);
+      console.log(url);
       // request for tiles based on the generated url
       // set allowImageDataAccess to true to allow
       // cross-domain access to create WebGL textures for 3D.
@@ -57,6 +58,7 @@ export const createGFWIntegratedLayer = async () => {
             // when esri request resolves successfully
             // get the image from the response
             const image = response.data;
+            console.log(image);
             const width = this.tileInfo.size[0];
             const height = this.tileInfo.size[0];
 
@@ -74,7 +76,8 @@ export const createGFWIntegratedLayer = async () => {
             imageObject.onload = () => {
               context.drawImage(imageObject, 0, 0, width, height);
               const imageData = context.getImageData(0, 0, width, height);
-              imageData.data.set(this.filter(imageData.data));
+              console.log(imageData);
+              // imageData.data.set(this.filter(imageData.data));
               context.putImageData(imageData, 0, 0);
               resolve(canvas);
             };
@@ -92,15 +95,15 @@ export const createGFWIntegratedLayer = async () => {
         count++;
         // if (count > 0 && count < 100000) {
         // Decode the rgba/pixel so I can filter on confidence and date ranges
-        const slice = [data[i], data[i + 1], data[i + 2]];
+        const slice = [data[i], data[i + 1], data[i + 2], data[i + 3]];
         const values = this.decodeDate(slice);
-        // if (data[i] > 0) {
-
-        data[i + 3] = values.intensity;
-        // data[i] = 220; // R
-        data[i + 1] = 102; // G
-        data[i + 2] = 153; // B
-        // }
+        if (data[i + 1] > 0) {
+          console.log(slice);
+          data[i + 3] = values.intensity;
+          data[i] = 220; // R
+          data[i + 1] = 102; // G
+          data[i + 2] = 153; // B
+        }
         // }
       }
       return data;
@@ -109,9 +112,7 @@ export const createGFWIntegratedLayer = async () => {
       // find the total days of the pixel by
       // multiplying the red band by 255 and adding
       // the green band to that
-      if (pixel[0] > 0) {
-        console.log('hit');
-      }
+
       const total_days = pixel[0] * 255 + pixel[1];
       // take the total days value and divide by 365 to
       // get the year_offset. Add 15 to this (i.e 0 + 15 = 2015)

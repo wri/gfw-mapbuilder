@@ -151,9 +151,6 @@ export const createGlad = async () => {
       // multiplying the red band by 255 and adding
       // the green band to that
       const total_days = pixel[0] * 255 + pixel[1];
-      if (total_days > 300) {
-        console.log(total_days);
-      }
       // take the total days value and divide by 365 to
       // get the year_offset. Add 15 to this (i.e 0 + 15 = 2015)
       // or 1 + 15 = 2016
