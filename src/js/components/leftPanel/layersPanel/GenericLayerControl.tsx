@@ -600,7 +600,8 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
         {layer?.visible && returnTimeSlider(props.id)}
         {layer?.visible && densityPicker && <CanopyDensityPicker />}
         {layer?.visible && layer.id === 'TREE_COVER_HEIGHT' && <TreeHeightPicker />}
-        {layer?.visible && layer.id === 'WIND_SPEED' && <WindSpeedPicker />}
+        {/*@TODO make this active when windspeed potential urls are available*/}
+        {/*{layer?.visible && layer.id === 'WIND_SPEED' && <WindSpeedPicker />}*/}
         {layer?.visible && layer.versions && (
           <LayerVersionPicker layerInfo={layer} selectedLanguage={selectedLanguage} />
         )}
