@@ -511,30 +511,30 @@ export const windSpeedConfig = {
     displayLabel: ['Displaying wind speed potential at', 'meters']
   },
   az: {
-    displayLabel: ['Displaying Tree cover height with', 'canopy height']
+    displayLabel: ['Displaying wind speed potential at', 'meters']
   },
   nl: {
-    displayLabel: ['Displaying Tree cover height with', 'canopy height']
+    displayLabel: ['Displaying wind speed potential at', 'meters']
   },
   hy: {
-    displayLabel: ['Displaying Tree cover height with է ', 'canopy height']
+    displayLabel: ['Displaying wind speed potential at', 'meters']
   },
   ka: {
-    displayLabel: ['Displaying Tree cover height with', 'canopy height']
+    displayLabel: ['Displaying wind speed potential at', 'meters']
   },
   fr: {
-    displayLabel: ['Displaying Tree cover height with', 'canopy height']
+    displayLabel: ['Displaying wind speed potential at', 'meters']
   },
   es: {
-    displayLabel: ['Displaying Tree cover height with', 'canopy height']
+    displayLabel: ['Displaying wind speed potential at', 'meters']
   },
   pt: {
-    displayLabel: ['Displaying Tree cover height with', 'canopy height']
+    displayLabel: ['Displaying wind speed potential at', 'meters']
   },
   id: {
-    displayLabel: ['Displaying Tree cover height with', 'canopy height']
+    displayLabel: ['Displaying wind speed potential at', 'meters']
   },
   zh: {
-    displayLabel: ['Displaying Tree cover height with', 'canopy height']
+    displayLabel: ['Displaying wind speed potential at', 'meters']
   }
 };
