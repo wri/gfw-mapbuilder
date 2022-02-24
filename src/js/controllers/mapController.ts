@@ -902,14 +902,18 @@ export class MapController {
     }
     if (layer) {
       const visibility = !layer.visible;
+      console.log(layer);
+
       if (visibility) {
         //sync parent layer with sublayer
         if (layer.parent && layer.parent.type === 'map-image') {
           layer.parent.visible = visibility;
         }
       }
+
       //1. update the map
       layer.visible = visibility;
+
       //2. Update redux
       const { mapviewState } = store.getState();
       const newLayersArray = mapviewState.allAvailableLayers.map(l => {
@@ -922,6 +926,17 @@ export class MapController {
           return l;
         }
       });
+      const webTileLayerVisible = newLayersArray
+        .filter((data: any) => data.type === 'webtiled')
+        .map((layer: any) => layer.visible);
+      if (layer.visible === false) {
+        if (!webTileLayerVisible.includes(true)) {
+          this.setWebmapOriginalBasemap('webmap_original');
+        }
+      }
+      if (layer.type === 'web-tile' && layer.visible === true) {
+        this.setActiveBasemap('hybrid');
+      }
       store.dispatch(allAvailableLayers(newLayersArray));
     }
   }
