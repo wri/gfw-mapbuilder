@@ -902,8 +902,6 @@ export class MapController {
     }
     if (layer) {
       const visibility = !layer.visible;
-      console.log(layer);
-
       if (visibility) {
         //sync parent layer with sublayer
         if (layer.parent && layer.parent.type === 'map-image') {
