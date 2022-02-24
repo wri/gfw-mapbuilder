@@ -109,7 +109,6 @@ const App = (props: AppSettings | any): JSX.Element => {
 
               //check if user has completed their profile
               getUserData(data.id, userToken).then(dataRes => {
-                console.log('userData', dataRes);
                 if (dataRes?.error) {
                   //handle error
                   console.log('Err:', dataRes.errorMsg);
