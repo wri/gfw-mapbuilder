@@ -142,13 +142,13 @@ export default {
           origin: 'rw-api',
           opacity: 1,
           sublabel: {
-            en: '(1 km, global,DTU/World Bank Group/ESMAP)',
-            es: '(1 km, global,DTU/World Bank Group/ESMAP)',
-            fr: '(1 km, global,DTU/World Bank Group/ESMAP)',
-            id: '(1 km, global,DTU/World Bank Group/ESMAP)',
-            ka: '(1 km, global,DTU/World Bank Group/ESMAP)',
-            pt: '(1 km, global,DTU/World Bank Group/ESMAP)',
-            zh: '(1 km, global,DTU/World Bank Group/ESMAP)'
+            en: '(1 km, global, DTU/World Bank Group/ESMAP)',
+            es: '(1 km, global, DTU/World Bank Group/ESMAP)',
+            fr: '(1 km, global, DTU/World Bank Group/ESMAP)',
+            id: '(1 km, global, DTU/World Bank Group/ESMAP)',
+            ka: '(1 km, global, DTU/World Bank Group/ESMAP)',
+            pt: '(1 km, global, DTU/World Bank Group/ESMAP)',
+            zh: '(1 km, global, DTU/World Bank Group/ESMAP)'
           }
         }
       ]
