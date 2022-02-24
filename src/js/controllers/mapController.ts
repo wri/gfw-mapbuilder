@@ -38,7 +38,7 @@ import {
   setGladEnd,
   setAnalysisFeatureList
 } from '../store/appState/actions';
-import { LayerProps, LayerFeatureResult, FeatureResult, LayerTypes } from '../../js/store/mapview/types';
+import { LayerProps, LayerFeatureResult, FeatureResult } from '../../js/store/mapview/types';
 import { OptionType } from '../types/measureWidget';
 import { queryLayersForFeatures } from '../helpers/dataPanel/DataPanel';
 import { setNewGraphic } from '../helpers/MapGraphics';
