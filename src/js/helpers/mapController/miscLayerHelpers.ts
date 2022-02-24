@@ -388,7 +388,7 @@ export async function getRemoteAndServiceLayers(): Promise<any> {
                 url: layer.assets.find(a => a[0] === 'Raster tile cache')[1],
                 type: 'webtiled',
                 label: { en: layer.metadata.title },
-                sublabel: layer.metadata.subtile,
+                sublabel: item.dataLayer.sublabel,
                 layerGroupId: item.layerGroupId,
                 group: item.layerGroupId,
                 metadata: {
