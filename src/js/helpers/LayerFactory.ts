@@ -86,6 +86,7 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
         esriLayer.renderingRule = colorRF;
       }
       if (layerConfig.id === 'AG_BIOMASS') {
+        esriLayer.opacity = layerConfig.opacity.combined;
         //biomass layer expects object id that maps to canopy density values
         esriLayer.mosaicRule = new MosaicRule({
           where: `OBJECTID = ${appState.leftPanel.density}`
@@ -167,6 +168,13 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
         urlTemplate: layerConfig.url,
         opacity: layerConfig.opacity.combined
       });
+      if (
+        layerConfig.id === 'LAND_COVER' ||
+        layerConfig.id === 'PRIMARY_FORESTS' ||
+        layerConfig.id === 'CARBON_EMISSIONS'
+      ) {
+        esriLayer.opacity = layerConfig.opacity.combined;
+      }
       break;
     case 'imagery':
       const imageConstructor = await createGain();
@@ -226,10 +234,12 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
           opacity: layerConfig.opacity
         });
       }
+      if (layerConfig.id === 'IFL') {
+        esriLayer.opacity = layerConfig.opacity.combined;
+      }
       break;
     default:
       break;
   }
-
   return esriLayer;
 }

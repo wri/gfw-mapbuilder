@@ -1,15 +1,11 @@
 import { loadModules } from 'esri-loader';
 
 import { mapController } from '../../js/controllers/mapController';
-import {
-  getCustomSymbol,
-  getPointSymbol
-} from '../../js/helpers/generateSymbol';
+import { getCustomSymbol, getPointSymbol } from '../../js/helpers/generateSymbol';
 import { FeatureResult } from '../../js/store/mapview/types';
+import store from '../store';
 
-const setSymbol = (
-  symbolType: string
-): Promise<__esri.SimpleFillSymbol | __esri.SimpleMarkerSymbol> => {
+const setSymbol = (symbolType: string): Promise<__esri.SimpleFillSymbol | __esri.SimpleMarkerSymbol> => {
   switch (symbolType) {
     case 'polygon':
       return getCustomSymbol();
@@ -21,14 +17,8 @@ const setSymbol = (
   }
 };
 
-const setGeometry = async (
-  symbolType: string,
-  geometry: __esri.Geometry
-): Promise<any> => {
-  const [Point, Polygon] = await loadModules([
-    'esri/geometry/Point',
-    'esri/geometry/Polygon'
-  ]);
+const setGeometry = async (symbolType: string, geometry: __esri.Geometry): Promise<any> => {
+  const [Point, Polygon] = await loadModules(['esri/geometry/Point', 'esri/geometry/Polygon']);
   switch (symbolType) {
     case 'polygon':
       return new Polygon(geometry);
@@ -41,12 +31,8 @@ const setGeometry = async (
 };
 
 //Helper for Report graphics in order to add POINT to the map
-export async function addPointGraphic(
-  map: __esri.Map,
-  feature: any
-): Promise<void> {
-  const [Map, GraphicsLayer, Graphic, Point] = await loadModules([
-    'esri/Map',
+export async function addPointGraphic(map: __esri.Map, feature: any): Promise<void> {
+  const [GraphicsLayer, Graphic, Point] = await loadModules([
     'esri/layers/GraphicsLayer',
     'esri/Graphic',
     'esri/geometry/Point'
@@ -84,12 +70,111 @@ interface GraphicConfig {
   isUploadFile: boolean;
 }
 
-export async function setNewGraphic({
-  map,
-  mapview,
-  allFeatures,
-  isUploadFile
-}: GraphicConfig): Promise<void> {
+export function clearGraphics() {
+  if (!mapController._map) return;
+  const graphicsLayer = mapController._map.findLayerById('active-feature-layer') as __esri.GraphicsLayer;
+  if (graphicsLayer) {
+    graphicsLayer.removeAll();
+  }
+}
+
+export function clearUserGraphics() {
+  if (!mapController._map) return;
+  const graphicsLayer = mapController._map.findLayerById('user_features') as __esri.GraphicsLayer;
+  if (graphicsLayer) {
+    graphicsLayer.removeAll();
+  }
+}
+
+export async function removeIntersectingGraphic() {
+  const graphicsLayer = mapController._map?.findLayerById('overlap-feature-layer') as __esri.GraphicsLayer;
+  if (graphicsLayer) {
+    graphicsLayer.removeAll();
+  }
+}
+export async function clearMultiPolygonGraphic() {
+  const analysisFeatureList = store.getState().appState.analysisFeatureList;
+  if (!analysisFeatureList[1]) {
+    const graphicsLayer = mapController._map?.layers.find((layer: any) =>
+      layer.id.includes('multi_poly_graphics')
+    ) as __esri.GraphicsLayer;
+    if (graphicsLayer) {
+      graphicsLayer.destroy();
+    }
+  }
+}
+export async function clearMultiPolygonLayer() {
+  const graphicsLayer = mapController._map?.layers.find((layer: any) =>
+    layer.id.includes('multi_poly_graphics')
+  ) as __esri.GraphicsLayer;
+  if (graphicsLayer) {
+    graphicsLayer.removeAll();
+  }
+}
+
+export async function deleteMultiPolygonLayer(activeAnalysisFeatures: any) {
+  const graphicsLayer = mapController._map?.findLayerById(activeAnalysisFeatures.featureID) as __esri.GraphicsLayer;
+  if (graphicsLayer) {
+    graphicsLayer.destroy();
+  }
+}
+
+export async function addToMultiPolygonLayer(activeFeature: any) {
+  const [GraphicsLayer, Graphic] = await loadModules(['esri/layers/GraphicsLayer', 'esri/Graphic']);
+  clearMultiPolygonGraphic();
+
+  const graphicsLayer = new GraphicsLayer({
+    id: `multi_poly_graphics-${activeFeature.objectid}`
+  });
+
+  if (!mapController._map) return;
+  mapController._map.add(graphicsLayer);
+
+  const graphic = new Graphic({
+    geometry: activeFeature.geometry,
+    symbol: {
+      type: 'simple-fill',
+      color: [0, 0, 0, 0],
+      outline: {
+        color: 'red',
+        width: 2
+      }
+    }
+  });
+  graphicsLayer.add(graphic);
+}
+
+export async function drawIntersectingGraphic(geometry: __esri.Geometry | __esri.Geometry[]): Promise<void> {
+  const [GraphicsLayer, Graphic] = await loadModules(['esri/layers/GraphicsLayer', 'esri/Graphic']);
+
+  let graphicsLayer = mapController._map?.findLayerById('overlap-feature-layer') as __esri.GraphicsLayer;
+  if (graphicsLayer) {
+    graphicsLayer.removeAll();
+  } else {
+    graphicsLayer = new GraphicsLayer({
+      id: 'overlap-feature-layer'
+    });
+  }
+
+  const overlapGraphic = new Graphic({
+    geometry: geometry,
+    symbol: {
+      type: 'simple-fill',
+      color: [255, 0, 0, 0.5], // red
+      outline: {
+        color: [255, 0, 0, 0.5], // red
+        width: 1
+      }
+    }
+  });
+
+  graphicsLayer.add(overlapGraphic);
+  if (mapController._map) {
+    mapController._map.add(graphicsLayer);
+  }
+}
+
+export async function setNewGraphic({ map, mapview, allFeatures, isUploadFile }: GraphicConfig): Promise<void> {
   const [GraphicsLayer, Graphic, projection] = await loadModules([
     'esri/layers/GraphicsLayer',
     'esri/Graphic',
@@ -109,15 +194,10 @@ export async function setNewGraphic({
 
   if (!isUploadFile) {
     let isPolygon = false;
-    if (
-      allFeatures[0].geometry?.type === 'polygon' ||
-      allFeatures[0].geometry.hasOwnProperty('rings')
-    ) {
+    if (allFeatures[0].geometry?.type === 'polygon' || allFeatures[0].geometry.hasOwnProperty('rings')) {
       isPolygon = true;
     }
-    const symbol = isPolygon
-      ? await setSymbol('polygon')
-      : await setSymbol('point');
+    const symbol = isPolygon ? await setSymbol('polygon') : await setSymbol('point');
 
     const geometry = isPolygon
       ? await setGeometry('polygon', allFeatures[0].geometry)
@@ -136,52 +216,46 @@ export async function setNewGraphic({
 
   if (isUploadFile) {
     projection.load().then(() => {
-      const allGraphics = allFeatures.map(
-        async (feature: FeatureResult, index: number) => {
-          const isPolygon =
-            (feature.geometry as any).rings ||
-            feature.geometry.type === 'polygon';
+      const allGraphics = allFeatures.map(async (feature: FeatureResult, index: number) => {
+        const isPolygon = (feature.geometry as any).rings || feature.geometry.type === 'polygon';
 
-          /**
-           * * NOTE:
-           * * File uploads don't have a geometry.type,
-           * * so we have to check if it has geometry.rings
-           */
+        /**
+         * * NOTE:
+         * * File uploads don't have a geometry.type,
+         * * so we have to check if it has geometry.rings
+         */
 
-          const symbol = isPolygon
-            ? await setSymbol('polygon')
-            : await setSymbol(feature.geometry.type);
+        const symbol = isPolygon ? await setSymbol('polygon') : await setSymbol(feature.geometry.type);
 
-          if (index === 0) {
-            //First feature is "active" by default > change it to appropriate color
-            //@ts-ignore TODO: test this
-            symbol.outline.color = [115, 252, 253];
-          }
-          const geometry = isPolygon
-            ? await setGeometry('polygon', feature.geometry)
-            : await setGeometry(feature.geometry.type, feature.geometry);
-
-          const featureGraphic = new Graphic({
-            geometry: geometry,
-            attributes: feature.attributes,
-            symbol: symbol
-          });
-
-          if (!mapController._mapview) return;
-          const transformation = projection.getTransformation(
-            featureGraphic.geometry.spatialReference,
-            mapController._mapview.spatialReference
-          );
-
-          featureGraphic.geometry = projection.project(
-            featureGraphic.geometry,
-            mapController._mapview.spatialReference,
-            transformation
-          ) as __esri.Geometry;
-
-          return featureGraphic;
+        if (index === 0) {
+          //First feature is "active" by default > change it to appropriate color
+          //@ts-ignore TODO: test this
+          symbol.outline.color = [115, 252, 253];
         }
-      );
+        const geometry = isPolygon
+          ? await setGeometry('polygon', feature.geometry)
+          : await setGeometry(feature.geometry.type, feature.geometry);
+
+        const featureGraphic = new Graphic({
+          geometry: geometry,
+          attributes: feature.attributes,
+          symbol: symbol
+        });
+
+        if (!mapController._mapview) return;
+        const transformation = projection.getTransformation(
+          featureGraphic.geometry.spatialReference,
+          mapController._mapview.spatialReference
+        );
+
+        featureGraphic.geometry = projection.project(
+          featureGraphic.geometry,
+          mapController._mapview.spatialReference,
+          transformation
+        ) as __esri.Geometry;
+
+        return featureGraphic;
+      });
 
       graphicsLayer.graphics.push(...allGraphics);
       mapController.initializeAndSetSketch(graphicsLayer.graphics);

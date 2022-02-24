@@ -1,3 +1,5 @@
+import { LayerFeatureResult } from '../mapview/types';
+
 export interface LeftPanel {
   tabViewVisible: boolean;
   activeTab: string;
@@ -55,9 +57,13 @@ export interface AppState {
   measureContent: MeasureContent;
   hideWidgetActive: boolean;
   isLoggedIn: boolean;
+  isProfileComplete: boolean;
   selectedSearchWidgetLayer: SelectedSearchWidgetLayer;
   renderPopup: boolean;
   areaImages: string[];
+  multiPolygonSelectionMode: boolean;
+  activeMultiInput: number;
+  analysisFeatureList: any[] | LayerFeatureResult[];
 }
 
 //Action names available
@@ -69,6 +75,7 @@ export const SET_LANGUAGE = 'SET_LANGUAGE';
 export const TOGGLE_TABVIEW_PANEL = 'TOGGLE_TABVIEW_PANEL';
 export const SET_OPEN_LAYER_GROUP = 'SET_OPEN_LAYER_GROUP';
 export const SET_LOGGED_IN = 'SET_LOGGED_IN';
+export const SET_IS_PROFILE_COMPLETE = 'SET_IS_PROFILE_COMPLETE';
 export const SET_MEASURE_RESULTS = 'SET_MEASURE_RESULTS';
 export const SET_ACTIVE_MEASURE_BUTTON = 'SET_ACTIVE_MEASURE_BUTTON';
 export const SET_HIDE_WIDGET = 'SET_HIDE_WIDGET';
@@ -88,6 +95,9 @@ export const SET_AREA_IMAGES = 'SET_AREA_IMAGES';
 export const SET_VERSIONED_LAYER = 'SET_VERSIONED_LAYER';
 export const SET_TREE_HEIGHT = 'SET_TREE_HEIGHT';
 export const SET_WIND_SPEED_POTENTIAL = 'SET_WIND_SPEED_POTENTIAL';
+export const SET_MULTI_POLYGON_SELECTION_MODE = 'SET_MULTI_POLYGON_SELECTION_MODE';
+export const SET_ACTIVE_MULTI_INPUT = 'SET_ACTIVE_MULTI_INPUT';
+export const SET_ANALYSIS_FEATURE_LIST = 'SET_ANALYSIS_FEATURE_LIST';
 
 interface SetSelectedSearchWidgetLayer {
   type: typeof SET_SELECTED_SEARCH_WIDGET_LAYER;
@@ -132,6 +142,11 @@ interface RenderGFWDropdownAction {
 interface SetLoggedIn {
   type: typeof SET_LOGGED_IN;
   payload: AppState['isLoggedIn'];
+}
+
+interface SetIsProfileComplete {
+  type: typeof SET_IS_PROFILE_COMPLETE;
+  payload: AppState['isProfileComplete'];
 }
 
 interface SelectActiveTab {
@@ -224,6 +239,21 @@ interface SetVersionedLayer {
   payload: any;
 }
 
+interface SetMultiPolygonSelectionMode {
+  type: typeof SET_MULTI_POLYGON_SELECTION_MODE;
+  payload: boolean;
+}
+
+interface SetActiveMultiInput {
+  type: typeof SET_ACTIVE_MULTI_INPUT;
+  payload: number;
+}
+
+interface SetAnalysisFeatureList {
+  type: typeof SET_ANALYSIS_FEATURE_LIST;
+  payload: any;
+}
+
 export type AppStateTypes =
   | ToggleTabviewPanelAction
   | RenderModalAction
@@ -233,6 +263,7 @@ export type AppStateTypes =
   | SetLanguageAction
   | SetOpenLayerGroup
   | SetLoggedIn
+  | SetIsProfileComplete
   | SetMeasureResults
   | SetActiveMeasureButton
   | SetHideWidget
@@ -251,4 +282,7 @@ export type AppStateTypes =
   | SetAreaImages
   | SetVersionedLayer
   | SetTreeHeight
-  | SetWindSpeedPotential;
+  | SetWindSpeedPotential
+  | SetMultiPolygonSelectionMode
+  | SetActiveMultiInput
+  | SetAnalysisFeatureList;
