@@ -1,10 +1,10 @@
 import * as React from 'react';
 
-import { LayerProps } from '../../../js/store/mapview/types';
+import { LayerProps } from '../../store/mapview/types';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../../js/store';
+import { RootState } from '../../store';
 import { PointItem, BasicItem, PolyFromMapServer, LineItem, GradientItem } from './LegendLabelComponents';
-import { mapController } from '../../../js/controllers/mapController';
+import { mapController } from '../../controllers/mapController';
 
 interface LegendItemProps {
   visibleLayers: LayerProps[];
@@ -128,13 +128,13 @@ function getLegendInfoFromRenderer(layer: LayerProps): any {
         break;
       }
       case 'image':
-        symbolDOMElement = <img style={style} className="legend-symbol" src={symbol.url} />;
+        symbolDOMElement = <img style={style} className="legend-symbol" alt="legend symbol" src={symbol.url} />;
         break;
     }
     if (symbol.type === 'picture-marker') {
       style.width = 12;
       style.height = 12;
-      symbolDOMElement = <img style={style} className="legend-symbol" src={symbol.url} />;
+      symbolDOMElement = <img style={style} className="legend-symbol" alt="legend symbol" src={symbol.url} />;
     }
     return symbolDOMElement;
   }
@@ -212,6 +212,20 @@ function getLegendInfoFromRenderer(layer: LayerProps): any {
 const LegendItems = (props: LegendItemProps): JSX.Element => {
   const { language } = props;
   const timeSlider = useSelector((store: RootState) => store.mapviewState.timeSlider);
+  const windSpeedPotential = useSelector((store: RootState) => store.appState.leftPanel.windSpeedPotential);
+  const getLayerTitle = (title: string, layerID: string) => {
+    let layerTitle = title;
+    if (layerID === 'WIND_SPEED') {
+      layerTitle = `${title} at ${windSpeedPotential}m (m/s)`;
+    } else if (layerID === 'AIR_QUALITY') {
+      layerTitle =
+        'January 13, 2022 - February 12, 2022 Average Tropospheric Nitrogen Dioxide (NO₂) (mol/m², millionths)';
+    } else if (layerID === 'DRY_SPELLS') {
+      const drySpelllayer: any = mapController._map?.findLayerById(layerID);
+      layerTitle = `${drySpelllayer.endDate ? drySpelllayer.endDate : 2030} Projected Change in Dry Spells`;
+    }
+    return layerTitle;
+  };
   const items = props.visibleLayers.map((layer, i) => {
     if (!layer.legendInfo) {
       //No legend Info available, that usually means that we are dealing with FeatureServer layers and need to attempt to create legend symbols manually
@@ -320,9 +334,10 @@ const LegendItems = (props: LegendItemProps): JSX.Element => {
           );
         });
       }
+      const layerTitle = getLayerTitle(title, layer.id);
       return (
         <div className="layer-item" key={layer.id + `${i}`}>
-          <p className="layer-title">{title ? title : layer.title}</p>
+          <p className="layer-title">{title ? layerTitle : layer.title}</p>
           {labelIcons}
         </div>
       );

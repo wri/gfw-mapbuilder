@@ -15,6 +15,7 @@ export interface LeftPanel {
   viirsStart: string;
   viirsEnd: string;
   treeHeight: number;
+  windSpeedPotential: number;
   versionedLayer: {
     [key: string]: string;
   };
@@ -93,6 +94,7 @@ export const SET_RENDER_POPUP = 'SET_RENDER_POPUP';
 export const SET_AREA_IMAGES = 'SET_AREA_IMAGES';
 export const SET_VERSIONED_LAYER = 'SET_VERSIONED_LAYER';
 export const SET_TREE_HEIGHT = 'SET_TREE_HEIGHT';
+export const SET_WIND_SPEED_POTENTIAL = 'SET_WIND_SPEED_POTENTIAL';
 export const SET_MULTI_POLYGON_SELECTION_MODE = 'SET_MULTI_POLYGON_SELECTION_MODE';
 export const SET_ACTIVE_MULTI_INPUT = 'SET_ACTIVE_MULTI_INPUT';
 export const SET_ANALYSIS_FEATURE_LIST = 'SET_ANALYSIS_FEATURE_LIST';
@@ -217,6 +219,11 @@ interface SetTreeHeight {
   payload: AppState['leftPanel']['treeHeight'];
 }
 
+interface SetWindSpeedPotential {
+  type: typeof SET_WIND_SPEED_POTENTIAL;
+  payload: AppState['leftPanel']['windSpeedPotential'];
+}
+
 interface SetRenderPopup {
   type: typeof SET_RENDER_POPUP;
   payload: AppState['renderPopup'];
@@ -274,7 +281,8 @@ export type AppStateTypes =
   | SetRenderPopup
   | SetAreaImages
   | SetVersionedLayer
+  | SetTreeHeight
+  | SetWindSpeedPotential
   | SetMultiPolygonSelectionMode
   | SetActiveMultiInput
-  | SetTreeHeight
   | SetAnalysisFeatureList;

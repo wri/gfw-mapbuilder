@@ -1,14 +1,14 @@
 import { setDefaultOptions, loadModules } from 'esri-loader';
 import { format, subDays, parse } from 'date-fns';
 import { debounce } from 'lodash-es';
-import { getMaxDateForViirsTiles } from '../../js/helpers/viirsLayerUtil';
+import { getMaxDateForViirsTiles } from '../helpers/viirsLayerUtil';
 import { landsatBaselayerURL, WRIBasemapConfig } from '../../../configs/layer-config';
 import { RefObject } from 'react';
 import { densityEnabledLayers } from '../../../configs/layer-config';
 import store from '../store/index';
-import { LayerFactory } from '../../js/helpers/LayerFactory';
-import { setLayerSearchSource } from '../../js/helpers/mapController/searchSources';
-import { getSortedLayers } from '../../js/helpers/mapController/layerSorting';
+import { LayerFactory } from '../helpers/LayerFactory';
+import { setLayerSearchSource } from '../helpers/mapController/searchSources';
+import { getSortedLayers } from '../helpers/mapController/layerSorting';
 import { addPointGraphic, clearGraphics, drawIntersectingGraphic } from '../../js/helpers/MapGraphics';
 import {
   allAvailableLayers,
@@ -21,9 +21,9 @@ import {
   setLayersLoading,
   setUserCoordinates,
   setDocuments
-} from '../../js/store/mapview/actions';
+} from '../store/mapview/actions';
 
-import { setSelectedBasemap } from '../../js/store/mapview/actions';
+import { setSelectedBasemap } from '../store/mapview/actions';
 import {
   renderModal,
   selectActiveTab,
@@ -37,24 +37,24 @@ import {
   setGladStart,
   setGladEnd,
   setAnalysisFeatureList
-} from '../../js/store/appState/actions';
-import { LayerProps, LayerFeatureResult, FeatureResult, LayerTypes } from '../../js/store/mapview/types';
+} from '../store/appState/actions';
+import { LayerProps, LayerFeatureResult, FeatureResult } from '../../js/store/mapview/types';
 import { OptionType } from '../types/measureWidget';
-import { queryLayersForFeatures } from '../../js/helpers/dataPanel/DataPanel';
-import { setNewGraphic } from '../../js/helpers/MapGraphics';
+import { queryLayersForFeatures } from '../helpers/dataPanel/DataPanel';
+import { setNewGraphic } from '../helpers/MapGraphics';
 
 import { MODISLayerIDs } from '../../../configs/modis-viirs';
 import { supportedLayers } from '../../../configs/layer-config';
-import { parseURLandApplyChanges, getLayerInfoFromURL, LayerInfo } from '../../js/helpers/shareFunctionality';
+import { parseURLandApplyChanges, getLayerInfoFromURL, LayerInfo } from '../helpers/shareFunctionality';
 import {
   determineLayerOpacity,
   determineLayerVisibility,
   extractWebmapLayerObjects,
   getRemoteAndServiceLayers
-} from '../../js/helpers/mapController/miscLayerHelpers';
-import { fetchLegendInfo } from '../../js/helpers/legendInfo';
-import { parseExtentConfig } from '../../js/helpers/mapController/configParsing';
-import { overwriteColorTheme } from '../../js/store/appSettings/actions';
+} from '../helpers/mapController/miscLayerHelpers';
+import { fetchLegendInfo } from '../helpers/legendInfo';
+import { parseExtentConfig } from '../helpers/mapController/configParsing';
+import { overwriteColorTheme } from '../store/appSettings/actions';
 
 setDefaultOptions({ css: true, version: '4.19' });
 
@@ -287,7 +287,7 @@ export class MapController {
           //TODO: move this elsewhere
           //Remove those layers that we do not support,
           const allowedRemoteLayersObjects = remoteAndServiceLayersObjects.filter((layerObject: any) => {
-            const layerType = layerObject.dataLayer ? layerObject.layer.type : layerObject.type;
+            const layerType = layerObject?.dataLayer ? layerObject.layer.type : layerObject.type;
             return supportedLayers.includes(layerType);
           });
 
@@ -373,7 +373,7 @@ export class MapController {
                 const id = String(l.sublayerID ? l.sublayerID : l.layerID);
                 return id === String(layerObject.id);
               });
-              layerObject.visible = urlLayer ? true : false;
+              layerObject.visible = !!urlLayer;
             });
 
             //Sync esri map visibility
@@ -915,8 +915,10 @@ export class MapController {
           layer.parent.visible = visibility;
         }
       }
+
       //1. update the map
       layer.visible = visibility;
+
       //2. Update redux
       const { mapviewState } = store.getState();
       const newLayersArray = mapviewState.allAvailableLayers.map(l => {
@@ -929,6 +931,17 @@ export class MapController {
           return l;
         }
       });
+      const webTileLayerVisible = newLayersArray
+        .filter((data: any) => data.type === 'webtiled')
+        .map((layer: any) => layer.visible);
+      if (layer.visible === false) {
+        if (!webTileLayerVisible.includes(true)) {
+          this.setWebmapOriginalBasemap('webmap_original');
+        }
+      }
+      if (layer.type === 'web-tile' && layer.visible === true) {
+        this.setActiveBasemap('hybrid');
+      }
       store.dispatch(allAvailableLayers(newLayersArray));
     }
   }
@@ -1661,7 +1674,7 @@ export class MapController {
     densityEnabledLayers.forEach((layerId: string) => {
       const layer: any = this._map?.findLayerById(layerId);
       if (layer && layer.id !== 'AG_BIOMASS' && layer.urlTemplate) {
-        layer.urlTemplate = layer.urlTemplate.replace(/(tcd_)(?:[^\/]+)/, `tcd_${value}`);
+        layer.urlTemplate = layer.urlTemplate.replace(/(tcd_)(?:[^/]+)/, `tcd_${value}`);
         layer.refresh();
       }
     });
@@ -1704,6 +1717,14 @@ export class MapController {
     if (treeLayer) {
       treeLayer.height = value;
       treeLayer.refresh();
+    }
+  }
+
+  async updateWindSpeedPotentialValue(value: number): Promise<any> {
+    const windSpeedLayerLayer: any = this._map?.findLayerById('WIND_SPEED');
+    if (windSpeedLayerLayer) {
+      windSpeedLayerLayer.height = value;
+      windSpeedLayerLayer.refresh();
     }
   }
 
@@ -1784,12 +1805,17 @@ export class MapController {
 
   updateBaseTile(id: string, range: Array<number>): void {
     const [startYear, endYear] = range;
-    const treeCoverLossLayer: any = this._map?.findLayerById(id);
+    const layer: any = this._map?.findLayerById(id);
 
-    if (treeCoverLossLayer) {
-      treeCoverLossLayer.minYear = startYear;
-      treeCoverLossLayer.maxYear = endYear;
-      treeCoverLossLayer.refresh();
+    if (layer) {
+      if (id === 'DRY_SPELLS') {
+        layer.urlTemplate = `https://tiles.globalforestwatch.org/nexgddp_change_dry_spells_2000_2080/v20211015/Change_Num_Dry_Spells_${startYear}/{z}/{x}/{y}.png`;
+        layer.endDate = startYear;
+      } else {
+        layer.minYear = startYear;
+        layer.maxYear = endYear;
+      }
+      layer.refresh();
     }
   }
 
@@ -1870,11 +1896,7 @@ export class MapController {
           MODISLayerIDs.forEach(({ id }) => {
             const modisLayer = this._map?.findLayerById(id);
             if (modisLayer) {
-              if (modisLayer.id === 'MODIS48') {
-                modisLayer.visible = true;
-              } else {
-                modisLayer.visible = false;
-              }
+              modisLayer.visible = modisLayer.id === 'MODIS48';
             }
           });
         }
@@ -1885,11 +1907,7 @@ export class MapController {
           MODISLayerIDs.forEach(({ id }) => {
             const modisLayer = this._map?.findLayerById(id);
             if (modisLayer) {
-              if (modisLayer.id === 'MODIS72') {
-                modisLayer.visible = true;
-              } else {
-                modisLayer.visible = false;
-              }
+              modisLayer.visible = modisLayer.id === 'MODIS72';
             }
           });
         }
@@ -1900,11 +1918,7 @@ export class MapController {
           MODISLayerIDs.forEach(({ id }) => {
             const modisLayer = this._map?.findLayerById(id);
             if (modisLayer) {
-              if (modisLayer.id === 'MODIS7D') {
-                modisLayer.visible = true;
-              } else {
-                modisLayer.visible = false;
-              }
+              modisLayer.visible = modisLayer.id === 'MODIS7D';
             }
           });
         }

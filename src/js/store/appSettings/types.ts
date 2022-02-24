@@ -21,6 +21,7 @@ export interface AppSettings {
   alternativeLanguageSubtitle: string;
   iso: string;
   hideFooter?: boolean;
+  enabledRWLayers?: string[];
   disabledAnalysisModules?:
     | ['VIIRS_FIRES', 'GLAD_ALERTS', 'TC_LOSS', 'IFL', 'LCC', 'TC_LOSS_TOTAL', 'TC_GAIN_TOTAL']
     | [];

@@ -14,80 +14,6 @@ export const supportedLayers = [
   'Vector.Layer'
 ];
 
-// export const baseMetadataURL = 'https://api.resourcewatch.org/v1/gfw-metadata/'; //append metadata id to the url to retrieve it, attributes.applicationConfig.metadata
-
-//Hard coded layers that will always be added to the application unless opt out option is specified in the config, UUID denotes gfw-api layer ID, this is used to pull in layer from gfw-api that we dont control, layers used in Flagship (globalforestwatch.org) are consumed this way
-export const defaultAPIFlagshipLayers = [
-  {
-    groupId: 'GROUP_LC',
-    id: 'TREE_COVER_HEIGHT',
-    order: 7,
-    type: 'remoteDataLayer',
-    uuid: '9efed1d8-164d-4adb-85a1-e62c6c5c00aa',
-    origin: 'gfw-api',
-    layerType: 'tree-cover-height',
-    opacity: 1,
-    label: {
-      en: 'Tree cover height',
-      es: 'Tree cover height',
-      fr: 'Tree cover height',
-      id: 'Tree cover height',
-      ka: 'Tree cover height',
-      pt: 'Tree cover height',
-      zh: 'Tree cover height'
-    },
-    sublabel: {
-      en: '2019, 30m, global, UMD/NASA GEDI',
-      es: '2019, 30m, global, UMD/NASA GEDI',
-      fr: '2019, 30m, global, UMD/NASA GEDI',
-      id: '2019, 30m, global, UMD/NASA GEDI',
-      ka: '2019, 30m, global, UMD/NASA GEDI',
-      pt: '2019, 30m, global, UMD/NASA GEDI',
-      zh: '2019, 30m, global, UMD/NASA GEDI'
-    },
-    legend: {
-      name: {
-        en: 'Tree cover height',
-        es: 'Tree cover height',
-        fr: 'Tree cover height',
-        id: 'Tree cover height',
-        ka: 'Tree cover height',
-        pt: 'Tree cover height',
-        zh: 'Tree cover height'
-      },
-      type: 'gradient',
-      items: [
-        {
-          color: '#bbffb8',
-          value: '3m',
-          name: {
-            en: '3m',
-            es: '3m',
-            fr: '3m',
-            id: '3m',
-            ka: '3m',
-            pt: '3m',
-            zh: '3m'
-          }
-        },
-        {
-          color: '#045200',
-          value: '30m',
-          name: {
-            en: '30m',
-            es: '30m',
-            fr: '30m',
-            id: '30m',
-            ka: '30m',
-            pt: '30m',
-            zh: '30m'
-          }
-        }
-      ]
-    }
-  }
-];
-
 //Layer controls (IDS)
 export const densityEnabledLayers = ['TREE_COVER_LOSS', 'AG_BIOMASS', 'TREE_COVER'];
 
@@ -104,3 +30,105 @@ export const WRIBasemapConfig = {
 };
 
 export const customBasemapIcon = 'https://my.gfw-mapbuilder.org/img/custom_basemap.png';
+
+//Timeslider objects for tree cover loss and dry spells
+export const defaultMarks: any = {
+  '2000': {
+    label: '2000',
+    style: {}
+  },
+  '2001': {
+    label: '2001',
+    style: { display: 'none' }
+  },
+  '2002': {
+    label: '2002',
+    style: { display: 'none' }
+  },
+  '2003': {
+    label: '2003',
+    style: { display: 'none' }
+  },
+  '2004': {
+    label: '2004',
+    style: { display: 'none' }
+  },
+  '2005': {
+    label: '2005',
+    style: {}
+  },
+  '2006': {
+    label: '2006',
+    style: { display: 'none' }
+  },
+  '2007': {
+    label: '2007',
+    style: { display: 'none' }
+  },
+  '2008': {
+    label: '2008',
+    style: { display: 'none' }
+  },
+  '2009': {
+    label: '2009',
+    style: { display: 'none' }
+  },
+  '2010': {
+    label: '2010',
+    style: {}
+  },
+  '2011': {
+    label: '2011',
+    style: { display: 'none' }
+  },
+  '2012': {
+    label: '2012',
+    style: { display: 'none' }
+  },
+  '2013': {
+    label: '2013',
+    style: { display: 'none' }
+  },
+  '2014': {
+    label: '2014',
+    style: { display: 'none' }
+  },
+  '2015': {
+    label: '2015',
+    style: {}
+  },
+  '2016': {
+    label: '2016',
+    style: { display: 'none' }
+  },
+  '2017': {
+    label: '2017',
+    style: { display: 'none' }
+  },
+  '2018': {
+    label: '2018',
+    style: { display: 'none' }
+  },
+  '2019': {
+    label: '2019',
+    style: { display: 'none' }
+  },
+  '2020': {
+    label: '2020',
+    style: {}
+  }
+};
+export const drySpellMarks = {
+  '2030': {
+    label: '2030',
+    style: {}
+  },
+  '2050': {
+    label: '2050',
+    style: {}
+  },
+  '2080': {
+    label: '2080',
+    style: {}
+  }
+};

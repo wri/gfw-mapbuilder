@@ -1,9 +1,8 @@
 import * as React from 'react';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../../../js/store/index';
-import { mapController } from '../../../../js/controllers/mapController';
+import { RootState } from '../../../store';
+import { mapController } from '../../../controllers/mapController';
 import styled from 'styled-components';
-
 import '../../../../css/layer-toggle-checkbox.scss';
 
 //Dynamic custom theme override using styled-components lib
@@ -25,10 +24,7 @@ interface LayerToggleProps {
 }
 
 const LayerToggleSwitch = (props: LayerToggleProps): React.ReactElement => {
-  const customColorTheme = useSelector(
-    (store: RootState) => store.appSettings.customColorTheme
-  );
-
+  const customColorTheme = useSelector((store: RootState) => store.appSettings.customColorTheme);
   const { layerIsVisible, layerID, sublayer, parentID } = props;
 
   const toggleVisibility = (): void => {
@@ -50,10 +46,7 @@ const LayerToggleSwitch = (props: LayerToggleProps): React.ReactElement => {
           checked={layerIsVisible}
           onChange={(): void => toggleVisibility()}
         />
-        <label
-          className="styled-checkboxlabel"
-          htmlFor={`layer-checkbox-${layerID}`}
-        >
+        <label className="styled-checkboxlabel" htmlFor={`layer-checkbox-${layerID}`}>
           {layerID}
         </label>
       </div>

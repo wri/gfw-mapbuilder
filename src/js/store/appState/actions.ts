@@ -28,6 +28,7 @@ import {
   SET_AREA_IMAGES,
   SET_VERSIONED_LAYER,
   SET_TREE_HEIGHT,
+  SET_WIND_SPEED_POTENTIAL,
   SET_MULTI_POLYGON_SELECTION_MODE,
   SET_ACTIVE_MULTI_INPUT,
   SET_ANALYSIS_FEATURE_LIST
@@ -211,6 +212,13 @@ export function setAreaImages(payload: string) {
 export function setTreeHeight(payload: number) {
   return {
     type: SET_TREE_HEIGHT as typeof SET_TREE_HEIGHT,
+    payload: payload
+  };
+}
+
+export function setWindSpeedPotential(payload: number) {
+  return {
+    type: SET_WIND_SPEED_POTENTIAL as typeof SET_WIND_SPEED_POTENTIAL,
     payload: payload
   };
 }
