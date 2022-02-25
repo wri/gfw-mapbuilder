@@ -269,7 +269,7 @@ export async function getRemoteAndServiceLayers(): Promise<any> {
           legend: layer.legend,
           sublabel: layer.sublabel
         });
-      } else if (layer.type === 'resourcewatch' && appSettings?.enabledRWLayers?.includes(layer.id)) {
+      } else if (layer.type === 'resourcewatch') {
         remoteDataLayers.push({
           order: layer.order,
           layerGroupId: layer.groupId,
