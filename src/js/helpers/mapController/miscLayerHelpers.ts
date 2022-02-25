@@ -1,13 +1,14 @@
 //Helper for determining layer opacity that we start with. Depending on the URL hash, resources file and API response those can be diffent
 import { defaultAPIFlagshipLayers } from '../../../../configs/layer-config';
-import { LayerInfo } from '../../../../src/js/helpers/shareFunctionality';
-import { LayerProps } from '../../../js/store/mapview/types';
+import { LayerInfo } from '../shareFunctionality';
+import { LayerProps } from '../../store/mapview/types';
 import store from '../../store';
 import {
   CustomLayerConfig,
   FlagshipLayerConfig,
   RecentImageryLayerConfig,
-  RemoteApiLayerConfig
+  RemoteApiLayerConfig,
+  RWLayerConfig
 } from '../../types/layersTypes';
 import { fetchLegendInfo } from '../legendInfo';
 
@@ -181,7 +182,13 @@ export async function extractWebmapLayerObjects(esriMap?: __esri.Map): Promise<L
   return mapLayerObjects;
 }
 
-type AllLayersConfig = RemoteApiLayerConfig | RecentImageryLayerConfig | CustomLayerConfig | FlagshipLayerConfig;
+type AllLayersConfig =
+  | RemoteApiLayerConfig
+  | RecentImageryLayerConfig
+  | CustomLayerConfig
+  | FlagshipLayerConfig
+  | RWLayerConfig
+  | any; //TODO fix this any
 export async function getRemoteAndServiceLayers(): Promise<any> {
   const { appSettings } = store.getState();
   const { layerPanel } = appSettings;
@@ -250,6 +257,30 @@ export async function getRemoteAndServiceLayers(): Promise<any> {
           layerGroupId: layer.groupId,
           dataLayer: layer
         });
+      } else if (layer.type === 'flagship') {
+        remoteDataLayers.push({
+          order: layer.order,
+          layerGroupId: layer.groupId,
+          dataLayer: layer,
+          origin: layer.origin,
+          uuid: layer.uuid,
+          label: layer.label,
+          layerType: layer.layerType,
+          id: layer.id,
+          opacity: layer.opacity,
+          legend: layer.legend,
+          sublabel: layer.sublabel
+        });
+      } else if (layer.type === 'resourcewatch') {
+        remoteDataLayers.push({
+          order: layer.order,
+          layerGroupId: layer.groupId,
+          dataLayer: layer,
+          origin: layer.origin,
+          layerType: layer.type,
+          id: layer.id,
+          opacity: layer.opacity
+        });
       } else {
         detailedLayers.push(layer);
       }
@@ -297,7 +328,7 @@ export async function getRemoteAndServiceLayers(): Promise<any> {
       .catch(error => console.error(error));
   }
 
-  function fetchFlaghshipLayer(item): Promise<any> {
+  function fetchFlagshipLayer(item): Promise<any> {
     const baseURL = `https://api.resourcewatch.org/v1/layer/${item.uuid}`;
     const baseMetadataURL = 'https://api.resourcewatch.org/v1/gfw-metadata/'; //append metadata id to the url to retrieve it, attributes.applicationConfig.metadata
     return fetch(baseURL)
@@ -337,9 +368,72 @@ export async function getRemoteAndServiceLayers(): Promise<any> {
     //
   }
 
+  function getLegendConfig(layer, config) {
+    const configObject = {
+      name: { en: layer.metadata.title },
+      type: config.attributes.legendConfig.type
+    };
+
+    const items = config.attributes.legendConfig.items.map(item => {
+      return {
+        color: item.color,
+        id: item.id,
+        name: {
+          en: item.name
+        }
+      };
+    });
+    configObject['items'] = items;
+    return configObject;
+  }
+
+  function fetchRWLayer(item): Promise<any> {
+    return fetch(item.dataLayer.datasetURL)
+      .then(response => response.json())
+      .then(json => json.data)
+      .then(layer => {
+        return fetch(item.dataLayer.datasetLegendConfigURL)
+          .then(response => response.json())
+          .then(json => json.data)
+          .then(config => {
+            item.groupId = item.layerGroupId;
+            const newItem = {
+              dataLayer: item,
+              layer: {
+                id: item.id,
+                opacity: item.opacity,
+                order: item.order,
+                url: layer.assets.find(a => a[0] === 'Raster tile cache')[1],
+                type: 'webtiled',
+                label: { en: layer.metadata.title },
+                sublabel: item.dataLayer.sublabel,
+                layerGroupId: item.layerGroupId,
+                group: item.layerGroupId,
+                metadata: {
+                  metadata: layer.metadata,
+                  legendConfig: getLegendConfig(layer, config)
+                }
+              },
+              dashboardURL: null,
+              group: item.layerGroupId,
+              order: item.order,
+              layerGroupId: item.layerGroupId
+            };
+            if (layer.dataset.includes('dry_spells')) {
+              newItem.layer.url =
+                'https://tiles.globalforestwatch.org/nexgddp_change_dry_spells_2000_2080/v20211015/Change_Num_Dry_Spells_2030/{z}/{x}/{y}.png';
+            }
+            return newItem;
+          });
+      })
+      .catch(error => console.error(error));
+  }
+
   const remoteDataLayerRequests = remoteDataLayers.map((item: any) => {
     if (item?.origin === 'gfw-api') {
-      return fetchFlaghshipLayer(item);
+      return fetchFlagshipLayer(item);
+    } else if (item?.origin === 'rw-api') {
+      return fetchRWLayer(item);
     } else {
       return fetchRemoteApiLayer(item);
     }

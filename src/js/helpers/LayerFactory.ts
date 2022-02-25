@@ -1,11 +1,11 @@
 /* eslint-disable no-case-declarations */
 import { loadModules } from 'esri-loader';
-import { createTCL } from '../layers/TreeCoverLossLayer';
-import { createTreeCover } from '../layers/TreeCoverLayer';
-import { createGlad } from '../layers/GladLayer';
-import { createHeight } from '../layers/TreeCoverHeightLayer';
-import { createGain } from '../layers/TreeCoverGainLayer';
-import { markValueMap } from '../components/mapWidgets/widgetContent/CanopyDensityContent';
+import { createTCL } from '../../js/layers/TreeCoverLossLayer';
+import { createTreeCover } from '../../js/layers/TreeCoverLayer';
+import { createGlad } from '../../js/layers/GladLayer';
+import { createHeight } from '../../js/layers/TreeCoverHeightLayer';
+import { createGain } from '../../js/layers/TreeCoverGainLayer';
+import { markValueMap } from '../../js/components/mapWidgets/widgetContent/CanopyDensityContent';
 import { treeMosaicDensityValue } from '../components/mapWidgets/widgetContent/TreeMosaicContent';
 import store from '../../js/store/index';
 import { LayerProps } from '../store/mapview/types';
@@ -88,6 +88,7 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
         esriLayer.renderingRule = colorRF;
       }
       if (layerConfig.id === 'AG_BIOMASS') {
+        esriLayer.opacity = layerConfig.opacity.combined;
         //biomass layer expects object id that maps to canopy density values
         esriLayer.mosaicRule = new MosaicRule({
           where: `OBJECTID = ${appState.leftPanel.density}`
@@ -180,8 +181,15 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
         title: layerConfig.title,
         visible: layerConfig.visible,
         urlTemplate: layerConfig.url,
-        opacity: layerConfig.opacity
+        opacity: layerConfig.opacity.combined
       });
+      if (
+        layerConfig.id === 'LAND_COVER' ||
+        layerConfig.id === 'PRIMARY_FORESTS' ||
+        layerConfig.id === 'CARBON_EMISSIONS'
+      ) {
+        esriLayer.opacity = layerConfig.opacity.combined;
+      }
       break;
     case 'imagery':
       const imageConstructor = await createGain();
@@ -241,10 +249,12 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
           opacity: layerConfig.opacity
         });
       }
+      if (layerConfig.id === 'IFL') {
+        esriLayer.opacity = layerConfig.opacity.combined;
+      }
       break;
     default:
       break;
   }
-
   return esriLayer;
 }

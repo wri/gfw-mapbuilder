@@ -15,9 +15,6 @@ export const supportedLayers = [
   'Vector.Layer'
 ];
 
-// export const baseMetadataURL = 'https://api.resourcewatch.org/v1/gfw-metadata/'; //append metadata id to the url to retrieve it, attributes.applicationConfig.metadata
-
-//Hard coded layers that will always be added to the application unless opt out option is specified in the config, UUID denotes gfw-api layer ID, this is used to pull in layer from gfw-api that we dont control, layers used in Flagship (globalforestwatch.org) are consumed this way
 export const defaultAPIFlagshipLayers = [
   {
     groupId: 'GROUP_LC',
@@ -86,6 +83,66 @@ export const defaultAPIFlagshipLayers = [
         }
       ]
     }
+  },
+  {
+    groupId: 'GROUP_CLIMATE',
+    id: 'DRY_SPELLS',
+    datasetURL: 'https://data-api.globalforestwatch.org/dataset/nexgddp_change_dry_spells_2000_2080/latest',
+    datasetLegendConfigURL:
+      'https://api.resourcewatch.org/v1/layer/7c497efb-1671-49bf-87a2-3c96ddb9ff88?filterIncludesByEnv=true&includes=vocabulary,metadata&env=production',
+    type: 'resourcewatch',
+    order: 3,
+    origin: 'rw-api',
+    opacity: 1,
+    sublabel: {
+      en: '(0.25°, global, 2000-2080, WRI/Vizzuality)',
+      es: '(0.25°, global, 2000-2080, WRI/Vizzuality)',
+      fr: '(0.25°, global, 2000-2080, WRI/Vizzuality)',
+      id: '(0.25°, global, 2000-2080, WRI/Vizzuality)',
+      ka: '(0.25°, global, 2000-2080, WRI/Vizzuality)',
+      pt: '(0.25°, global, 2000-2080, WRI/Vizzuality)',
+      zh: '(0.25°, global, 2000-2080, WRI/Vizzuality)'
+    }
+  },
+  {
+    groupId: 'GROUP_CLIMATE',
+    id: 'AIR_QUALITY',
+    datasetURL: 'https://data-api.globalforestwatch.org/dataset/tropomi_avg_nitrogen_dioxide_last_month/latest',
+    datasetLegendConfigURL:
+      'https://api.resourcewatch.org/v1/layer/61989f1f-65af-40e7-bf45-49b27eb2b9da?filterIncludesByEnv=true&includes=vocabulary,metadata&env=production',
+    type: 'resourcewatch',
+    order: 4,
+    origin: 'rw-api',
+    opacity: 1,
+    sublabel: {
+      en: '(3.5 x 5.5 km, global, 2018, TROPOMI/ESA/KNMI/DLR/SRON/BIRA-IASB/STFC/MPIC/S&T/Uni-Bremen)',
+      es: '(3.5 x 5.5 km, global, 2018, TROPOMI/ESA/KNMI/DLR/SRON/BIRA-IASB/STFC/MPIC/S&T/Uni-Bremen)',
+      fr: '(3.5 x 5.5 km, global, 2018, TROPOMI/ESA/KNMI/DLR/SRON/BIRA-IASB/STFC/MPIC/S&T/Uni-Bremen)',
+      id: '(3.5 x 5.5 km, global, 2018, TROPOMI/ESA/KNMI/DLR/SRON/BIRA-IASB/STFC/MPIC/S&T/Uni-Bremen)',
+      ka: '(3.5 x 5.5 km, global, 2018, TROPOMI/ESA/KNMI/DLR/SRON/BIRA-IASB/STFC/MPIC/S&T/Uni-Bremen)',
+      pt: '(3.5 x 5.5 km, global, 2018, TROPOMI/ESA/KNMI/DLR/SRON/BIRA-IASB/STFC/MPIC/S&T/Uni-Bremen)',
+      zh: '(3.5 x 5.5 km, global, 2018, TROPOMI/ESA/KNMI/DLR/SRON/BIRA-IASB/STFC/MPIC/S&T/Uni-Bremen)'
+    }
+  },
+  {
+    groupId: 'GROUP_CLIMATE',
+    id: 'WIND_SPEED',
+    datasetURL: 'https://data-api.globalforestwatch.org/dataset/dtu_wb_wind_speed_potential_2001_2010/latest',
+    datasetLegendConfigURL:
+      'https://api.resourcewatch.org/v1/layer/1ae1f58f-569d-4a21-9835-3e9bdd93759b?filterIncludesByEnv=true&includes=vocabulary,metadata&env=production',
+    type: 'resourcewatch',
+    order: 4,
+    origin: 'rw-api',
+    opacity: 1,
+    sublabel: {
+      en: '(1 km, global, DTU/World Bank Group/ESMAP)',
+      es: '(1 km, global, DTU/World Bank Group/ESMAP)',
+      fr: '(1 km, global, DTU/World Bank Group/ESMAP)',
+      id: '(1 km, global, DTU/World Bank Group/ESMAP)',
+      ka: '(1 km, global, DTU/World Bank Group/ESMAP)',
+      pt: '(1 km, global, DTU/World Bank Group/ESMAP)',
+      zh: '(1 km, global, DTU/World Bank Group/ESMAP)'
+    }
   }
 ];
 
@@ -105,3 +162,105 @@ export const WRIBasemapConfig = {
 };
 
 export const customBasemapIcon = 'https://my.gfw-mapbuilder.org/img/custom_basemap.png';
+
+//Timeslider objects for tree cover loss and dry spells
+export const defaultMarks: any = {
+  '2000': {
+    label: '2000',
+    style: {}
+  },
+  '2001': {
+    label: '2001',
+    style: { display: 'none' }
+  },
+  '2002': {
+    label: '2002',
+    style: { display: 'none' }
+  },
+  '2003': {
+    label: '2003',
+    style: { display: 'none' }
+  },
+  '2004': {
+    label: '2004',
+    style: { display: 'none' }
+  },
+  '2005': {
+    label: '2005',
+    style: {}
+  },
+  '2006': {
+    label: '2006',
+    style: { display: 'none' }
+  },
+  '2007': {
+    label: '2007',
+    style: { display: 'none' }
+  },
+  '2008': {
+    label: '2008',
+    style: { display: 'none' }
+  },
+  '2009': {
+    label: '2009',
+    style: { display: 'none' }
+  },
+  '2010': {
+    label: '2010',
+    style: {}
+  },
+  '2011': {
+    label: '2011',
+    style: { display: 'none' }
+  },
+  '2012': {
+    label: '2012',
+    style: { display: 'none' }
+  },
+  '2013': {
+    label: '2013',
+    style: { display: 'none' }
+  },
+  '2014': {
+    label: '2014',
+    style: { display: 'none' }
+  },
+  '2015': {
+    label: '2015',
+    style: {}
+  },
+  '2016': {
+    label: '2016',
+    style: { display: 'none' }
+  },
+  '2017': {
+    label: '2017',
+    style: { display: 'none' }
+  },
+  '2018': {
+    label: '2018',
+    style: { display: 'none' }
+  },
+  '2019': {
+    label: '2019',
+    style: { display: 'none' }
+  },
+  '2020': {
+    label: '2020',
+    style: {}
+  }
+};
+export const drySpellMarks = {
+  '2030': {
+    label: '2030',
+    style: {}
+  },
+  '2050': {
+    label: '2050',
+    style: {}
+  },
+  '2080': {
+    label: '2080',
+    style: {}
+  }
+};

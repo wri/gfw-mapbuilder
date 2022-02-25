@@ -48,7 +48,6 @@ export function allRequiredFieldsPresent(userData: UserData): Array<string> {
       missingKeys.push(requiredKey);
     }
   }
-  console.log(missingKeys);
   return missingKeys;
 }
 

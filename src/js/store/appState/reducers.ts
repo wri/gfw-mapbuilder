@@ -30,6 +30,7 @@ import {
   SET_AREA_IMAGES,
   SET_VERSIONED_LAYER,
   SET_TREE_HEIGHT,
+  SET_WIND_SPEED_POTENTIAL,
   SET_MULTI_POLYGON_SELECTION_MODE,
   SET_ACTIVE_MULTI_INPUT,
   SET_ANALYSIS_FEATURE_LIST
@@ -62,7 +63,8 @@ const initialState: AppState = {
     viirsEnd: format(new Date(Date.now()), 'yyyy-MM-dd'),
     viirsStart: format(subYears(new Date(Date.now()), 1), 'yyyy-MM-dd'),
     versionedLayer: {},
-    treeHeight: 3
+    treeHeight: 3,
+    windSpeedPotential: 50
   },
   measureContent: {
     activeButton: '',
@@ -234,6 +236,14 @@ export function appStateReducer(state = initialState, action: AppStateTypes): Ap
         leftPanel: {
           ...state.leftPanel,
           treeHeight: action.payload
+        }
+      };
+    case SET_WIND_SPEED_POTENTIAL:
+      return {
+        ...state,
+        leftPanel: {
+          ...state.leftPanel,
+          windSpeedPotential: action.payload
         }
       };
     case SET_VERSIONED_LAYER: {
