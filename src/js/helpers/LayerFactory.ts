@@ -1,14 +1,16 @@
 /* eslint-disable no-case-declarations */
 import { loadModules } from 'esri-loader';
-import { createTCL } from '../layers/TreeCoverLossLayer';
-import { createTreeCover } from '../layers/TreeCoverLayer';
-import { createGlad } from '../layers/GladLayer';
-import { createHeight } from '../layers/TreeCoverHeightLayer';
-import { createGain } from '../layers/TreeCoverGainLayer';
-import { markValueMap } from '../components/mapWidgets/widgetContent/CanopyDensityContent';
+import { createTCL } from '../../js/layers/TreeCoverLossLayer';
+import { createTreeCover } from '../../js/layers/TreeCoverLayer';
+import { createGlad } from '../../js/layers/GladLayer';
+import { createHeight } from '../../js/layers/TreeCoverHeightLayer';
+import { createGain } from '../../js/layers/TreeCoverGainLayer';
+import { markValueMap } from '../../js/components/mapWidgets/widgetContent/CanopyDensityContent';
+import { treeMosaicDensityValue } from '../components/mapWidgets/widgetContent/TreeMosaicContent';
 import store from '../../js/store/index';
 import { LayerProps } from '../store/mapview/types';
 import viirsLayer from './viirsLayerUtil';
+import { createTreeMosaicCover } from '../layers/TreeMosaicLayer';
 
 interface LayerOptions {
   id: string;
@@ -121,6 +123,19 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
       esriLayer.maxYear = yearRange[1];
       esriLayer.refresh();
       break;
+    case 'tree-mosaic':
+      const treeDensityValue = treeMosaicDensityValue[appState.leftPanel.density];
+      layerConfig.url = layerConfig.url.replace(/(tcd_)(?:[^/]+)/, `tcd_${treeDensityValue}`);
+      const constructor = await createTreeMosaicCover();
+      const treeMosaicLayer = new constructor({
+        id: layerConfig.id,
+        title: layerConfig.title,
+        visible: layerConfig.visible,
+        urlTemplate: layerConfig.url,
+        view: mapView
+      });
+      esriLayer = treeMosaicLayer;
+      break;
     case 'gain':
       const gainConstructor = await createGain();
       const gainLayer = new gainConstructor({
@@ -198,9 +213,9 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
       });
       esriLayer = gladLayer;
       esriLayer.confirmed = appState.leftPanel.gladConfirmed;
-      // @ts-ignore
+      //@ts-ignore
       const startDate: any = new Date(appState.leftPanel.gladStart).getJulian() as any;
-      // @ts-ignore
+      //@ts-ignore
       const endDate = new Date(appState.leftPanel.gladEnd).getJulian();
       esriLayer.julianFrom = startDate;
       esriLayer.julianTo = endDate;

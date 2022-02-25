@@ -19,10 +19,10 @@ import {
   setGladStart,
   setGladEnd,
   setGladConfirmed
-} from '../../../store/appState/actions';
-import { RootState } from '../../../store';
-import { LayerProps } from '../../../store/mapview/types';
-import { mapController } from '../../../controllers/mapController';
+} from '../../../../js/store/appState/actions';
+import { RootState } from '../../../../js/store';
+import { LayerProps } from '../../../../js/store/mapview/types';
+import { mapController } from '../../../../js/controllers/mapController';
 import { defaultMarks, densityEnabledLayers, drySpellMarks } from '../../../../../configs/layer-config';
 import { InfoIcon } from '../../../../images/infoIcon';
 import { DashboardIcon } from '../../../../images/dashboardIcon';
@@ -222,26 +222,26 @@ const LayerFilterSelection = (props: LayerInfo): JSX.Element => {
   }, [selectedLanguage]);
 
   const customStyles = {
-    clearIndicator: (provided: any, state: any) => ({
+    clearIndicator: (provided: any) => ({
       ...provided,
       cursor: 'pointer',
       padding: '4px'
     }),
-    dropdownIndicator: (provided: any, state: any) => ({
+    dropdownIndicator: (provided: any) => ({
       ...provided,
       cursor: 'pointer',
       padding: '4px'
     }),
-    container: (provided: any, state: any) => ({
+    container: (provided: any) => ({
       ...provided,
       fontSize: '12px',
       width: '200px'
     }),
-    indicatorsContainer: (provided: any, state: any) => ({
+    indicatorsContainer: (provided: any) => ({
       ...provided,
       padding: '4px'
     }),
-    control: (provided: any, state: any) => ({
+    control: (provided: any) => ({
       ...provided,
       minHeight: '20px'
     })
@@ -498,7 +498,7 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
           </div>
         </div>
         {layer?.visible && returnTimeSlider(props.id)}
-        {layer?.visible && densityPicker && <CanopyDensityPicker />}
+        {layer?.visible && densityPicker && <CanopyDensityPicker type={layer.id} />}
         {layer?.visible && layer.id === 'TREE_COVER_HEIGHT' && <TreeHeightPicker />}
         {/*@TODO make this active when windspeed potential urls are available*/}
         {/*{layer?.visible && layer.id === 'WIND_SPEED' && <WindSpeedPicker />}*/}

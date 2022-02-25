@@ -223,6 +223,7 @@ export async function getRemoteAndServiceLayers(): Promise<any> {
     VIIRS_ACTIVE_FIRES: 'viirsFires',
     MODIS_ACTIVE_FIRES: 'modisFires',
     LAND_COVER: 'landCover',
+    TREES_MOSAIC_LANDSCAPES: 'treeMosaicLandscapes',
     AG_BIOMASS: 'aboveGroundBiomass',
     IFL: 'intactForests',
     PRIMARY_FORESTS: 'primaryForests',

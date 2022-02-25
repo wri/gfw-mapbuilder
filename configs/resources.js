@@ -197,6 +197,12 @@ export default {
           order: 6,
           type: 'remoteDataLayer',
           uuid: '2569adca-ef87-42c4-a153-57c5e8ba0ef7'
+        },
+        {
+          id: 'TREES_MOSAIC_LANDSCAPES',
+          order: 7,
+          type: 'remoteDataLayer',
+          uuid: '9e0c1e1e-a0a3-457f-a373-4104820f7a50'
         }
       ]
     },
