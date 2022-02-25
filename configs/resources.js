@@ -55,7 +55,6 @@ export default {
     en: 'Carto Layers',
     fr: 'Carto Layers'
   },
-  // enabledRWLayers: ['DRY_SPELLS', 'AIR_QUALITY', 'WIND_SPEED'], //'DRY_SPELLS', 'AIR_QUALITY', 'WIND_SPEED'
   disabledAnalysisModules: [], //'VIIRS_FIRES', 'GLAD_ALERTS', 'TC_LOSS', 'IFL', 'LCC'
   layerPanel: {
     GROUP_WEBMAP: {
