@@ -4,7 +4,6 @@ import { createTCL } from '../../js/layers/TreeCoverLossLayer';
 import { createTreeCover } from '../../js/layers/TreeCoverLayer';
 import { createGlad } from '../../js/layers/GladLayer';
 import { createHeight } from '../../js/layers/TreeCoverHeightLayer';
-import { createPrimary } from '../../js/layers/PrimaryForestLayer';
 import { createGain } from '../../js/layers/TreeCoverGainLayer';
 import { markValueMap } from '../../js/components/mapWidgets/widgetContent/CanopyDensityContent';
 import store from '../../js/store/index';
@@ -107,7 +106,7 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
       break;
     case 'loss':
       const densityValue = markValueMap[appState.leftPanel.density];
-      layerConfig.url = layerConfig.url.replace(/(tcd_)(?:[^\/]+)/, `tcd_${densityValue}`);
+      layerConfig.url = layerConfig.url.replace(/(tcd_)(?:[^/]+)/, `tcd_${densityValue}`);
       const yearRange = mapviewState.timeSlider;
       const tclConstructor = await createTCL();
       const tclLayer = new tclConstructor({
@@ -201,24 +200,6 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
       break;
     case 'integrated-alert-layer':
       const integratedAlertConstructor = await createGFWIntegratedLayer();
-      const integratedAlertLayer = new integratedAlertConstructor({
-        id: layerConfig.id,
-        title: layerConfig.title,
-        visible: layerConfig.visible,
-        urlTemplate: layerConfig.url,
-        view: mapView
-      });
-      console.log(integratedAlertLayer);
-      esriLayer = integratedAlertLayer;
-      esriLayer.confirmed = appState.leftPanel.gladConfirmed;
-      //@ts-ignore
-      const integratedAlertStartDate: any = new Date(appState.leftPanel.gladStart).getJulian() as any;
-      console.log(appState.leftPanel.gladStart);
-      console.log(appState.leftPanel.gladEnd);
-      //@ts-ignore
-      const integratedAlertEndDate = new Date(appState.leftPanel.gladEnd).getJulian();
-      esriLayer.julianFrom = integratedAlertStartDate;
-      esriLayer.julianTo = integratedAlertEndDate;
       break;
     case 'MASK':
       const { appSettings } = store.getState();
