@@ -34,8 +34,7 @@ const load = (url, canvas, callback) => {
 
 export const createGFWIntegratedLayer = async () => {
   const [esriRequest, BaseTileLayer] = await loadModules(['esri/request', 'esri/layers/BaseTileLayer']);
-  // const canvas = document.createElement('canvas');
-  // load('https://tiles.globalforestwatch.org/gfw_integrated_alerts/latest/default/3/3/3.png', canvas);
+
   const integratedLayer = BaseTileLayer.createSubclass({
     getTileUrl: function(level, row, column) {
       return this.urlTemplate
@@ -45,22 +44,17 @@ export const createGFWIntegratedLayer = async () => {
     },
 
     fetchTile: function(level, row, column) {
-      // call getTileUrl() method to construct the URL to tiles
-      // for a given level, row and col provided by the LayerView
       const url = this.getTileUrl(3, 3, 3);
       console.log(url);
-      // request for tiles based on the generated url
-      // set allowImageDataAccess to true to allow
-      // cross-domain access to create WebGL textures for 3D.
+
       return esriRequest(url, {
         responseType: 'image',
         allowImageDataAccess: true
       }).then(
         function(response) {
-          // We use a promise because we can't return an empty canvas before the image data has loaded, been filtered, and properly colored
+          const canvas = document.createElement('canvas');
+          load(response.url, canvas);
           const promise = new Promise(resolve => {
-            // when esri request resolves successfully
-            // get the image from the response
             console.log(response);
 
             const image = response.data;
