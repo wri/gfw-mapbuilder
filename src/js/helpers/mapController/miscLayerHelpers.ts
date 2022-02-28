@@ -1,5 +1,5 @@
 //Helper for determining layer opacity that we start with. Depending on the URL hash, resources file and API response those can be diffent
-import { defaultAPIFlagshipLayers } from '../../../../configs/layer-config';
+import { defaultAPIFlagshipLayers, rDataLayer } from '../../../../configs/layer-config';
 import { LayerInfo } from '../shareFunctionality';
 import { LayerProps } from '../../store/mapview/types';
 import store from '../../store';
@@ -241,8 +241,7 @@ export async function getRemoteAndServiceLayers(): Promise<any> {
       //Check for settings on that layer
       const settingID = configLayerFilters[l.id];
       //If no setting exist for the layer, we default to showing the layer
-      const settingValue = appSettings.hasOwnProperty(settingID) ? appSettings[settingID] : true;
-      return settingValue;
+      return appSettings.hasOwnProperty(settingID) ? appSettings[settingID] : true;
     } else {
       return true;
     }
@@ -285,6 +284,14 @@ export async function getRemoteAndServiceLayers(): Promise<any> {
         detailedLayers.push(layer);
       }
     });
+
+  rDataLayer.forEach((layer: AllLayersConfig): void => {
+    remoteDataLayers.push({
+      order: layer.order,
+      layerGroupId: layer.groupId,
+      dataLayer: layer
+    });
+  });
 
   defaultAPIFlagshipLayers.forEach(layer => {
     remoteDataLayers.push({
@@ -340,7 +347,7 @@ export async function getRemoteAndServiceLayers(): Promise<any> {
           .then(metadata => {
             const intConfig = layer.attributes?.interactionConfig;
             item.groupId = item.layerGroupId;
-            const newItem = {
+            return {
               dataLayer: item,
               layer: {
                 id: item.id,
@@ -361,7 +368,6 @@ export async function getRemoteAndServiceLayers(): Promise<any> {
               order: item.order,
               layerGroupId: item.layerGroupId
             };
-            return newItem;
           });
       })
       .catch(error => console.error(error));
@@ -374,7 +380,7 @@ export async function getRemoteAndServiceLayers(): Promise<any> {
       type: config.attributes.legendConfig.type
     };
 
-    const items = config.attributes.legendConfig.items.map(item => {
+    configObject['items'] = config.attributes.legendConfig.items.map(item => {
       return {
         color: item.color,
         id: item.id,
@@ -383,7 +389,6 @@ export async function getRemoteAndServiceLayers(): Promise<any> {
         }
       };
     });
-    configObject['items'] = items;
     return configObject;
   }
 
