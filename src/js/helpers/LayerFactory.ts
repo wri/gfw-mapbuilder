@@ -200,21 +200,21 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
       break;
     case 'integrated-alert-layer':
       const integratedAlertConstructor = await createGFWIntegratedLayer();
-      // const integratedAlertLayer = new integratedAlertConstructor({
-      //   id: layerConfig.id,
-      //   title: layerConfig.title,
-      //   visible: layerConfig.visible,
-      //   urlTemplate: layerConfig.url,
-      //   view: mapView
-      // });
-      // esriLayer = integratedAlertLayer;
-      // esriLayer.confirmed = appState.leftPanel.gladConfirmed;
-      // //@ts-ignore
-      // const startDate: any = new Date(appState.leftPanel.gladStart).getJulian() as any;
-      // //@ts-ignore
-      // const endDate = new Date(appState.leftPanel.gladEnd).getJulian();
-      // esriLayer.julianFrom = startDate;
-      // esriLayer.julianTo = endDate;
+      const integratedAlertLayer = new integratedAlertConstructor({
+        id: layerConfig.id,
+        title: layerConfig.title,
+        visible: layerConfig.visible,
+        urlTemplate: layerConfig.url,
+        view: mapView
+      });
+      esriLayer = integratedAlertLayer;
+      esriLayer.confirmed = appState.leftPanel.gladConfirmed;
+      //@ts-ignore
+      const integratedAlertStartDate: any = new Date(appState.leftPanel.gladStart).getJulian() as any;
+      //@ts-ignore
+      const integratedAlertEndDate = new Date(appState.leftPanel.gladEnd).getJulian();
+      esriLayer.julianFrom = integratedAlertStartDate;
+      esriLayer.julianTo = integratedAlertEndDate;
       break;
     case 'MASK':
       const { appSettings } = store.getState();
