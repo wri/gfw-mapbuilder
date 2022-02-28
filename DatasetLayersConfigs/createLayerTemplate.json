@@ -1,5 +1,0 @@
-{
-  "name": "GFW Integrated Deforestation Alert",
-  "description": "Combines the GLAD-S, GLAD and RADD alert layers",
-  "application": ["forest-atlas"]
-}

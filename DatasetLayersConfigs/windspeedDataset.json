@@ -1,9 +1,0 @@
-{
-  "name": "Wind Speed Potential at 50m (m/s)",
-  "subtitle": "Average wind speed at 50 meters of altitude in meters per second (m/s).",
-
-  "application": ["rw"],
-  "connectorType": "wms",
-  "provider": "wms",
-  "connectorUrl": "https://s3.amazonaws.com/wri-api-backups/resourcewatch/prod/thumbnails/1ae1f58f-569d-4a21-9835-3e9bdd93759b-1643919928442.png"
-}
