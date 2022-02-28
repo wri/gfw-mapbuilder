@@ -1,6 +1,6 @@
 //Helper for determining layer opacity that we start with. Depending on the URL hash, resources file and API response those can be diffent
-import { LayerInfo } from '../../../../src/js/helpers/shareFunctionality';
-import { LayerProps } from '../../../js/store/mapview/types';
+import { LayerInfo } from '../shareFunctionality';
+import { LayerProps } from '../../store/mapview/types';
 import store from '../../store';
 import {
   CustomLayerConfig,
@@ -401,7 +401,6 @@ export async function getRemoteAndServiceLayers(): Promise<any> {
               order: item.order,
               layerGroupId: item.layerGroupId
             };
-            console.log(newItem);
             return newItem;
           });
       })

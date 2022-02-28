@@ -1,13 +1,13 @@
 /* eslint-disable no-case-declarations */
 import { loadModules } from 'esri-loader';
-import { createTCL } from '../../js/layers/TreeCoverLossLayer';
-import { createTreeCover } from '../../js/layers/TreeCoverLayer';
-import { createGlad } from '../../js/layers/GladLayer';
-import { createHeight } from '../../js/layers/TreeCoverHeightLayer';
-import { createGain } from '../../js/layers/TreeCoverGainLayer';
-import { markValueMap } from '../../js/components/mapWidgets/widgetContent/CanopyDensityContent';
+import { createTCL } from '../layers/TreeCoverLossLayer';
+import { createTreeCover } from '../layers/TreeCoverLayer';
+import { createGlad } from '../layers/GladLayer';
+import { createHeight } from '../layers/TreeCoverHeightLayer';
+import { createGain } from '../layers/TreeCoverGainLayer';
+import { markValueMap } from '../components/mapWidgets/widgetContent/CanopyDensityContent';
 import store from '../../js/store/index';
-import { LayerProps } from '../../js/store/mapview/types';
+import { LayerProps } from '../store/mapview/types';
 import viirsLayer from './viirsLayerUtil';
 import { createGFWIntegratedLayer } from '../layers/GFWIntegratedLayer';
 
@@ -200,6 +200,21 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
       break;
     case 'integrated-alert-layer':
       const integratedAlertConstructor = await createGFWIntegratedLayer();
+      // const integratedAlertLayer = new integratedAlertConstructor({
+      //   id: layerConfig.id,
+      //   title: layerConfig.title,
+      //   visible: layerConfig.visible,
+      //   urlTemplate: layerConfig.url,
+      //   view: mapView
+      // });
+      // esriLayer = integratedAlertLayer;
+      // esriLayer.confirmed = appState.leftPanel.gladConfirmed;
+      // //@ts-ignore
+      // const startDate: any = new Date(appState.leftPanel.gladStart).getJulian() as any;
+      // //@ts-ignore
+      // const endDate = new Date(appState.leftPanel.gladEnd).getJulian();
+      // esriLayer.julianFrom = startDate;
+      // esriLayer.julianTo = endDate;
       break;
     case 'MASK':
       const { appSettings } = store.getState();

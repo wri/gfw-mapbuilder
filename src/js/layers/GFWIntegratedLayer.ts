@@ -1,37 +1,37 @@
 //@ts-nocheck
-const filter = (data: any) => {
-  console.log(data);
-  for (let i = 0; i < data.length; i += 4) {
-    const slice = [data[i], data[i + 1], data[i + 2], data[i + 3]];
+import PNG from 'png-ts';
 
-    if (data[i + 1] > 0) {
-      console.log(slice);
-      //   // data[i + 3] = values.intensity;
-      //   data[i] = 220; // R
-      //   data[i + 1] = 102; // G
-      //   data[i + 2] = 153; // B
+const processData = data => {
+  for (let i = 0; i < data.length; i += 4) {
+    const slice_dark = [data[i], data[i + 1], data[i + 2], data[i + 3]];
+    if (data[i] > 0) {
+      console.log(slice_dark);
     }
   }
 };
-export const createGFWIntegratedLayer = async () => {
-  const width = 256;
-  const height = 256;
 
-  // create a canvas with 2D rendering context
-  const canvas = document.createElement('canvas');
-  const context = canvas.getContext('2d', {
-    alpha: true
-  });
-  canvas.width = width;
-  canvas.height = height;
-
-  const img = new Image();
-  img.crossOrigin = 'Anonymous';
-  img.src = 'https://tiles.globalforestwatch.org/gfw_integrated_alerts/latest/default/3/3/3.png';
-  img.onload = () => {
-    context.drawImage(img, 0, 0, 256, 256);
-    const imageData = context.getImageData(0, 0, 256, 256).data;
-    console.log(imageData);
-    filter(imageData);
+const load = (url, canvas, callback) => {
+  if (typeof canvas === 'function') {
+    callback = canvas;
+  }
+  const xhr = new XMLHttpRequest();
+  xhr.open('GET', url, true);
+  xhr.responseType = 'arraybuffer';
+  xhr.onload = () => {
+    const data = new Uint8Array(xhr.response || xhr.mozResponseArrayBuffer);
+    const png = new PNG(data);
+    const pngImage = PNG.load(png.data, canvas);
+    const pixels = pngImage.decodePixels();
+    processData(pixels);
+    if (typeof (canvas && canvas.getContext) === 'function') {
+      render(canvas);
+    }
+    return typeof callback === 'function' ? callback(png) : undefined;
   };
+  return xhr.send(null);
+};
+
+export const createGFWIntegratedLayer = async () => {
+  const canvas = document.createElement('canvas');
+  load('https://tiles.globalforestwatch.org/gfw_integrated_alerts/latest/default/3/3/3.png', canvas);
 };
