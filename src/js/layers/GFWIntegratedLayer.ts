@@ -39,12 +39,57 @@ export const createGFWIntegratedLayer = async () => {
     processData: function(data) {
       for (let i = 0; i < data.length; i += 4) {
         const slice = [data[i], data[i + 1], data[i + 2], data[i + 3]];
-        data[i + 3] = 92;
-        data[i]; // R
-        data[i + 1]; // G
-        data[i + 2]; // B
+        const values = this.decodeDate(slice);
+        if (values.date > 20033) {
+          data[i + 3] = values.intensity;
+
+          if (values.confidence === 0) {
+            data[i] = 236; // R
+            data[i + 1] = 164; // G
+            data[i + 2] = 194; // B
+          }
+          if (values.confidence === 1) {
+            data[i] = 220; // R
+            data[i + 1] = 101; // G
+            data[i + 2] = 152; // B
+          }
+          if (values.confidence === 2) {
+            data[i] = 201; // R
+            data[i + 1] = 42; // G
+            data[i + 2] = 108; // B
+          }
+        }
+        if (data[i] > 0) {
+          // console.log(values);
+          if (values.confidence === 2) {
+            console.log('hit');
+          }
+        }
       }
       return data;
+    },
+    decodeDate: function(pixel) {
+      const total_days = pixel[0] * 255 + pixel[1];
+      const year_int = parseInt(total_days / 365) + 15;
+      const year = parseInt(year_int * 1000);
+      const julian_day = total_days % 365;
+      const date = year + julian_day;
+      const band3_str = this.pad(pixel[2].toString());
+      const confidence = parseInt(band3_str[0]) - 1;
+      const intensity_raw = parseInt(band3_str.slice(1, 3));
+      let intensity = intensity_raw * 50;
+      if (intensity > 255) {
+        intensity = 255;
+      }
+      return {
+        confidence: confidence,
+        intensity: intensity,
+        date: date
+      };
+    },
+    pad: function(num) {
+      const str = '00' + num;
+      return str.slice(str.length - 3);
     }
   });
 };
