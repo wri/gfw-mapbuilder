@@ -24,7 +24,7 @@ const DocumentsTabView = (props: Props): JSX.Element => {
   let documentTitle = '';
   if (activeFeatures && activeFeatures.length) {
     documentTitle =
-      activeFeatures[activeFeatureIndex[0]].sublayerTitle || activeFeatures[activeFeatureIndex[0]].layerTitle;
+      activeFeatures[activeFeatureIndex[0]]?.sublayerTitle || activeFeatures[activeFeatureIndex[0]]?.layerTitle;
   }
 
   const documentsList: React.ReactFragment[] | undefined = documents?.map((attachment: Attachment, key: number) => {

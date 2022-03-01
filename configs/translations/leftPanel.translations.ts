@@ -440,6 +440,38 @@ export const dataTabConfig = {
     instructionsList: ['使用图层键来打开图层', '在地图上选择图形']
   }
 };
+export const treesMosaicConfig = {
+  en: {
+    displayLabel: ['Displaying Trees in Mosaic Landscapes with', 'tree cover.']
+  },
+  az: {
+    displayLabel: ['Göstərir', 'örtük sıxlığı.']
+  },
+  nl: {
+    displayLabel: ['Weergeven', 'luifeldichtheid.']
+  },
+  hy: {
+    displayLabel: ['Ցուցադրվում է ', 'Սաղարթի խտություն ']
+  },
+  ka: {
+    displayLabel: ['წარმოდგენილია', 'ვარჯის სიმჭიდროვე.']
+  },
+  fr: {
+    displayLabel: ['Affichage', 'Densité de la canopée.']
+  },
+  es: {
+    displayLabel: ['Mostrando', 'densidad de follaje.']
+  },
+  pt: {
+    displayLabel: ['Exibindo', 'densidade de dossel']
+  },
+  id: {
+    displayLabel: ['Displaying Trees in Mosaic Landscapes with', 'tree cover.']
+  },
+  zh: {
+    displayLabel: ['显示中', '林冠覆盖密度']
+  }
+};
 
 export const canopyDensityPickerConfig = {
   en: {
@@ -504,5 +536,37 @@ export const treeHeightConfig = {
   },
   zh: {
     displayLabel: ['Displaying Tree cover height with', 'canopy height']
+  }
+};
+export const windSpeedConfig = {
+  en: {
+    displayLabel: ['Displaying wind speed potential at', 'meters']
+  },
+  az: {
+    displayLabel: ['Displaying wind speed potential at', 'meters']
+  },
+  nl: {
+    displayLabel: ['Displaying wind speed potential at', 'meters']
+  },
+  hy: {
+    displayLabel: ['Displaying wind speed potential at', 'meters']
+  },
+  ka: {
+    displayLabel: ['Displaying wind speed potential at', 'meters']
+  },
+  fr: {
+    displayLabel: ['Displaying wind speed potential at', 'meters']
+  },
+  es: {
+    displayLabel: ['Displaying wind speed potential at', 'meters']
+  },
+  pt: {
+    displayLabel: ['Displaying wind speed potential at', 'meters']
+  },
+  id: {
+    displayLabel: ['Displaying wind speed potential at', 'meters']
+  },
+  zh: {
+    displayLabel: ['Displaying wind speed potential at', 'meters']
   }
 };

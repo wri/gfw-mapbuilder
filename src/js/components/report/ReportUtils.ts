@@ -30,13 +30,11 @@ export function extractLayerInfo(
     activeLayerInfo.sublayer = true;
     const parentLayer: any = map.findLayerById(activeLayer.parentID);
     activeLayerInfo.parentLayer = parentLayer;
-    activeLayerInfo.sub = parentLayer.allSublayers.items.find(
-      (s: any) => s.id === Number(activeLayer.id)
-    );
+    activeLayerInfo.sub = parentLayer.allSublayers.items.find((s: any) => s.id === Number(activeLayer.id));
     activeLayerInfo.type = parentLayer.type;
   } else {
     activeLayerInfo.sublayer = false;
-    const layer: any = map.findLayerById(activeLayer.id);
+    const layer: any = map.findLayerById(activeLayer?.id);
     activeLayerInfo.parentLayer = layer;
     activeLayerInfo.type = layer.type;
   }
@@ -48,9 +46,7 @@ export function extractLayerInfo(
     (activeLayer.origin === 'service' && activeLayer.type === 'dynamic')
   ) {
     const firesMapServerLayer: any = activeLayerInfo.parentLayer;
-    const firesSublayer = firesMapServerLayer.findSublayerById(
-      Number(sublayerIDFromURL)
-    );
+    const firesSublayer = firesMapServerLayer.findSublayerById(Number(sublayerIDFromURL));
     activeLayerInfo.sub = firesSublayer;
     activeLayerInfo.sublayer = true;
     activeLayer.url = firesSublayer.url;

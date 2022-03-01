@@ -3,106 +3,25 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { createSliderWithTooltip, Range } from 'rc-slider';
 
-import { mapController } from '../../../js/controllers/mapController';
+import { mapController } from '../../controllers/mapController';
 
-import { setTimeSlider } from '../../../js/store/mapview/actions';
+import { setTimeSlider } from '../../store/mapview/actions';
 
-import { RootState } from '../../../js/store/index';
+import { RootState } from '../../store';
 
 const SliderWithTooltip = createSliderWithTooltip(Range);
 
 interface TimeSliderProps {
   layerID: string;
+  defaultMarks: any;
+  min: number;
+  max?: number;
+  defaultValue: Array<number> | any;
+  steps?: number | null;
+  included: boolean;
 }
 
 const TimeSlider = (props: TimeSliderProps): JSX.Element => {
-  const defaultMarks = {
-    '2000': {
-      label: '2000',
-      style: {}
-    },
-    '2001': {
-      label: '2001',
-      style: { display: 'none' }
-    },
-    '2002': {
-      label: '2002',
-      style: { display: 'none' }
-    },
-    '2003': {
-      label: '2003',
-      style: { display: 'none' }
-    },
-    '2004': {
-      label: '2004',
-      style: { display: 'none' }
-    },
-    '2005': {
-      label: '2005',
-      style: {}
-    },
-    '2006': {
-      label: '2006',
-      style: { display: 'none' }
-    },
-    '2007': {
-      label: '2007',
-      style: { display: 'none' }
-    },
-    '2008': {
-      label: '2008',
-      style: { display: 'none' }
-    },
-    '2009': {
-      label: '2009',
-      style: { display: 'none' }
-    },
-    '2010': {
-      label: '2010',
-      style: {}
-    },
-    '2011': {
-      label: '2011',
-      style: { display: 'none' }
-    },
-    '2012': {
-      label: '2012',
-      style: { display: 'none' }
-    },
-    '2013': {
-      label: '2013',
-      style: { display: 'none' }
-    },
-    '2014': {
-      label: '2014',
-      style: { display: 'none' }
-    },
-    '2015': {
-      label: '2015',
-      style: {}
-    },
-    '2016': {
-      label: '2016',
-      style: { display: 'none' }
-    },
-    '2017': {
-      label: '2017',
-      style: { display: 'none' }
-    },
-    '2018': {
-      label: '2018',
-      style: { display: 'none' }
-    },
-    '2019': {
-      label: '2019',
-      style: { display: 'none' }
-    },
-    '2020': {
-      label: '2020',
-      style: {}
-    }
-  };
-
   const dispatch = useDispatch();
   const timeSliderRef = useRef();
   const { layerID } = props;
@@ -111,7 +30,7 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
   const [playButton, setPlayButton] = useState(true);
   const [startTimeSlider, setStartTimeSlider] = useState(false);
   const customColorTheme = useSelector((store: RootState) => store.appSettings.customColorTheme);
-  const [marks, setMarks] = useState(defaultMarks);
+  const [marks, setMarks] = useState(props.defaultMarks);
 
   useEffect(() => {
     const updateMarks = (newMaxYear: number): void => {
@@ -157,7 +76,7 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
       (timeSliderRef as any).current = setInterval(playSequence, 1000);
     } else if (startTimeSlider && range[1] === timeSlider[1]) {
       setRange([range[0], range[0]]);
-      setMarks(defaultMarks);
+      setMarks(props.defaultMarks);
     }
 
     return (): any => {
@@ -181,7 +100,7 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
     } else {
       // * NOTE: stops & resets time slider
       setRange(timeSlider);
-      setMarks(defaultMarks);
+      setMarks(props.defaultMarks);
       mapController.updateBaseTile(layerID, timeSlider);
       setStartTimeSlider(false);
       setPlayButton(true);
@@ -192,16 +111,20 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
   return (
     <div className="time-slider-container">
       {playButton ? (
-        <button style={{ color: customColorTheme }} onClick={(): void => playOrPauseTimeSlider(true)}>
+        <button
+          style={props.steps === 1 ? { color: customColorTheme } : { color: customColorTheme, visibility: 'hidden' }}
+          onClick={(): void => playOrPauseTimeSlider(true)}
+        >
           &#9658;
         </button>
       ) : (
         <button onClick={(): void => playOrPauseTimeSlider(false)}>&#10074;&#10074;</button>
       )}
+
       <SliderWithTooltip
-        min={2000}
-        max={2020}
-        defaultValue={[2000, 2020]}
+        min={props.min}
+        max={props.max}
+        defaultValue={props.defaultValue}
         value={range}
         allowCross={false}
         tipFormatter={(val: number): number => val}
@@ -213,6 +136,10 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
         activeDotStyle={{
           border: `1px solid ${customColorTheme}`
         }}
+        included={props.included}
+        // @ts-ignore
+        // This disables marks in between date ranges
+        step={props.steps}
         trackStyle={[{ backgroundColor: customColorTheme }]}
         className={playButton ? '' : 'playing'}
         onChange={(value: Array<number>): void => setSelectedRange(value)}

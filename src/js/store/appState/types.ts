@@ -1,3 +1,5 @@
+import { LayerFeatureResult } from '../mapview/types';
+
 export interface LeftPanel {
   tabViewVisible: boolean;
   activeTab: string;
@@ -13,6 +15,7 @@ export interface LeftPanel {
   viirsStart: string;
   viirsEnd: string;
   treeHeight: number;
+  windSpeedPotential: number;
   versionedLayer: {
     [key: string]: string;
   };
@@ -54,9 +57,13 @@ export interface AppState {
   measureContent: MeasureContent;
   hideWidgetActive: boolean;
   isLoggedIn: boolean;
+  isProfileComplete: boolean;
   selectedSearchWidgetLayer: SelectedSearchWidgetLayer;
   renderPopup: boolean;
   areaImages: string[];
+  multiPolygonSelectionMode: boolean;
+  activeMultiInput: number;
+  analysisFeatureList: any[] | LayerFeatureResult[];
 }
 
 //Action names available
@@ -68,14 +75,14 @@ export const SET_LANGUAGE = 'SET_LANGUAGE';
 export const TOGGLE_TABVIEW_PANEL = 'TOGGLE_TABVIEW_PANEL';
 export const SET_OPEN_LAYER_GROUP = 'SET_OPEN_LAYER_GROUP';
 export const SET_LOGGED_IN = 'SET_LOGGED_IN';
+export const SET_IS_PROFILE_COMPLETE = 'SET_IS_PROFILE_COMPLETE';
 export const SET_MEASURE_RESULTS = 'SET_MEASURE_RESULTS';
 export const SET_ACTIVE_MEASURE_BUTTON = 'SET_ACTIVE_MEASURE_BUTTON';
 export const SET_HIDE_WIDGET = 'SET_HIDE_WIDGET';
 export const SET_CANOPY_DENSITY = 'SET_CANOPY_DENSITY';
 export const SET_ANALYSIS_DATE = 'SET_ANALYSIS_DATE';
 export const SET_ANALYSIS_YEAR_RANGE = 'SET_ANALYSIS_YEAR_RANGE';
-export const SET_SELECTED_SEARCH_WIDGET_LAYER =
-  'SET_SELECTED_SEARCH_WIDGET_LAYER';
+export const SET_SELECTED_SEARCH_WIDGET_LAYER = 'SET_SELECTED_SEARCH_WIDGET_LAYER';
 export const SET_GLAD_CONFIRMED = 'SET_GLAD_CONFIRMED';
 export const SET_GLAD_START = 'SET_GLAD_START';
 export const SET_GLAD_END = 'SET_GLAD_END';
@@ -87,6 +94,10 @@ export const SET_RENDER_POPUP = 'SET_RENDER_POPUP';
 export const SET_AREA_IMAGES = 'SET_AREA_IMAGES';
 export const SET_VERSIONED_LAYER = 'SET_VERSIONED_LAYER';
 export const SET_TREE_HEIGHT = 'SET_TREE_HEIGHT';
+export const SET_WIND_SPEED_POTENTIAL = 'SET_WIND_SPEED_POTENTIAL';
+export const SET_MULTI_POLYGON_SELECTION_MODE = 'SET_MULTI_POLYGON_SELECTION_MODE';
+export const SET_ACTIVE_MULTI_INPUT = 'SET_ACTIVE_MULTI_INPUT';
+export const SET_ANALYSIS_FEATURE_LIST = 'SET_ANALYSIS_FEATURE_LIST';
 
 interface SetSelectedSearchWidgetLayer {
   type: typeof SET_SELECTED_SEARCH_WIDGET_LAYER;
@@ -131,6 +142,11 @@ interface RenderGFWDropdownAction {
 interface SetLoggedIn {
   type: typeof SET_LOGGED_IN;
   payload: AppState['isLoggedIn'];
+}
+
+interface SetIsProfileComplete {
+  type: typeof SET_IS_PROFILE_COMPLETE;
+  payload: AppState['isProfileComplete'];
 }
 
 interface SelectActiveTab {
@@ -203,6 +219,11 @@ interface SetTreeHeight {
   payload: AppState['leftPanel']['treeHeight'];
 }
 
+interface SetWindSpeedPotential {
+  type: typeof SET_WIND_SPEED_POTENTIAL;
+  payload: AppState['leftPanel']['windSpeedPotential'];
+}
+
 interface SetRenderPopup {
   type: typeof SET_RENDER_POPUP;
   payload: AppState['renderPopup'];
@@ -218,6 +239,21 @@ interface SetVersionedLayer {
   payload: any;
 }
 
+interface SetMultiPolygonSelectionMode {
+  type: typeof SET_MULTI_POLYGON_SELECTION_MODE;
+  payload: boolean;
+}
+
+interface SetActiveMultiInput {
+  type: typeof SET_ACTIVE_MULTI_INPUT;
+  payload: number;
+}
+
+interface SetAnalysisFeatureList {
+  type: typeof SET_ANALYSIS_FEATURE_LIST;
+  payload: any;
+}
+
 export type AppStateTypes =
   | ToggleTabviewPanelAction
   | RenderModalAction
@@ -227,6 +263,7 @@ export type AppStateTypes =
   | SetLanguageAction
   | SetOpenLayerGroup
   | SetLoggedIn
+  | SetIsProfileComplete
   | SetMeasureResults
   | SetActiveMeasureButton
   | SetHideWidget
@@ -244,4 +281,8 @@ export type AppStateTypes =
   | SetRenderPopup
   | SetAreaImages
   | SetVersionedLayer
-  | SetTreeHeight;
+  | SetTreeHeight
+  | SetWindSpeedPotential
+  | SetMultiPolygonSelectionMode
+  | SetActiveMultiInput
+  | SetAnalysisFeatureList;

@@ -1,15 +1,15 @@
 import { setDefaultOptions, loadModules } from 'esri-loader';
 import { format, subDays, parse } from 'date-fns';
 import { debounce } from 'lodash-es';
-import { getMaxDateForViirsTiles } from '../../js/helpers/viirsLayerUtil';
+import { getMaxDateForViirsTiles } from '../helpers/viirsLayerUtil';
 import { landsatBaselayerURL, WRIBasemapConfig } from '../../../configs/layer-config';
 import { RefObject } from 'react';
 import { densityEnabledLayers } from '../../../configs/layer-config';
 import store from '../store/index';
-import { LayerFactory } from '../../js/helpers/LayerFactory';
-import { setLayerSearchSource } from '../../js/helpers/mapController/searchSources';
-import { getSortedLayers } from '../../js/helpers/mapController/layerSorting';
-import { addPointGraphic } from '../../js/helpers/MapGraphics';
+import { LayerFactory } from '../helpers/LayerFactory';
+import { setLayerSearchSource } from '../helpers/mapController/searchSources';
+import { getSortedLayers } from '../helpers/mapController/layerSorting';
+import { addPointGraphic, clearGraphics, drawIntersectingGraphic } from '../../js/helpers/MapGraphics';
 import {
   allAvailableLayers,
   mapError,
@@ -21,9 +21,9 @@ import {
   setLayersLoading,
   setUserCoordinates,
   setDocuments
-} from '../../js/store/mapview/actions';
+} from '../store/mapview/actions';
 
-import { setSelectedBasemap } from '../../js/store/mapview/actions';
+import { setSelectedBasemap } from '../store/mapview/actions';
 import {
   renderModal,
   selectActiveTab,
@@ -35,27 +35,28 @@ import {
   setViirsStart,
   setViirsEnd,
   setGladStart,
-  setGladEnd
-} from '../../js/store/appState/actions';
-import { LayerProps, LayerFeatureResult, FeatureResult, LayerTypes } from '../../js/store/mapview/types';
+  setGladEnd,
+  setAnalysisFeatureList
+} from '../store/appState/actions';
+import { LayerProps, LayerFeatureResult, FeatureResult } from '../../js/store/mapview/types';
 import { OptionType } from '../types/measureWidget';
-import { queryLayersForFeatures } from '../../js/helpers/dataPanel/DataPanel';
-import { setNewGraphic } from '../../js/helpers/MapGraphics';
+import { queryLayersForFeatures } from '../helpers/dataPanel/DataPanel';
+import { setNewGraphic } from '../helpers/MapGraphics';
 
 import { MODISLayerIDs } from '../../../configs/modis-viirs';
 import { supportedLayers } from '../../../configs/layer-config';
-import { parseURLandApplyChanges, getLayerInfoFromURL, LayerInfo } from '../../js/helpers/shareFunctionality';
+import { parseURLandApplyChanges, getLayerInfoFromURL, LayerInfo } from '../helpers/shareFunctionality';
 import {
   determineLayerOpacity,
   determineLayerVisibility,
   extractWebmapLayerObjects,
   getRemoteAndServiceLayers
-} from '../../js/helpers/mapController/miscLayerHelpers';
-import { fetchLegendInfo } from '../../js/helpers/legendInfo';
-import { parseExtentConfig } from '../../js/helpers/mapController/configParsing';
-import { overwriteColorTheme } from '../../js/store/appSettings/actions';
+} from '../helpers/mapController/miscLayerHelpers';
+import { fetchLegendInfo } from '../helpers/legendInfo';
+import { parseExtentConfig } from '../helpers/mapController/configParsing';
+import { overwriteColorTheme } from '../store/appSettings/actions';
 
-setDefaultOptions({ css: true, version: '4.18' });
+setDefaultOptions({ css: true, version: '4.19' });
 
 interface URLCoordinates {
   zoom: number;
@@ -71,12 +72,14 @@ export class MapController {
   _map: __esri.Map | undefined;
   _mapview: __esri.MapView | undefined;
   _sketchVM: __esri.SketchViewModel | undefined;
+  _sketchMultipleVM: __esri.SketchViewModel | undefined;
   _previousSketchGraphic: any;
   _mouseClickEventListener: EventListener | any;
   _pointerMoveEventListener: EventListener | any;
   _printTask: __esri.PrintTask | undefined;
   _selectedWidget: __esri.DistanceMeasurement2D | __esri.AreaMeasurement2D | undefined;
   _sketchVMGraphicsLayer: __esri.GraphicsLayer | undefined;
+  _sketchMultipleGLayer: __esri.GraphicsLayer | undefined;
   _domRef: RefObject<any>;
   _imageryOpacity: number;
   _mouseTrackingEvent: IHandle | undefined;
@@ -90,6 +93,7 @@ export class MapController {
     this._map = undefined;
     this._mapview = undefined;
     this._sketchVM = undefined;
+    this._sketchMultipleVM = undefined;
     this._previousSketchGraphic = undefined;
     this._printTask = undefined;
     this._selectedWidget = undefined;
@@ -196,6 +200,9 @@ export class MapController {
         this.setGLADDates();
 
         this._mapview!.on('click', event => {
+          //clear out map graphics
+          clearGraphics();
+
           //clean active indexes for data tab and activeFeatures
           store.dispatch(setActiveFeatures([]));
           store.dispatch(setActiveFeatureIndex([0, 0]));
@@ -366,7 +373,7 @@ export class MapController {
                 const id = String(l.sublayerID ? l.sublayerID : l.layerID);
                 return id === String(layerObject.id);
               });
-              layerObject.visible = urlLayer ? true : false;
+              layerObject.visible = !!urlLayer;
             });
 
             //Sync esri map visibility
@@ -908,8 +915,10 @@ export class MapController {
           layer.parent.visible = visibility;
         }
       }
+
       //1. update the map
       layer.visible = visibility;
+
       //2. Update redux
       const { mapviewState } = store.getState();
       const newLayersArray = mapviewState.allAvailableLayers.map(l => {
@@ -922,6 +931,17 @@ export class MapController {
           return l;
         }
       });
+      const webTileLayerVisible = newLayersArray
+        .filter((data: any) => data.type === 'webtiled')
+        .map((layer: any) => layer.visible);
+      if (layer.visible === false) {
+        if (!webTileLayerVisible.includes(true)) {
+          this.setWebmapOriginalBasemap('webmap_original');
+        }
+      }
+      if (layer.type === 'web-tile' && layer.visible === true) {
+        this.setActiveBasemap('hybrid');
+      }
       store.dispatch(allAvailableLayers(newLayersArray));
     }
   }
@@ -1171,6 +1191,85 @@ export class MapController {
   createPolygonSketch = (): void => {
     this.deleteSketchVM();
     this._sketchVM?.create('polygon', { mode: 'freehand' });
+  };
+
+  initSketchForMultiple = async (inputIndex: number) => {
+    const polygonSymbol = {
+      type: 'simple-fill',
+      color: '#F2BC94',
+      outline: {
+        color: '#722620',
+        width: 3
+      }
+    };
+    const [GraphicsLayer, SketchViewModel] = await loadModules([
+      'esri/layers/GraphicsLayer',
+      'esri/widgets/Sketch/SketchViewModel'
+    ]);
+
+    if (!this._sketchMultipleGLayer) {
+      this._sketchMultipleGLayer = new GraphicsLayer({
+        id: 'multi_poly_graphics'
+      });
+      //@ts-ignore
+      this._map.add(this._sketchMultipleGLayer);
+    }
+
+    console.log(this._sketchMultipleVM);
+    if (!this._sketchMultipleVM) {
+      console.log('creating sketch vm');
+      this._sketchMultipleVM = new SketchViewModel({
+        view: this._mapview,
+        layer: this._sketchMultipleGLayer,
+        polygonSymbol: polygonSymbol
+      });
+    }
+
+    //ensure we got the view model to work with
+    if (!this._sketchMultipleVM) return;
+    //event handlers
+    const handleCompletedDrawing = event => {
+      if (event.state === 'complete') {
+        const eventGraphics: any = event.graphic;
+        eventGraphics.attributes = {
+          inputIndex: inputIndex
+        };
+        eventGraphics.symbol.outline.color = [115, 252, 253];
+        eventGraphics.symbol.color = [0, 0, 0, 0];
+        const drawnFeatures: LayerFeatureResult = {
+          layerID: 'multi_poly_graphics',
+          layerTitle: 'Multi Polygon Features',
+          features: [eventGraphics],
+          fieldNames: null
+        };
+
+        //we should save this into our array
+        const analysisFeatureList = store.getState().appState.analysisFeatureList;
+
+        const oldState = [...analysisFeatureList];
+        oldState[inputIndex] = drawnFeatures;
+        store.dispatch(setAnalysisFeatureList(oldState));
+
+        this._sketchMultipleVM!.destroy();
+        this._sketchMultipleVM = undefined;
+      }
+    };
+    const evt = this._sketchMultipleVM.on('create', event => {
+      handleCompletedDrawing(event);
+    });
+
+    this._sketchMultipleVM.create('polygon', { mode: 'freehand' });
+  };
+
+  clearGraphicFromMultiSelection = (inputIndex: number): void => {
+    if (!this._sketchMultipleGLayer) return;
+    //@ts-ignore
+    console.log(this._sketchMultipleGLayer.graphics.items);
+    //@ts-ignore
+    const graphicToRemove = this._sketchMultipleGLayer.graphics.items.find(g => g.attributes.inputIndex === inputIndex);
+    if (graphicToRemove) {
+      this._sketchMultipleGLayer.remove(graphicToRemove);
+    }
   };
 
   getAndDispatchMeasureResults(optionType: OptionType): void {
@@ -1429,9 +1528,8 @@ export class MapController {
 
     return mapPDF;
   };
-  // let GraphicsLayer
-  setPolygon = (points: Array<__esri.Point>): void => {
-    // import GraphicsLayer from 'esri/layers/GraphicsLayer';
+
+  setPolygon = async (points: Array<__esri.Point>): Promise<void> => {
     const userLayer = this._map?.findLayerById('user_features') as __esri.GraphicsLayer;
     if (userLayer) {
       userLayer.graphics.removeAll();
@@ -1473,8 +1571,6 @@ export class MapController {
     drawnGraphic.symbol.outline.color = [115, 252, 253];
     drawnGraphic.symbol.color = [0, 0, 0, 0];
 
-    userLayer.graphics.add(drawnGraphic);
-
     this._mapview?.goTo(
       {
         target: graphic
@@ -1490,12 +1586,33 @@ export class MapController {
       features: [drawnGraphic],
       fieldNames: null
     };
+    const multiPolyMethod = store.getState().appState.multiPolygonSelectionMode;
+    if (multiPolyMethod) {
+      const activeMultiInput = store.getState().appState.activeMultiInput;
+      const analysisFeatureList = store.getState().appState.analysisFeatureList;
+      //add graphics to the layer and add graphics to the array
+      let gLayer = this._map?.findLayerById('multi_poly_graphics') as __esri.GraphicsLayer;
+      if (!gLayer) {
+        const [GraphicsLayer] = await loadModules(['esri/layers/GraphicsLayer']);
+        gLayer = new GraphicsLayer({
+          id: 'multi_poly_graphics'
+        });
+        this._map?.add(gLayer);
+      }
+      gLayer.graphics.add(drawnGraphic);
+      drawnFeatures.features[0].attributes.inputIndex = activeMultiInput;
+      const oldList = [...analysisFeatureList];
+      oldList[activeMultiInput] = drawnFeatures;
+      store.dispatch(setAnalysisFeatureList(oldList));
+      store.dispatch(renderModal(''));
+    } else {
+      userLayer.graphics.add(drawnGraphic);
+      store.dispatch(setActiveFeatures([drawnFeatures]));
+      store.dispatch(setActiveFeatureIndex([0, 0]));
+      store.dispatch(selectActiveTab('analysis'));
 
-    store.dispatch(setActiveFeatures([drawnFeatures]));
-    store.dispatch(setActiveFeatureIndex([0, 0]));
-    store.dispatch(selectActiveTab('analysis'));
-
-    store.dispatch(renderModal(''));
+      store.dispatch(renderModal(''));
+    }
   };
 
   async initializeSearchWidget(searchRef: RefObject<any>): Promise<void> {
@@ -1557,7 +1674,7 @@ export class MapController {
     densityEnabledLayers.forEach((layerId: string) => {
       const layer: any = this._map?.findLayerById(layerId);
       if (layer && layer.id !== 'AG_BIOMASS' && layer.urlTemplate) {
-        layer.urlTemplate = layer.urlTemplate.replace(/(tcd_)(?:[^\/]+)/, `tcd_${value}`);
+        layer.urlTemplate = layer.urlTemplate.replace(/(tcd_)(?:[^/]+)/, `tcd_${value}`);
         layer.refresh();
       }
     });
@@ -1600,6 +1717,14 @@ export class MapController {
     if (treeLayer) {
       treeLayer.height = value;
       treeLayer.refresh();
+    }
+  }
+
+  async updateWindSpeedPotentialValue(value: number): Promise<any> {
+    const windSpeedLayerLayer: any = this._map?.findLayerById('WIND_SPEED');
+    if (windSpeedLayerLayer) {
+      windSpeedLayerLayer.height = value;
+      windSpeedLayerLayer.refresh();
     }
   }
 
@@ -1680,12 +1805,17 @@ export class MapController {
 
   updateBaseTile(id: string, range: Array<number>): void {
     const [startYear, endYear] = range;
-    const treeCoverLossLayer: any = this._map?.findLayerById(id);
+    const layer: any = this._map?.findLayerById(id);
 
-    if (treeCoverLossLayer) {
-      treeCoverLossLayer.minYear = startYear;
-      treeCoverLossLayer.maxYear = endYear;
-      treeCoverLossLayer.refresh();
+    if (layer) {
+      if (id === 'DRY_SPELLS') {
+        layer.urlTemplate = `https://tiles.globalforestwatch.org/nexgddp_change_dry_spells_2000_2080/v20211015/Change_Num_Dry_Spells_${startYear}/{z}/{x}/{y}.png`;
+        layer.endDate = startYear;
+      } else {
+        layer.minYear = startYear;
+        layer.maxYear = endYear;
+      }
+      layer.refresh();
     }
   }
 
@@ -1766,11 +1896,7 @@ export class MapController {
           MODISLayerIDs.forEach(({ id }) => {
             const modisLayer = this._map?.findLayerById(id);
             if (modisLayer) {
-              if (modisLayer.id === 'MODIS48') {
-                modisLayer.visible = true;
-              } else {
-                modisLayer.visible = false;
-              }
+              modisLayer.visible = modisLayer.id === 'MODIS48';
             }
           });
         }
@@ -1781,11 +1907,7 @@ export class MapController {
           MODISLayerIDs.forEach(({ id }) => {
             const modisLayer = this._map?.findLayerById(id);
             if (modisLayer) {
-              if (modisLayer.id === 'MODIS72') {
-                modisLayer.visible = true;
-              } else {
-                modisLayer.visible = false;
-              }
+              modisLayer.visible = modisLayer.id === 'MODIS72';
             }
           });
         }
@@ -1796,11 +1918,7 @@ export class MapController {
           MODISLayerIDs.forEach(({ id }) => {
             const modisLayer = this._map?.findLayerById(id);
             if (modisLayer) {
-              if (modisLayer.id === 'MODIS7D') {
-                modisLayer.visible = true;
-              } else {
-                modisLayer.visible = false;
-              }
+              modisLayer.visible = modisLayer.id === 'MODIS7D';
             }
           });
         }
@@ -1995,6 +2113,38 @@ export class MapController {
       const inverseIndex = numberOfLayers - index;
       this._map.reorder(layerToReorder, inverseIndex);
     }
+  }
+
+  // Checks two geometries to see if they intersect. And returns intersection geometry if true
+  async checkIntersection(geo1: __esri.Geometry, geo2: __esri.Geometry): Promise<boolean> {
+    const [geometryEngine] = await loadModules(['esri/geometry/geometryEngine']);
+    //does it intersect?
+    const intersects = (geometryEngine as __esri.geometryEngine).intersects(geo1, geo2);
+
+    // if yes, what is the intersection?
+    const intersecting = (geometryEngine as __esri.geometryEngine).intersect(geo1, geo2);
+    if (intersects) {
+      drawIntersectingGraphic(intersecting);
+
+      const intersectingGraphics = intersecting;
+      const intersectingFeature = {
+        attributes: {},
+        geometry: intersectingGraphics,
+        objectid: 0
+      } as any;
+      const drawnFeatures: LayerFeatureResult = {
+        layerID: 'overlap-feature-layer',
+        layerTitle: 'Intersecting User Features',
+        features: [intersectingFeature],
+        fieldNames: null
+      };
+
+      store.dispatch(setActiveFeatures([drawnFeatures]));
+
+      store.dispatch(setActiveFeatureIndex([0, 0]));
+      return true;
+    }
+    return false;
   }
 }
 

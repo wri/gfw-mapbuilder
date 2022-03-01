@@ -55,7 +55,6 @@ export default {
     en: 'Carto Layers',
     fr: 'Carto Layers'
   },
-  enabledRWLayers: ['DRY_SPELLS', 'AIR_QUALITY', 'WIND_SPEED'], //'DRY_SPELLS', 'AIR_QUALITY', 'WIND_SPEED'
   disabledAnalysisModules: [], //'VIIRS_FIRES', 'GLAD_ALERTS', 'TC_LOSS', 'IFL', 'LCC'
   layerPanel: {
     GROUP_WEBMAP: {
@@ -90,39 +89,6 @@ export default {
           order: 2,
           type: 'remoteDataLayer',
           uuid: '6d989ac9-ab57-4f95-8475-2e747a3adc10'
-        },
-        {
-          groupId: 'GROUP_CLIMATE',
-          id: 'DRY_SPELLS',
-          datasetURL: 'https://data-api.globalforestwatch.org/dataset/nexgddp_change_dry_spells_2000_2080/latest',
-          datasetLegendConfigURL:
-            'https://api.resourcewatch.org/v1/layer/7c497efb-1671-49bf-87a2-3c96ddb9ff88?filterIncludesByEnv=true&includes=vocabulary,metadata&env=production',
-          type: 'resourcewatch',
-          order: 3,
-          origin: 'rw-api',
-          opacity: 1
-        },
-        {
-          groupId: 'GROUP_CLIMATE',
-          id: 'AIR_QUALITY',
-          datasetURL: 'https://data-api.globalforestwatch.org/dataset/tropomi_avg_nitrogen_dioxide_last_month/latest',
-          datasetLegendConfigURL:
-            'https://api.resourcewatch.org/v1/layer/61989f1f-65af-40e7-bf45-49b27eb2b9da?filterIncludesByEnv=true&includes=vocabulary,metadata&env=production',
-          type: 'resourcewatch',
-          order: 4,
-          origin: 'rw-api',
-          opacity: 1
-        },
-        {
-          groupId: 'GROUP_CLIMATE',
-          id: 'WIND_SPEED',
-          datasetURL: 'https://data-api.globalforestwatch.org/dataset/dtu_wb_wind_speed_potential_2001_2010/latest',
-          datasetLegendConfigURL:
-            'https://api.resourcewatch.org/v1/layer/1ae1f58f-569d-4a21-9835-3e9bdd93759b?filterIncludesByEnv=true&includes=vocabulary,metadata&env=production',
-          type: 'resourcewatch',
-          order: 5,
-          origin: 'rw-api',
-          opacity: 1
         }
         /*    {
           groupId: 'GROUP_CLIMATE',
@@ -250,72 +216,10 @@ export default {
           uuid: '2569adca-ef87-42c4-a153-57c5e8ba0ef7'
         },
         {
-          groupId: 'GROUP_LC',
-          id: 'TREE_COVER_HEIGHT',
+          id: 'TREES_MOSAIC_LANDSCAPES',
           order: 7,
-          type: 'flagship',
-          uuid: '9efed1d8-164d-4adb-85a1-e62c6c5c00aa',
-          origin: 'gfw-api',
-          layerType: 'tree-cover-height',
-          opacity: 1,
-          label: {
-            en: 'Tree cover height',
-            es: 'Tree cover height',
-            fr: 'Tree cover height',
-            id: 'Tree cover height',
-            ka: 'Tree cover height',
-            pt: 'Tree cover height',
-            zh: 'Tree cover height'
-          },
-          sublabel: {
-            en: '2019, 30m, global, UMD/NASA GEDI',
-            es: '2019, 30m, global, UMD/NASA GEDI',
-            fr: '2019, 30m, global, UMD/NASA GEDI',
-            id: '2019, 30m, global, UMD/NASA GEDI',
-            ka: '2019, 30m, global, UMD/NASA GEDI',
-            pt: '2019, 30m, global, UMD/NASA GEDI',
-            zh: '2019, 30m, global, UMD/NASA GEDI'
-          },
-          legend: {
-            name: {
-              en: 'Tree cover height',
-              es: 'Tree cover height',
-              fr: 'Tree cover height',
-              id: 'Tree cover height',
-              ka: 'Tree cover height',
-              pt: 'Tree cover height',
-              zh: 'Tree cover height'
-            },
-            type: 'gradient',
-            items: [
-              {
-                color: '#bbffb8',
-                value: '3m',
-                name: {
-                  en: '3m',
-                  es: '3m',
-                  fr: '3m',
-                  id: '3m',
-                  ka: '3m',
-                  pt: '3m',
-                  zh: '3m'
-                }
-              },
-              {
-                color: '#045200',
-                value: '30m',
-                name: {
-                  en: '30m',
-                  es: '30m',
-                  fr: '30m',
-                  id: '30m',
-                  ka: '30m',
-                  pt: '30m',
-                  zh: '30m'
-                }
-              }
-            ]
-          }
+          type: 'remoteDataLayer',
+          uuid: '9e0c1e1e-a0a3-457f-a373-4104820f7a50'
         }
       ]
     },

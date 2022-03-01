@@ -6,14 +6,11 @@ import { RootState } from '../../../js/store';
 import { emailLoginTranslations } from '../../../../configs/translations/staticOptions';
 
 import '../../../css/formInputs.scss';
+import { CHECK_LOGGED_URL } from './utils';
 
-const defaultLoginURL =
-  ' https://production-api.globalforestwatch.org/auth/login';
-const checkLogURL =
-  'https://production-api.globalforestwatch.org/auth/check-logged';
+const defaultLoginURL = ' https://production-api.globalforestwatch.org/auth/login';
 const registerURL = 'https://production-api.globalforestwatch.org/auth/sign-up';
-const resetURL =
-  'https://production-api.globalforestwatch.org/auth/reset-password';
+const resetURL = 'https://production-api.globalforestwatch.org/auth/reset-password';
 
 export const EmailLogin = () => {
   const dispatch = useDispatch();
@@ -22,17 +19,11 @@ export const EmailLogin = () => {
   const [showRegister, setShowRegister] = React.useState(false);
   const [registerSuccess, setRegisterSuccess] = React.useState(false);
   const [resetPasswordSuccess, setResetPasswordSuccess] = React.useState(false);
-  const [defaultLoginError, setDefaultLoginError] = React.useState<
-    boolean | string
-  >(false);
+  const [defaultLoginError, setDefaultLoginError] = React.useState<boolean | string>(false);
 
-  const customColorTheme = useSelector(
-    (store: RootState) => store.appSettings.customColorTheme
-  );
+  const customColorTheme = useSelector((store: RootState) => store.appSettings.customColorTheme);
 
-  const selectedLanguage = useSelector(
-    (store: RootState) => store.appState.selectedLanguage
-  );
+  const selectedLanguage = useSelector((store: RootState) => store.appState.selectedLanguage);
 
   const {
     register,
@@ -89,7 +80,7 @@ export const EmailLogin = () => {
 
         const bearer = `Bearer ${data.data.token}`;
 
-        fetch(checkLogURL, {
+        fetch(CHECK_LOGGED_URL, {
           method: 'GET',
           headers: {
             Authorization: bearer
@@ -171,11 +162,7 @@ export const EmailLogin = () => {
                 placeholder="example@globalforestwatch.com"
                 name="email"
               />
-              {errors.password && (
-                <p className="input-error">
-                  {emailLoginTranslations[selectedLanguage].required}
-                </p>
-              )}
+              {errors.password && <p className="input-error">{emailLoginTranslations[selectedLanguage].required}</p>}
             </div>
             <div className="form-section">
               <label htmlFor="password" className="input-label">
@@ -188,16 +175,9 @@ export const EmailLogin = () => {
                 placeholder="********"
                 name="password"
               />
-              {errors.password && (
-                <p className="input-error">
-                  {emailLoginTranslations[selectedLanguage].required}
-                </p>
-              )}
+              {errors.password && <p className="input-error">{emailLoginTranslations[selectedLanguage].required}</p>}
             </div>
-            <p
-              className="input-forgot-pass"
-              onClick={() => handleFormSwitch('forgot')}
-            >
+            <p className="input-forgot-pass" onClick={() => handleFormSwitch('forgot')}>
               {emailLoginTranslations[selectedLanguage].forgotPassword}
             </p>
             {defaultLoginError && (
@@ -240,11 +220,7 @@ export const EmailLogin = () => {
                   placeholder="example@globalforestwatch.com"
                   name="email"
                 />
-                {errors.password && (
-                  <p className="input-error">
-                    {emailLoginTranslations[selectedLanguage].required}
-                  </p>
-                )}
+                {errors.password && <p className="input-error">{emailLoginTranslations[selectedLanguage].required}</p>}
               </div>
               <div className="form-section">
                 <label htmlFor="password" className="input-label">
@@ -257,11 +233,7 @@ export const EmailLogin = () => {
                   placeholder="********"
                   name="password"
                 />
-                {errors.password && (
-                  <p className="input-error">
-                    {emailLoginTranslations[selectedLanguage].required}
-                  </p>
-                )}
+                {errors.password && <p className="input-error">{emailLoginTranslations[selectedLanguage].required}</p>}
               </div>
               <div className="form-section">
                 <label htmlFor="password" className="input-label">
@@ -274,11 +246,7 @@ export const EmailLogin = () => {
                   placeholder="********"
                   name="repeatPassword"
                 />
-                {errors.password && (
-                  <p className="input-error">
-                    {emailLoginTranslations[selectedLanguage].required}
-                  </p>
-                )}
+                {errors.password && <p className="input-error">{emailLoginTranslations[selectedLanguage].required}</p>}
               </div>
               {defaultLoginError && (
                 <div className="input-error">
@@ -328,9 +296,7 @@ export const EmailLogin = () => {
         <div>
           {!resetPasswordSuccess && (
             <>
-              <p style={{ marginTop: 0 }}>
-                {emailLoginTranslations[selectedLanguage].passwordReset}
-              </p>
+              <p style={{ marginTop: 0 }}>{emailLoginTranslations[selectedLanguage].passwordReset}</p>
               <form onSubmit={handleSubmit(onForgotSubmit)}>
                 <div className="form-section">
                   <label htmlFor="email" className="input-label">
@@ -344,9 +310,7 @@ export const EmailLogin = () => {
                     name="email"
                   />
                   {errors.password && (
-                    <p className="input-error">
-                      {emailLoginTranslations[selectedLanguage].required}
-                    </p>
+                    <p className="input-error">{emailLoginTranslations[selectedLanguage].required}</p>
                   )}
                 </div>
                 {defaultLoginError && (
@@ -377,9 +341,7 @@ export const EmailLogin = () => {
           {resetPasswordSuccess && (
             <div className="register-success">
               <div className="tree-success"></div>
-              <p>
-                {emailLoginTranslations[selectedLanguage].passwordResetSuccess}
-              </p>
+              <p>{emailLoginTranslations[selectedLanguage].passwordResetSuccess}</p>
               <button
                 className="orange-button form-submit"
                 style={{

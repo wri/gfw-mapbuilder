@@ -6,10 +6,12 @@ import { createGlad } from '../layers/GladLayer';
 import { createHeight } from '../layers/TreeCoverHeightLayer';
 import { createGain } from '../layers/TreeCoverGainLayer';
 import { markValueMap } from '../components/mapWidgets/widgetContent/CanopyDensityContent';
+import { treeMosaicDensityValue } from '../components/mapWidgets/widgetContent/TreeMosaicContent';
+import viirsLayer from './viirsLayerUtil';
+import { createTreeMosaicCover } from '../layers/TreeMosaicLayer';
+import { createGFWIntegratedLayer } from '../layers/GFWIntegratedLayer';
 import store from '../../js/store/index';
 import { LayerProps } from '../store/mapview/types';
-import viirsLayer from './viirsLayerUtil';
-import { createGFWIntegratedLayer } from '../layers/GFWIntegratedLayer';
 
 interface LayerOptions {
   id: string;
@@ -87,6 +89,7 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
         esriLayer.renderingRule = colorRF;
       }
       if (layerConfig.id === 'AG_BIOMASS') {
+        esriLayer.opacity = layerConfig.opacity.combined;
         //biomass layer expects object id that maps to canopy density values
         esriLayer.mosaicRule = new MosaicRule({
           where: `OBJECTID = ${appState.leftPanel.density}`
@@ -120,6 +123,19 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
       esriLayer.minYear = yearRange[0];
       esriLayer.maxYear = yearRange[1];
       esriLayer.refresh();
+      break;
+    case 'tree-mosaic':
+      const treeDensityValue = treeMosaicDensityValue[appState.leftPanel.density];
+      layerConfig.url = layerConfig.url.replace(/(tcd_)(?:[^/]+)/, `tcd_${treeDensityValue}`);
+      const constructor = await createTreeMosaicCover();
+      const treeMosaicLayer = new constructor({
+        id: layerConfig.id,
+        title: layerConfig.title,
+        visible: layerConfig.visible,
+        urlTemplate: layerConfig.url,
+        view: mapView
+      });
+      esriLayer = treeMosaicLayer;
       break;
     case 'gain':
       const gainConstructor = await createGain();
@@ -168,6 +184,13 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
         urlTemplate: layerConfig.url,
         opacity: layerConfig.opacity.combined
       });
+      if (
+        layerConfig.id === 'LAND_COVER' ||
+        layerConfig.id === 'PRIMARY_FORESTS' ||
+        layerConfig.id === 'CARBON_EMISSIONS'
+      ) {
+        esriLayer.opacity = layerConfig.opacity.combined;
+      }
       break;
     case 'imagery':
       const imageConstructor = await createGain();
@@ -245,10 +268,12 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
           opacity: layerConfig.opacity
         });
       }
+      if (layerConfig.id === 'IFL') {
+        esriLayer.opacity = layerConfig.opacity.combined;
+      }
       break;
     default:
       break;
   }
-
   return esriLayer;
 }

@@ -5,7 +5,7 @@ import { createSelector } from 'reselect';
 import ReactTooltip from 'react-tooltip';
 import { RootState } from '../../../../js/store';
 import { setActiveFeatures } from '../../../../js/store/mapview/actions';
-import { setRenderPopup } from '../../../../js/store/appState/actions';
+import { setRenderPopup, setMultiPolygonSelectionMode } from '../../../../js/store/appState/actions';
 
 import { registerGeometry } from '../../../../js/helpers/geometryRegistration';
 import fragmentationSpec from './fragmentationVegaSpec';
@@ -84,6 +84,8 @@ const BaseAnalysis = (): JSX.Element => {
   const customColorTheme = useSelector((store: RootState) => store.appSettings.customColorTheme);
 
   const disabledAnalysisModules = useSelector((store: RootState) => store.appSettings.disabledAnalysisModules);
+
+  const multiPolygonSelection = useSelector((store: RootState) => store.appState.multiPolygonSelectionMode);
 
   useEffect(() => {
     const activeLayer = activeFeatures[activeFeatureIndex[0]];
@@ -367,8 +369,8 @@ const BaseAnalysis = (): JSX.Element => {
   };
 
   //Analysis is disabled for point and polyline features
-  const selectedFeature = activeFeatures[activeFeatureIndex[0]].features[activeFeatureIndex[1]];
-  const selectedFeatureType = selectedFeature.geometry.type;
+  const selectedFeature = activeFeatures[activeFeatureIndex[0]]?.features[activeFeatureIndex[1]] || null;
+  const selectedFeatureType = selectedFeature?.geometry?.type;
   const featureIsNotAllowed = selectedFeatureType === 'point' || selectedFeatureType === 'polyline';
 
   return (
@@ -379,10 +381,10 @@ const BaseAnalysis = (): JSX.Element => {
             <span>{title === null ? 'User Drawn Feature' : title}</span>
             {returnButtons()}
           </div>
-          {!chartLoading && <AnalysisOptions />}
+          <AnalysisOptions />
           {!vegaSpec && !chartError && (
             <div className="analysis-instructions" style={{ height: 300 }}>
-              {!chartLoading && <AnalysisInstructions />}
+              <AnalysisInstructions />
             </div>
           )}
           {chartError && (
@@ -451,6 +453,17 @@ const BaseAnalysis = (): JSX.Element => {
               >
                 {analysisTranslations.runAnalysisButton[selectedLanguage]}
               </button>
+              {!multiPolygonSelection && (
+                <button
+                  style={{ backgroundColor: customColorTheme }}
+                  className={'orange-button'}
+                  onClick={() => {
+                    dispatch(setMultiPolygonSelectionMode(true));
+                  }}
+                >
+                  Analyze overlapping area
+                </button>
+              )}
             </span>
           )}
           <ReactTooltip effect="solid" className="tab-tooltip" disable={!featureIsNotAllowed} />

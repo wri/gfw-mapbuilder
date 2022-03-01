@@ -12,7 +12,7 @@ import TimeSlider from '../../../../js/components/sharedComponents/TimeSlider';
 import DateRangeModis from './DateRangeModis';
 import DateRangeViirs from './DateRangeVIIRS';
 import { format } from 'date-fns';
-import { esriQuery } from '../../../../js/helpers/dataPanel/esriQuery';
+import { esriQuery } from '../../../helpers/dataPanel/esriQuery';
 import {
   renderModal,
   setInfoModalLayerID,
@@ -23,11 +23,11 @@ import {
 import { RootState } from '../../../../js/store';
 import { LayerProps } from '../../../../js/store/mapview/types';
 import { mapController } from '../../../../js/controllers/mapController';
-import { densityEnabledLayers } from '../../../../../configs/layer-config';
+import { defaultMarks, densityEnabledLayers, drySpellMarks } from '../../../../../configs/layer-config';
 import { InfoIcon } from '../../../../images/infoIcon';
 import { DashboardIcon } from '../../../../images/dashboardIcon';
 import { LayerVersionPicker } from './LayerVersionPicker';
-import { LayerFactory } from '../../../../js/helpers/LayerFactory';
+import { LayerFactory } from '../../../helpers/LayerFactory';
 import { layerControlsTranslations } from '../../../../../configs/translations/leftPanel.translations';
 import DatePicker from 'react-datepicker';
 import TreeHeightPicker from '../../sharedComponents/TreeHeightPicker';
@@ -35,6 +35,8 @@ import { OpacityIcon } from '../../../../images/opacityIcon';
 import { DragIcon } from '../../../../images/dragIcon';
 
 import 'react-datepicker/dist/react-datepicker.css';
+import WindSpeedPicker from '../../sharedComponents/WindSpeedPicker';
+import { setTimeSlider } from '../../../store/mapview/actions';
 
 //Dynamic custom theme override using styled-components lib
 interface CheckBoxWrapperProps {
@@ -220,26 +222,26 @@ const LayerFilterSelection = (props: LayerInfo): JSX.Element => {
   }, [selectedLanguage]);
 
   const customStyles = {
-    clearIndicator: (provided: any, state: any) => ({
+    clearIndicator: (provided: any) => ({
       ...provided,
       cursor: 'pointer',
       padding: '4px'
     }),
-    dropdownIndicator: (provided: any, state: any) => ({
+    dropdownIndicator: (provided: any) => ({
       ...provided,
       cursor: 'pointer',
       padding: '4px'
     }),
-    container: (provided: any, state: any) => ({
+    container: (provided: any) => ({
       ...provided,
       fontSize: '12px',
       width: '200px'
     }),
-    indicatorsContainer: (provided: any, state: any) => ({
+    indicatorsContainer: (provided: any) => ({
       ...provided,
       padding: '4px'
     }),
-    control: (provided: any, state: any) => ({
+    control: (provided: any) => ({
       ...provided,
       minHeight: '20px'
     })
@@ -288,7 +290,30 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
     console.log(id);
     switch (id) {
       case 'TREE_COVER_LOSS':
-        return <TimeSlider layerID={id} />;
+        return (
+          <TimeSlider
+            layerID={id}
+            defaultMarks={defaultMarks}
+            min={2000}
+            max={2020}
+            defaultValue={[2000, 2020]}
+            steps={1}
+            included={true}
+          />
+        );
+      case 'DRY_SPELLS':
+        dispatch(setTimeSlider([2030]));
+        return (
+          <TimeSlider
+            layerID={id}
+            defaultMarks={drySpellMarks}
+            min={2030}
+            max={2080}
+            defaultValue={[2030]}
+            steps={100}
+            included={false}
+          />
+        );
       default:
         return null;
     }
@@ -474,8 +499,10 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
           </div>
         </div>
         {layer?.visible && returnTimeSlider(props.id)}
-        {layer?.visible && densityPicker && <CanopyDensityPicker />}
+        {layer?.visible && densityPicker && <CanopyDensityPicker type={layer.id} />}
         {layer?.visible && layer.id === 'TREE_COVER_HEIGHT' && <TreeHeightPicker />}
+        {/*@TODO make this active when windspeed potential urls are available*/}
+        {/*{layer?.visible && layer.id === 'WIND_SPEED' && <WindSpeedPicker />}*/}
         {layer?.visible && layer.versions && (
           <LayerVersionPicker layerInfo={layer} selectedLanguage={selectedLanguage} />
         )}

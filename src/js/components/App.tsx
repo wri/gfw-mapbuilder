@@ -8,7 +8,7 @@ import { RootState } from '../../js/store/index';
 import { useSelector, useDispatch } from 'react-redux';
 import Loader from '../../js/components/sharedComponents/Loader';
 import { overwriteSettings } from '../../js/store/appSettings/actions';
-import { setLoggedIn } from '../../js/store/appState/actions';
+import { setIsProfileComplete, setLoggedIn } from '../../js/store/appState/actions';
 import { AppSettings } from '../../js/store/appSettings/types';
 import {
   checkForReportView,
@@ -21,6 +21,7 @@ import resources from '../../../configs/resources';
 // import resources from '../../../configs/countryConfigs/cameroon';
 
 import '../../css/index.scss';
+import { allRequiredFieldsPresent, CHECK_LOGGED_URL, getUserData } from './gfwContent/utils';
 
 const App = (props: AppSettings | any): JSX.Element => {
   //Check for Report param in the URL (if that exists, we render a report view instead of our full scale application
@@ -28,23 +29,14 @@ const App = (props: AppSettings | any): JSX.Element => {
   const [showGlobalSpinner, setShowGlobalSpinner] = useState(true);
   const dispatch = useDispatch();
   //Listen to map loading state that comes from mapController via redux store change
-  const hideHeader = useSelector(
-    (store: RootState) => store.appSettings.hideHeader
-  );
-  const sharinghost = useSelector(
-    (store: RootState) => store.appSettings.sharinghost
-  );
-  const analyticsCode = useSelector(
-    (store: RootState) => store.appSettings.analyticsCode
-  );
+  const hideHeader = useSelector((store: RootState) => store.appSettings.hideHeader);
+  const sharinghost = useSelector((store: RootState) => store.appSettings.sharinghost);
+  const analyticsCode = useSelector((store: RootState) => store.appSettings.analyticsCode);
 
   loadGoogleAnalytics(analyticsCode);
 
   const fetchPortalInfo = async (appID: string) => {
-    const [Portal, PortalItem] = await loadModules([
-      'esri/portal/Portal',
-      'esri/portal/PortalItem'
-    ]);
+    const [Portal, PortalItem] = await loadModules(['esri/portal/Portal', 'esri/portal/PortalItem']);
 
     // APPID existing on the URL indicates that mapbuilder is loaded using arcgis template and we need to fetch settings using that app id to overwrite our default settings
     const portalURL = sharinghost || 'https://www.arcgis.com';
@@ -101,15 +93,12 @@ const App = (props: AppSettings | any): JSX.Element => {
         userToken = token;
       }
       if (userToken) {
-        fetch(
-          'https://production-api.globalforestwatch.org/auth/check-logged',
-          {
-            credentials: 'include',
-            headers: {
-              Authorization: `Bearer ${userToken}`
-            }
+        fetch(CHECK_LOGGED_URL, {
+          credentials: 'include',
+          headers: {
+            Authorization: `Bearer ${userToken}`
           }
-        )
+        })
           .then(response => {
             const hasError = response.status !== 200;
             response.json().then(data => {
@@ -117,6 +106,19 @@ const App = (props: AppSettings | any): JSX.Element => {
               localStorage.setItem('userID', data.id);
               localStorage.setItem('email', data?.email);
               dispatch(setLoggedIn(true));
+
+              //check if user has completed their profile
+              getUserData(data.id, userToken).then(dataRes => {
+                if (dataRes?.error) {
+                  //handle error
+                  console.log('Err:', dataRes.errorMsg);
+                  dispatch(setIsProfileComplete(false));
+                } else if (dataRes?.userData) {
+                  if (dataRes?.userData) {
+                    dispatch(setIsProfileComplete(allRequiredFieldsPresent(dataRes?.userData).length === 0));
+                  }
+                }
+              });
             });
           })
           .catch(e => console.error(e));

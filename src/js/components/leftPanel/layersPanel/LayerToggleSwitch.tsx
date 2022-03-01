@@ -1,9 +1,8 @@
 import * as React from 'react';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../../../js/store/index';
-import { mapController } from '../../../../js/controllers/mapController';
+import { RootState } from '../../../store';
+import { mapController } from '../../../controllers/mapController';
 import styled from 'styled-components';
-
 import '../../../../css/layer-toggle-checkbox.scss';
 
 //Dynamic custom theme override using styled-components lib

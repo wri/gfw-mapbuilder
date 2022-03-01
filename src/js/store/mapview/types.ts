@@ -125,6 +125,7 @@ export interface FieldName {
 export interface LayerFeatureResult {
   layerTitle: string;
   layerID: string;
+  featureID?: string;
   sublayerTitle?: string;
   sublayerID?: string;
   features: FeatureResult[];

@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { PrintModal } from '../../../js/components/mapWidgets/widgetContent/printModal';
+import { PrintModal } from '../mapWidgets/widgetContent/printModal';
 import ShareContent from '../../../js/components/mapWidgets/widgetContent/shareContent';
 import PenContent from '../../../js/components/mapWidgets/widgetContent/penContent';
 import SearchContent from '../../../js/components/mapWidgets/widgetContent/searchContent';
@@ -15,16 +15,15 @@ import LayerDash from '../../../js/components/sharedComponents/LayerDash';
 import EditProfile from '../../../js/components/gfwContent/EditProfile';
 import PlanetInfo from '../../../js/components/leftPanel/layersPanel/PlanetInfo';
 
-import { renderModal } from '../../../js/store/appState/actions';
+import { renderModal } from '../../store/appState/actions';
 
-import { RootState } from '../../../js/store';
+import { RootState } from '../../store';
 
 import '../../../css/modalCard.scss';
+import TreeMosaicContent from '../mapWidgets/widgetContent/TreeMosaicContent';
 
 const ModalCard: FunctionComponent<{}> = () => {
-  const modalType = useSelector(
-    (state: RootState) => state.appState.renderModal
-  );
+  const modalType = useSelector((state: RootState) => state.appState.renderModal);
   const dispatch = useDispatch();
 
   const handleEscapeKey = (key: string) => {
@@ -62,6 +61,8 @@ const ModalCard: FunctionComponent<{}> = () => {
         return <MeasureContent />;
       case 'CanopyDensity':
         return <CanopyDensityContent />;
+      case 'treeMosaic':
+        return <TreeMosaicContent />;
       case 'InfoContent':
         return <InfoContent />;
       case 'EditProfile':
@@ -119,11 +120,7 @@ const ModalCard: FunctionComponent<{}> = () => {
             tabIndex={0}
           ></div>
           <div className={`modal-card-container ${setClassName()}`}>
-            <button
-              style={{ color: '#555' }}
-              className="exit-button"
-              onClick={() => dispatch(renderModal(''))}
-            >
+            <button style={{ color: '#555' }} className="exit-button" onClick={() => dispatch(renderModal(''))}>
               <svg className="svg-icon">
                 <svg id="shape-close" viewBox="0 0 25 25">
                   <title>Close</title>

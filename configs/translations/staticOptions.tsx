@@ -30,7 +30,7 @@ export const sectors: SectorsObject = {
         },
         {
           label: 'Other',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -47,7 +47,7 @@ export const sectors: SectorsObject = {
         { label: 'Field/Country Staff', id: 'Field_Country_Staff' },
         {
           label: 'Other',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -70,7 +70,7 @@ export const sectors: SectorsObject = {
         { label: 'Park/Forest Ranger', id: 'Park_Forest_Ranger' },
         {
           label: 'Other',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -89,7 +89,7 @@ export const sectors: SectorsObject = {
         { label: 'Researcher', id: 'Researcher' },
         {
           label: 'Other',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -111,7 +111,7 @@ export const sectors: SectorsObject = {
         { label: 'Communications Specialist', id: 'Communications_Specialist' },
         {
           label: 'Other',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -140,7 +140,7 @@ export const sectors: SectorsObject = {
         },
         {
           label: 'Other',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -154,7 +154,7 @@ export const sectors: SectorsObject = {
         { label: 'Editor', id: 'Editor' },
         {
           label: 'Other',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -170,7 +170,7 @@ export const sectors: SectorsObject = {
         { label: 'Communications Specialist', id: 'Communications_Specialist' },
         {
           label: 'Other',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -184,7 +184,7 @@ export const sectors: SectorsObject = {
         { label: 'Land or Concession Owner', id: 'Land_or_Concession_Owner' },
         {
           label: 'Other',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -196,7 +196,7 @@ export const sectors: SectorsObject = {
       subsectors: [
         {
           label: 'Other',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -205,7 +205,7 @@ export const sectors: SectorsObject = {
       subsectors: [
         {
           label: 'Other',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     }
@@ -236,7 +236,7 @@ export const sectors: SectorsObject = {
         },
         {
           label: 'Other',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -253,7 +253,7 @@ export const sectors: SectorsObject = {
         { label: 'Field/Country Staff', id: 'Field_Country_Staff' },
         {
           label: 'Other',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -276,7 +276,7 @@ export const sectors: SectorsObject = {
         { label: 'Park/Forest Ranger', id: 'Park_Forest_Ranger' },
         {
           label: 'Other',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -295,7 +295,7 @@ export const sectors: SectorsObject = {
         { label: 'Researcher', id: 'Researcher' },
         {
           label: 'Other',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -317,7 +317,7 @@ export const sectors: SectorsObject = {
         { label: 'Communications Specialist', id: 'Communications_Specialist' },
         {
           label: 'Other',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -346,7 +346,7 @@ export const sectors: SectorsObject = {
         },
         {
           label: 'Other',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -360,7 +360,7 @@ export const sectors: SectorsObject = {
         { label: 'Editor', id: 'Editor' },
         {
           label: 'Other',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -376,7 +376,7 @@ export const sectors: SectorsObject = {
         { label: 'Communications Specialist', id: 'Communications_Specialist' },
         {
           label: 'Other',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -390,7 +390,7 @@ export const sectors: SectorsObject = {
         { label: 'Land or Concession Owner', id: 'Land_or_Concession_Owner' },
         {
           label: 'Other',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -402,7 +402,7 @@ export const sectors: SectorsObject = {
       subsectors: [
         {
           label: 'Other',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -411,7 +411,7 @@ export const sectors: SectorsObject = {
       subsectors: [
         {
           label: 'Other',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     }
@@ -443,7 +443,7 @@ export const sectors: SectorsObject = {
         },
         {
           label: 'Other',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -460,7 +460,7 @@ export const sectors: SectorsObject = {
         { label: 'Field/Country Staff', id: 'Field_Country_Staff' },
         {
           label: 'Other',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -483,7 +483,7 @@ export const sectors: SectorsObject = {
         { label: 'Park/Forest Ranger', id: 'Park_Forest_Ranger' },
         {
           label: 'Other',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -502,7 +502,7 @@ export const sectors: SectorsObject = {
         { label: 'Researcher', id: 'Researcher' },
         {
           label: 'Other',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -524,7 +524,7 @@ export const sectors: SectorsObject = {
         { label: 'Communications Specialist', id: 'Communications_Specialist' },
         {
           label: 'Other',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -553,7 +553,7 @@ export const sectors: SectorsObject = {
         },
         {
           label: 'Other',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -567,7 +567,7 @@ export const sectors: SectorsObject = {
         { label: 'Editor', id: 'Editor' },
         {
           label: 'Other',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -583,7 +583,7 @@ export const sectors: SectorsObject = {
         { label: 'Communications Specialist', id: 'Communications_Specialist' },
         {
           label: 'Other',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -597,7 +597,7 @@ export const sectors: SectorsObject = {
         { label: 'Land or Concession Owner', id: 'Land_or_Concession_Owner' },
         {
           label: 'Other',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -609,7 +609,7 @@ export const sectors: SectorsObject = {
       subsectors: [
         {
           label: 'Other',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -618,7 +618,7 @@ export const sectors: SectorsObject = {
       subsectors: [
         {
           label: 'Other',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     }
@@ -650,7 +650,7 @@ export const sectors: SectorsObject = {
         },
         {
           label: 'Other',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -667,7 +667,7 @@ export const sectors: SectorsObject = {
         { label: 'Field/Country Staff', id: 'Field_Country_Staff' },
         {
           label: 'Other',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -690,7 +690,7 @@ export const sectors: SectorsObject = {
         { label: 'Park/Forest Ranger', id: 'Park_Forest_Ranger' },
         {
           label: 'Other',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -709,7 +709,7 @@ export const sectors: SectorsObject = {
         { label: 'Researcher', id: 'Researcher' },
         {
           label: 'Other',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -731,7 +731,7 @@ export const sectors: SectorsObject = {
         { label: 'Communications Specialist', id: 'Communications_Specialist' },
         {
           label: 'Other',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -760,7 +760,7 @@ export const sectors: SectorsObject = {
         },
         {
           label: 'Other',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -774,7 +774,7 @@ export const sectors: SectorsObject = {
         { label: 'Editor', id: 'Editor' },
         {
           label: 'Other',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -790,7 +790,7 @@ export const sectors: SectorsObject = {
         { label: 'Communications Specialist', id: 'Communications_Specialist' },
         {
           label: 'Other',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -804,7 +804,7 @@ export const sectors: SectorsObject = {
         { label: 'Land or Concession Owner', id: 'Land_or_Concession_Owner' },
         {
           label: 'Other',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -816,7 +816,7 @@ export const sectors: SectorsObject = {
       subsectors: [
         {
           label: 'Other',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -825,7 +825,7 @@ export const sectors: SectorsObject = {
       subsectors: [
         {
           label: 'Other',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     }
@@ -856,7 +856,7 @@ export const sectors: SectorsObject = {
         },
         {
           label: 'Autre :',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -873,7 +873,7 @@ export const sectors: SectorsObject = {
         { label: 'Field/Country Staff', id: 'Field_Country_Staff' },
         {
           label: 'Autre :',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -896,7 +896,7 @@ export const sectors: SectorsObject = {
         { label: 'Park/Forest Ranger', id: 'Park_Forest_Ranger' },
         {
           label: 'Autre :',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -915,7 +915,7 @@ export const sectors: SectorsObject = {
         { label: 'Researcher', id: 'Researcher' },
         {
           label: 'Autre :',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -937,7 +937,7 @@ export const sectors: SectorsObject = {
         { label: 'Communications Specialist', id: 'Communications_Specialist' },
         {
           label: 'Autre :',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -966,7 +966,7 @@ export const sectors: SectorsObject = {
         },
         {
           label: 'Autre :',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -980,7 +980,7 @@ export const sectors: SectorsObject = {
         { label: 'Editor', id: 'Editor' },
         {
           label: 'Autre :',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -996,7 +996,7 @@ export const sectors: SectorsObject = {
         { label: 'Communications Specialist', id: 'Communications_Specialist' },
         {
           label: 'Autre :',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -1010,7 +1010,7 @@ export const sectors: SectorsObject = {
         { label: 'Land or Concession Owner', id: 'Land_or_Concession_Owner' },
         {
           label: 'Autre :',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -1022,7 +1022,7 @@ export const sectors: SectorsObject = {
       subsectors: [
         {
           label: 'Autre :',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -1031,7 +1031,7 @@ export const sectors: SectorsObject = {
       subsectors: [
         {
           label: 'Autre :',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     }
@@ -1062,7 +1062,7 @@ export const sectors: SectorsObject = {
         },
         {
           label: 'Otros:',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -1079,7 +1079,7 @@ export const sectors: SectorsObject = {
         { label: 'Field/Country Staff', id: 'Field_Country_Staff' },
         {
           label: 'Otros:',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -1102,7 +1102,7 @@ export const sectors: SectorsObject = {
         { label: 'Park/Forest Ranger', id: 'Park_Forest_Ranger' },
         {
           label: 'Otros:',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -1121,7 +1121,7 @@ export const sectors: SectorsObject = {
         { label: 'Researcher', id: 'Researcher' },
         {
           label: 'Otros:',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -1143,7 +1143,7 @@ export const sectors: SectorsObject = {
         { label: 'Communications Specialist', id: 'Communications_Specialist' },
         {
           label: 'Otros:',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -1172,7 +1172,7 @@ export const sectors: SectorsObject = {
         },
         {
           label: 'Otros:',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -1186,7 +1186,7 @@ export const sectors: SectorsObject = {
         { label: 'Editor', id: 'Editor' },
         {
           label: 'Otros:',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -1202,7 +1202,7 @@ export const sectors: SectorsObject = {
         { label: 'Communications Specialist', id: 'Communications_Specialist' },
         {
           label: 'Otros:',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -1216,7 +1216,7 @@ export const sectors: SectorsObject = {
         { label: 'Land or Concession Owner', id: 'Land_or_Concession_Owner' },
         {
           label: 'Otros:',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -1228,7 +1228,7 @@ export const sectors: SectorsObject = {
       subsectors: [
         {
           label: 'Otros:',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -1237,7 +1237,7 @@ export const sectors: SectorsObject = {
       subsectors: [
         {
           label: 'Otros:',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     }
@@ -1268,7 +1268,7 @@ export const sectors: SectorsObject = {
         },
         {
           label: 'Outro:',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -1285,7 +1285,7 @@ export const sectors: SectorsObject = {
         { label: 'Field/Country Staff', id: 'Field_Country_Staff' },
         {
           label: 'Outro:',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -1308,7 +1308,7 @@ export const sectors: SectorsObject = {
         { label: 'Park/Forest Ranger', id: 'Park_Forest_Ranger' },
         {
           label: 'Outro:',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -1327,7 +1327,7 @@ export const sectors: SectorsObject = {
         { label: 'Researcher', id: 'Researcher' },
         {
           label: 'Outro:',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -1349,7 +1349,7 @@ export const sectors: SectorsObject = {
         { label: 'Communications Specialist', id: 'Communications_Specialist' },
         {
           label: 'Outro:',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -1378,7 +1378,7 @@ export const sectors: SectorsObject = {
         },
         {
           label: 'Outro:',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -1392,7 +1392,7 @@ export const sectors: SectorsObject = {
         { label: 'Editor', id: 'Editor' },
         {
           label: 'Outro:',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -1408,7 +1408,7 @@ export const sectors: SectorsObject = {
         { label: 'Communications Specialist', id: 'Communications_Specialist' },
         {
           label: 'Outro:',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -1422,7 +1422,7 @@ export const sectors: SectorsObject = {
         { label: 'Land or Concession Owner', id: 'Land_or_Concession_Owner' },
         {
           label: 'Outro:',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -1434,7 +1434,7 @@ export const sectors: SectorsObject = {
       subsectors: [
         {
           label: 'Outro:',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -1443,7 +1443,7 @@ export const sectors: SectorsObject = {
       subsectors: [
         {
           label: 'Outro:',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     }
@@ -1474,7 +1474,7 @@ export const sectors: SectorsObject = {
         },
         {
           label: 'Other',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -1491,7 +1491,7 @@ export const sectors: SectorsObject = {
         { label: 'Field/Country Staff', id: 'Field_Country_Staff' },
         {
           label: 'Other',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -1514,7 +1514,7 @@ export const sectors: SectorsObject = {
         { label: 'Park/Forest Ranger', id: 'Park_Forest_Ranger' },
         {
           label: 'Other',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -1533,7 +1533,7 @@ export const sectors: SectorsObject = {
         { label: 'Researcher', id: 'Researcher' },
         {
           label: 'Other',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -1555,7 +1555,7 @@ export const sectors: SectorsObject = {
         { label: 'Communications Specialist', id: 'Communications_Specialist' },
         {
           label: 'Other',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -1584,7 +1584,7 @@ export const sectors: SectorsObject = {
         },
         {
           label: 'Other',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -1598,7 +1598,7 @@ export const sectors: SectorsObject = {
         { label: 'Editor', id: 'Editor' },
         {
           label: 'Other',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -1614,7 +1614,7 @@ export const sectors: SectorsObject = {
         { label: 'Communications Specialist', id: 'Communications_Specialist' },
         {
           label: 'Other',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -1628,7 +1628,7 @@ export const sectors: SectorsObject = {
         { label: 'Land or Concession Owner', id: 'Land_or_Concession_Owner' },
         {
           label: 'Other',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -1640,7 +1640,7 @@ export const sectors: SectorsObject = {
       subsectors: [
         {
           label: 'Other',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -1649,7 +1649,7 @@ export const sectors: SectorsObject = {
       subsectors: [
         {
           label: 'Other',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     }
@@ -1680,7 +1680,7 @@ export const sectors: SectorsObject = {
         },
         {
           label: '其他：',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -1697,7 +1697,7 @@ export const sectors: SectorsObject = {
         { label: 'Field/Country Staff', id: 'Field_Country_Staff' },
         {
           label: '其他：',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -1720,7 +1720,7 @@ export const sectors: SectorsObject = {
         { label: 'Park/Forest Ranger', id: 'Park_Forest_Ranger' },
         {
           label: '其他：',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -1739,7 +1739,7 @@ export const sectors: SectorsObject = {
         { label: 'Researcher', id: 'Researcher' },
         {
           label: '其他：',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -1761,7 +1761,7 @@ export const sectors: SectorsObject = {
         { label: 'Communications Specialist', id: 'Communications_Specialist' },
         {
           label: '其他：',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -1790,7 +1790,7 @@ export const sectors: SectorsObject = {
         },
         {
           label: '其他：',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -1804,7 +1804,7 @@ export const sectors: SectorsObject = {
         { label: 'Editor', id: 'Editor' },
         {
           label: '其他：',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -1820,7 +1820,7 @@ export const sectors: SectorsObject = {
         { label: 'Communications Specialist', id: 'Communications_Specialist' },
         {
           label: '其他：',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -1834,7 +1834,7 @@ export const sectors: SectorsObject = {
         { label: 'Land or Concession Owner', id: 'Land_or_Concession_Owner' },
         {
           label: '其他：',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -1846,7 +1846,7 @@ export const sectors: SectorsObject = {
       subsectors: [
         {
           label: '其他：',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -1855,7 +1855,7 @@ export const sectors: SectorsObject = {
       subsectors: [
         {
           label: '其他：',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     }
@@ -1886,7 +1886,7 @@ export const sectors: SectorsObject = {
         },
         {
           label: 'Lainnya:',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -1903,7 +1903,7 @@ export const sectors: SectorsObject = {
         { label: 'Field/Country Staff', id: 'Field_Country_Staff' },
         {
           label: 'Lainnya:',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -1926,7 +1926,7 @@ export const sectors: SectorsObject = {
         { label: 'Park/Forest Ranger', id: 'Park_Forest_Ranger' },
         {
           label: 'Lainnya:',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -1945,7 +1945,7 @@ export const sectors: SectorsObject = {
         { label: 'Researcher', id: 'Researcher' },
         {
           label: 'Lainnya:',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -1967,7 +1967,7 @@ export const sectors: SectorsObject = {
         { label: 'Communications Specialist', id: 'Communications_Specialist' },
         {
           label: 'Lainnya:',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -1996,7 +1996,7 @@ export const sectors: SectorsObject = {
         },
         {
           label: 'Lainnya:',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -2010,7 +2010,7 @@ export const sectors: SectorsObject = {
         { label: 'Editor', id: 'Editor' },
         {
           label: 'Lainnya:',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -2026,7 +2026,7 @@ export const sectors: SectorsObject = {
         { label: 'Communications Specialist', id: 'Communications_Specialist' },
         {
           label: 'Lainnya:',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -2040,7 +2040,7 @@ export const sectors: SectorsObject = {
         { label: 'Land or Concession Owner', id: 'Land_or_Concession_Owner' },
         {
           label: 'Lainnya:',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -2052,7 +2052,7 @@ export const sectors: SectorsObject = {
       subsectors: [
         {
           label: 'Lainnya:',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     },
@@ -2061,7 +2061,7 @@ export const sectors: SectorsObject = {
       subsectors: [
         {
           label: 'Lainnya:',
-          id: 'Other: '
+          id: 'Other:'
         }
       ]
     }
@@ -2326,8 +2326,7 @@ export const usage: Topic = {
       id: 'Advocacy/campaigning'
     },
     {
-      label:
-        'Données ou illustrations pour les blogs ou les articles de presse',
+      label: 'Données ou illustrations pour les blogs ou les articles de presse',
       id: 'Data or visuals for blogs or media stories'
     },
     {
@@ -2347,8 +2346,7 @@ export const usage: Topic = {
       id: 'Identify illegal activity'
     },
     {
-      label:
-        'Informez les décisions de financement des subventions/paiements basés sur les résultats',
+      label: 'Informez les décisions de financement des subventions/paiements basés sur les résultats',
       id: 'Inform grant funding decisions/results-based payments'
     },
     {
@@ -2390,8 +2388,7 @@ export const usage: Topic = {
       id: 'Advocacy/campaigning'
     },
     {
-      label:
-        'Datos o imágenes para blogs o historias de medios de comunicación',
+      label: 'Datos o imágenes para blogs o historias de medios de comunicación',
       id: 'Data or visuals for blogs or media stories'
     },
     {
@@ -2411,8 +2408,7 @@ export const usage: Topic = {
       id: 'Identify illegal activity'
     },
     {
-      label:
-        'Informar sobre las decisiones de financiación de las subvenciones/pagos basados en los resultados',
+      label: 'Informar sobre las decisiones de financiación de las subvenciones/pagos basados en los resultados',
       id: 'Inform grant funding decisions/results-based payments'
     },
     {
@@ -2475,8 +2471,7 @@ export const usage: Topic = {
       id: 'Identify illegal activity'
     },
     {
-      label:
-        'Informe decisões de financiamento de subsídios/pagamentos baseados em resultados',
+      label: 'Informe decisões de financiamento de subsídios/pagamentos baseados em resultados',
       id: 'Inform grant funding decisions/results-based payments'
     },
     {
@@ -2538,8 +2533,7 @@ export const usage: Topic = {
       id: 'Identify illegal activity'
     },
     {
-      label:
-        'Memberi masukan untuk keputusan pendanaan hibah/pembayaran berbasis hasil',
+      label: 'Memberi masukan untuk keputusan pendanaan hibah/pembayaran berbasis hasil',
       id: 'Inform grant funding decisions/results-based payments'
     },
     {
@@ -2910,8 +2904,7 @@ export const topics: Topic = {
       id: 'Reforestation_Landscape_restoration'
     },
     {
-      label:
-        'Fonds de petites subventions et bourse de recherche en technologie',
+      label: 'Fonds de petites subventions et bourse de recherche en technologie',
       id: 'Small_Grants_Fund_and_Tech_Fellowship'
     },
     {
@@ -3071,8 +3064,7 @@ export const emailLoginTranslations = {
     registerSuccess:
       "Thank you for registering, please check your email and confirm your account. If it doesn't appear check your spam folder.",
     login: 'Login',
-    passwordReset:
-      'To reset your password, enter your email and follow the instructions.',
+    passwordReset: 'To reset your password, enter your email and follow the instructions.',
     passwordResetSuccess:
       "Thank you. Please, check your inbox and follow instructions to reset your password. If it doesn't appear check your spam folder.",
     reset: 'Reset',
@@ -3089,8 +3081,7 @@ export const emailLoginTranslations = {
     registerSuccess:
       "Thank you for registering, please check your email and confirm your account. If it doesn't appear check your spam folder.",
     login: 'Login',
-    passwordReset:
-      'To reset your password, enter your email and follow the instructions.',
+    passwordReset: 'To reset your password, enter your email and follow the instructions.',
     passwordResetSuccess:
       "Thank you. Please, check your inbox and follow instructions to reset your password. If it doesn't appear check your spam folder.",
     reset: 'Reset',
@@ -3107,8 +3098,7 @@ export const emailLoginTranslations = {
     registerSuccess:
       "Thank you for registering, please check your email and confirm your account. If it doesn't appear check your spam folder.",
     login: 'Login',
-    passwordReset:
-      'To reset your password, enter your email and follow the instructions.',
+    passwordReset: 'To reset your password, enter your email and follow the instructions.',
     passwordResetSuccess:
       "Thank you. Please, check your inbox and follow instructions to reset your password. If it doesn't appear check your spam folder.",
     reset: 'Վերադառնալ սկզբնական կարգավորումներին',
@@ -3125,10 +3115,8 @@ export const emailLoginTranslations = {
     registerSuccess:
       "წერილი თუ არ ჩანს, შეამოწმეთ 'სპამის' საქაღალდე. შეგიძლიათ გაეცნოთ ჩვენს კონფიდენციალურობის პოლიტიკას და მიიღოთ დამატებითი ინფორმაცია იმის შესახებ თუ როგორ ვიყენებთ პერსონალურ მონაცემებს",
     login: 'შესვლა',
-    passwordReset:
-      'პაროლის აღსადგენად, მიუთითეთ თქვენი ელ. ფოსტის მისამართი და მიყევით ინსტრუქციას',
-    passwordResetSuccess:
-      'მადლობა. გთხოვთ შეამოწმოთ თქვენი ელ. ფოსტა და მიყვეთ ინსტრუქციას პაროლის აღსადგენად',
+    passwordReset: 'პაროლის აღსადგენად, მიუთითეთ თქვენი ელ. ფოსტის მისამართი და მიყევით ინსტრუქციას',
+    passwordResetSuccess: 'მადლობა. გთხოვთ შეამოწმოთ თქვენი ელ. ფოსტა და მიყვეთ ინსტრუქციას პაროლის აღსადგენად',
     reset: 'ახლიდან ჩატვირთვა',
     register: 'დარეგისტრირდით'
   },
@@ -3143,8 +3131,7 @@ export const emailLoginTranslations = {
     registerSuccess:
       'Thank you for registering, please check your email and confirm your account. Si no aparece, revise su carpeta de correo no deseado.',
     login: 'Nombre de usuario',
-    passwordReset:
-      'Para restablecer su contraseña, introduzca su correo electrónico y siga las instrucciones.',
+    passwordReset: 'Para restablecer su contraseña, introduzca su correo electrónico y siga las instrucciones.',
     passwordResetSuccess:
       'Gracias. Por favor, revise su bandeja de entrada y siga las instrucciones para restablecer su contraseña. Si no aparece, revise su carpeta de correo no deseado.',
     reset: 'Restablecer',
@@ -3161,8 +3148,7 @@ export const emailLoginTranslations = {
     registerSuccess:
       "Thank you for registering, please check your email and confirm your account. S'il n'apparaît pas, vérifiez dans votre dossier spam.",
     login: 'Connexion',
-    passwordReset:
-      'Pour réinitialiser votre mot de passe, entrez votre e-mail et suivez les instructions.',
+    passwordReset: 'Pour réinitialiser votre mot de passe, entrez votre e-mail et suivez les instructions.',
     passwordResetSuccess:
       "Merci. Consultez votre boîte de réception et suivez les instructions pour réinitialiser votre mot de passeS'il n'apparaît pas, vérifiez dans votre dossier spam",
     reset: 'Réinitialiser',
@@ -3179,8 +3165,7 @@ export const emailLoginTranslations = {
     registerSuccess:
       'Thank you for registering, please check your email and confirm your account. Se não aparecer, verifique sua pasta de spam.',
     login: 'Login',
-    passwordReset:
-      'Para redefinir sua senha, insira seu e-mail e siga as instruções.',
+    passwordReset: 'Para redefinir sua senha, insira seu e-mail e siga as instruções.',
     passwordResetSuccess:
       'Obrigado. Por favor, verifique sua caixa de entrada e siga as instruções para redefinir sua senha. Se não aparecer, verifique sua pasta de spam.',
     reset: 'Redefinir',
@@ -3197,8 +3182,7 @@ export const emailLoginTranslations = {
     registerSuccess:
       'Thank you for registering, please check your email and confirm your account. Jika tidak muncul silakan cek folder spam.',
     login: 'log masuk',
-    passwordReset:
-      'Untuk mengatur ulang sandi, masukkan email Anda dan ikuti instruksinya.',
+    passwordReset: 'Untuk mengatur ulang sandi, masukkan email Anda dan ikuti instruksinya.',
     passwordResetSuccess:
       'Terima kasih. Silakan cek kotak masuk Anda dan ikuti instruksi untuk mengatur ulang sandi. Jika tidak muncul silakan cek folder spam. ',
     reset: 'Atur ulang',
@@ -3216,8 +3200,7 @@ export const emailLoginTranslations = {
       'Thank you for registering, please check your email and confirm your account. 如果没看到它，请检查您的垃圾文件夹。',
     login: '登录',
     passwordReset: '若要重置密码，请输入您的电子邮件并按照说明操作.',
-    passwordResetSuccess:
-      ' 谢谢！请检查您的收件箱，并按照说明重置您的密码。如果没看到它，请检查您的垃圾文件夹。',
+    passwordResetSuccess: ' 谢谢！请检查您的收件箱，并按照说明重置您的密码。如果没看到它，请检查您的垃圾文件夹。',
     reset: '重置',
     register: "S'inscrire"
   }
@@ -3366,10 +3349,7 @@ export const editProfileTranslations = {
     topics: '¿QUÉ TEMAS LE INTERESAN ',
     selectAll: 'SELECCIONE TODAS LAS OPCIONES QUE CORRESPONDAN.',
     howUse: '¿CÓMO USA GLOBAL FOREST WATCH',
-    delete: [
-      'Envíenos un correo electrónio',
-      'para eliminar su cuenta de MyGFW.'
-    ],
+    delete: ['Envíenos un correo electrónio', 'para eliminar su cuenta de MyGFW.'],
     success: [
       'Thank you for updating your My GFW profile!',
       'You may wish to read our',

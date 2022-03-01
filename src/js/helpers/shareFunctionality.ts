@@ -68,7 +68,7 @@ export async function getShareableURL(props: ShareURLProps): Promise<string> {
     const activeFeature = activeLayer.features[mapviewState.activeFeatureIndex[1]];
     urlParams.push(`acLayer=${activeLayer.layerID}`);
     urlParams.push(`acSublayer=${activeLayer.sublayerID}`);
-    urlParams.push(`objectid=${activeFeature.objectid}`);
+    urlParams.push(`objectid=${appState.multiPolygonSelectionMode ? 'undefined' : activeFeature.objectid}`);
   }
 
   //Basemap LayerID
