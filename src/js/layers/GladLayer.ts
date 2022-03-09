@@ -25,7 +25,7 @@ Date.prototype.getJulian = function() {
 
 export const createGlad = async () => {
   const [esriRequest, BaseTileLayer] = await loadModules(['esri/request', 'esri/layers/BaseTileLayer']);
-  const GladLayer = BaseTileLayer.createSubclass({
+  return BaseTileLayer.createSubclass({
     properties: {
       julianFrom: '15000',
       julianTo: new Date().getJulian(),
@@ -52,7 +52,7 @@ export const createGlad = async () => {
       }).then(
         function(response) {
           // We use a promise because we can't return an empty canvas before the image data has loaded, been filtered, and properly colored
-          const promise = new Promise(resolve => {
+          return new Promise(resolve => {
             // when esri request resolves successfully
             // get the image from the response
             const image = response.data;
@@ -79,7 +79,6 @@ export const createGlad = async () => {
             };
             imageObject.src = image.src;
           });
-          return promise;
         }.bind(this)
       );
     },
@@ -98,6 +97,7 @@ export const createGlad = async () => {
         // Check if pixel date is between Julian Date properties above
         if (values.date > this.julianFrom && values.date < this.julianTo) {
           // Check if we are only examining confirmed cases or not
+
           if (this.confirmed) {
             if (values.confidence > 0) {
               data[i + 3] = values.intensity;
@@ -192,5 +192,4 @@ export const createGlad = async () => {
       return str.slice(str.length - 3);
     }
   });
-  return GladLayer;
 };

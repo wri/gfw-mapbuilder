@@ -6,6 +6,11 @@ export const createGFWIntegratedLayer = async () => {
   const [BaseTileLayer] = await loadModules(['esri/layers/BaseTileLayer']);
 
   return BaseTileLayer.createSubclass({
+    properties: {
+      julianFrom: '15000',
+      julianTo: new Date().getJulian(),
+      confirmed: false
+    },
     getTileUrl: function(level, row, column) {
       return this.urlTemplate
         .replace('{z}', level)
@@ -40,29 +45,36 @@ export const createGFWIntegratedLayer = async () => {
       for (let i = 0; i < data.length; i += 4) {
         const slice = [data[i], data[i + 1], data[i + 2], data[i + 3]];
         const values = this.decodeDate(slice);
+        // if date is > Feb 03 2020
         if (values.date > 20033) {
           data[i + 3] = values.intensity;
-
-          if (values.confidence === 0) {
-            data[i] = 236; // R
-            data[i + 1] = 164; // G
-            data[i + 2] = 194; // B
-          }
-          if (values.confidence === 1) {
-            data[i] = 220; // R
-            data[i + 1] = 101; // G
-            data[i + 2] = 152; // B
-          }
-          if (values.confidence === 2) {
-            data[i] = 201; // R
-            data[i + 1] = 42; // G
-            data[i + 2] = 108; // B
-          }
-        }
-        if (data[i] > 0) {
-          // console.log(values);
-          if (values.confidence === 2) {
-            console.log('hit');
+          if (this.confirmed) {
+            if (values.confidence === 1) {
+              data[i] = 220; // R
+              data[i + 1] = 101; // G
+              data[i + 2] = 152; // B
+            }
+            if (values.confidence === 2) {
+              data[i] = 201; // R
+              data[i + 1] = 42; // G
+              data[i + 2] = 108; // B
+            }
+          } else {
+            if (values.confidence === 0) {
+              data[i] = 236; // R
+              data[i + 1] = 164; // G
+              data[i + 2] = 194; // B
+            }
+            if (values.confidence === 1) {
+              data[i] = 220; // R
+              data[i + 1] = 101; // G
+              data[i + 2] = 152; // B
+            }
+            if (values.confidence === 2) {
+              data[i] = 201; // R
+              data[i + 1] = 42; // G
+              data[i + 2] = 108; // B
+            }
           }
         }
       }

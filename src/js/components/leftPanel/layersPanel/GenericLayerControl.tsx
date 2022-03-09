@@ -18,11 +18,12 @@ import {
   setInfoModalLayerID,
   setGladStart,
   setGladEnd,
-  setGladConfirmed
-} from '../../../../js/store/appState/actions';
-import { RootState } from '../../../../js/store';
-import { LayerProps } from '../../../../js/store/mapview/types';
-import { mapController } from '../../../../js/controllers/mapController';
+  setGladConfirmed,
+  setHighConfidenceConfirmed
+} from '../../../store/appState/actions';
+import { RootState } from '../../../store';
+import { LayerProps } from '../../../store/mapview/types';
+import { mapController } from '../../../controllers/mapController';
 import { defaultMarks, densityEnabledLayers, drySpellMarks } from '../../../../../configs/layer-config';
 import { InfoIcon } from '../../../../images/infoIcon';
 import { DashboardIcon } from '../../../../images/dashboardIcon';
@@ -53,17 +54,18 @@ interface GladControlsProps {
   customColorTheme: string;
   layerConfig: any;
   selectedLanguage: string;
+  type?: string;
 }
 
 const GladControls = (props: GladControlsProps): JSX.Element => {
   const dispatch = useDispatch();
   const gladConfirmed = useSelector((store: RootState) => store.appState.leftPanel.gladConfirmed);
-
+  const highConfidenceConfirmed = useSelector((store: RootState) => store.appState.leftPanel.highConfidenceConfirmed);
   const gladStart = useSelector((store: RootState) => store.appState.leftPanel.gladStart);
-
   const gladEnd = useSelector((store: RootState) => store.appState.leftPanel.gladEnd);
 
   const [unconfirmedAlerts, setUnconfirmedAlerts] = React.useState(gladConfirmed);
+  const [highconfidenceAlerts, setHighConfidenceAlerts] = React.useState(highConfidenceConfirmed);
   const [startDate, setStartDate] = React.useState(String(gladStart));
   const [endDate, setEndDate] = React.useState(gladEnd);
 
@@ -115,24 +117,49 @@ const GladControls = (props: GladControlsProps): JSX.Element => {
     mapController._map?.add(gladLayerNew);
   }
 
+  function showOnlyHighConfidenceToggle(): void {
+    setHighConfidenceAlerts(!highConfidenceConfirmed);
+    dispatch(setHighConfidenceConfirmed(!highConfidenceConfirmed));
+  }
+
   return (
     <div className="glad-control-wrapper">
-      <div className="glad-control-container">
-        <div className="layer-checkbox">
-          <CheckboxWrapper customColorTheme={props.customColorTheme}>
-            <input
-              type="checkbox"
-              name="styled-checkbox"
-              className="styled-checkbox"
-              id="layer-checkbox-glad"
-              checked={unconfirmedAlerts}
-              onChange={handleConfirmedAlertsToggle}
-            />
-            <label className="styled-checkboxlabel" htmlFor="layer-checkbox-glad"></label>
-          </CheckboxWrapper>
+      {props.type === 'gfw-integrated-alert' ? (
+        <div className="glad-control-container">
+          <div className="layer-checkbox">
+            <CheckboxWrapper customColorTheme={props.customColorTheme}>
+              <input
+                type="checkbox"
+                name="styled-checkbox"
+                className="styled-checkbox"
+                id="layer-checkbox-glad"
+                checked={highconfidenceAlerts}
+                onChange={showOnlyHighConfidenceToggle}
+              />
+              <label className="styled-checkboxlabel" htmlFor="layer-checkbox-glad"></label>
+            </CheckboxWrapper>
+          </div>
+          <p>Show only high and highest confidence alerts</p>
         </div>
-        <p>Hide unconfirmed alerts</p>
-      </div>
+      ) : (
+        <div className="glad-control-container">
+          <div className="layer-checkbox">
+            <CheckboxWrapper customColorTheme={props.customColorTheme}>
+              <input
+                type="checkbox"
+                name="styled-checkbox"
+                className="styled-checkbox"
+                id="layer-checkbox-glad"
+                checked={unconfirmedAlerts}
+                onChange={handleConfirmedAlertsToggle}
+              />
+              <label className="styled-checkboxlabel" htmlFor="layer-checkbox-glad"></label>
+            </CheckboxWrapper>
+          </div>
+          Hide unconfirmed alerts
+        </div>
+      )}
+
       <div className="calendar-wrapper">
         <div className="date-section-wrapper">
           <label htmlFor="start-date">{layerControlsTranslations[props.selectedLanguage].timeStart}</label>
@@ -287,7 +314,6 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
   const altLayerName = layer.label && layer.label[selectedLanguage];
 
   const returnTimeSlider = (id: string): any => {
-    console.log(id);
     switch (id) {
       case 'TREE_COVER_LOSS':
         return (
@@ -312,6 +338,18 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
             defaultValue={[2030]}
             steps={100}
             included={false}
+          />
+        );
+      case 'GFW_INTEGRATED_ALERTS':
+        return (
+          <TimeSlider
+            layerID={id}
+            defaultMarks={defaultMarks}
+            min={2000}
+            max={2020}
+            defaultValue={[2000, 2020]}
+            steps={1}
+            included={true}
           />
         );
       default:
@@ -366,6 +404,15 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
             customColorTheme={customColorTheme}
             layerConfig={layerConfig}
             selectedLanguage={selectedLanguage}
+          />
+        );
+      case 'GFW_INTEGRATED_ALERTS':
+        return (
+          <GladControls
+            customColorTheme={customColorTheme}
+            layerConfig={layerConfig}
+            selectedLanguage={selectedLanguage}
+            type={'gfw-integrated-alert'}
           />
         );
       default:

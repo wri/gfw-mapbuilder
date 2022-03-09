@@ -18,6 +18,7 @@ import {
   SET_ANALYSIS_YEAR_RANGE,
   SET_SELECTED_SEARCH_WIDGET_LAYER,
   SET_GLAD_CONFIRMED,
+  SET_HIGH_CONFIDENCE_CONFIRMED,
   SET_GLAD_START,
   SET_GLAD_END,
   SET_VIIRS_START,
@@ -27,11 +28,12 @@ import {
   SET_RENDER_POPUP,
   SET_AREA_IMAGES,
   SET_VERSIONED_LAYER,
-  SET_TREE_HEIGHT,
   SET_WIND_SPEED_POTENTIAL,
   SET_MULTI_POLYGON_SELECTION_MODE,
   SET_ACTIVE_MULTI_INPUT,
-  SET_ANALYSIS_FEATURE_LIST
+  SET_ANALYSIS_FEATURE_LIST,
+  SET_TREE_HEIGHT,
+  SET_IMAGE_OBJECT
 } from './types';
 
 export function setSelectedSearchWidgetLayer(payload: AppState['selectedSearchWidgetLayer']) {
@@ -153,6 +155,13 @@ export function setGladConfirmed(payload: AppState['leftPanel']['gladConfirmed']
   };
 }
 
+export function setHighConfidenceConfirmed(payload: AppState['leftPanel']['highConfidenceConfirmed']) {
+  return {
+    type: SET_HIGH_CONFIDENCE_CONFIRMED as typeof SET_HIGH_CONFIDENCE_CONFIRMED,
+    payload: payload
+  };
+}
+
 export function setGladStart(payload: AppState['leftPanel']['gladStart']) {
   return {
     type: SET_GLAD_START as typeof SET_GLAD_START,
@@ -215,7 +224,6 @@ export function setTreeHeight(payload: number) {
     payload: payload
   };
 }
-
 export function setWindSpeedPotential(payload: number) {
   return {
     type: SET_WIND_SPEED_POTENTIAL as typeof SET_WIND_SPEED_POTENTIAL,
@@ -223,6 +231,12 @@ export function setWindSpeedPotential(payload: number) {
   };
 }
 
+export function setImageObject(payload: number) {
+  return {
+    type: SET_IMAGE_OBJECT as typeof SET_IMAGE_OBJECT,
+    payload: payload
+  };
+}
 export function setVersionedLayer(payload: any) {
   return {
     type: SET_VERSIONED_LAYER as typeof SET_VERSIONED_LAYER,

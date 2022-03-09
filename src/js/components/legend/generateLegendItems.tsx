@@ -3,7 +3,7 @@ import * as React from 'react';
 import { LayerProps } from '../../store/mapview/types';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
-import { PointItem, BasicItem, PolyFromMapServer, LineItem, GradientItem } from './LegendLabelComponents';
+import { BasicItem, GradientItem, LineItem, PointItem, PolyFromMapServer } from './LegendLabelComponents';
 import { mapController } from '../../controllers/mapController';
 
 interface LegendItemProps {
@@ -205,8 +205,7 @@ function getLegendInfoFromRenderer(layer: LayerProps): any {
     return container;
   }
 
-  const legendSymbols = createLegendSymbol(esriLayer);
-  return legendSymbols;
+  return createLegendSymbol(esriLayer);
 }
 
 const LegendItems = (props: LegendItemProps): JSX.Element => {

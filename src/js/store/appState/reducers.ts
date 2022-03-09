@@ -3,37 +3,39 @@ import { format, subYears } from 'date-fns';
 import {
   AppState,
   AppStateTypes,
-  TOGGLE_TABVIEW_PANEL,
-  SELECT_ACTIVE_TAB,
-  SET_LANGUAGE,
-  RENDER_MODAL,
-  RENDER_INFO_MODAL,
   RENDER_GFW_DROPDOWN,
-  SET_OPEN_LAYER_GROUP,
-  SET_LOGGED_IN,
-  SET_IS_PROFILE_COMPLETE,
-  SET_MEASURE_RESULTS,
+  RENDER_INFO_MODAL,
+  RENDER_MODAL,
+  SELECT_ACTIVE_TAB,
   SET_ACTIVE_MEASURE_BUTTON,
-  SET_HIDE_WIDGET,
-  SET_CANOPY_DENSITY,
-  SET_ANALYSIS_DATE,
-  SET_ANALYSIS_YEAR_RANGE,
-  SET_SELECTED_SEARCH_WIDGET_LAYER,
-  SET_GLAD_CONFIRMED,
-  SET_GLAD_START,
-  SET_GLAD_END,
-  SET_MODIS_START,
-  SET_MODIS_END,
-  SET_VIIRS_START,
-  SET_VIIRS_END,
-  SET_RENDER_POPUP,
-  SET_AREA_IMAGES,
-  SET_VERSIONED_LAYER,
-  SET_TREE_HEIGHT,
-  SET_WIND_SPEED_POTENTIAL,
-  SET_MULTI_POLYGON_SELECTION_MODE,
   SET_ACTIVE_MULTI_INPUT,
-  SET_ANALYSIS_FEATURE_LIST
+  SET_ANALYSIS_DATE,
+  SET_ANALYSIS_FEATURE_LIST,
+  SET_ANALYSIS_YEAR_RANGE,
+  SET_AREA_IMAGES,
+  SET_CANOPY_DENSITY,
+  SET_GLAD_CONFIRMED,
+  SET_GLAD_END,
+  SET_GLAD_START,
+  SET_HIDE_WIDGET,
+  SET_HIGH_CONFIDENCE_CONFIRMED,
+  SET_IMAGE_OBJECT,
+  SET_IS_PROFILE_COMPLETE,
+  SET_LANGUAGE,
+  SET_LOGGED_IN,
+  SET_MEASURE_RESULTS,
+  SET_MODIS_END,
+  SET_MODIS_START,
+  SET_MULTI_POLYGON_SELECTION_MODE,
+  SET_OPEN_LAYER_GROUP,
+  SET_RENDER_POPUP,
+  SET_SELECTED_SEARCH_WIDGET_LAYER,
+  SET_TREE_HEIGHT,
+  SET_VERSIONED_LAYER,
+  SET_VIIRS_END,
+  SET_VIIRS_START,
+  SET_WIND_SPEED_POTENTIAL,
+  TOGGLE_TABVIEW_PANEL
 } from './types';
 
 const initialState: AppState = {
@@ -56,6 +58,7 @@ const initialState: AppState = {
     analysisDateRange: [format(new Date(Date.now()), 'yyyy-MM-dd'), format(new Date(Date.now()), 'yyyy-MM-dd')],
     analysisYearRange: [2001, 2018],
     gladConfirmed: false,
+    highConfidenceConfirmed: false,
     gladStart: '2015-01-01',
     gladEnd: format(new Date(Date.now()), 'yyyy-MM-dd'),
     modisEnd: format(new Date(Date.now()), 'yyyy-MM-dd'),
@@ -75,6 +78,7 @@ const initialState: AppState = {
   },
   renderPopup: false,
   areaImages: [],
+  imageObject: {},
   multiPolygonSelectionMode: false,
   activeMultiInput: 0,
   analysisFeatureList: [undefined, undefined]
@@ -182,6 +186,14 @@ export function appStateReducer(state = initialState, action: AppStateTypes): Ap
           gladConfirmed: action.payload
         }
       };
+    case SET_HIGH_CONFIDENCE_CONFIRMED:
+      return {
+        ...state,
+        leftPanel: {
+          ...state.leftPanel,
+          highConfidenceConfirmed: action.payload
+        }
+      };
     case SET_GLAD_START:
       return {
         ...state,
@@ -248,8 +260,7 @@ export function appStateReducer(state = initialState, action: AppStateTypes): Ap
       };
     case SET_VERSIONED_LAYER: {
       const versionedState = state.leftPanel.versionedLayer;
-      const val = Object.values(action.payload)[0] as string;
-      versionedState[Object.keys(action.payload)[0]] = val;
+      versionedState[Object.keys(action.payload)[0]] = Object.values(action.payload)[0] as string;
       return {
         ...state,
         leftPanel: {
@@ -277,6 +288,11 @@ export function appStateReducer(state = initialState, action: AppStateTypes): Ap
         areaImages: newAreaImages
       };
     }
+    case SET_IMAGE_OBJECT:
+      return {
+        ...state,
+        imageObject: action.payload
+      };
     default:
       return state;
   }

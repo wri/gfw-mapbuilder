@@ -8,6 +8,7 @@ export interface LeftPanel {
   analysisDateRange: string[];
   analysisYearRange: number[];
   gladConfirmed: boolean;
+  highConfidenceConfirmed: boolean;
   gladStart: string;
   gladEnd: string;
   modisStart: string;
@@ -28,11 +29,6 @@ interface SpecificAreaResults {
 
 interface SpecificDistanceResults {
   length?: string;
-}
-
-interface ClickResults {
-  latitude?: number;
-  longitude?: number;
 }
 
 export interface MeasureContent {
@@ -64,6 +60,7 @@ export interface AppState {
   multiPolygonSelectionMode: boolean;
   activeMultiInput: number;
   analysisFeatureList: any[] | LayerFeatureResult[];
+  imageObject: any;
 }
 
 //Action names available
@@ -84,6 +81,7 @@ export const SET_ANALYSIS_DATE = 'SET_ANALYSIS_DATE';
 export const SET_ANALYSIS_YEAR_RANGE = 'SET_ANALYSIS_YEAR_RANGE';
 export const SET_SELECTED_SEARCH_WIDGET_LAYER = 'SET_SELECTED_SEARCH_WIDGET_LAYER';
 export const SET_GLAD_CONFIRMED = 'SET_GLAD_CONFIRMED';
+export const SET_HIGH_CONFIDENCE_CONFIRMED = 'SET_HIGH_CONFIDENCE_CONFIRMED';
 export const SET_GLAD_START = 'SET_GLAD_START';
 export const SET_GLAD_END = 'SET_GLAD_END';
 export const SET_VIIRS_START = 'SET_VIIRS_START';
@@ -94,6 +92,7 @@ export const SET_RENDER_POPUP = 'SET_RENDER_POPUP';
 export const SET_AREA_IMAGES = 'SET_AREA_IMAGES';
 export const SET_VERSIONED_LAYER = 'SET_VERSIONED_LAYER';
 export const SET_TREE_HEIGHT = 'SET_TREE_HEIGHT';
+export const SET_IMAGE_OBJECT = 'SET_IMAGE_OBJECT';
 export const SET_WIND_SPEED_POTENTIAL = 'SET_WIND_SPEED_POTENTIAL';
 export const SET_MULTI_POLYGON_SELECTION_MODE = 'SET_MULTI_POLYGON_SELECTION_MODE';
 export const SET_ACTIVE_MULTI_INPUT = 'SET_ACTIVE_MULTI_INPUT';
@@ -183,7 +182,10 @@ interface SetGladConfirmed {
   type: typeof SET_GLAD_CONFIRMED;
   payload: AppState['leftPanel']['gladConfirmed'];
 }
-
+interface SetHighConfidenceConfirmed {
+  type: typeof SET_HIGH_CONFIDENCE_CONFIRMED;
+  payload: AppState['leftPanel']['highConfidenceConfirmed'];
+}
 interface SetGladStart {
   type: typeof SET_GLAD_START;
   payload: AppState['leftPanel']['gladStart'];
@@ -239,6 +241,11 @@ interface SetVersionedLayer {
   payload: any;
 }
 
+interface SetImageObject {
+  type: typeof SET_IMAGE_OBJECT;
+  payload: any;
+}
+
 interface SetMultiPolygonSelectionMode {
   type: typeof SET_MULTI_POLYGON_SELECTION_MODE;
   payload: boolean;
@@ -272,6 +279,7 @@ export type AppStateTypes =
   | SetAnalysisYearRange
   | SetSelectedSearchWidgetLayer
   | SetGladConfirmed
+  | SetHighConfidenceConfirmed
   | SetGladStart
   | SetGladEnd
   | SetModisStart
@@ -282,6 +290,7 @@ export type AppStateTypes =
   | SetAreaImages
   | SetVersionedLayer
   | SetTreeHeight
+  | SetImageObject
   | SetWindSpeedPotential
   | SetMultiPolygonSelectionMode
   | SetActiveMultiInput
