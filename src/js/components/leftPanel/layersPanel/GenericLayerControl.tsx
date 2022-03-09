@@ -19,7 +19,9 @@ import {
   setGladStart,
   setGladEnd,
   setGladConfirmed,
-  setHighConfidenceConfirmed
+  setHighConfidenceConfirmed,
+  setGfwIntegratedStart,
+  setGfwIntegratedEnd
 } from '../../../store/appState/actions';
 import { RootState } from '../../../store';
 import { LayerProps } from '../../../store/mapview/types';
@@ -63,11 +65,15 @@ const GladControls = (props: GladControlsProps): JSX.Element => {
   const highConfidenceConfirmed = useSelector((store: RootState) => store.appState.leftPanel.highConfidenceConfirmed);
   const gladStart = useSelector((store: RootState) => store.appState.leftPanel.gladStart);
   const gladEnd = useSelector((store: RootState) => store.appState.leftPanel.gladEnd);
+  const gfwIntegratedStart = useSelector((store: RootState) => store.appState.leftPanel.gfwIntegratedStart);
+  const gfwIntegratedEnd = useSelector((store: RootState) => store.appState.leftPanel.gfwIntegratedEnd);
 
   const [unconfirmedAlerts, setUnconfirmedAlerts] = React.useState(gladConfirmed);
   const [highconfidenceAlerts, setHighConfidenceAlerts] = React.useState(highConfidenceConfirmed);
-  const [startDate, setStartDate] = React.useState(String(gladStart));
-  const [endDate, setEndDate] = React.useState(gladEnd);
+  const [startDate, setStartDate] = React.useState(
+    String(props.type === 'gfw-integrated-alert' ? gfwIntegratedStart : gladStart)
+  );
+  const [endDate, setEndDate] = React.useState(props.type === 'gfw-integrated-alert' ? gfwIntegratedEnd : gladEnd);
 
   function handleStartDateChange(day: any): void {
     const dFormat = format(day, 'yyyy-MM-dd');
@@ -76,16 +82,29 @@ const GladControls = (props: GladControlsProps): JSX.Element => {
     const start = new Date(dFormat).getJulian();
     //@ts-ignore
     const end = new Date(endDate).getJulian();
-    const gladLayerOld: any = mapController._map!.findLayerById('GLAD_ALERTS');
-    const gladIndex: number = mapController._map!.layers.indexOf(gladLayerOld);
-    mapController._map?.remove(gladLayerOld);
-    const gladLayerNew: any = LayerFactory(mapController._mapview, props.layerConfig);
-    gladLayerNew.julianFrom = start;
-    gladLayerNew.julianTo = end;
-    mapController._map?.add(gladLayerNew, gladIndex);
+    if (props.type === 'gfw-integrated-alert') {
+      const gfwIntegratedLayerOld: any = mapController._map!.findLayerById('GFW_INTEGRATED_ALERTS');
+      const gfwIntegratedIndex: number = mapController._map!.layers.indexOf(gfwIntegratedLayerOld);
+      mapController._map?.remove(gfwIntegratedLayerOld);
+      const gfwIntegratedLayerNew: any = LayerFactory(mapController._mapview, props.layerConfig);
+      gfwIntegratedLayerNew.gfwjulianFrom = start;
+      gfwIntegratedLayerNew.gfwjulianTo = end;
+      mapController._map?.add(gfwIntegratedLayerNew, gfwIntegratedIndex);
 
-    dispatch(setGladStart(dFormat));
-    dispatch(setGladEnd(endDate));
+      dispatch(setGfwIntegratedStart(dFormat));
+      dispatch(setGfwIntegratedEnd(endDate));
+    } else {
+      const gladLayerOld: any = mapController._map!.findLayerById('GLAD_ALERTS');
+      const gladIndex: number = mapController._map!.layers.indexOf(gladLayerOld);
+      mapController._map?.remove(gladLayerOld);
+      const gladLayerNew: any = LayerFactory(mapController._mapview, props.layerConfig);
+      gladLayerNew.julianFrom = start;
+      gladLayerNew.julianTo = end;
+      mapController._map?.add(gladLayerNew, gladIndex);
+
+      dispatch(setGladStart(dFormat));
+      dispatch(setGladEnd(endDate));
+    }
   }
 
   function handleEndDateChange(day: any): void {
@@ -95,16 +114,27 @@ const GladControls = (props: GladControlsProps): JSX.Element => {
     const end = new Date(dFormat).getJulian();
     //@ts-ignore
     const start = new Date(startDate).getJulian();
-    const gladLayerOld: any = mapController._map!.findLayerById('GLAD_ALERTS');
-    const gladIndex: number = mapController._map!.layers.indexOf(gladLayerOld);
-    mapController._map?.remove(gladLayerOld);
-    const gladLayerNew: any = LayerFactory(mapController._mapview, props.layerConfig);
-    gladLayerNew.julianFrom = start;
-    gladLayerNew.julianTo = end;
-    mapController._map?.add(gladLayerNew, gladIndex);
-
-    dispatch(setGladStart(startDate));
-    dispatch(setGladEnd(dFormat));
+    if (props.type === 'gfw-integrated-alert') {
+      const gfwIntegratedLayerOld: any = mapController._map!.findLayerById('GFW_INTEGRATED_ALERTS');
+      const gfwIntegratedIndex: number = mapController._map!.layers.indexOf(gfwIntegratedLayerOld);
+      mapController._map?.remove(gfwIntegratedLayerOld);
+      const gfwIntegratedLayerNew: any = LayerFactory(mapController._mapview, props.layerConfig);
+      gfwIntegratedLayerNew.gfwjulianFrom = start;
+      gfwIntegratedLayerNew.gfwjulianTo = end;
+      mapController._map?.add(gfwIntegratedLayerNew, gfwIntegratedIndex);
+      dispatch(setGfwIntegratedStart(startDate));
+      dispatch(setGfwIntegratedEnd(dFormat));
+    } else {
+      const gladLayerOld: any = mapController._map!.findLayerById('GLAD_ALERTS');
+      const gladIndex: number = mapController._map!.layers.indexOf(gladLayerOld);
+      mapController._map?.remove(gladLayerOld);
+      const gladLayerNew: any = LayerFactory(mapController._mapview, props.layerConfig);
+      gladLayerNew.julianFrom = start;
+      gladLayerNew.julianTo = end;
+      mapController._map?.add(gladLayerNew, gladIndex);
+      dispatch(setGladStart(startDate));
+      dispatch(setGladEnd(dFormat));
+    }
   }
 
   function handleConfirmedAlertsToggle(): void {
@@ -120,27 +150,50 @@ const GladControls = (props: GladControlsProps): JSX.Element => {
   function showOnlyHighConfidenceToggle(): void {
     setHighConfidenceAlerts(!highConfidenceConfirmed);
     dispatch(setHighConfidenceConfirmed(!highConfidenceConfirmed));
+    const gfwIntegratedLayerOld: any = mapController._map!.findLayerById('GFW_INTEGRATED_ALERTS');
+    mapController._map?.remove(gfwIntegratedLayerOld);
+    const gfwIntegratedLayerNew: any = LayerFactory(mapController._mapview, props.layerConfig);
+    gfwIntegratedLayerNew.highConfidenceConfirmed = !highConfidenceConfirmed;
+    mapController._map?.add(gfwIntegratedLayerNew);
   }
 
   return (
     <div className="glad-control-wrapper">
       {props.type === 'gfw-integrated-alert' ? (
-        <div className="glad-control-container">
-          <div className="layer-checkbox">
-            <CheckboxWrapper customColorTheme={props.customColorTheme}>
-              <input
-                type="checkbox"
-                name="styled-checkbox"
-                className="styled-checkbox"
-                id="layer-checkbox-glad"
-                checked={highconfidenceAlerts}
-                onChange={showOnlyHighConfidenceToggle}
-              />
-              <label className="styled-checkboxlabel" htmlFor="layer-checkbox-glad"></label>
-            </CheckboxWrapper>
+        <>
+          <div className="glad-control-container">
+            <div className="layer-checkbox">
+              <CheckboxWrapper customColorTheme={props.customColorTheme}>
+                <input
+                  type="checkbox"
+                  name="styled-checkbox"
+                  className="styled-checkbox"
+                  id="layer-checkbox-glad"
+                  checked={highconfidenceAlerts}
+                  onChange={showOnlyHighConfidenceToggle}
+                />
+                <label className="styled-checkboxlabel" htmlFor="layer-checkbox-glad"></label>
+              </CheckboxWrapper>
+            </div>
+            <p>Show only high and highest confidence alerts</p>
           </div>
-          <p>Show only high and highest confidence alerts</p>
-        </div>
+          <div className="glad-control-container">
+            <div className="layer-checkbox">
+              <CheckboxWrapper customColorTheme={props.customColorTheme}>
+                <input
+                  type="checkbox"
+                  name="styled-checkbox"
+                  className="styled-checkbox"
+                  id="layer-checkbox-glad"
+                  checked={highconfidenceAlerts}
+                  onChange={showOnlyHighConfidenceToggle}
+                />
+                <label className="styled-checkboxlabel" htmlFor="layer-checkbox-glad"></label>
+              </CheckboxWrapper>
+            </div>
+            <p>Geographic Coverage</p>
+          </div>
+        </>
       ) : (
         <div className="glad-control-container">
           <div className="layer-checkbox">

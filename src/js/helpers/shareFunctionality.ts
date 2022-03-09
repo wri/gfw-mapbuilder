@@ -1,18 +1,18 @@
 import store from '../../js/store/index';
-import { mapController } from '../../js/controllers/mapController';
+import { mapController } from '../controllers/mapController';
 import {
   setCanopyDensity,
   setGladConfirmed,
-  setGladStart,
   setGladEnd,
-  setModisStart,
+  setGladStart,
   setModisEnd,
-  setViirsStart,
-  setViirsEnd
-} from '../../js/store/appState/actions';
-import { LayerFeatureResult } from '../../js/store/mapview/types';
-import { registerGeometry } from '../../js/helpers/geometryRegistration';
-import { setTimeSlider } from '../../js/store/mapview/actions';
+  setModisStart,
+  setViirsEnd,
+  setViirsStart
+} from '../store/appState/actions';
+import { LayerFeatureResult } from '../store/mapview/types';
+import { registerGeometry } from './geometryRegistration';
+import { setTimeSlider } from '../store/mapview/actions';
 
 /* eslint no-case-declarations: 0 */
 
@@ -121,6 +121,13 @@ export async function getShareableURL(props: ShareURLProps): Promise<string> {
     urlParams.push(`ge=${leftPanel.gladEnd}`);
   }
 
+  const gfwIntegratedLayer: any = mapController._map?.findLayerById('GFW_INTEGRATED_ALERT');
+  if (gladLayer) {
+    urlParams.push(`highConfidenceConfirmed=${gfwIntegratedLayer.highConfidenceConfirmed}`);
+    urlParams.push(`gs=${leftPanel.gfwIntegratedStart}`);
+    urlParams.push(`ge=${leftPanel.gfwIntegratedEnd}`);
+  }
+
   const viirsLayer = mapController._map?.findLayerById('VIIRS_ACTIVE_FIRES');
   if (viirsLayer) {
     urlParams.push(`vs=${leftPanel.viirsStart}`);
@@ -148,7 +155,7 @@ export function getLayerInfoFromURL(): LayerInfo[] {
     ?.split(',')
     .map(o => Number(o));
 
-  const mergedLayerInfosFromUrl = allLayerIDS
+  return allLayerIDS
     ? allLayerIDS.map((id: string, i: number) => {
         const outputObject = {} as any;
         const isSublayer = id.includes('[s]');
@@ -165,7 +172,6 @@ export function getLayerInfoFromURL(): LayerInfo[] {
         return outputObject;
       })
     : [];
-  return mergedLayerInfosFromUrl;
 }
 
 //Apply hash state for zoom, lat, long, tab and density values
@@ -204,7 +210,7 @@ export function parseURLandApplyChanges(): void {
           break;
         case 'gladconfirmed':
           //Url params always come in as strings so we need to do exact check
-          const gladConfirmedValue = urlParamValue === 'true' ? true : false;
+          const gladConfirmedValue = urlParamValue === 'true';
           store.dispatch(setGladConfirmed(gladConfirmedValue));
           break;
         case 'gs':

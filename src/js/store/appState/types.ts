@@ -11,6 +11,8 @@ export interface LeftPanel {
   highConfidenceConfirmed: boolean;
   gladStart: string;
   gladEnd: string;
+  gfwIntegratedStart: string;
+  gfwIntegratedEnd: string;
   modisStart: string;
   modisEnd: string;
   viirsStart: string;
@@ -84,6 +86,8 @@ export const SET_GLAD_CONFIRMED = 'SET_GLAD_CONFIRMED';
 export const SET_HIGH_CONFIDENCE_CONFIRMED = 'SET_HIGH_CONFIDENCE_CONFIRMED';
 export const SET_GLAD_START = 'SET_GLAD_START';
 export const SET_GLAD_END = 'SET_GLAD_END';
+export const SET_GFW_INTEGRATED_START = 'SET_GFW_INTEGRATED_START';
+export const SET_GFW_INTEGRATED_END = 'SET_GFW_INTEGRATED_END';
 export const SET_VIIRS_START = 'SET_VIIRS_START';
 export const SET_VIIRS_END = 'SET_VIIRS_END';
 export const SET_MODIS_START = 'SET_MODIS_START';
@@ -196,6 +200,16 @@ interface SetGladEnd {
   payload: AppState['leftPanel']['gladEnd'];
 }
 
+interface SetGfwIntegratedStart {
+  type: typeof SET_GFW_INTEGRATED_START;
+  payload: AppState['leftPanel']['gfwIntegratedStart'];
+}
+
+interface SetGfwIntegratedEnd {
+  type: typeof SET_GFW_INTEGRATED_END;
+  payload: AppState['leftPanel']['gfwIntegratedEnd'];
+}
+
 interface SetModisStart {
   type: typeof SET_MODIS_START;
   payload: AppState['leftPanel']['modisStart'];
@@ -282,6 +296,8 @@ export type AppStateTypes =
   | SetHighConfidenceConfirmed
   | SetGladStart
   | SetGladEnd
+  | SetGfwIntegratedStart
+  | SetGfwIntegratedEnd
   | SetModisStart
   | SetModisEnd
   | SetViirsStart

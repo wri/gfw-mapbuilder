@@ -7,9 +7,9 @@ export const createGFWIntegratedLayer = async () => {
 
   return BaseTileLayer.createSubclass({
     properties: {
-      julianFrom: '15000',
-      julianTo: new Date().getJulian(),
-      confirmed: false
+      gfwjulianFrom: '20063',
+      gfwjulianTo: new Date().getJulian(),
+      highConfidenceConfirmed: false
     },
     getTileUrl: function(level, row, column) {
       return this.urlTemplate
@@ -45,19 +45,24 @@ export const createGFWIntegratedLayer = async () => {
       for (let i = 0; i < data.length; i += 4) {
         const slice = [data[i], data[i + 1], data[i + 2], data[i + 3]];
         const values = this.decodeDate(slice);
-        // if date is > Feb 03 2020
-        if (values.date > 20033) {
+
+        if (values.date > this.gfwjulianFrom && values.date < this.gfwjulianTo) {
+          // if date is > Mar 03 2020
+          // if (values.date > 20063) {
           data[i + 3] = values.intensity;
-          if (this.confirmed) {
+          if (this.highConfidenceConfirmed) {
             if (values.confidence === 1) {
               data[i] = 220; // R
-              data[i + 1] = 101; // G
-              data[i + 2] = 152; // B
+              data[i + 1] = 102; // G
+              data[i + 2] = 153; // B
             }
             if (values.confidence === 2) {
               data[i] = 201; // R
               data[i + 1] = 42; // G
               data[i + 2] = 108; // B
+            }
+            if (values.confidence === 0) {
+              data[i + 3] = 0;
             }
           } else {
             if (values.confidence === 0) {
@@ -76,6 +81,7 @@ export const createGFWIntegratedLayer = async () => {
               data[i + 2] = 108; // B
             }
           }
+          // }
         }
       }
       return data;

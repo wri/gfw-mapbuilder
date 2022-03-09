@@ -17,6 +17,8 @@ import {
   SET_GLAD_CONFIRMED,
   SET_GLAD_END,
   SET_GLAD_START,
+  SET_GFW_INTEGRATED_START,
+  SET_GFW_INTEGRATED_END,
   SET_HIDE_WIDGET,
   SET_HIGH_CONFIDENCE_CONFIRMED,
   SET_IMAGE_OBJECT,
@@ -61,6 +63,8 @@ const initialState: AppState = {
     highConfidenceConfirmed: false,
     gladStart: '2015-01-01',
     gladEnd: format(new Date(Date.now()), 'yyyy-MM-dd'),
+    gfwIntegratedStart: '2020-03-03',
+    gfwIntegratedEnd: format(new Date(Date.now()), 'yyyy-MM-dd'),
     modisEnd: format(new Date(Date.now()), 'yyyy-MM-dd'),
     modisStart: format(subYears(new Date(Date.now()), 1), 'yyyy-MM-dd'),
     viirsEnd: format(new Date(Date.now()), 'yyyy-MM-dd'),
@@ -208,6 +212,22 @@ export function appStateReducer(state = initialState, action: AppStateTypes): Ap
         leftPanel: {
           ...state.leftPanel,
           gladEnd: action.payload
+        }
+      };
+    case SET_GFW_INTEGRATED_START:
+      return {
+        ...state,
+        leftPanel: {
+          ...state.leftPanel,
+          gfwIntegratedStart: action.payload
+        }
+      };
+    case SET_GFW_INTEGRATED_END:
+      return {
+        ...state,
+        leftPanel: {
+          ...state.leftPanel,
+          gfwIntegratedEnd: action.payload
         }
       };
     case SET_MODIS_START:

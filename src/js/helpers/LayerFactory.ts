@@ -231,13 +231,15 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
         view: mapView
       });
       esriLayer = integratedAlertLayer;
-      esriLayer.confirmed = appState.leftPanel.gladConfirmed;
+      esriLayer.highConfidenceConfirmed = appState.leftPanel.highConfidenceConfirmed;
+
       //@ts-ignore
-      const integratedAlertStartDate: any = new Date(appState.leftPanel.gladStart).getJulian() as any;
+      const integratedAlertStartDate: any = new Date(appState.leftPanel.gfwIntegratedStart).getJulian() as any;
       //@ts-ignore
-      const integratedAlertEndDate = new Date(appState.leftPanel.gladEnd).getJulian();
-      esriLayer.julianFrom = integratedAlertStartDate;
-      esriLayer.julianTo = integratedAlertEndDate;
+      const integratedAlertEndDate = new Date(appState.leftPanel.gfwIntegratedEnd).getJulian();
+
+      esriLayer.gfwjulianFrom = integratedAlertStartDate;
+      esriLayer.gfwjulianTo = integratedAlertEndDate;
       break;
     case 'MASK':
       const { appSettings } = store.getState();

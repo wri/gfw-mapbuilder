@@ -21,6 +21,8 @@ import {
   SET_HIGH_CONFIDENCE_CONFIRMED,
   SET_GLAD_START,
   SET_GLAD_END,
+  SET_GFW_INTEGRATED_START,
+  SET_GFW_INTEGRATED_END,
   SET_VIIRS_START,
   SET_VIIRS_END,
   SET_MODIS_START,
@@ -172,6 +174,20 @@ export function setGladStart(payload: AppState['leftPanel']['gladStart']) {
 export function setGladEnd(payload: AppState['leftPanel']['gladEnd']) {
   return {
     type: SET_GLAD_END as typeof SET_GLAD_END,
+    payload: payload
+  };
+}
+
+export function setGfwIntegratedStart(payload: AppState['leftPanel']['gfwIntegratedStart']) {
+  return {
+    type: SET_GFW_INTEGRATED_START as typeof SET_GFW_INTEGRATED_START,
+    payload: payload
+  };
+}
+
+export function setGfwIntegratedEnd(payload: AppState['leftPanel']['gfwIntegratedEnd']) {
+  return {
+    type: SET_GFW_INTEGRATED_END as typeof SET_GFW_INTEGRATED_END,
     payload: payload
   };
 }
