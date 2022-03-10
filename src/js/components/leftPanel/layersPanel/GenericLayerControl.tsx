@@ -209,7 +209,7 @@ const GladControls = (props: GladControlsProps): JSX.Element => {
               <label className="styled-checkboxlabel" htmlFor="layer-checkbox-glad"></label>
             </CheckboxWrapper>
           </div>
-          Hide unconfirmed alerts
+          <p>Hide unconfirmed alerts</p>
         </div>
       )}
 
@@ -365,7 +365,17 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
   //Determine if we need density control on this layer
   const densityPicker = layer && densityEnabledLayers.includes(layer.id);
   const altLayerName = layer.label && layer.label[selectedLanguage];
-
+  const getDateRange = () => {
+    const now = new Date(2022, 3, 3);
+    const daysOfYear = [];
+    for (let d = new Date(2020, 3, 3); d <= now; d.setDate(d.getDate() + 1)) {
+      // @ts-ignore
+      daysOfYear.push(new Date(d).getJulian());
+    }
+    // @ts-ignore
+    return daysOfYear;
+  };
+  const dateRange = getDateRange();
   const returnTimeSlider = (id: string): any => {
     switch (id) {
       case 'TREE_COVER_LOSS':
@@ -396,13 +406,15 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
       case 'GFW_INTEGRATED_ALERTS':
         return (
           <TimeSlider
+            layer={layer}
             layerID={id}
             defaultMarks={defaultMarks}
-            min={2000}
-            max={2020}
-            defaultValue={[2000, 2020]}
+            min={20063}
+            max={22062}
+            defaultValue={dateRange}
             steps={1}
             included={true}
+            type={'gfw-integrated-alert'}
           />
         );
       default:

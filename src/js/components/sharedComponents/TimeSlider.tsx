@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-
+import moment from 'moment';
 import { createSliderWithTooltip, Range } from 'rc-slider';
 
 import { mapController } from '../../controllers/mapController';
@@ -8,10 +8,13 @@ import { mapController } from '../../controllers/mapController';
 import { setTimeSlider } from '../../store/mapview/actions';
 
 import { RootState } from '../../store';
+import { LayerFactory } from '../../helpers/LayerFactory';
+import { setGfwIntegratedEnd, setGfwIntegratedStart } from '../../store/appState/actions';
 
 const SliderWithTooltip = createSliderWithTooltip(Range);
 
 interface TimeSliderProps {
+  layer?: any;
   layerID: string;
   defaultMarks: any;
   min: number;
@@ -19,6 +22,7 @@ interface TimeSliderProps {
   defaultValue: Array<number> | any;
   steps?: number | null;
   included: boolean;
+  type?: string;
 }
 
 const TimeSlider = (props: TimeSliderProps): JSX.Element => {
@@ -83,11 +87,28 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
       clearInterval(timeSliderRef.current);
     };
   }, [startTimeSlider, range[1], timeSlider[1]]);
-
+  const convertJulianDate = julianDate => {
+    return moment(julianDate, 'YYDDD').format('YYYY-MM-DD');
+  };
   const setSelectedRange = (selectedRange: Array<number>): void => {
     setRange(selectedRange);
     dispatch(setTimeSlider(selectedRange));
     mapController.updateBaseTile(layerID, selectedRange);
+
+    if (props.type === 'gfw-integrated-alert') {
+      const startDate = convertJulianDate(selectedRange[0]);
+      const endDate = convertJulianDate(selectedRange[1]);
+
+      const gfwIntegratedLayerOld: any = mapController._map!.findLayerById('GFW_INTEGRATED_ALERTS');
+      const gfwIntegratedIndex: number = mapController._map!.layers.indexOf(gfwIntegratedLayerOld);
+      mapController._map?.remove(gfwIntegratedLayerOld);
+      const gfwIntegratedLayerNew: any = LayerFactory(mapController._mapview, props.layer);
+      gfwIntegratedLayerNew.gfwjulianFrom = startDate;
+      gfwIntegratedLayerNew.gfwjulianTo = endDate;
+      mapController._map?.add(gfwIntegratedLayerNew, gfwIntegratedIndex);
+      dispatch(setGfwIntegratedStart(startDate));
+      dispatch(setGfwIntegratedEnd(endDate));
+    }
   };
 
   const playOrPauseTimeSlider = (startPlaying: boolean): any => {
