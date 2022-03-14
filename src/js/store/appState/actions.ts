@@ -35,6 +35,7 @@ import {
   SET_ACTIVE_MULTI_INPUT,
   SET_ANALYSIS_FEATURE_LIST,
   SET_TREE_HEIGHT,
+  SET_GFW_LAYER,
   SET_IMAGE_OBJECT
 } from './types';
 
@@ -237,6 +238,13 @@ export function setAreaImages(payload: string) {
 export function setTreeHeight(payload: number) {
   return {
     type: SET_TREE_HEIGHT as typeof SET_TREE_HEIGHT,
+    payload: payload
+  };
+}
+
+export function setGFWLayer(payload: number) {
+  return {
+    type: SET_GFW_LAYER as typeof SET_GFW_LAYER,
     payload: payload
   };
 }

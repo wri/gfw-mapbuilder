@@ -9,7 +9,7 @@ import store from '../store/index';
 import { LayerFactory } from '../helpers/LayerFactory';
 import { setLayerSearchSource } from '../helpers/mapController/searchSources';
 import { getSortedLayers } from '../helpers/mapController/layerSorting';
-import { addPointGraphic, clearGraphics, drawIntersectingGraphic } from '../../js/helpers/MapGraphics';
+import { addPointGraphic, clearGraphics, drawIntersectingGraphic } from '../helpers/MapGraphics';
 import {
   allAvailableLayers,
   mapError,
@@ -38,7 +38,7 @@ import {
   setGladEnd,
   setAnalysisFeatureList
 } from '../store/appState/actions';
-import { LayerProps, LayerFeatureResult, FeatureResult } from '../../js/store/mapview/types';
+import { LayerProps, LayerFeatureResult, FeatureResult } from '../store/mapview/types';
 import { OptionType } from '../types/measureWidget';
 import { queryLayersForFeatures } from '../helpers/dataPanel/DataPanel';
 import { setNewGraphic } from '../helpers/MapGraphics';
@@ -1215,9 +1215,7 @@ export class MapController {
       this._map.add(this._sketchMultipleGLayer);
     }
 
-    console.log(this._sketchMultipleVM);
     if (!this._sketchMultipleVM) {
-      console.log('creating sketch vm');
       this._sketchMultipleVM = new SketchViewModel({
         view: this._mapview,
         layer: this._sketchMultipleGLayer,
@@ -1263,8 +1261,6 @@ export class MapController {
 
   clearGraphicFromMultiSelection = (inputIndex: number): void => {
     if (!this._sketchMultipleGLayer) return;
-    //@ts-ignore
-    console.log(this._sketchMultipleGLayer.graphics.items);
     //@ts-ignore
     const graphicToRemove = this._sketchMultipleGLayer.graphics.items.find(g => g.attributes.inputIndex === inputIndex);
     if (graphicToRemove) {
@@ -1726,6 +1722,16 @@ export class MapController {
       windSpeedLayerLayer.height = value;
       windSpeedLayerLayer.refresh();
     }
+  }
+
+  async updateGFWLayer(value: string, gfwLayers: Array<string>): Promise<any> {
+    const turnOffLayersNotSelected = gfwLayers.filter(layer => layer != value);
+    turnOffLayersNotSelected.forEach(gfwLayer => {
+      const layer = this._map!.findLayerById(gfwLayer);
+      layer.visible = false;
+    });
+    const selectedLayer = this._map!.findLayerById(value);
+    selectedLayer.visible = true;
   }
 
   getMapviewCoordinates(): URLCoordinates {

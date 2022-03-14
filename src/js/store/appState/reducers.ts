@@ -33,6 +33,7 @@ import {
   SET_RENDER_POPUP,
   SET_SELECTED_SEARCH_WIDGET_LAYER,
   SET_TREE_HEIGHT,
+  SET_GFW_LAYER,
   SET_VERSIONED_LAYER,
   SET_VIIRS_END,
   SET_VIIRS_START,
@@ -71,6 +72,7 @@ const initialState: AppState = {
     viirsStart: format(subYears(new Date(Date.now()), 1), 'yyyy-MM-dd'),
     versionedLayer: {},
     treeHeight: 3,
+    gfwLayer: 1,
     windSpeedPotential: 50
   },
   measureContent: {
@@ -268,6 +270,14 @@ export function appStateReducer(state = initialState, action: AppStateTypes): Ap
         leftPanel: {
           ...state.leftPanel,
           treeHeight: action.payload
+        }
+      };
+    case SET_GFW_LAYER:
+      return {
+        ...state,
+        leftPanel: {
+          ...state.leftPanel,
+          gfwLayer: action.payload
         }
       };
     case SET_WIND_SPEED_POTENTIAL:

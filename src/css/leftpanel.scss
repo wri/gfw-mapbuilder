@@ -374,7 +374,6 @@
   color: $dark-grey;
   overflow-y: auto;
   overflow-x: visible;
-  width: 314px;
   position: relative;
   left: -8px;
 }
@@ -505,7 +504,8 @@
   }
 }
 
-.glad-control-container {
+.glad-control-container,
+.gfw-control-container {
   display: grid;
   grid-template-columns: auto 1fr;
   align-items: center;
@@ -1015,7 +1015,29 @@
     color: #fff;
   }
 }
-
+.gfw-alert-picker-wrapper {
+  text-align: center;
+  span {
+    font-size: 12px;
+  }
+  .toggle {
+    position: relative;
+    background: transparent;
+    width: 11rem;
+    padding: 5px;
+    font-size: 16px;
+    line-height: 1;
+    height: 1.5rem;
+    border-radius: 16px;
+    -webkit-appearance: none;
+    margin-top: auto;
+    margin-bottom: auto;
+    border: 1px solid $base-yellow;
+    background-color: $white;
+    color: $dark-grey;
+    font-size: 11px;
+  }
+}
 .recent-imagery-container {
   font-family: $fira-sans;
   color: #555;

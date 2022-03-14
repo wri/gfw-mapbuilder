@@ -40,6 +40,8 @@ import { DragIcon } from '../../../../images/dragIcon';
 import 'react-datepicker/dist/react-datepicker.css';
 import WindSpeedPicker from '../../sharedComponents/WindSpeedPicker';
 import { setTimeSlider } from '../../../store/mapview/actions';
+import { createGeographicCoverage } from '../../../layers/GeographicCoverage';
+import SelectGFWAlertLayer from '../../sharedComponents/SelectGFWAlertLayer';
 
 //Dynamic custom theme override using styled-components lib
 interface CheckBoxWrapperProps {
@@ -70,6 +72,7 @@ const GladControls = (props: GladControlsProps): JSX.Element => {
 
   const [unconfirmedAlerts, setUnconfirmedAlerts] = React.useState(gladConfirmed);
   const [highconfidenceAlerts, setHighConfidenceAlerts] = React.useState(highConfidenceConfirmed);
+  const [geographicCoverageToggle, setGeographicCoverageToggle] = React.useState(false);
   const [startDate, setStartDate] = React.useState(
     String(props.type === 'gfw-integrated-alert' ? gfwIntegratedStart : gladStart)
   );
@@ -157,6 +160,17 @@ const GladControls = (props: GladControlsProps): JSX.Element => {
     mapController._map?.add(gfwIntegratedLayerNew);
   }
 
+  async function showGeographicCoverage() {
+    const geographicCoverageConstructor = await createGeographicCoverage();
+    const geographicCoverageLayer = new geographicCoverageConstructor({
+      title: 'Geographic Coverage',
+      urlTemplate: 'https://tiles.globalforestwatch.org/umd_glad_landsat_alerts_coverage/v2014/default/{z}/{x}/{y}.pbf',
+      view: mapController._mapview
+    });
+    setGeographicCoverageToggle(!geographicCoverageToggle);
+    mapController._map?.add(geographicCoverageLayer);
+  }
+
   return (
     <div className="glad-control-wrapper">
       {props.type === 'gfw-integrated-alert' ? (
@@ -177,18 +191,18 @@ const GladControls = (props: GladControlsProps): JSX.Element => {
             </div>
             <p>Show only high and highest confidence alerts</p>
           </div>
-          <div className="glad-control-container">
+          <div className="gfw-control-container" style={{ marginTop: 5 }}>
             <div className="layer-checkbox">
               <CheckboxWrapper customColorTheme={props.customColorTheme}>
                 <input
                   type="checkbox"
                   name="styled-checkbox"
                   className="styled-checkbox"
-                  id="layer-checkbox-glad"
-                  checked={highconfidenceAlerts}
-                  onChange={showOnlyHighConfidenceToggle}
+                  id="layer-checkbox-gfw"
+                  checked={geographicCoverageToggle}
+                  onChange={showGeographicCoverage}
                 />
-                <label className="styled-checkboxlabel" htmlFor="layer-checkbox-glad"></label>
+                <label className="styled-checkboxlabel" htmlFor="layer-checkbox-gfw"></label>
               </CheckboxWrapper>
             </div>
             <p>Geographic Coverage</p>
@@ -599,9 +613,11 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
             )}
           </div>
         </div>
+        {layer?.visible && layer.id === 'GFW_INTEGRATED_ALERTS' && <SelectGFWAlertLayer />}
         {layer?.visible && returnTimeSlider(props.id)}
         {layer?.visible && densityPicker && <CanopyDensityPicker type={layer.id} />}
         {layer?.visible && layer.id === 'TREE_COVER_HEIGHT' && <TreeHeightPicker />}
+
         {/*@TODO make this active when windspeed potential urls are available*/}
         {/*{layer?.visible && layer.id === 'WIND_SPEED' && <WindSpeedPicker />}*/}
         {layer?.visible && layer.versions && (
