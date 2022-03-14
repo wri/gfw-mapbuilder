@@ -26,7 +26,7 @@ import {
 import { RootState } from '../../../store';
 import { LayerProps } from '../../../store/mapview/types';
 import { mapController } from '../../../controllers/mapController';
-import { defaultMarks, densityEnabledLayers, drySpellMarks } from '../../../../../configs/layer-config';
+import { defaultMarks, densityEnabledLayers, drySpellMarks, gfwMarks } from '../../../../../configs/layer-config';
 import { InfoIcon } from '../../../../images/infoIcon';
 import { DashboardIcon } from '../../../../images/dashboardIcon';
 import { LayerVersionPicker } from './LayerVersionPicker';
@@ -358,24 +358,12 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
   const layer = props.layer;
   const dispatch = useDispatch();
   const [opacityControl, setOpacityControl] = useState(false);
-
   const selectedLanguage = useSelector((store: RootState) => store.appState.selectedLanguage);
-
   const customColorTheme = useSelector((store: RootState) => store.appSettings.customColorTheme);
   //Determine if we need density control on this layer
   const densityPicker = layer && densityEnabledLayers.includes(layer.id);
   const altLayerName = layer.label && layer.label[selectedLanguage];
-  const getDateRange = () => {
-    const now = new Date(2022, 3, 3);
-    const daysOfYear = [];
-    for (let d = new Date(2020, 3, 3); d <= now; d.setDate(d.getDate() + 1)) {
-      // @ts-ignore
-      daysOfYear.push(new Date(d).getJulian());
-    }
-    // @ts-ignore
-    return daysOfYear;
-  };
-  const dateRange = getDateRange();
+
   const returnTimeSlider = (id: string): any => {
     switch (id) {
       case 'TREE_COVER_LOSS':
@@ -404,15 +392,16 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
           />
         );
       case 'GFW_INTEGRATED_ALERTS':
+        // @ts-ignore
         return (
           <TimeSlider
             layer={layer}
             layerID={id}
-            defaultMarks={defaultMarks}
-            min={20063}
-            max={22062}
-            defaultValue={dateRange}
-            steps={1}
+            defaultMarks={gfwMarks}
+            min={new Date(2020, 3, 3)}
+            max={new Date(2022, 3, 3)}
+            defaultValue={[0, 730]}
+            steps={33}
             included={true}
             type={'gfw-integrated-alert'}
           />

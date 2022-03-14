@@ -265,3 +265,20 @@ export const drySpellMarks = {
     style: {}
   }
 };
+export const gfwMarks = {
+  '0': {
+    value: '0',
+    label: '2020-03-31',
+    style: {}
+  },
+  '365': {
+    value: '365',
+    label: '2021-03-31',
+    style: {}
+  },
+  '730': {
+    value: '730',
+    label: '2022-03-31',
+    style: {}
+  }
+};

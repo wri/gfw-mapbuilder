@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import moment from 'moment';
 import { createSliderWithTooltip, Range } from 'rc-slider';
 
 import { mapController } from '../../controllers/mapController';
@@ -17,8 +16,8 @@ interface TimeSliderProps {
   layer?: any;
   layerID: string;
   defaultMarks: any;
-  min: number;
-  max?: number;
+  min: number | any;
+  max?: number | any;
   defaultValue: Array<number> | any;
   steps?: number | null;
   included: boolean;
@@ -28,9 +27,9 @@ interface TimeSliderProps {
 const TimeSlider = (props: TimeSliderProps): JSX.Element => {
   const dispatch = useDispatch();
   const timeSliderRef = useRef();
-  const { layerID } = props;
+  const { layerID, min, max } = props;
   const timeSlider = useSelector((store: RootState) => store.mapviewState.timeSlider);
-  const [range, setRange] = useState(timeSlider);
+  const [range, setRange] = useState(props.type !== 'gfw-integrated-alert' ? timeSlider : [0, 730]);
   const [playButton, setPlayButton] = useState(true);
   const [startTimeSlider, setStartTimeSlider] = useState(false);
   const customColorTheme = useSelector((store: RootState) => store.appSettings.customColorTheme);
@@ -87,8 +86,11 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
       clearInterval(timeSliderRef.current);
     };
   }, [startTimeSlider, range[1], timeSlider[1]]);
-  const convertJulianDate = julianDate => {
-    return moment(julianDate, 'YYDDD').format('YYYY-MM-DD');
+
+  const convertDate = value => {
+    const nextStartDate = new Date(min.getTime() || max.getTime());
+    nextStartDate.setDate(value);
+    return new Date(nextStartDate.getTime() - nextStartDate.getTimezoneOffset() * 60000).toISOString().split('T')[0];
   };
   const setSelectedRange = (selectedRange: Array<number>): void => {
     setRange(selectedRange);
@@ -96,18 +98,19 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
     mapController.updateBaseTile(layerID, selectedRange);
 
     if (props.type === 'gfw-integrated-alert') {
-      const startDate = convertJulianDate(selectedRange[0]);
-      const endDate = convertJulianDate(selectedRange[1]);
-
+      const convertStartDate = convertDate(selectedRange[0]);
+      const convertEndDate = convertDate(selectedRange[1]);
       const gfwIntegratedLayerOld: any = mapController._map!.findLayerById('GFW_INTEGRATED_ALERTS');
       const gfwIntegratedIndex: number = mapController._map!.layers.indexOf(gfwIntegratedLayerOld);
       mapController._map?.remove(gfwIntegratedLayerOld);
+
       const gfwIntegratedLayerNew: any = LayerFactory(mapController._mapview, props.layer);
-      gfwIntegratedLayerNew.gfwjulianFrom = startDate;
-      gfwIntegratedLayerNew.gfwjulianTo = endDate;
+      gfwIntegratedLayerNew.gfwjulianFrom = convertStartDate;
+      gfwIntegratedLayerNew.gfwjulianTo = convertEndDate;
       mapController._map?.add(gfwIntegratedLayerNew, gfwIntegratedIndex);
-      dispatch(setGfwIntegratedStart(startDate));
-      dispatch(setGfwIntegratedEnd(endDate));
+
+      dispatch(setGfwIntegratedStart(convertStartDate));
+      dispatch(setGfwIntegratedEnd(convertEndDate));
     }
   };
 
@@ -143,12 +146,18 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
       )}
 
       <SliderWithTooltip
-        min={props.min}
-        max={props.max}
+        min={props.type === 'gfw-integrated-alert' ? 0 : props.min}
+        max={props.type === 'gfw-integrated-alert' ? 730 : props.max}
         defaultValue={props.defaultValue}
         value={range}
         allowCross={false}
-        tipFormatter={(val: number): number => val}
+        tipFormatter={
+          props.type !== 'gfw-integrated-alert' ? (val: number): number => val : (val: any): any => convertDate(val)
+        }
+        tipProps={{
+          placement: 'top',
+          prefixCls: 'rc-slider-tooltip'
+        }}
         dots={true}
         marks={marks}
         railStyle={{ backgroundColor: 'rgb(233, 233, 233)' }}
