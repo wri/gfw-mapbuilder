@@ -18,7 +18,7 @@ export interface LeftPanel {
   viirsStart: string;
   viirsEnd: string;
   treeHeight: number;
-  gfwLayer: number;
+  gfwLayer: string;
   windSpeedPotential: number;
   versionedLayer: {
     [key: string]: string;

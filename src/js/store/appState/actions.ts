@@ -242,7 +242,7 @@ export function setTreeHeight(payload: number) {
   };
 }
 
-export function setGFWLayer(payload: number) {
+export function setGFWLayer(payload: string) {
   return {
     type: SET_GFW_LAYER as typeof SET_GFW_LAYER,
     payload: payload

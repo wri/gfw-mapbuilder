@@ -72,7 +72,7 @@ const initialState: AppState = {
     viirsStart: format(subYears(new Date(Date.now()), 1), 'yyyy-MM-dd'),
     versionedLayer: {},
     treeHeight: 3,
-    gfwLayer: 1,
+    gfwLayer: 'GFW_INTEGRATED_ALERTS',
     windSpeedPotential: 50
   },
   measureContent: {

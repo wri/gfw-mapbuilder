@@ -40,8 +40,8 @@ import { DragIcon } from '../../../../images/dragIcon';
 import 'react-datepicker/dist/react-datepicker.css';
 import WindSpeedPicker from '../../sharedComponents/WindSpeedPicker';
 import { setTimeSlider } from '../../../store/mapview/actions';
-import { createGeographicCoverage } from '../../../layers/GeographicCoverage';
 import SelectGFWAlertLayer from '../../sharedComponents/SelectGFWAlertLayer';
+import { loadModules } from 'esri-loader';
 
 //Dynamic custom theme override using styled-components lib
 interface CheckBoxWrapperProps {
@@ -161,14 +161,18 @@ const GladControls = (props: GladControlsProps): JSX.Element => {
   }
 
   async function showGeographicCoverage() {
-    const geographicCoverageConstructor = await createGeographicCoverage();
-    const geographicCoverageLayer = new geographicCoverageConstructor({
-      title: 'Geographic Coverage',
-      urlTemplate: 'https://tiles.globalforestwatch.org/umd_glad_landsat_alerts_coverage/v2014/default/{z}/{x}/{y}.pbf',
-      view: mapController._mapview
+    const [VectorTileLayer] = await loadModules(['esri/layers/VectorTileLayer']);
+    const geographicCoverageLayer = new VectorTileLayer({
+      url: 'https://tiles.globalforestwatch.org/umd_glad_landsat_alerts_coverage/v2014/default/root.json',
+      id: 'GEOGRAPHIC_COVERAGE_LAYER'
     });
     setGeographicCoverageToggle(!geographicCoverageToggle);
-    mapController._map?.add(geographicCoverageLayer);
+    if (geographicCoverageToggle) {
+      const geographicCoverageLayerOld: any = mapController._map!.findLayerById('GEOGRAPHIC_COVERAGE_LAYER');
+      mapController._map?.remove(geographicCoverageLayerOld);
+    } else {
+      mapController._map?.add(geographicCoverageLayer);
+    }
   }
 
   return (
