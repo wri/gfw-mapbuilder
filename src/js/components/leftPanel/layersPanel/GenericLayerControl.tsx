@@ -69,7 +69,8 @@ const GladControls = (props: GladControlsProps): JSX.Element => {
   const gladEnd = useSelector((store: RootState) => store.appState.leftPanel.gladEnd);
   const gfwIntegratedStart = useSelector((store: RootState) => store.appState.leftPanel.gfwIntegratedStart);
   const gfwIntegratedEnd = useSelector((store: RootState) => store.appState.leftPanel.gfwIntegratedEnd);
-
+  const gfwLayer = useSelector((store: RootState) => store.appState.leftPanel.gfwLayer);
+  const allAvailableLayers = useSelector((store: RootState) => store.mapviewState.allAvailableLayers);
   const [unconfirmedAlerts, setUnconfirmedAlerts] = React.useState(gladConfirmed);
   const [highconfidenceAlerts, setHighConfidenceAlerts] = React.useState(highConfidenceConfirmed);
   const [geographicCoverageToggle, setGeographicCoverageToggle] = React.useState(false);
@@ -78,14 +79,14 @@ const GladControls = (props: GladControlsProps): JSX.Element => {
   );
   const [endDate, setEndDate] = React.useState(props.type === 'gfw-integrated-alert' ? gfwIntegratedEnd : gladEnd);
 
-  function handleStartDateChange(day: any): void {
+  async function handleStartDateChange(day: any) {
     const dFormat = format(day, 'yyyy-MM-dd');
     setStartDate(dFormat);
     //@ts-ignore
     const start = new Date(dFormat).getJulian();
     //@ts-ignore
     const end = new Date(endDate).getJulian();
-    if (props.type === 'gfw-integrated-alert') {
+    if (props.type === 'gfw-integrated-alert' && gfwLayer === 'GFW_INTEGRATED_ALERTS') {
       const gfwIntegratedLayerOld: any = mapController._map!.findLayerById('GFW_INTEGRATED_ALERTS');
       const gfwIntegratedIndex: number = mapController._map!.layers.indexOf(gfwIntegratedLayerOld);
       mapController._map?.remove(gfwIntegratedLayerOld);
@@ -97,27 +98,30 @@ const GladControls = (props: GladControlsProps): JSX.Element => {
       dispatch(setGfwIntegratedStart(dFormat));
       dispatch(setGfwIntegratedEnd(endDate));
     } else {
+      const gladLayerConfig: any = allAvailableLayers.filter((layer: any) => layer.id === 'GLAD_ALERTS');
       const gladLayerOld: any = mapController._map!.findLayerById('GLAD_ALERTS');
       const gladIndex: number = mapController._map!.layers.indexOf(gladLayerOld);
       mapController._map?.remove(gladLayerOld);
-      const gladLayerNew: any = LayerFactory(mapController._mapview, props.layerConfig);
+      const gladLayerNew: any = await LayerFactory(mapController._mapview, gladLayerConfig[0]);
       gladLayerNew.julianFrom = start;
       gladLayerNew.julianTo = end;
       mapController._map?.add(gladLayerNew, gladIndex);
+      const selectedLayer = mapController._map!.findLayerById('GLAD_ALERTS');
+      selectedLayer.visible = true;
 
       dispatch(setGladStart(dFormat));
       dispatch(setGladEnd(endDate));
     }
   }
 
-  function handleEndDateChange(day: any): void {
+  async function handleEndDateChange(day: any) {
     const dFormat = format(day, 'yyyy-MM-dd');
     setEndDate(dFormat);
     //@ts-ignore
     const end = new Date(dFormat).getJulian();
     //@ts-ignore
     const start = new Date(startDate).getJulian();
-    if (props.type === 'gfw-integrated-alert') {
+    if (props.type === 'gfw-integrated-alert' && gfwLayer === 'GFW_INTEGRATED_ALERTS') {
       const gfwIntegratedLayerOld: any = mapController._map!.findLayerById('GFW_INTEGRATED_ALERTS');
       const gfwIntegratedIndex: number = mapController._map!.layers.indexOf(gfwIntegratedLayerOld);
       mapController._map?.remove(gfwIntegratedLayerOld);
@@ -128,13 +132,16 @@ const GladControls = (props: GladControlsProps): JSX.Element => {
       dispatch(setGfwIntegratedStart(startDate));
       dispatch(setGfwIntegratedEnd(dFormat));
     } else {
+      const gladLayerConfig: any = allAvailableLayers.filter((layer: any) => layer.id === 'GLAD_ALERTS');
       const gladLayerOld: any = mapController._map!.findLayerById('GLAD_ALERTS');
       const gladIndex: number = mapController._map!.layers.indexOf(gladLayerOld);
       mapController._map?.remove(gladLayerOld);
-      const gladLayerNew: any = LayerFactory(mapController._mapview, props.layerConfig);
+      const gladLayerNew: any = await LayerFactory(mapController._mapview, gladLayerConfig[0]);
       gladLayerNew.julianFrom = start;
       gladLayerNew.julianTo = end;
       mapController._map?.add(gladLayerNew, gladIndex);
+      const selectedLayer = mapController._map!.findLayerById('GLAD_ALERTS');
+      selectedLayer.visible = true;
       dispatch(setGladStart(startDate));
       dispatch(setGladEnd(dFormat));
     }

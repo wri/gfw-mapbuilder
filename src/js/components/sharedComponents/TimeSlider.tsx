@@ -8,7 +8,7 @@ import { setTimeSlider } from '../../store/mapview/actions';
 
 import { RootState } from '../../store';
 import { LayerFactory } from '../../helpers/LayerFactory';
-import { setGfwIntegratedEnd, setGfwIntegratedStart } from '../../store/appState/actions';
+import { setGfwIntegratedEnd, setGfwIntegratedStart, setGladEnd, setGladStart } from '../../store/appState/actions';
 
 const SliderWithTooltip = createSliderWithTooltip(Range);
 
@@ -33,6 +33,8 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
   const [playButton, setPlayButton] = useState(true);
   const [startTimeSlider, setStartTimeSlider] = useState(false);
   const customColorTheme = useSelector((store: RootState) => store.appSettings.customColorTheme);
+  const gfwLayer = useSelector((store: RootState) => store.appState.leftPanel.gfwLayer);
+  const allAvailableLayers = useSelector((store: RootState) => store.mapviewState.allAvailableLayers);
   const [marks, setMarks] = useState(props.defaultMarks);
 
   useEffect(() => {
@@ -92,14 +94,17 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
     nextStartDate.setDate(value);
     return new Date(nextStartDate.getTime() - nextStartDate.getTimezoneOffset() * 60000).toISOString().split('T')[0];
   };
-  const setSelectedRange = (selectedRange: Array<number>): void => {
+  const setSelectedRange = async (selectedRange: Array<number>) => {
     setRange(selectedRange);
     dispatch(setTimeSlider(selectedRange));
     mapController.updateBaseTile(layerID, selectedRange);
-
-    if (props.type === 'gfw-integrated-alert') {
-      const convertStartDate = convertDate(selectedRange[0]);
-      const convertEndDate = convertDate(selectedRange[1]);
+    const convertStartDate = convertDate(selectedRange[0]);
+    const convertEndDate = convertDate(selectedRange[1]);
+    //@ts-ignore
+    const end = new Date(convertEndDate).getJulian();
+    //@ts-ignore
+    const start = new Date(convertStartDate).getJulian();
+    if (props.type === 'gfw-integrated-alert' && gfwLayer === 'GFW_INTEGRATED_ALERTS') {
       const gfwIntegratedLayerOld: any = mapController._map!.findLayerById('GFW_INTEGRATED_ALERTS');
       const gfwIntegratedIndex: number = mapController._map!.layers.indexOf(gfwIntegratedLayerOld);
       mapController._map?.remove(gfwIntegratedLayerOld);
@@ -111,6 +116,19 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
 
       dispatch(setGfwIntegratedStart(convertStartDate));
       dispatch(setGfwIntegratedEnd(convertEndDate));
+    } else {
+      const gladLayerConfig: any = allAvailableLayers.filter((layer: any) => layer.id === 'GLAD_ALERTS');
+      const gladLayerOld: any = mapController._map!.findLayerById('GLAD_ALERTS');
+      const gladIndex: number = mapController._map!.layers.indexOf(gladLayerOld);
+      mapController._map?.remove(gladLayerOld);
+      const gladLayerNew: any = await LayerFactory(mapController._mapview, gladLayerConfig[0]);
+      gladLayerNew.julianFrom = start;
+      gladLayerNew.julianTo = end;
+      mapController._map?.add(gladLayerNew, gladIndex);
+      const selectedLayer = mapController._map!.findLayerById('GLAD_ALERTS');
+      selectedLayer.visible = true;
+      dispatch(setGladStart(convertStartDate));
+      dispatch(setGladEnd(convertEndDate));
     }
   };
 
@@ -172,7 +190,7 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
         step={props.steps}
         trackStyle={[{ backgroundColor: customColorTheme }]}
         className={playButton ? '' : 'playing'}
-        onChange={(value: Array<number>): void => setSelectedRange(value)}
+        onChange={(value: Array<number>) => setSelectedRange(value)}
       />
     </div>
   );
