@@ -117,16 +117,18 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
       dispatch(setGfwIntegratedStart(convertStartDate));
       dispatch(setGfwIntegratedEnd(convertEndDate));
     } else {
-      const gladLayerConfig: any = allAvailableLayers.filter((layer: any) => layer.id === 'GLAD_ALERTS');
-      const gladLayerOld: any = mapController._map!.findLayerById('GLAD_ALERTS');
+      const gladLayerConfig: any = allAvailableLayers.filter((layer: any) => layer.id === gfwLayer);
+      const gladLayerOld: any = mapController._map!.findLayerById(gfwLayer);
       const gladIndex: number = mapController._map!.layers.indexOf(gladLayerOld);
       mapController._map?.remove(gladLayerOld);
       const gladLayerNew: any = await LayerFactory(mapController._mapview, gladLayerConfig[0]);
       gladLayerNew.julianFrom = start;
       gladLayerNew.julianTo = end;
+      gladLayerNew.id = gfwLayer;
       mapController._map?.add(gladLayerNew, gladIndex);
-      const selectedLayer = mapController._map!.findLayerById('GLAD_ALERTS');
+      const selectedLayer = mapController._map!.findLayerById(gfwLayer);
       selectedLayer.visible = true;
+
       dispatch(setGladStart(convertStartDate));
       dispatch(setGladEnd(convertEndDate));
     }

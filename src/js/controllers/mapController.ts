@@ -359,6 +359,8 @@ export class MapController {
               newRemoteLayerObject.dashboardURL = remoteLayerObject?.dashboardURL;
               newRemoteLayerObject.popup = remoteLayerObject.popup;
             }
+            console.log(newRemoteLayerObject);
+
             remoteLayerObjects.push(newRemoteLayerObject);
           }
           const allLayerObjects = [...mapLayerObjects, ...remoteLayerObjects];
@@ -1728,10 +1730,14 @@ export class MapController {
     const turnOffLayersNotSelected = gfwLayers.filter(layer => layer != value);
     turnOffLayersNotSelected.forEach(gfwLayer => {
       const layer = this._map!.findLayerById(gfwLayer);
-      layer.visible = false;
+      if (layer) {
+        layer.visible = false;
+      }
     });
     const selectedLayer = this._map!.findLayerById(value);
-    selectedLayer.visible = true;
+    if (selectedLayer) {
+      selectedLayer.visible = true;
+    }
   }
 
   getMapviewCoordinates(): URLCoordinates {

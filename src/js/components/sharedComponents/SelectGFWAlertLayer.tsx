@@ -10,7 +10,7 @@ const SelectGFWAlertLayer = (): JSX.Element => {
   const gfwLayer = useSelector((store: RootState) => store.appState.leftPanel.gfwLayer);
 
   function handleDensityButtonClick(e): void {
-    const gfwLayers = [e.target[0].value, e.target[1].value];
+    const gfwLayers = [e.target[0].value, e.target[1].value, e.target[2].value];
     mapController.updateGFWLayer(e.target.value, gfwLayers);
     dispatch(setGFWLayer(e.target.value));
   }
@@ -30,8 +30,8 @@ const SelectGFWAlertLayer = (): JSX.Element => {
       <select className="toggle" onChange={(e): void => handleDensityButtonClick(e)} value={gfwLayer}>
         <option value={'GFW_INTEGRATED_ALERTS'}>Integrated Deforestation Alerts {'▼'}</option>
         <option value={'GLAD_ALERTS'}>GLAD-L Alerts {'▼'}</option>
-        {/*<option value={'GFW_INTEGRATED_ALERTS'}>GLAD-S2 Alerts {'▼'}</option>*/}
-        {/*<option value={'GLAD_ALERTS'}>RADD Alerts {'▼'}</option>*/}
+        <option value={'GLAD_S2_ALERTS'}>GLAD-S2 Alerts {'▼'}</option>
+        <option value={'RADD_ALERTS'}>RADD Alerts {'▼'}</option>
       </select>
       {/*<span> {displayLabel[1]}</span>*/}
     </div>

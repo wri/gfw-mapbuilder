@@ -132,15 +132,15 @@ const GladControls = (props: GladControlsProps): JSX.Element => {
       dispatch(setGfwIntegratedStart(startDate));
       dispatch(setGfwIntegratedEnd(dFormat));
     } else {
-      const gladLayerConfig: any = allAvailableLayers.filter((layer: any) => layer.id === 'GLAD_ALERTS');
-      const gladLayerOld: any = mapController._map!.findLayerById('GLAD_ALERTS');
+      const gladLayerConfig: any = allAvailableLayers.filter((layer: any) => layer.id === gfwLayer);
+      const gladLayerOld: any = mapController._map!.findLayerById(gfwLayer);
       const gladIndex: number = mapController._map!.layers.indexOf(gladLayerOld);
       mapController._map?.remove(gladLayerOld);
       const gladLayerNew: any = await LayerFactory(mapController._mapview, gladLayerConfig[0]);
       gladLayerNew.julianFrom = start;
       gladLayerNew.julianTo = end;
       mapController._map?.add(gladLayerNew, gladIndex);
-      const selectedLayer = mapController._map!.findLayerById('GLAD_ALERTS');
+      const selectedLayer = mapController._map!.findLayerById(gfwLayer);
       selectedLayer.visible = true;
       dispatch(setGladStart(startDate));
       dispatch(setGladEnd(dFormat));
@@ -385,6 +385,7 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
   const [opacityControl, setOpacityControl] = useState(false);
   const selectedLanguage = useSelector((store: RootState) => store.appState.selectedLanguage);
   const customColorTheme = useSelector((store: RootState) => store.appSettings.customColorTheme);
+  const gfwLayer = useSelector((store: RootState) => store.appState.leftPanel.gfwLayer);
   //Determine if we need density control on this layer
   const densityPicker = layer && densityEnabledLayers.includes(layer.id);
   const altLayerName = layer.label && layer.label[selectedLanguage];
@@ -574,8 +575,8 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
       );
     }
   };
-
-  return (
+  // hiding GLAD Alert Layers
+  return layer.title !== 'GLAD Alerts' && layer.title !== 'RADD Alerts' && layer.title !== 'GLAD S2 Alerts' ? (
     <div
       ref={props!.dndProvided!.innerRef}
       {...props!.dndProvided!.draggableProps}
@@ -641,6 +642,8 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
         {opacityControl && returnOpacityControl(layer)}
       </div>
     </div>
+  ) : (
+    <div></div>
   );
 };
 
