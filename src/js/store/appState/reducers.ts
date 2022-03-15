@@ -34,6 +34,8 @@ import {
   SET_SELECTED_SEARCH_WIDGET_LAYER,
   SET_TREE_HEIGHT,
   SET_GFW_LAYER,
+  SET_GFW_LAYER_LABEL,
+  SET_GFW_LAYER_SUBTITLE,
   SET_VERSIONED_LAYER,
   SET_VIIRS_END,
   SET_VIIRS_START,
@@ -73,6 +75,8 @@ const initialState: AppState = {
     versionedLayer: {},
     treeHeight: 3,
     gfwLayer: 'GFW_INTEGRATED_ALERTS',
+    gfwLayerLabel: 'Integrated Deforestation Alerts',
+    gfwLayerSubtitle: '(daily, 10m, tropics, UMD/GLAD and WUR)',
     windSpeedPotential: 50
   },
   measureContent: {
@@ -278,6 +282,22 @@ export function appStateReducer(state = initialState, action: AppStateTypes): Ap
         leftPanel: {
           ...state.leftPanel,
           gfwLayer: action.payload
+        }
+      };
+    case SET_GFW_LAYER_LABEL:
+      return {
+        ...state,
+        leftPanel: {
+          ...state.leftPanel,
+          gfwLayerLabel: action.payload
+        }
+      };
+    case SET_GFW_LAYER_SUBTITLE:
+      return {
+        ...state,
+        leftPanel: {
+          ...state.leftPanel,
+          gfwLayerSubtitle: action.payload
         }
       };
     case SET_WIND_SPEED_POTENTIAL:

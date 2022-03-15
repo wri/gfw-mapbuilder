@@ -36,6 +36,8 @@ import {
   SET_ANALYSIS_FEATURE_LIST,
   SET_TREE_HEIGHT,
   SET_GFW_LAYER,
+  SET_GFW_LAYER_LABEL,
+  SET_GFW_LAYER_SUBTITLE,
   SET_IMAGE_OBJECT
 } from './types';
 
@@ -248,6 +250,21 @@ export function setGFWLayer(payload: string) {
     payload: payload
   };
 }
+
+export function setGFWLayerLabel(payload: string) {
+  return {
+    type: SET_GFW_LAYER_LABEL as typeof SET_GFW_LAYER_LABEL,
+    payload: payload
+  };
+}
+
+export function setGFWLayerSubtitle(payload: string) {
+  return {
+    type: SET_GFW_LAYER_SUBTITLE as typeof SET_GFW_LAYER_SUBTITLE,
+    payload: payload
+  };
+}
+
 export function setWindSpeedPotential(payload: number) {
   return {
     type: SET_WIND_SPEED_POTENTIAL as typeof SET_WIND_SPEED_POTENTIAL,

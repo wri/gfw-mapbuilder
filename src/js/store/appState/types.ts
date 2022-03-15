@@ -19,6 +19,8 @@ export interface LeftPanel {
   viirsEnd: string;
   treeHeight: number;
   gfwLayer: string;
+  gfwLayerLabel: string;
+  gfwLayerSubtitle: string;
   windSpeedPotential: number;
   versionedLayer: {
     [key: string]: string;
@@ -98,6 +100,8 @@ export const SET_AREA_IMAGES = 'SET_AREA_IMAGES';
 export const SET_VERSIONED_LAYER = 'SET_VERSIONED_LAYER';
 export const SET_TREE_HEIGHT = 'SET_TREE_HEIGHT';
 export const SET_GFW_LAYER = 'SET_GFW_LAYER';
+export const SET_GFW_LAYER_LABEL = 'SET_GFW_LAYER_LABEL';
+export const SET_GFW_LAYER_SUBTITLE = 'SET_GFW_LAYER_SUBTITLE';
 export const SET_IMAGE_OBJECT = 'SET_IMAGE_OBJECT';
 export const SET_WIND_SPEED_POTENTIAL = 'SET_WIND_SPEED_POTENTIAL';
 export const SET_MULTI_POLYGON_SELECTION_MODE = 'SET_MULTI_POLYGON_SELECTION_MODE';
@@ -242,6 +246,16 @@ interface SetGFWLayer {
   payload: AppState['leftPanel']['gfwLayer'];
 }
 
+interface SetGFWLayerLabel {
+  type: typeof SET_GFW_LAYER_LABEL;
+  payload: AppState['leftPanel']['gfwLayerLabel'];
+}
+
+interface SetGFWLayerSubtitle {
+  type: typeof SET_GFW_LAYER_SUBTITLE;
+  payload: AppState['leftPanel']['gfwLayerSubtitle'];
+}
+
 interface SetWindSpeedPotential {
   type: typeof SET_WIND_SPEED_POTENTIAL;
   payload: AppState['leftPanel']['windSpeedPotential'];
@@ -314,6 +328,8 @@ export type AppStateTypes =
   | SetVersionedLayer
   | SetTreeHeight
   | SetGFWLayer
+  | SetGFWLayerLabel
+  | SetGFWLayerSubtitle
   | SetImageObject
   | SetWindSpeedPotential
   | SetMultiPolygonSelectionMode

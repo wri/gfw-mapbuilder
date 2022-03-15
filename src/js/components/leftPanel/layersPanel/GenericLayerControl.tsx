@@ -385,7 +385,8 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
   const [opacityControl, setOpacityControl] = useState(false);
   const selectedLanguage = useSelector((store: RootState) => store.appState.selectedLanguage);
   const customColorTheme = useSelector((store: RootState) => store.appSettings.customColorTheme);
-  const gfwLayer = useSelector((store: RootState) => store.appState.leftPanel.gfwLayer);
+  const gfwLayerLabel = useSelector((store: RootState) => store.appState.leftPanel.gfwLayerLabel);
+  const gfwLayerSubtitle = useSelector((store: RootState) => store.appState.leftPanel.gfwLayerSubtitle);
   //Determine if we need density control on this layer
   const densityPicker = layer && densityEnabledLayers.includes(layer.id);
   const altLayerName = layer.label && layer.label[selectedLanguage];
@@ -460,7 +461,11 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
   const returnSubtitle = (): JSX.Element | undefined => {
     let subTitle = '';
     if (layer?.sublabel) {
-      subTitle = layer.sublabel[selectedLanguage];
+      if (layer.title === 'GFW Integrated Alerts') {
+        subTitle = gfwLayerSubtitle;
+      } else {
+        subTitle = layer.sublabel[selectedLanguage];
+      }
       return (
         <>
           <span className="layer-subtitle">{subTitle}</span>
@@ -575,6 +580,10 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
       );
     }
   };
+  let layerTitle = altLayerName ? altLayerName : layer?.title;
+  if (layer.title === 'GFW Integrated Alerts') {
+    layerTitle = gfwLayerLabel;
+  }
   // hiding GLAD Alert Layers
   return layer.title !== 'GLAD Alerts' && layer.title !== 'RADD Alerts' && layer.title !== 'GLAD S2 Alerts' ? (
     <div
@@ -593,7 +602,9 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
                 </div>
                 {returnLayerControl()}
                 <div className="title-wrapper">
-                  <span className="layer-label">{altLayerName ? altLayerName : layer?.title}</span>
+                  <span className="layer-label" style={{ textTransform: 'capitalize' }}>
+                    {layerTitle}
+                  </span>
                 </div>
               </div>
             </div>
