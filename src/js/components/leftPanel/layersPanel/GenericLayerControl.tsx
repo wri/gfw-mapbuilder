@@ -72,7 +72,6 @@ const GladControls = (props: GladControlsProps): JSX.Element => {
   const gfwLayer = useSelector((store: RootState) => store.appState.leftPanel.gfwLayer);
   const allAvailableLayers = useSelector((store: RootState) => store.mapviewState.allAvailableLayers);
   const [unconfirmedAlerts, setUnconfirmedAlerts] = React.useState(gladConfirmed);
-  const [highconfidenceAlerts, setHighConfidenceAlerts] = React.useState(highConfidenceConfirmed);
   const [geographicCoverageToggle, setGeographicCoverageToggle] = React.useState(false);
   const [startDate, setStartDate] = React.useState(
     String(props.type === 'gfw-integrated-alert' ? gfwIntegratedStart : gladStart)
@@ -157,14 +156,25 @@ const GladControls = (props: GladControlsProps): JSX.Element => {
     mapController._map?.add(gladLayerNew);
   }
 
-  function showOnlyHighConfidenceToggle(): void {
-    setHighConfidenceAlerts(!highConfidenceConfirmed);
-    dispatch(setHighConfidenceConfirmed(!highConfidenceConfirmed));
-    const gfwIntegratedLayerOld: any = mapController._map!.findLayerById('GFW_INTEGRATED_ALERTS');
-    mapController._map?.remove(gfwIntegratedLayerOld);
-    const gfwIntegratedLayerNew: any = LayerFactory(mapController._mapview, props.layerConfig);
-    gfwIntegratedLayerNew.highConfidenceConfirmed = !highConfidenceConfirmed;
-    mapController._map?.add(gfwIntegratedLayerNew);
+  async function showOnlyHighConfidenceToggle() {
+    if (gfwLayer === 'GFW_INTEGRATED_ALERTS') {
+      dispatch(setHighConfidenceConfirmed(!highConfidenceConfirmed));
+      const gfwIntegratedLayerOld: any = mapController._map!.findLayerById('GFW_INTEGRATED_ALERTS');
+      mapController._map?.remove(gfwIntegratedLayerOld);
+      const gfwIntegratedLayerNew: any = LayerFactory(mapController._mapview, props.layerConfig);
+      gfwIntegratedLayerNew.highConfidenceConfirmed = !highConfidenceConfirmed;
+      mapController._map?.add(gfwIntegratedLayerNew);
+    } else {
+      dispatch(setHighConfidenceConfirmed(!highConfidenceConfirmed));
+      const gladLayerOld: any = mapController._map!.findLayerById(gfwLayer);
+      mapController._map?.remove(gladLayerOld);
+      const gladLayerConfig: any = allAvailableLayers.filter((layer: any) => layer.id === gfwLayer);
+      const gladLayerNew: any = await LayerFactory(mapController._mapview, gladLayerConfig[0]);
+      gladLayerNew.confirmed = !highConfidenceConfirmed;
+      mapController._map?.add(gladLayerNew);
+      const selectedLayer = mapController._map!.findLayerById(gfwLayer);
+      selectedLayer.visible = true;
+    }
   }
 
   async function showGeographicCoverage() {
@@ -181,7 +191,6 @@ const GladControls = (props: GladControlsProps): JSX.Element => {
       mapController._map?.add(geographicCoverageLayer);
     }
   }
-
   return (
     <div className="glad-control-wrapper">
       {props.type === 'gfw-integrated-alert' ? (
@@ -194,7 +203,7 @@ const GladControls = (props: GladControlsProps): JSX.Element => {
                   name="styled-checkbox"
                   className="styled-checkbox"
                   id="layer-checkbox-glad"
-                  checked={highconfidenceAlerts}
+                  checked={highConfidenceConfirmed}
                   onChange={showOnlyHighConfidenceToggle}
                 />
                 <label className="styled-checkboxlabel" htmlFor="layer-checkbox-glad"></label>
@@ -592,7 +601,7 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
     layerTitle = gfwLayerLabel;
   }
   // hiding GLAD Alert Layers
-  return layer.title !== 'GLAD Alerts' && layer.title !== 'RADD Alerts' && layer.title !== 'GLAD S2 Alerts' ? (
+  return layer.title !== 'RADD Alerts' && layer.title !== 'GLAD S2 Alerts' ? (
     <div
       ref={props!.dndProvided!.innerRef}
       {...props!.dndProvided!.draggableProps}

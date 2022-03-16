@@ -2,7 +2,12 @@ import * as React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store';
 
-import { setGFWLayer, setGFWLayerLabel, setGFWLayerSubtitle } from '../../store/appState/actions';
+import {
+  setGFWLayer,
+  setGFWLayerLabel,
+  setGFWLayerSubtitle,
+  setHighConfidenceConfirmed
+} from '../../store/appState/actions';
 import { mapController } from '../../controllers/mapController';
 
 const SelectGFWAlertLayer = (): JSX.Element => {
@@ -10,6 +15,7 @@ const SelectGFWAlertLayer = (): JSX.Element => {
   const gfwLayer = useSelector((store: RootState) => store.appState.leftPanel.gfwLayer);
 
   function handleDensityButtonClick(e): void {
+    dispatch(setHighConfidenceConfirmed(false));
     const gfwLayers = [e.target[0].value, e.target[1].value, e.target[2].value];
     mapController.updateGFWLayer(e.target.value, gfwLayers);
     dispatch(setGFWLayer(e.target.value));
