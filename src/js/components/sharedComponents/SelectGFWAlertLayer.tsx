@@ -39,13 +39,13 @@ const SelectGFWAlertLayer = (): JSX.Element => {
           Integrated Deforestation Alerts
         </option>
         <option value={'GLAD_ALERTS'} data-subtitle="(weekly, 30m, tropics, UMD/ GLAD)">
-          GLAD-L Alerts{' '}
+          GLAD-L Alerts
         </option>
         <option value={'GLAD_S2_ALERTS'} data-subtitle="(every 5 days, 10m, Amazon Basin, UMD/GLAD)">
-          GLAD-S2 Alerts{' '}
+          GLAD-S2 Alerts
         </option>
         <option value={'RADD_ALERTS'} data-subtitle="(every 6-12 days, 10m, select countries, WUR)">
-          RADD Alerts{' '}
+          RADD Alerts
         </option>
       </select>
       {/*<span> {displayLabel[1]}</span>*/}

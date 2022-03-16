@@ -385,6 +385,7 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
   const [opacityControl, setOpacityControl] = useState(false);
   const selectedLanguage = useSelector((store: RootState) => store.appState.selectedLanguage);
   const customColorTheme = useSelector((store: RootState) => store.appSettings.customColorTheme);
+  const gfwLayer = useSelector((store: RootState) => store.appState.leftPanel.gfwLayer);
   const gfwLayerLabel = useSelector((store: RootState) => store.appState.leftPanel.gfwLayerLabel);
   const gfwLayerSubtitle = useSelector((store: RootState) => store.appState.leftPanel.gfwLayerSubtitle);
   //Determine if we need density control on this layer
@@ -439,9 +440,15 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
   };
 
   const openInfoModal = (): void => {
+    let layerId = '';
+    if (layer.title === 'GFW Integrated Alerts') {
+      layerId = gfwLayer;
+    } else {
+      layerId = layer.id;
+    }
     if (layer) {
       dispatch(renderModal('InfoContent'));
-      dispatch(setInfoModalLayerID(layer.id));
+      dispatch(setInfoModalLayerID(layerId));
     }
     return;
   };
