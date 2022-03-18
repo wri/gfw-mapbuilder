@@ -82,6 +82,10 @@ export const createGFWIntegratedLayer = async () => {
             }
           }
           // }
+        } else {
+          data[i] = 201; // R
+          data[i + 1] = 42; // G
+          data[i + 2] = 108; // B
         }
       }
       return data;
