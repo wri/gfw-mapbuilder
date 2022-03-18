@@ -397,6 +397,8 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
   const gfwLayer = useSelector((store: RootState) => store.appState.leftPanel.gfwLayer);
   const gfwLayerLabel = useSelector((store: RootState) => store.appState.leftPanel.gfwLayerLabel);
   const gfwLayerSubtitle = useSelector((store: RootState) => store.appState.leftPanel.gfwLayerSubtitle);
+  const allAvailableLayers = useSelector((store: RootState) => store.mapviewState.allAvailableLayers);
+  const gladLayerConfig: any = allAvailableLayers.filter((layer: any) => layer.id === gfwLayer);
   //Determine if we need density control on this layer
   const densityPicker = layer && densityEnabledLayers.includes(layer.id);
   const altLayerName = layer.label && layer.label[selectedLanguage];
@@ -555,11 +557,17 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
   };
 
   const handleFullOpacityChange = (eventValue: any): void => {
+    let layerConfig: any;
+    if (layer.title === 'GFW Integrated Alerts') {
+      layerConfig = gladLayerConfig[0];
+    } else {
+      layerConfig = props;
+    }
     //TODO: check if we still need modis
     if (props.id === 'MODIS_ACTIVE_FIRES') {
       mapController.updateMODISorVIIRSOpacity(props.id, eventValue);
     } else {
-      mapController.setLayerOpacity(props.id, eventValue, props.sublayer, props.parentID);
+      mapController.setLayerOpacity(layerConfig.id, eventValue, layerConfig.sublayer, layerConfig.parentID);
     }
   };
 
@@ -586,10 +594,16 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
         </div>
       );
     } else {
+      let layerConfig: any;
+      if (layer.title === 'GFW Integrated Alerts') {
+        layerConfig = gladLayerConfig[0];
+      } else {
+        layerConfig = layer;
+      }
       return (
         <div style={{ padding: '5px 2rem' }}>
           <LayerTransparencySlider
-            layerOpacity={layer.opacity.combined}
+            layerOpacity={layerConfig.opacity.combined}
             handleOpacityChange={handleFullOpacityChange}
           />
         </div>
@@ -600,6 +614,7 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
   if (layer.title === 'GFW Integrated Alerts') {
     layerTitle = gfwLayerLabel;
   }
+
   // hiding GLAD Alert Layers
   return layer.title !== 'RADD Alerts' && layer.title !== 'GLAD S2 Alerts' ? (
     <div
