@@ -122,7 +122,7 @@ export async function getShareableURL(props: ShareURLProps): Promise<string> {
   }
 
   const gfwIntegratedLayer: any = mapController._map?.findLayerById('GFW_INTEGRATED_ALERT');
-  if (gladLayer) {
+  if (gfwIntegratedLayer) {
     urlParams.push(`highConfidenceConfirmed=${gfwIntegratedLayer.highConfidenceConfirmed}`);
     urlParams.push(`gs=${leftPanel.gfwIntegratedStart}`);
     urlParams.push(`ge=${leftPanel.gfwIntegratedEnd}`);
