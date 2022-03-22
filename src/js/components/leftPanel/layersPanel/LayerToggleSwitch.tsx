@@ -25,7 +25,6 @@ interface LayerToggleProps {
 
 const LayerToggleSwitch = (props: LayerToggleProps): React.ReactElement => {
   const customColorTheme = useSelector((store: RootState) => store.appSettings.customColorTheme);
-
   const { layerIsVisible, layerID, sublayer, parentID } = props;
 
   const toggleVisibility = (): void => {
