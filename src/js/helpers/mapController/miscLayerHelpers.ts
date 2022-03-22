@@ -2,7 +2,6 @@
 import { defaultAPIFlagshipLayers, rDataLayer } from '../../../../configs/layer-config';
 import { LayerInfo } from '../shareFunctionality';
 import { LayerProps } from '../../store/mapview/types';
-import { defaultAPIFlagshipLayers } from '../../../../configs/layer-config';
 import store from '../../store';
 import {
   CustomLayerConfig,

@@ -153,24 +153,6 @@ export default {
           order: 8,
           type: 'remoteDataLayer',
           uuid: '8ae39d34-a5e5-4742-b06e-6e913a8f1eb8'
-        },
-        {
-          id: 'GFW_INTEGRATED_ALERTS',
-          order: 9,
-          type: 'remoteDataLayer',
-          uuid: 'bd58f25d-d3bb-4d59-9daa-cecddd27d9f4'
-        },
-        {
-          id: 'GLAD_S2_ALERTS',
-          order: 10,
-          type: 'remoteDataLayer',
-          uuid: '3b869953-48c4-48d0-8023-5c64a311f3dd'
-        },
-        {
-          id: 'RADD_ALERTS',
-          order: 11,
-          type: 'remoteDataLayer',
-          uuid: '440e53d0-36b3-47ad-993a-1c2018c3942c'
         }
       ]
     },

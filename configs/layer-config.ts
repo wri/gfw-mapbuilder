@@ -22,6 +22,27 @@ export const rDataLayer = [
     type: 'remoteDataLayer',
     uuid: '9e0c1e1e-a0a3-457f-a373-4104820f7a50',
     groupId: 'GROUP_LC'
+  },
+  {
+    id: 'GFW_INTEGRATED_ALERTS',
+    order: 9,
+    type: 'remoteDataLayer',
+    uuid: 'bd58f25d-d3bb-4d59-9daa-cecddd27d9f4',
+    groupId: 'GROUP_LCD'
+  },
+  {
+    id: 'GLAD_S2_ALERTS',
+    order: 10,
+    type: 'remoteDataLayer',
+    uuid: '3b869953-48c4-48d0-8023-5c64a311f3dd',
+    groupId: 'GROUP_LCD'
+  },
+  {
+    id: 'RADD_ALERTS',
+    order: 11,
+    type: 'remoteDataLayer',
+    uuid: '440e53d0-36b3-47ad-993a-1c2018c3942c',
+    groupId: 'GROUP_LCD'
   }
 ];
 export const defaultAPIFlagshipLayers = [
