@@ -15,7 +15,15 @@ export const supportedLayers = [
   'co2_emissions',
   'Vector.Layer'
 ];
-
+export const rDataLayer = [
+  {
+    id: 'TREES_MOSAIC_LANDSCAPES',
+    order: 7,
+    type: 'remoteDataLayer',
+    uuid: '9e0c1e1e-a0a3-457f-a373-4104820f7a50',
+    groupId: 'GROUP_LC'
+  }
+];
 export const defaultAPIFlagshipLayers = [
   {
     groupId: 'GROUP_LC',
