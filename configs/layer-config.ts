@@ -8,6 +8,7 @@ export const supportedLayers = [
   'webtiled',
   'imagery',
   'glad',
+  'integrated-alert-layer',
   'primed',
   'tree-cover',
   'tree-cover-height',
@@ -21,6 +22,27 @@ export const rDataLayer = [
     type: 'remoteDataLayer',
     uuid: '9e0c1e1e-a0a3-457f-a373-4104820f7a50',
     groupId: 'GROUP_LC'
+  },
+  {
+    id: 'GFW_INTEGRATED_ALERTS',
+    order: 9,
+    type: 'remoteDataLayer',
+    uuid: 'bd58f25d-d3bb-4d59-9daa-cecddd27d9f4',
+    groupId: 'GROUP_LCD'
+  },
+  {
+    id: 'GLAD_S2_ALERTS',
+    order: 10,
+    type: 'remoteDataLayer',
+    uuid: '3b869953-48c4-48d0-8023-5c64a311f3dd',
+    groupId: 'GROUP_LCD'
+  },
+  {
+    id: 'RADD_ALERTS',
+    order: 11,
+    type: 'remoteDataLayer',
+    uuid: '440e53d0-36b3-47ad-993a-1c2018c3942c',
+    groupId: 'GROUP_LCD'
   }
 ];
 export const defaultAPIFlagshipLayers = [
@@ -269,6 +291,23 @@ export const drySpellMarks = {
   },
   '2080': {
     label: '2080',
+    style: {}
+  }
+};
+export const gfwMarks = {
+  '0': {
+    value: '0',
+    label: '2020-03-31',
+    style: {}
+  },
+  '365': {
+    value: '365',
+    label: '2021-03-31',
+    style: {}
+  },
+  '730': {
+    value: '730',
+    label: '2022-03-31',
     style: {}
   }
 };

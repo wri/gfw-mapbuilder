@@ -24,11 +24,8 @@ Date.prototype.getJulian = function() {
 };
 
 export const createGlad = async () => {
-  const [esriRequest, BaseTileLayer] = await loadModules([
-    'esri/request',
-    'esri/layers/BaseTileLayer'
-  ]);
-  const GladLayer = BaseTileLayer.createSubclass({
+  const [esriRequest, BaseTileLayer] = await loadModules(['esri/request', 'esri/layers/BaseTileLayer']);
+  return BaseTileLayer.createSubclass({
     properties: {
       julianFrom: '15000',
       julianTo: new Date().getJulian(),
@@ -55,7 +52,7 @@ export const createGlad = async () => {
       }).then(
         function(response) {
           // We use a promise because we can't return an empty canvas before the image data has loaded, been filtered, and properly colored
-          const promise = new Promise(resolve => {
+          return new Promise(resolve => {
             // when esri request resolves successfully
             // get the image from the response
             const image = response.data;
@@ -67,7 +64,6 @@ export const createGlad = async () => {
             const context = canvas.getContext('2d');
             canvas.width = width;
             canvas.height = height;
-
             // Draw the blended image onto the canvas.
             context.drawImage(image, 0, 0, width, height);
 
@@ -83,16 +79,11 @@ export const createGlad = async () => {
             };
             imageObject.src = image.src;
           });
-          return promise;
         }.bind(this)
       );
     },
 
     filter: function(data) {
-      const todayDate = new Date().getJulian();
-      const towoWeeksAgo = new Date();
-      towoWeeksAgo.setDate(towoWeeksAgo.getDate() - 14);
-      const weekAgoJulian = towoWeeksAgo.getJulian();
       for (let i = 0; i < data.length; i += 4) {
         // Decode the rgba/pixel so I can filter on confidence and date ranges
         const slice = [data[i], data[i + 1], data[i + 2]];
@@ -101,49 +92,39 @@ export const createGlad = async () => {
         // Check if pixel date is between Julian Date properties above
         if (values.date > this.julianFrom && values.date < this.julianTo) {
           // Check if we are only examining confirmed cases or not
+
+          data[i + 3] = values.intensity;
           if (this.confirmed) {
-            if (values.confidence > 0) {
-              data[i + 3] = values.intensity;
-              // Make the pixel pink for glad alerts
-              if (values.date > weekAgoJulian && values.date < todayDate) {
-                // Make the pixel yellow for recent alerts
-                data[i] = 224; // R
-                data[i + 1] = 190; // G
-                data[i + 2] = 7; // B
-              } else {
-                data[i] = 220; // R
-                data[i + 1] = 102; // G
-                data[i + 2] = 153; // B
-              }
-            } else {
-              // Hide the pixel
-              data[i + 3] = 0;
-              data[i + 2] = 0;
-              data[i + 1] = 0;
-              data[i] = 0;
-            }
-            // Glad is not confirmed
-          } else {
-            data[i + 3] = values.intensity;
-            if (values.date > weekAgoJulian && values.date < todayDate) {
-              // Make the pixel yellow for recent alerts
-              data[i] = 224; // R
-              data[i + 1] = 190; // G
-              data[i + 2] = 7; // B
-            } else {
-              // Make the pixel pink for glad alerts
+            if (values.confidence === 1) {
               data[i] = 220; // R
               data[i + 1] = 102; // G
               data[i + 2] = 153; // B
             }
+            if (values.confidence === 2) {
+              data[i] = 201; // R
+              data[i + 1] = 42; // G
+              data[i + 2] = 108; // B
+            }
+            if (values.confidence === 0) {
+              data[i + 3] = 0;
+            }
+          } else {
+            if (values.confidence === 0) {
+              data[i] = 236; // R
+              data[i + 1] = 164; // G
+              data[i + 2] = 194; // B
+            }
+            if (values.confidence === 1) {
+              data[i] = 220; // R
+              data[i + 1] = 101; // G
+              data[i + 2] = 152; // B
+            }
+            if (values.confidence === 2) {
+              data[i] = 201; // R
+              data[i + 1] = 42; // G
+              data[i + 2] = 108; // B
+            }
           }
-          // Hide pixel if outside of date range
-        } else {
-          // Hide the pixel
-          data[i + 3] = 0;
-          data[i + 2] = 0;
-          data[i + 1] = 0;
-          data[i] = 0;
         }
       }
       return data;
@@ -166,6 +147,7 @@ export const createGlad = async () => {
       const julian_day = total_days % 365;
       // Add to get YYDDD date val
       const date = year + julian_day;
+
       // Convert the blue band to string, leading
       // zeros if it's not currently three digits
       // this occurs very rarely; where there's an intensity
@@ -194,5 +176,4 @@ export const createGlad = async () => {
       return str.slice(str.length - 3);
     }
   });
-  return GladLayer;
 };

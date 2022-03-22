@@ -18,12 +18,15 @@ import {
   setInfoModalLayerID,
   setGladStart,
   setGladEnd,
-  setGladConfirmed
-} from '../../../../js/store/appState/actions';
-import { RootState } from '../../../../js/store';
-import { LayerProps } from '../../../../js/store/mapview/types';
-import { mapController } from '../../../../js/controllers/mapController';
-import { defaultMarks, densityEnabledLayers, drySpellMarks } from '../../../../../configs/layer-config';
+  setGladConfirmed,
+  setHighConfidenceConfirmed,
+  setGfwIntegratedStart,
+  setGfwIntegratedEnd
+} from '../../../store/appState/actions';
+import { RootState } from '../../../store';
+import { LayerProps } from '../../../store/mapview/types';
+import { mapController } from '../../../controllers/mapController';
+import { defaultMarks, densityEnabledLayers, drySpellMarks, gfwMarks } from '../../../../../configs/layer-config';
 import { InfoIcon } from '../../../../images/infoIcon';
 import { DashboardIcon } from '../../../../images/dashboardIcon';
 import { LayerVersionPicker } from './LayerVersionPicker';
@@ -37,6 +40,8 @@ import { DragIcon } from '../../../../images/dragIcon';
 import 'react-datepicker/dist/react-datepicker.css';
 import WindSpeedPicker from '../../sharedComponents/WindSpeedPicker';
 import { setTimeSlider } from '../../../store/mapview/actions';
+import SelectGFWAlertLayer from '../../sharedComponents/SelectGFWAlertLayer';
+import { loadModules } from 'esri-loader';
 
 //Dynamic custom theme override using styled-components lib
 interface CheckBoxWrapperProps {
@@ -53,56 +58,92 @@ interface GladControlsProps {
   customColorTheme: string;
   layerConfig: any;
   selectedLanguage: string;
+  type?: string;
 }
 
 const GladControls = (props: GladControlsProps): JSX.Element => {
   const dispatch = useDispatch();
   const gladConfirmed = useSelector((store: RootState) => store.appState.leftPanel.gladConfirmed);
-
+  const highConfidenceConfirmed = useSelector((store: RootState) => store.appState.leftPanel.highConfidenceConfirmed);
   const gladStart = useSelector((store: RootState) => store.appState.leftPanel.gladStart);
-
   const gladEnd = useSelector((store: RootState) => store.appState.leftPanel.gladEnd);
-
+  const gfwIntegratedStart = useSelector((store: RootState) => store.appState.leftPanel.gfwIntegratedStart);
+  const gfwIntegratedEnd = useSelector((store: RootState) => store.appState.leftPanel.gfwIntegratedEnd);
+  const gfwLayer = useSelector((store: RootState) => store.appState.leftPanel.gfwLayer);
+  const allAvailableLayers = useSelector((store: RootState) => store.mapviewState.allAvailableLayers);
   const [unconfirmedAlerts, setUnconfirmedAlerts] = React.useState(gladConfirmed);
-  const [startDate, setStartDate] = React.useState(String(gladStart));
-  const [endDate, setEndDate] = React.useState(gladEnd);
+  const [geographicCoverageToggle, setGeographicCoverageToggle] = React.useState(false);
+  const [startDate, setStartDate] = React.useState(
+    String(props.type === 'gfw-integrated-alert' ? gfwIntegratedStart : gladStart)
+  );
+  const [endDate, setEndDate] = React.useState(props.type === 'gfw-integrated-alert' ? gfwIntegratedEnd : gladEnd);
 
-  function handleStartDateChange(day: any): void {
+  async function handleStartDateChange(day: any) {
     const dFormat = format(day, 'yyyy-MM-dd');
     setStartDate(dFormat);
     //@ts-ignore
     const start = new Date(dFormat).getJulian();
     //@ts-ignore
     const end = new Date(endDate).getJulian();
-    const gladLayerOld: any = mapController._map!.findLayerById('GLAD_ALERTS');
-    const gladIndex: number = mapController._map!.layers.indexOf(gladLayerOld);
-    mapController._map?.remove(gladLayerOld);
-    const gladLayerNew: any = LayerFactory(mapController._mapview, props.layerConfig);
-    gladLayerNew.julianFrom = start;
-    gladLayerNew.julianTo = end;
-    mapController._map?.add(gladLayerNew, gladIndex);
+    if (props.type === 'gfw-integrated-alert' && gfwLayer === 'GFW_INTEGRATED_ALERTS') {
+      const gfwIntegratedLayerOld: any = mapController._map!.findLayerById('GFW_INTEGRATED_ALERTS');
+      const gfwIntegratedIndex: number = mapController._map!.layers.indexOf(gfwIntegratedLayerOld);
+      mapController._map?.remove(gfwIntegratedLayerOld);
+      const gfwIntegratedLayerNew: any = LayerFactory(mapController._mapview, props.layerConfig);
+      gfwIntegratedLayerNew.gfwjulianFrom = start;
+      gfwIntegratedLayerNew.gfwjulianTo = end;
+      mapController._map?.add(gfwIntegratedLayerNew, gfwIntegratedIndex);
 
-    dispatch(setGladStart(dFormat));
-    dispatch(setGladEnd(endDate));
+      dispatch(setGfwIntegratedStart(dFormat));
+      dispatch(setGfwIntegratedEnd(endDate));
+    } else {
+      const gladLayerConfig: any = allAvailableLayers.filter((layer: any) => layer.id === 'GLAD_ALERTS');
+      const gladLayerOld: any = mapController._map!.findLayerById('GLAD_ALERTS');
+      const gladIndex: number = mapController._map!.layers.indexOf(gladLayerOld);
+      mapController._map?.remove(gladLayerOld);
+      const gladLayerNew: any = await LayerFactory(mapController._mapview, gladLayerConfig[0]);
+      gladLayerNew.julianFrom = start;
+      gladLayerNew.julianTo = end;
+      mapController._map?.add(gladLayerNew, gladIndex);
+      const selectedLayer = mapController._map!.findLayerById('GLAD_ALERTS');
+      selectedLayer.visible = true;
+
+      dispatch(setGladStart(dFormat));
+      dispatch(setGladEnd(endDate));
+    }
   }
 
-  function handleEndDateChange(day: any): void {
+  async function handleEndDateChange(day: any) {
     const dFormat = format(day, 'yyyy-MM-dd');
     setEndDate(dFormat);
     //@ts-ignore
     const end = new Date(dFormat).getJulian();
     //@ts-ignore
     const start = new Date(startDate).getJulian();
-    const gladLayerOld: any = mapController._map!.findLayerById('GLAD_ALERTS');
-    const gladIndex: number = mapController._map!.layers.indexOf(gladLayerOld);
-    mapController._map?.remove(gladLayerOld);
-    const gladLayerNew: any = LayerFactory(mapController._mapview, props.layerConfig);
-    gladLayerNew.julianFrom = start;
-    gladLayerNew.julianTo = end;
-    mapController._map?.add(gladLayerNew, gladIndex);
-
-    dispatch(setGladStart(startDate));
-    dispatch(setGladEnd(dFormat));
+    if (props.type === 'gfw-integrated-alert' && gfwLayer === 'GFW_INTEGRATED_ALERTS') {
+      const gfwIntegratedLayerOld: any = mapController._map!.findLayerById('GFW_INTEGRATED_ALERTS');
+      const gfwIntegratedIndex: number = mapController._map!.layers.indexOf(gfwIntegratedLayerOld);
+      mapController._map?.remove(gfwIntegratedLayerOld);
+      const gfwIntegratedLayerNew: any = LayerFactory(mapController._mapview, props.layerConfig);
+      gfwIntegratedLayerNew.gfwjulianFrom = start;
+      gfwIntegratedLayerNew.gfwjulianTo = end;
+      mapController._map?.add(gfwIntegratedLayerNew, gfwIntegratedIndex);
+      dispatch(setGfwIntegratedStart(startDate));
+      dispatch(setGfwIntegratedEnd(dFormat));
+    } else {
+      const gladLayerConfig: any = allAvailableLayers.filter((layer: any) => layer.id === gfwLayer);
+      const gladLayerOld: any = mapController._map!.findLayerById(gfwLayer);
+      const gladIndex: number = mapController._map!.layers.indexOf(gladLayerOld);
+      mapController._map?.remove(gladLayerOld);
+      const gladLayerNew: any = await LayerFactory(mapController._mapview, gladLayerConfig[0]);
+      gladLayerNew.julianFrom = start;
+      gladLayerNew.julianTo = end;
+      mapController._map?.add(gladLayerNew, gladIndex);
+      const selectedLayer = mapController._map!.findLayerById(gfwLayer);
+      selectedLayer.visible = true;
+      dispatch(setGladStart(startDate));
+      dispatch(setGladEnd(dFormat));
+    }
   }
 
   function handleConfirmedAlertsToggle(): void {
@@ -115,24 +156,97 @@ const GladControls = (props: GladControlsProps): JSX.Element => {
     mapController._map?.add(gladLayerNew);
   }
 
+  async function showOnlyHighConfidenceToggle() {
+    if (gfwLayer === 'GFW_INTEGRATED_ALERTS') {
+      dispatch(setHighConfidenceConfirmed(!highConfidenceConfirmed));
+      const gfwIntegratedLayerOld: any = mapController._map!.findLayerById('GFW_INTEGRATED_ALERTS');
+      mapController._map?.remove(gfwIntegratedLayerOld);
+      const gfwIntegratedLayerNew: any = LayerFactory(mapController._mapview, props.layerConfig);
+      gfwIntegratedLayerNew.highConfidenceConfirmed = !highConfidenceConfirmed;
+      mapController._map?.add(gfwIntegratedLayerNew);
+    } else {
+      dispatch(setHighConfidenceConfirmed(!highConfidenceConfirmed));
+      const gladLayerOld: any = mapController._map!.findLayerById(gfwLayer);
+      mapController._map?.remove(gladLayerOld);
+      const gladLayerConfig: any = allAvailableLayers.filter((layer: any) => layer.id === gfwLayer);
+      const gladLayerNew: any = await LayerFactory(mapController._mapview, gladLayerConfig[0]);
+      gladLayerNew.confirmed = !highConfidenceConfirmed;
+      mapController._map?.add(gladLayerNew);
+      const selectedLayer = mapController._map!.findLayerById(gfwLayer);
+      selectedLayer.visible = true;
+    }
+  }
+
+  async function showGeographicCoverage() {
+    const [VectorTileLayer] = await loadModules(['esri/layers/VectorTileLayer']);
+    const geographicCoverageLayer = new VectorTileLayer({
+      url: 'https://tiles.globalforestwatch.org/umd_glad_landsat_alerts_coverage/v2014/default/root.json',
+      id: 'GEOGRAPHIC_COVERAGE_LAYER'
+    });
+    setGeographicCoverageToggle(!geographicCoverageToggle);
+    if (geographicCoverageToggle) {
+      const geographicCoverageLayerOld: any = mapController._map!.findLayerById('GEOGRAPHIC_COVERAGE_LAYER');
+      mapController._map?.remove(geographicCoverageLayerOld);
+    } else {
+      mapController._map?.add(geographicCoverageLayer);
+    }
+  }
   return (
     <div className="glad-control-wrapper">
-      <div className="glad-control-container">
-        <div className="layer-checkbox">
-          <CheckboxWrapper customColorTheme={props.customColorTheme}>
-            <input
-              type="checkbox"
-              name="styled-checkbox"
-              className="styled-checkbox"
-              id="layer-checkbox-glad"
-              checked={unconfirmedAlerts}
-              onChange={handleConfirmedAlertsToggle}
-            />
-            <label className="styled-checkboxlabel" htmlFor="layer-checkbox-glad"></label>
-          </CheckboxWrapper>
+      {props.type === 'gfw-integrated-alert' ? (
+        <>
+          <div className="glad-control-container">
+            <div className="layer-checkbox">
+              <CheckboxWrapper customColorTheme={props.customColorTheme}>
+                <input
+                  type="checkbox"
+                  name="styled-checkbox"
+                  className="styled-checkbox"
+                  id="layer-checkbox-glad"
+                  checked={highConfidenceConfirmed}
+                  onChange={showOnlyHighConfidenceToggle}
+                />
+                <label className="styled-checkboxlabel" htmlFor="layer-checkbox-glad"></label>
+              </CheckboxWrapper>
+            </div>
+            <p>Show only high and highest confidence alerts</p>
+          </div>
+          <div className="gfw-control-container" style={{ marginTop: 5 }}>
+            <div className="layer-checkbox">
+              <CheckboxWrapper customColorTheme={props.customColorTheme}>
+                <input
+                  type="checkbox"
+                  name="styled-checkbox"
+                  className="styled-checkbox"
+                  id="layer-checkbox-gfw"
+                  checked={geographicCoverageToggle}
+                  onChange={showGeographicCoverage}
+                />
+                <label className="styled-checkboxlabel" htmlFor="layer-checkbox-gfw"></label>
+              </CheckboxWrapper>
+            </div>
+            <p>Geographic Coverage</p>
+          </div>
+        </>
+      ) : (
+        <div className="glad-control-container">
+          <div className="layer-checkbox">
+            <CheckboxWrapper customColorTheme={props.customColorTheme}>
+              <input
+                type="checkbox"
+                name="styled-checkbox"
+                className="styled-checkbox"
+                id="layer-checkbox-glad"
+                checked={unconfirmedAlerts}
+                onChange={handleConfirmedAlertsToggle}
+              />
+              <label className="styled-checkboxlabel" htmlFor="layer-checkbox-glad"></label>
+            </CheckboxWrapper>
+          </div>
+          <p>Hide unconfirmed alerts</p>
         </div>
-        <p>Hide unconfirmed alerts</p>
-      </div>
+      )}
+
       <div className="calendar-wrapper">
         <div className="date-section-wrapper">
           <label htmlFor="start-date">{layerControlsTranslations[props.selectedLanguage].timeStart}</label>
@@ -278,10 +392,13 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
   const layer = props.layer;
   const dispatch = useDispatch();
   const [opacityControl, setOpacityControl] = useState(false);
-
   const selectedLanguage = useSelector((store: RootState) => store.appState.selectedLanguage);
-
   const customColorTheme = useSelector((store: RootState) => store.appSettings.customColorTheme);
+  const gfwLayer = useSelector((store: RootState) => store.appState.leftPanel.gfwLayer);
+  const gfwLayerLabel = useSelector((store: RootState) => store.appState.leftPanel.gfwLayerLabel);
+  const gfwLayerSubtitle = useSelector((store: RootState) => store.appState.leftPanel.gfwLayerSubtitle);
+  const allAvailableLayers = useSelector((store: RootState) => store.mapviewState.allAvailableLayers);
+  const gladLayerConfig: any = allAvailableLayers.filter((layer: any) => layer.id === gfwLayer);
   //Determine if we need density control on this layer
   const densityPicker = layer && densityEnabledLayers.includes(layer.id);
   const altLayerName = layer.label && layer.label[selectedLanguage];
@@ -313,15 +430,36 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
             included={false}
           />
         );
+      case 'GFW_INTEGRATED_ALERTS':
+        // @ts-ignore
+        return (
+          <TimeSlider
+            layer={layer}
+            layerID={id}
+            defaultMarks={gfwMarks}
+            min={new Date(2020, 3, 3)}
+            max={new Date(2022, 3, 3)}
+            defaultValue={[0, 730]}
+            steps={33}
+            included={true}
+            type={'gfw-integrated-alert'}
+          />
+        );
       default:
         return null;
     }
   };
 
   const openInfoModal = (): void => {
+    let layerId = '';
+    if (layer.title === 'GFW Integrated Alerts') {
+      layerId = gfwLayer;
+    } else {
+      layerId = layer.id;
+    }
     if (layer) {
       dispatch(renderModal('InfoContent'));
-      dispatch(setInfoModalLayerID(layer.id));
+      dispatch(setInfoModalLayerID(layerId));
     }
     return;
   };
@@ -341,7 +479,11 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
   const returnSubtitle = (): JSX.Element | undefined => {
     let subTitle = '';
     if (layer?.sublabel) {
-      subTitle = layer.sublabel[selectedLanguage];
+      if (layer.title === 'GFW Integrated Alerts') {
+        subTitle = gfwLayerSubtitle;
+      } else {
+        subTitle = layer.sublabel[selectedLanguage];
+      }
       return (
         <>
           <span className="layer-subtitle">{subTitle}</span>
@@ -365,6 +507,15 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
             customColorTheme={customColorTheme}
             layerConfig={layerConfig}
             selectedLanguage={selectedLanguage}
+          />
+        );
+      case 'GFW_INTEGRATED_ALERTS':
+        return (
+          <GladControls
+            customColorTheme={customColorTheme}
+            layerConfig={layerConfig}
+            selectedLanguage={selectedLanguage}
+            type={'gfw-integrated-alert'}
           />
         );
       default:
@@ -406,11 +557,17 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
   };
 
   const handleFullOpacityChange = (eventValue: any): void => {
+    let layerConfig: any;
+    if (layer.title === 'GFW Integrated Alerts') {
+      layerConfig = gladLayerConfig[0];
+    } else {
+      layerConfig = props;
+    }
     //TODO: check if we still need modis
     if (props.id === 'MODIS_ACTIVE_FIRES') {
       mapController.updateMODISorVIIRSOpacity(props.id, eventValue);
     } else {
-      mapController.setLayerOpacity(props.id, eventValue, props.sublayer, props.parentID);
+      mapController.setLayerOpacity(layerConfig.id, eventValue, layerConfig.sublayer, layerConfig.parentID);
     }
   };
 
@@ -437,18 +594,29 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
         </div>
       );
     } else {
+      let layerConfig: any;
+      if (layer.title === 'GFW Integrated Alerts') {
+        layerConfig = gladLayerConfig[0];
+      } else {
+        layerConfig = layer;
+      }
       return (
         <div style={{ padding: '5px 2rem' }}>
           <LayerTransparencySlider
-            layerOpacity={layer.opacity.combined}
+            layerOpacity={layerConfig.opacity.combined}
             handleOpacityChange={handleFullOpacityChange}
           />
         </div>
       );
     }
   };
+  let layerTitle = altLayerName ? altLayerName : layer?.title;
+  if (layer.title === 'GFW Integrated Alerts') {
+    layerTitle = gfwLayerLabel;
+  }
 
-  return (
+  // hiding GLAD Alert Layers
+  return layer.title !== 'RADD Alerts' && layer.title !== 'GLAD S2 Alerts' ? (
     <div
       ref={props!.dndProvided!.innerRef}
       {...props!.dndProvided!.draggableProps}
@@ -465,7 +633,9 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
                 </div>
                 {returnLayerControl()}
                 <div className="title-wrapper">
-                  <span className="layer-label">{altLayerName ? altLayerName : layer?.title}</span>
+                  <span className="layer-label" style={{ textTransform: 'capitalize' }}>
+                    {layerTitle}
+                  </span>
                 </div>
               </div>
             </div>
@@ -497,9 +667,11 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
             )}
           </div>
         </div>
+        {layer?.visible && layer.id === 'GFW_INTEGRATED_ALERTS' && <SelectGFWAlertLayer />}
         {layer?.visible && returnTimeSlider(props.id)}
         {layer?.visible && densityPicker && <CanopyDensityPicker type={layer.id} />}
         {layer?.visible && layer.id === 'TREE_COVER_HEIGHT' && <TreeHeightPicker />}
+
         {/*@TODO make this active when windspeed potential urls are available*/}
         {/*{layer?.visible && layer.id === 'WIND_SPEED' && <WindSpeedPicker />}*/}
         {layer?.visible && layer.versions && (
@@ -512,6 +684,8 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
         {opacityControl && returnOpacityControl(layer)}
       </div>
     </div>
+  ) : (
+    <div></div>
   );
 };
 

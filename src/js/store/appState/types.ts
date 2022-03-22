@@ -8,13 +8,19 @@ export interface LeftPanel {
   analysisDateRange: string[];
   analysisYearRange: number[];
   gladConfirmed: boolean;
+  highConfidenceConfirmed: boolean;
   gladStart: string;
   gladEnd: string;
+  gfwIntegratedStart: string;
+  gfwIntegratedEnd: string;
   modisStart: string;
   modisEnd: string;
   viirsStart: string;
   viirsEnd: string;
   treeHeight: number;
+  gfwLayer: string;
+  gfwLayerLabel: string;
+  gfwLayerSubtitle: string;
   windSpeedPotential: number;
   versionedLayer: {
     [key: string]: string;
@@ -28,11 +34,6 @@ interface SpecificAreaResults {
 
 interface SpecificDistanceResults {
   length?: string;
-}
-
-interface ClickResults {
-  latitude?: number;
-  longitude?: number;
 }
 
 export interface MeasureContent {
@@ -64,6 +65,7 @@ export interface AppState {
   multiPolygonSelectionMode: boolean;
   activeMultiInput: number;
   analysisFeatureList: any[] | LayerFeatureResult[];
+  imageObject: any;
 }
 
 //Action names available
@@ -84,8 +86,11 @@ export const SET_ANALYSIS_DATE = 'SET_ANALYSIS_DATE';
 export const SET_ANALYSIS_YEAR_RANGE = 'SET_ANALYSIS_YEAR_RANGE';
 export const SET_SELECTED_SEARCH_WIDGET_LAYER = 'SET_SELECTED_SEARCH_WIDGET_LAYER';
 export const SET_GLAD_CONFIRMED = 'SET_GLAD_CONFIRMED';
+export const SET_HIGH_CONFIDENCE_CONFIRMED = 'SET_HIGH_CONFIDENCE_CONFIRMED';
 export const SET_GLAD_START = 'SET_GLAD_START';
 export const SET_GLAD_END = 'SET_GLAD_END';
+export const SET_GFW_INTEGRATED_START = 'SET_GFW_INTEGRATED_START';
+export const SET_GFW_INTEGRATED_END = 'SET_GFW_INTEGRATED_END';
 export const SET_VIIRS_START = 'SET_VIIRS_START';
 export const SET_VIIRS_END = 'SET_VIIRS_END';
 export const SET_MODIS_START = 'SET_MODIS_START';
@@ -94,6 +99,10 @@ export const SET_RENDER_POPUP = 'SET_RENDER_POPUP';
 export const SET_AREA_IMAGES = 'SET_AREA_IMAGES';
 export const SET_VERSIONED_LAYER = 'SET_VERSIONED_LAYER';
 export const SET_TREE_HEIGHT = 'SET_TREE_HEIGHT';
+export const SET_GFW_LAYER = 'SET_GFW_LAYER';
+export const SET_GFW_LAYER_LABEL = 'SET_GFW_LAYER_LABEL';
+export const SET_GFW_LAYER_SUBTITLE = 'SET_GFW_LAYER_SUBTITLE';
+export const SET_IMAGE_OBJECT = 'SET_IMAGE_OBJECT';
 export const SET_WIND_SPEED_POTENTIAL = 'SET_WIND_SPEED_POTENTIAL';
 export const SET_MULTI_POLYGON_SELECTION_MODE = 'SET_MULTI_POLYGON_SELECTION_MODE';
 export const SET_ACTIVE_MULTI_INPUT = 'SET_ACTIVE_MULTI_INPUT';
@@ -183,7 +192,10 @@ interface SetGladConfirmed {
   type: typeof SET_GLAD_CONFIRMED;
   payload: AppState['leftPanel']['gladConfirmed'];
 }
-
+interface SetHighConfidenceConfirmed {
+  type: typeof SET_HIGH_CONFIDENCE_CONFIRMED;
+  payload: AppState['leftPanel']['highConfidenceConfirmed'];
+}
 interface SetGladStart {
   type: typeof SET_GLAD_START;
   payload: AppState['leftPanel']['gladStart'];
@@ -192,6 +204,16 @@ interface SetGladStart {
 interface SetGladEnd {
   type: typeof SET_GLAD_END;
   payload: AppState['leftPanel']['gladEnd'];
+}
+
+interface SetGfwIntegratedStart {
+  type: typeof SET_GFW_INTEGRATED_START;
+  payload: AppState['leftPanel']['gfwIntegratedStart'];
+}
+
+interface SetGfwIntegratedEnd {
+  type: typeof SET_GFW_INTEGRATED_END;
+  payload: AppState['leftPanel']['gfwIntegratedEnd'];
 }
 
 interface SetModisStart {
@@ -219,6 +241,21 @@ interface SetTreeHeight {
   payload: AppState['leftPanel']['treeHeight'];
 }
 
+interface SetGFWLayer {
+  type: typeof SET_GFW_LAYER;
+  payload: AppState['leftPanel']['gfwLayer'];
+}
+
+interface SetGFWLayerLabel {
+  type: typeof SET_GFW_LAYER_LABEL;
+  payload: AppState['leftPanel']['gfwLayerLabel'];
+}
+
+interface SetGFWLayerSubtitle {
+  type: typeof SET_GFW_LAYER_SUBTITLE;
+  payload: AppState['leftPanel']['gfwLayerSubtitle'];
+}
+
 interface SetWindSpeedPotential {
   type: typeof SET_WIND_SPEED_POTENTIAL;
   payload: AppState['leftPanel']['windSpeedPotential'];
@@ -236,6 +273,11 @@ interface SetAreaImages {
 
 interface SetVersionedLayer {
   type: typeof SET_VERSIONED_LAYER;
+  payload: any;
+}
+
+interface SetImageObject {
+  type: typeof SET_IMAGE_OBJECT;
   payload: any;
 }
 
@@ -272,8 +314,11 @@ export type AppStateTypes =
   | SetAnalysisYearRange
   | SetSelectedSearchWidgetLayer
   | SetGladConfirmed
+  | SetHighConfidenceConfirmed
   | SetGladStart
   | SetGladEnd
+  | SetGfwIntegratedStart
+  | SetGfwIntegratedEnd
   | SetModisStart
   | SetModisEnd
   | SetViirsStart
@@ -282,6 +327,10 @@ export type AppStateTypes =
   | SetAreaImages
   | SetVersionedLayer
   | SetTreeHeight
+  | SetGFWLayer
+  | SetGFWLayerLabel
+  | SetGFWLayerSubtitle
+  | SetImageObject
   | SetWindSpeedPotential
   | SetMultiPolygonSelectionMode
   | SetActiveMultiInput

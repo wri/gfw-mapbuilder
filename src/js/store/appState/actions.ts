@@ -18,8 +18,11 @@ import {
   SET_ANALYSIS_YEAR_RANGE,
   SET_SELECTED_SEARCH_WIDGET_LAYER,
   SET_GLAD_CONFIRMED,
+  SET_HIGH_CONFIDENCE_CONFIRMED,
   SET_GLAD_START,
   SET_GLAD_END,
+  SET_GFW_INTEGRATED_START,
+  SET_GFW_INTEGRATED_END,
   SET_VIIRS_START,
   SET_VIIRS_END,
   SET_MODIS_START,
@@ -27,11 +30,15 @@ import {
   SET_RENDER_POPUP,
   SET_AREA_IMAGES,
   SET_VERSIONED_LAYER,
-  SET_TREE_HEIGHT,
   SET_WIND_SPEED_POTENTIAL,
   SET_MULTI_POLYGON_SELECTION_MODE,
   SET_ACTIVE_MULTI_INPUT,
-  SET_ANALYSIS_FEATURE_LIST
+  SET_ANALYSIS_FEATURE_LIST,
+  SET_TREE_HEIGHT,
+  SET_GFW_LAYER,
+  SET_GFW_LAYER_LABEL,
+  SET_GFW_LAYER_SUBTITLE,
+  SET_IMAGE_OBJECT
 } from './types';
 
 export function setSelectedSearchWidgetLayer(payload: AppState['selectedSearchWidgetLayer']) {
@@ -153,6 +160,13 @@ export function setGladConfirmed(payload: AppState['leftPanel']['gladConfirmed']
   };
 }
 
+export function setHighConfidenceConfirmed(payload: AppState['leftPanel']['highConfidenceConfirmed']) {
+  return {
+    type: SET_HIGH_CONFIDENCE_CONFIRMED as typeof SET_HIGH_CONFIDENCE_CONFIRMED,
+    payload: payload
+  };
+}
+
 export function setGladStart(payload: AppState['leftPanel']['gladStart']) {
   return {
     type: SET_GLAD_START as typeof SET_GLAD_START,
@@ -163,6 +177,20 @@ export function setGladStart(payload: AppState['leftPanel']['gladStart']) {
 export function setGladEnd(payload: AppState['leftPanel']['gladEnd']) {
   return {
     type: SET_GLAD_END as typeof SET_GLAD_END,
+    payload: payload
+  };
+}
+
+export function setGfwIntegratedStart(payload: AppState['leftPanel']['gfwIntegratedStart']) {
+  return {
+    type: SET_GFW_INTEGRATED_START as typeof SET_GFW_INTEGRATED_START,
+    payload: payload
+  };
+}
+
+export function setGfwIntegratedEnd(payload: AppState['leftPanel']['gfwIntegratedEnd']) {
+  return {
+    type: SET_GFW_INTEGRATED_END as typeof SET_GFW_INTEGRATED_END,
     payload: payload
   };
 }
@@ -216,6 +244,27 @@ export function setTreeHeight(payload: number) {
   };
 }
 
+export function setGFWLayer(payload: string) {
+  return {
+    type: SET_GFW_LAYER as typeof SET_GFW_LAYER,
+    payload: payload
+  };
+}
+
+export function setGFWLayerLabel(payload: string) {
+  return {
+    type: SET_GFW_LAYER_LABEL as typeof SET_GFW_LAYER_LABEL,
+    payload: payload
+  };
+}
+
+export function setGFWLayerSubtitle(payload: string) {
+  return {
+    type: SET_GFW_LAYER_SUBTITLE as typeof SET_GFW_LAYER_SUBTITLE,
+    payload: payload
+  };
+}
+
 export function setWindSpeedPotential(payload: number) {
   return {
     type: SET_WIND_SPEED_POTENTIAL as typeof SET_WIND_SPEED_POTENTIAL,
@@ -223,6 +272,12 @@ export function setWindSpeedPotential(payload: number) {
   };
 }
 
+export function setImageObject(payload: number) {
+  return {
+    type: SET_IMAGE_OBJECT as typeof SET_IMAGE_OBJECT,
+    payload: payload
+  };
+}
 export function setVersionedLayer(payload: any) {
   return {
     type: SET_VERSIONED_LAYER as typeof SET_VERSIONED_LAYER,
