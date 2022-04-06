@@ -359,7 +359,6 @@ export class MapController {
               newRemoteLayerObject.dashboardURL = remoteLayerObject?.dashboardURL;
               newRemoteLayerObject.popup = remoteLayerObject.popup;
             }
-            console.log(newRemoteLayerObject);
 
             remoteLayerObjects.push(newRemoteLayerObject);
           }

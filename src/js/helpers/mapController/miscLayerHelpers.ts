@@ -1,5 +1,4 @@
 //Helper for determining layer opacity that we start with. Depending on the URL hash, resources file and API response those can be diffent
-import { defaultAPIFlagshipLayers, rDataLayer } from '../../../../configs/layer-config';
 import { LayerInfo } from '../shareFunctionality';
 import { LayerProps } from '../../store/mapview/types';
 import store from '../../store';
@@ -270,7 +269,7 @@ export async function getRemoteAndServiceLayers(): Promise<any> {
           legend: layer.legend,
           sublabel: layer.sublabel
         });
-      } else if (layer.type === 'resourcewatch') {
+      } else if (layer.type === 'resourcewatch' && appSettings?.enabledRWLayers?.includes(layer.id)) {
         remoteDataLayers.push({
           order: layer.order,
           layerGroupId: layer.groupId,
@@ -284,30 +283,6 @@ export async function getRemoteAndServiceLayers(): Promise<any> {
         detailedLayers.push(layer);
       }
     });
-
-  rDataLayer.forEach((layer: AllLayersConfig): void => {
-    remoteDataLayers.push({
-      order: layer.order,
-      layerGroupId: layer.groupId,
-      dataLayer: layer
-    });
-  });
-
-  defaultAPIFlagshipLayers.forEach(layer => {
-    remoteDataLayers.push({
-      order: layer.order,
-      layerGroupId: layer.groupId,
-      dataLayer: layer,
-      origin: layer.origin,
-      uuid: layer.uuid,
-      label: layer.label,
-      layerType: layer.layerType,
-      id: layer.id,
-      opacity: layer.opacity,
-      legend: layer.legend,
-      sublabel: layer.sublabel
-    });
-  });
 
   function fetchRemoteApiLayer(item): Promise<any> {
     const baseURL = `https://production-api.globalforestwatch.org/v1/layer/${item?.dataLayer?.uuid}`;
