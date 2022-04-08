@@ -45,6 +45,8 @@ export default {
   gladAlerts: true,
   terraIAlerts: true,
   recentImagery: true,
+  planetImagery: false,
+  carbonSequence: true,
   webmapMenuName: 'Land Use',
   sharinghost: 'https://www.arcgis.com',
   analyticsCode: '',
