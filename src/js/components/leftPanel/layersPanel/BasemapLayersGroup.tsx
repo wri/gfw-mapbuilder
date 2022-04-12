@@ -1,19 +1,13 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../../../../js/store';
-import {
-  setOpenLayerGroup,
-  renderModal
-} from '../../../../js/store/appState/actions';
+import { RootState } from '../../../store';
+import { setOpenLayerGroup, renderModal } from '../../../store/appState/actions';
 import { InfoIcon } from '../../../../images/infoIcon';
-import {
-  landsatBaselayerYears,
-  customBasemapIcon
-} from '../../../../../configs/layer-config';
-import { mapController } from '../../../../js/controllers/mapController';
+import { landsatBaselayerYears, customBasemapIcon } from '../../../../../configs/layer-config';
+import { mapController } from '../../../controllers/mapController';
 import { basemapLayersContent } from '../../../../../configs/translations/leftPanel.translations';
-import { LayerProps } from '../../../../js/store/mapview/types';
+import { LayerProps } from '../../../store/mapview/types';
 import { format } from 'date-fns';
 
 interface DefaultBasemapProps {
@@ -64,20 +58,12 @@ const BaseLayerWRI = (props: DefaultBasemapProps): JSX.Element => {
 const PlanetBasemap = (props: BaseLayerPlanet): JSX.Element => {
   const { title, url, apiKey } = props.layerInfo;
   const [planetColor, setPlanetColor] = useState('rgb');
-  const [planetTiles, setPlanetTiles] = useState<
-    Array<{ label: string; value: string }>
-  >([]);
-  const [selectedPlanetTileLayer, setSelectedPlanetTileLayer] = useState<
-    string
-  >('2021-02');
+  const [planetTiles, setPlanetTiles] = useState<Array<{ label: string; value: string }>>([]);
+  const [selectedPlanetTileLayer, setSelectedPlanetTileLayer] = useState<string>('2021-02');
 
-  const activeBasemap = useSelector(
-    (store: RootState) => store.mapviewState.activeBasemap
-  );
+  const activeBasemap = useSelector((store: RootState) => store.mapviewState.activeBasemap);
 
-  const customColorTheme = useSelector(
-    (store: RootState) => store.appSettings.customColorTheme
-  );
+  const customColorTheme = useSelector((store: RootState) => store.appSettings.customColorTheme);
 
   const dispatch = useDispatch();
 
@@ -86,8 +72,7 @@ const PlanetBasemap = (props: BaseLayerPlanet): JSX.Element => {
     fetch(tileInfoURL)
       .then(res => res.json())
       .then(data => {
-        const planetDateRanges: Array<string> =
-          data?.components?.schemas?.PlanetDateRange?.enum;
+        const planetDateRanges: Array<string> = data?.components?.schemas?.PlanetDateRange?.enum;
         const planetTilesFormat = planetDateRanges
           .reverse()
           .filter(label => label.length > 4)
@@ -115,12 +100,7 @@ const PlanetBasemap = (props: BaseLayerPlanet): JSX.Element => {
   }
 
   function handlePlanetTileClick() {
-    mapController.addPlanetTileLayer(
-      url,
-      planetColor,
-      selectedPlanetTileLayer,
-      apiKey
-    );
+    mapController.addPlanetTileLayer(url, planetColor, selectedPlanetTileLayer, apiKey);
   }
 
   const tileOptions = planetTiles?.map(tileInfo => {
@@ -150,18 +130,9 @@ const PlanetBasemap = (props: BaseLayerPlanet): JSX.Element => {
   };
 
   return (
-    <div
-      className={`layer-basemap landsat ${
-        activeBasemap === 'planet' ? 'selected' : ''
-      }`}
-    >
-      <span
-        className="planet-thumb"
-        onClick={() => handlePlanetTileClick()}
-      ></span>
-      <span onClick={() => handlePlanetTileClick()}>
-        {title && title[props.selectedLanguage]}
-      </span>
+    <div className={`layer-basemap landsat ${activeBasemap === 'planet' ? 'selected' : ''}`}>
+      <span className="planet-thumb" onClick={() => handlePlanetTileClick()}></span>
+      <span onClick={() => handlePlanetTileClick()}>{title && title[props.selectedLanguage]}</span>
       <div className="planet-selectors">
         <select
           onChange={e => handlePlanetTileChange(e.target.value)}
@@ -188,18 +159,12 @@ const PlanetBasemap = (props: BaseLayerPlanet): JSX.Element => {
   );
 };
 
-const BaseLayerControlLandsat = (
-  props: BaseLayerControlLandsatProps
-): JSX.Element => {
+const BaseLayerControlLandsat = (props: BaseLayerControlLandsatProps): JSX.Element => {
   const { thumbnailUrl, title } = props.layerInfo;
   const years = landsatBaselayerYears;
-  const [selectedYear, setSelectedYear] = React.useState(
-    years[years.length - 1]
-  );
+  const [selectedYear, setSelectedYear] = React.useState(years[years.length - 1]);
 
-  const activeBasemap = useSelector(
-    (store: RootState) => store.mapviewState.activeBasemap
-  );
+  const activeBasemap = useSelector((store: RootState) => store.mapviewState.activeBasemap);
 
   function handleYearSelection(e: any): void {
     setSelectedYear(e.target.value);
@@ -225,19 +190,9 @@ const BaseLayerControlLandsat = (
   };
 
   return (
-    <div
-      className={`layer-basemap ${
-        activeBasemap.includes('landsat') ? 'selected' : ''
-      }`}
-    >
-      <span
-        onClick={handleBasemapSectionClick}
-        className="landsat-thumb"
-        style={imgStyles}
-      ></span>
-      <span onClick={handleBasemapSectionClick}>
-        {title && title[props.selectedLanguage]}
-      </span>
+    <div className={`layer-basemap ${activeBasemap.includes('landsat') ? 'selected' : ''}`}>
+      <span onClick={handleBasemapSectionClick} className="landsat-thumb" style={imgStyles}></span>
+      <span onClick={handleBasemapSectionClick}>{title && title[props.selectedLanguage]}</span>
       <select
         value={selectedYear}
         onChange={handleYearSelection}
@@ -250,9 +205,7 @@ const BaseLayerControlLandsat = (
   );
 };
 
-const GenericBaseLayerControl = ({
-  layerInfo
-}: DefaultBasemapProps): JSX.Element => {
+const GenericBaseLayerControl = ({ layerInfo }: DefaultBasemapProps): JSX.Element => {
   const { id, thumbnailUrl, title, activeBasemap } = layerInfo;
   return (
     <div
@@ -271,22 +224,15 @@ interface LayerGroupProps {
 }
 
 const BasemapLayersGroup = (props: LayerGroupProps): React.ReactElement => {
-  const customColorTheme = useSelector(
-    (store: RootState) => store.appSettings.customColorTheme
-  );
+  const customColorTheme = useSelector((store: RootState) => store.appSettings.customColorTheme);
   const leftPanel = useSelector((store: RootState) => store.appState.leftPanel);
-  const selectedLanguage = useSelector(
-    (store: RootState) => store.appState.selectedLanguage
-  );
-  const activeBasemap = useSelector(
-    (store: RootState) => store.mapviewState.activeBasemap
-  );
+  const selectedLanguage = useSelector((store: RootState) => store.appState.selectedLanguage);
+  const activeBasemap = useSelector((store: RootState) => store.mapviewState.activeBasemap);
 
   const dispatch = useDispatch();
   const { layerGroupKey, layerGroupConfig } = props;
 
-  const layerGroupTitle =
-    layerGroupConfig.label?.[selectedLanguage] || 'Basemap';
+  const layerGroupTitle = layerGroupConfig.label?.[selectedLanguage] || 'Basemap';
 
   const groupOpen = leftPanel.openLayerGroup === layerGroupKey;
 
@@ -317,19 +263,17 @@ const BasemapLayersGroup = (props: LayerGroupProps): React.ReactElement => {
         />
       );
     }
-    if (
-      baselayer.id === 'planet' &&
-      baselayer?.url &&
-      baselayer.url.length !== 0
-    ) {
+    if (baselayer.id === 'planet' && baselayer?.url && baselayer.url.length !== 0) {
       return (
-        <PlanetBasemap
-          key={baselayer.id}
-          url={baselayer.url}
-          layerInfo={baselayer}
-          selectedLanguage={selectedLanguage}
-          customColorTheme={customColorTheme}
-        />
+        baselayer.visible && (
+          <PlanetBasemap
+            key={baselayer.id}
+            url={baselayer.url}
+            layerInfo={baselayer}
+            selectedLanguage={selectedLanguage}
+            customColorTheme={customColorTheme}
+          />
+        )
       );
     }
     if (baselayer.id === 'webmap_original') {
