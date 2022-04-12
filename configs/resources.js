@@ -46,6 +46,7 @@ export default {
   terraIAlerts: true,
   recentImagery: true,
   carbonSequence: true,
+  carbonEmissions: true,
   webmapMenuName: 'Land Use',
   sharinghost: 'https://www.arcgis.com',
   analyticsCode: '',

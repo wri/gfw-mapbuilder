@@ -231,7 +231,8 @@ export async function getRemoteAndServiceLayers(): Promise<any> {
     IMAZON_SAD: 'sadAlerts',
     GLAD_ALERTS: 'gladAlerts',
     RECENT_IMAGERY: 'recentImagery',
-    CARBON_SEQ: 'carbonSequence'
+    CARBON_SEQ: 'carbonSequence',
+    CARBON_EMISSIONS: 'carbonEmissions'
   };
   const configLayerIDs = Object.keys(configLayerFilters);
 
