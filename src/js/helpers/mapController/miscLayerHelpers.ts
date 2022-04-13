@@ -228,7 +228,6 @@ export async function getRemoteAndServiceLayers(): Promise<any> {
     PRIMARY_FORESTS: 'primaryForests',
     FORMA_ALERTS: 'forma',
     GLOB_MANGROVE: 'mangroves',
-    IMAZON_SAD: 'sadAlerts',
     GLAD_ALERTS: 'gladAlerts',
     RECENT_IMAGERY: 'recentImagery',
     CARBON_SEQ: 'carbonSequence',
