@@ -615,15 +615,20 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
     layerTitle = gfwLayerLabel;
   }
 
-  // hiding GLAD Alert Layers
-  return layer.title !== 'RADD Alerts' && layer.title !== 'GLAD S2 Alerts' ? (
+  return (
     <div
       ref={props!.dndProvided!.innerRef}
       {...props!.dndProvided!.draggableProps}
       className="draggable-card"
       style={getItemStyle(props!.dndSnapshot!.isDragging, props!.dndProvided!.draggableProps.style)}
     >
-      <div style={{ borderBottom: '1px solid #8983834a', paddingBottom: 10 }}>
+      <div
+        style={
+          layer.title !== 'RADD Alerts' && layer.title !== 'GLAD S2 Alerts'
+            ? { visibility: 'visible', borderBottom: '1px solid #8983834a', paddingBottom: 10 }
+            : { display: 'none' }
+        }
+      >
         <div className="layers-control-checkbox">
           <div className="label-wrapper">
             <div {...props!.dndProvided!.dragHandleProps}>
@@ -684,8 +689,6 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
         {opacityControl && returnOpacityControl(layer)}
       </div>
     </div>
-  ) : (
-    <div></div>
   );
 };
 
