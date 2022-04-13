@@ -13,7 +13,7 @@ import {
   CHANGE_MAP_SCALE,
   CHANGE_MAP_CENTER_COORDINATES,
   SET_LAYERS_LOADING,
-  SET_USER_COORDINATES
+  SET_USER_COORDINATES,
 } from './types';
 
 const initialState: MapviewState = {
@@ -24,17 +24,14 @@ const initialState: MapviewState = {
   activeFeatureIndex: [0, 0], //first element is the index of the layer, second is the index of feature
   documents: null,
   activeBasemap: 'webmap',
-  timeSlider: [2000, 2020],
+  timeSlider: [2000, 2021],
   scale: 0,
   mapCenterCoordinates: { latitude: 0, longitude: 0 },
   layersLoading: true,
-  userCoordinates: undefined
+  userCoordinates: undefined,
 };
 
-export function mapviewReducer(
-  state = initialState,
-  action: MapviewStateTypes
-): MapviewState {
+export function mapviewReducer(state = initialState, action: MapviewStateTypes): MapviewState {
   switch (action.type) {
     case MAP_READY:
       return { ...state, isMapReady: action.payload };
