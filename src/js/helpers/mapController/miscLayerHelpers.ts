@@ -222,19 +222,21 @@ export async function getRemoteAndServiceLayers(): Promise<any> {
     VIIRS_ACTIVE_FIRES: 'viirsFires',
     MODIS_ACTIVE_FIRES: 'modisFires',
     LAND_COVER: 'landCover',
-    TREES_MOSAIC_LANDSCAPES: 'treeMosaicLandscapess',
+    TREES_MOSAIC_LANDSCAPES: 'treeMosaicLandscapes',
     AG_BIOMASS: 'aboveGroundBiomass',
     IFL: 'intactForests',
     PRIMARY_FORESTS: 'primaryForests',
     FORMA_ALERTS: 'forma',
     GLOB_MANGROVE: 'mangroves',
     GLAD_ALERTS: 'gladAlerts',
+    IMAZON_SAD: 'sadAlerts',
     RECENT_IMAGERY: 'recentImagery',
     CARBON_SEQ: 'carbonSequence',
     CARBON_EMISSIONS: 'carbonEmissions',
     TREE_COVER: 'treeCover',
     TREE_COVER_GAIN: 'treeCoverGain',
     TREE_COVER_LOSS: 'treeCoverLoss',
+    TREE_COVER_HEIGHT: 'treeCoverHeight',
     GFW_INTEGRATED_ALERTS: 'gfwIntegratedAlertLayer'
   };
   const configLayerIDs = Object.keys(configLayerFilters);
