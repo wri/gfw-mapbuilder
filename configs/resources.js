@@ -41,6 +41,7 @@ export default {
   landCover: true,
   mangroves: false,
   gladAlerts: true,
+  gfwIntegratedAlertLayer: false,
   recentImagery: true,
   carbonSequence: true,
   carbonEmissions: true,
