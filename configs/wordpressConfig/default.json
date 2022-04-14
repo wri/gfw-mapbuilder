@@ -107,7 +107,16 @@
             "type": "resourcewatch",
             "order": 3,
             "origin": "rw-api",
-            "opacity": 1
+            "opacity": 1,
+            "sublabel": {
+              "en": "(0.25°, global, 2000-2080, WRI/Vizzuality)",
+              "es": "(0.25°, global, 2000-2080, WRI/Vizzuality)",
+              "fr": "(0.25°, global, 2000-2080, WRI/Vizzuality)",
+              "id": "(0.25°, global, 2000-2080, WRI/Vizzuality)",
+              "ka": "(0.25°, global, 2000-2080, WRI/Vizzuality)",
+              "pt": "(0.25°, global, 2000-2080, WRI/Vizzuality)",
+              "zh": "(0.25°, global, 2000-2080, WRI/Vizzuality)"
+            }
           },
           {
             "groupId": "GROUP_CLIMATE",
@@ -117,7 +126,16 @@
             "type": "resourcewatch",
             "order": 4,
             "origin": "rw-api",
-            "opacity": 1
+            "opacity": 1,
+            "sublabel": {
+              "en": "(3.5 x 5.5 km, global, 2018, TROPOMI/ESA/KNMI/DLR/SRON/BIRA-IASB/STFC/MPIC/S&T/Uni-Bremen)",
+              "es": "(3.5 x 5.5 km, global, 2018, TROPOMI/ESA/KNMI/DLR/SRON/BIRA-IASB/STFC/MPIC/S&T/Uni-Bremen)",
+              "fr": "(3.5 x 5.5 km, global, 2018, TROPOMI/ESA/KNMI/DLR/SRON/BIRA-IASB/STFC/MPIC/S&T/Uni-Bremen)",
+              "id": "(3.5 x 5.5 km, global, 2018, TROPOMI/ESA/KNMI/DLR/SRON/BIRA-IASB/STFC/MPIC/S&T/Uni-Bremen)",
+              "ka": "(3.5 x 5.5 km, global, 2018, TROPOMI/ESA/KNMI/DLR/SRON/BIRA-IASB/STFC/MPIC/S&T/Uni-Bremen)",
+              "pt": "(3.5 x 5.5 km, global, 2018, TROPOMI/ESA/KNMI/DLR/SRON/BIRA-IASB/STFC/MPIC/S&T/Uni-Bremen)",
+              "zh": "(3.5 x 5.5 km, global, 2018, TROPOMI/ESA/KNMI/DLR/SRON/BIRA-IASB/STFC/MPIC/S&T/Uni-Bremen)"
+            }
           },
           {
             "groupId": "GROUP_CLIMATE",
@@ -127,7 +145,16 @@
             "type": "resourcewatch",
             "order": 5,
             "origin": "rw-api",
-            "opacity": 1
+            "opacity": 1,
+            "sublabel": {
+              "en": "(1 km, global, DTU/World Bank Group/ESMAP)",
+              "es": "(1 km, global, DTU/World Bank Group/ESMAP)",
+              "fr": "(1 km, global, DTU/World Bank Group/ESMAP)",
+              "id": "(1 km, global, DTU/World Bank Group/ESMAP)",
+              "ka": "(1 km, global, DTU/World Bank Group/ESMAP)",
+              "pt": "(1 km, global, DTU/World Bank Group/ESMAP)",
+              "zh": "(1 km, global, DTU/World Bank Group/ESMAP)"
+            }
           }
         ]
       },
