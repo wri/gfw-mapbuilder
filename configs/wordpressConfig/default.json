@@ -109,7 +109,7 @@
             "opacity": 1
           },
           {
-            "groupId": "GROUP_CLIMATE1",
+            "groupId": "GROUP_CLIMATE",
             "id": "AIR_QUALITY",
             "datasetURL": "https://data-api.globalforestwatch.org/dataset/tropomi_avg_nitrogen_dioxide_last_month/latest",
             "datasetLegendConfigURL": "https://api.resourcewatch.org/v1/layer/61989f1f-65af-40e7-bf45-49b27eb2b9da?filterIncludesByEnv=true&includes=vocabulary,metadata&env=production",
