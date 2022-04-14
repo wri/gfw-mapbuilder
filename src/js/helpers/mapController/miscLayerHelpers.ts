@@ -234,7 +234,8 @@ export async function getRemoteAndServiceLayers(): Promise<any> {
     CARBON_EMISSIONS: 'carbonEmissions',
     TREE_COVER: 'treeCover',
     TREE_COVER_GAIN: 'treeCoverGain',
-    TREE_COVER_LOSS: 'treeCoverLoss'
+    TREE_COVER_LOSS: 'treeCoverLoss',
+    GFW_INTEGRATED_ALERTS: 'gfwIntegratedAlertLayer'
   };
   const configLayerIDs = Object.keys(configLayerFilters);
 
