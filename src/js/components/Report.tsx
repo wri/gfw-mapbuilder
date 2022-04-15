@@ -98,8 +98,6 @@ const Report = (props: ReportProps): JSX.Element => {
         esriIntl
       );
 
-      // console.log('responseAttributes', responseAttributes);
-      console.log('formattedAttributes', formattedAttributes);
       setAttributes({
         attributes: formattedAttributes,
         fields: attributesToUse,
