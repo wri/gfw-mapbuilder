@@ -303,9 +303,11 @@ export async function getRemoteAndServiceLayers(): Promise<any> {
             const attributes = layer.attributes;
             const intConfig = layer.attributes?.interactionConfig;
             const itemGroup = item.group;
+
             item.layer = layer.attributes.layerConfig;
             item.dashboardURL = item.dataLayer?.dashboardURL?.length !== 0 ? item.dataLayer.dashboardURL : null;
             item.group = itemGroup;
+            item.uiParams = item.dataLayer?.uiParams;
             item.layer.metadata = {
               metadata,
               legendConfig: attributes.legendConfig,
@@ -401,6 +403,7 @@ export async function getRemoteAndServiceLayers(): Promise<any> {
                   legendConfig: getLegendConfig(layer, config)
                 }
               },
+              uiParams: item.dataLayer.uiParams,
               dashboardURL: null,
               group: item.layerGroupId,
               order: item.order,
@@ -410,6 +413,7 @@ export async function getRemoteAndServiceLayers(): Promise<any> {
               newItem.layer.url =
                 'https://tiles.globalforestwatch.org/nexgddp_change_dry_spells_2000_2080/v20211015/Change_Num_Dry_Spells_2030/{z}/{x}/{y}.png';
             }
+
             return newItem;
           });
       })

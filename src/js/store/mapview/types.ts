@@ -37,11 +37,6 @@ export interface MapviewState {
   documents: null | Attachment[];
 }
 
-interface Popup {
-  content: any;
-  title: any;
-}
-
 interface LegendConfigItem {
   color: string;
   name: object;
@@ -89,6 +84,7 @@ export interface LayerProps {
   sublayer?: boolean;
   parentID?: string;
   popup?: any | null;
+  uiParams?: any | null;
   sublabel?: object;
   layerIds?: any[] | null;
   label?: any;

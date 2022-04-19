@@ -26,7 +26,7 @@ import {
 import { RootState } from '../../../store';
 import { LayerProps } from '../../../store/mapview/types';
 import { mapController } from '../../../controllers/mapController';
-import { defaultMarks, densityEnabledLayers, drySpellMarks, gfwMarks } from '../../../../../configs/layer-config';
+import { densityEnabledLayers } from '../../../../../configs/layer-config';
 import { InfoIcon } from '../../../../images/infoIcon';
 import { DashboardIcon } from '../../../../images/dashboardIcon';
 import { LayerVersionPicker } from './LayerVersionPicker';
@@ -42,6 +42,7 @@ import WindSpeedPicker from '../../sharedComponents/WindSpeedPicker';
 import { setTimeSlider } from '../../../store/mapview/actions';
 import SelectGFWAlertLayer from '../../sharedComponents/SelectGFWAlertLayer';
 import { loadModules } from 'esri-loader';
+import { UiParams } from '../../../types/layersTypes';
 
 //Dynamic custom theme override using styled-components lib
 interface CheckBoxWrapperProps {
@@ -399,59 +400,32 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
   const gfwLayerSubtitle = useSelector((store: RootState) => store.appState.leftPanel.gfwLayerSubtitle);
   const allAvailableLayers = useSelector((store: RootState) => store.mapviewState.allAvailableLayers);
   const gladLayerConfig: any = allAvailableLayers.filter((layer: any) => layer.id === gfwLayer);
-  //Determine if we need density control on this layer
   const densityPicker = layer && densityEnabledLayers.includes(layer.id);
   const altLayerName = layer.label && layer.label[selectedLanguage];
 
-  const returnTimeSlider = (id: string): any => {
-    switch (id) {
-      case 'TREE_COVER_LOSS':
-        return (
-          <TimeSlider
-            layerID={id}
-            defaultMarks={defaultMarks}
-            min={2000}
-            max={2020}
-            defaultValue={[2000, 2020]}
-            steps={1}
-            included={true}
-          />
-        );
-      case 'DRY_SPELLS':
-        dispatch(setTimeSlider([2030]));
-        return (
-          <TimeSlider
-            layerID={id}
-            defaultMarks={drySpellMarks}
-            min={2030}
-            max={2080}
-            defaultValue={[2030]}
-            steps={100}
-            included={false}
-          />
-        );
-      case 'GFW_INTEGRATED_ALERTS':
-        // @ts-ignore
-        return (
-          <TimeSlider
-            layer={layer}
-            layerID={id}
-            defaultMarks={gfwMarks}
-            min={new Date(2020, 3, 3)}
-            max={new Date(2022, 3, 3)}
-            defaultValue={[0, 730]}
-            steps={33}
-            included={true}
-            type={'gfw-integrated-alert'}
-          />
-        );
-      default:
-        return null;
-    }
+  const returnTimeSlider = (id: string, uiParams: any): any => {
+    const { inputType, minDate, maxDate, defaultDate, steps, included, defaultMarks, type }: UiParams = uiParams;
+
+    if (inputType !== 'datepicker') return;
+    if (id === 'DRY_SPELLS') dispatch(setTimeSlider([2030]));
+
+    return (
+      <TimeSlider
+        layer={layer}
+        layerID={id}
+        defaultMarks={defaultMarks}
+        min={minDate}
+        max={maxDate}
+        defaultValue={defaultDate}
+        steps={steps}
+        included={included}
+        type={type}
+      />
+    );
   };
 
   const openInfoModal = (): void => {
-    let layerId = '';
+    let layerId;
     if (layer.title === 'GFW Integrated Alerts') {
       layerId = gfwLayer;
     } else {
@@ -673,10 +647,10 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
           </div>
         </div>
         {layer?.visible && layer.id === 'GFW_INTEGRATED_ALERTS' && <SelectGFWAlertLayer />}
-        {layer?.visible && returnTimeSlider(props.id)}
+
+        {layer?.visible && returnTimeSlider(props.id, layer.uiParams)}
         {layer?.visible && densityPicker && <CanopyDensityPicker type={layer.id} />}
         {layer?.visible && layer.id === 'TREE_COVER_HEIGHT' && <TreeHeightPicker />}
-
         {/*@TODO make this active when windspeed potential urls are available*/}
         {/*{layer?.visible && layer.id === 'WIND_SPEED' && <WindSpeedPicker />}*/}
         {layer?.visible && layer.versions && (

@@ -91,6 +91,7 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
 
   const convertDate = value => {
     const nextStartDate = new Date(min.getTime() || max.getTime());
+
     nextStartDate.setDate(value);
     return new Date(nextStartDate.getTime() - nextStartDate.getTimezoneOffset() * 60000).toISOString().split('T')[0];
   };
