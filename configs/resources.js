@@ -174,70 +174,76 @@ export default {
       },
       layers: [
         {
-          id: 'TREE_COVER_LOSS',
+          id: 'TEST_LAYER',
           order: 1,
+          type: 'remoteDataLayer',
+          uuid: 'ea4b7032-280e-4c3b-8717-21bf6c340c62'
+        },
+        {
+          id: 'TREE_COVER_LOSS',
+          order: 2,
           type: 'remoteDataLayer',
           uuid: '2aed67b3-3643-40d3-9c1e-8af9afb5d9e2'
         },
         {
           id: 'TREE_COVER_GAIN',
-          order: 2,
+          order: 3,
           type: 'remoteDataLayer',
           uuid: 'cb016f17-f12d-463a-9dc2-aabcf5db566c'
         },
         {
           id: 'IMAZON_SAD',
-          order: 3,
+          order: 4,
           type: 'remoteDataLayer',
           uuid: '3e9e86ae-e38d-4c59-8484-c8214ca5186a'
         },
         {
           id: 'FORMA_ALERTS',
-          order: 4,
+          order: 5,
           type: 'remoteDataLayer',
           uuid: '56aa7e57-0ac4-446c-a82d-7713904b17c3'
         },
         {
           id: 'GLAD_ALERTS',
-          order: 5,
+          order: 6,
           type: 'remoteDataLayer',
           uuid: '356f862b-3e70-493a-997b-dc2a193410e9'
         },
         {
           id: 'TERRA_I_ALERTS',
-          order: 6,
+          order: 7,
           type: 'remoteDataLayer',
           uuid: '1fc7b0c5-259a-4685-8665-b2f1ed3f808f'
         },
         {
           id: 'VIIRS_ACTIVE_FIRES',
-          order: 7,
+          order: 8,
           type: 'remoteDataLayer',
           uuid: '6d316908-92c8-4f95-8598-f2a0c72786af'
         },
         {
           id: 'MODIS_ACTIVE_FIRES',
-          order: 8,
+          order: 9,
           type: 'remoteDataLayer',
           uuid: '8ae39d34-a5e5-4742-b06e-6e913a8f1eb8'
         },
         {
           id: 'GFW_INTEGRATED_ALERTS',
-          order: 9,
+          order: 10,
           type: 'remoteDataLayer',
           uuid: 'bd58f25d-d3bb-4d59-9daa-cecddd27d9f4',
           groupId: 'GROUP_LCD'
         },
         {
           id: 'GLAD_S2_ALERTS',
-          order: 10,
+          order: 11,
           type: 'remoteDataLayer',
           uuid: '3b869953-48c4-48d0-8023-5c64a311f3dd',
           groupId: 'GROUP_LCD'
         },
         {
           id: 'RADD_ALERTS',
-          order: 11,
+          order: 12,
           type: 'remoteDataLayer',
           uuid: '440e53d0-36b3-47ad-993a-1c2018c3942c',
           groupId: 'GROUP_LCD'

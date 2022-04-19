@@ -3,6 +3,7 @@ export const supportedLayers = [
   'dynamic',
   'loss',
   'tree-mosaic',
+  'test-layer',
   'gain',
   'image',
   'webtiled',
