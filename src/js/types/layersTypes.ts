@@ -58,3 +58,16 @@ export interface CustomLayerConfig {
   type: 'feature';
   url: string;
 }
+
+export interface UiParams {
+  inputType: string;
+  layer: any;
+  layerID: string;
+  defaultMarks: any;
+  minDate: string;
+  maxDate: string;
+  defaultDate: Array<number>;
+  steps: number;
+  included: boolean;
+  type: string;
+}

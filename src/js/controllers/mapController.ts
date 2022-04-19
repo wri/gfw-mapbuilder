@@ -1,51 +1,52 @@
-import { setDefaultOptions, loadModules } from 'esri-loader';
-import { format, subDays, parse } from 'date-fns';
+import { loadModules, setDefaultOptions } from 'esri-loader';
+import { format, parse, subDays } from 'date-fns';
 import { debounce } from 'lodash-es';
 import { getMaxDateForViirsTiles } from '../helpers/viirsLayerUtil';
-import { landsatBaselayerURL, WRIBasemapConfig } from '../../../configs/layer-config';
+import {
+  densityEnabledLayers,
+  landsatBaselayerURL,
+  supportedLayers,
+  WRIBasemapConfig
+} from '../../../configs/layer-config';
 import { RefObject } from 'react';
-import { densityEnabledLayers } from '../../../configs/layer-config';
 import store from '../store/index';
 import { LayerFactory } from '../helpers/LayerFactory';
 import { setLayerSearchSource } from '../helpers/mapController/searchSources';
 import { getSortedLayers } from '../helpers/mapController/layerSorting';
-import { addPointGraphic, clearGraphics, drawIntersectingGraphic } from '../helpers/MapGraphics';
+import { addPointGraphic, clearGraphics, drawIntersectingGraphic, setNewGraphic } from '../helpers/MapGraphics';
 import {
   allAvailableLayers,
-  mapError,
+  changeMapCenterCoordinates,
+  changeMapScale,
   isMapReady,
+  mapError,
   setActiveFeatureIndex,
   setActiveFeatures,
-  changeMapScale,
-  changeMapCenterCoordinates,
+  setDocuments,
   setLayersLoading,
-  setUserCoordinates,
-  setDocuments
+  setSelectedBasemap,
+  setUserCoordinates
 } from '../store/mapview/actions';
-
-import { setSelectedBasemap } from '../store/mapview/actions';
 import {
   renderModal,
   selectActiveTab,
-  setMeasureResults,
-  setLanguage,
-  setSelectedSearchWidgetLayer,
-  setModisStart,
-  setModisEnd,
-  setViirsStart,
-  setViirsEnd,
-  setGladStart,
+  setAnalysisFeatureList,
   setGladEnd,
-  setAnalysisFeatureList
+  setGladStart,
+  setLanguage,
+  setMeasureResults,
+  setModisEnd,
+  setModisStart,
+  setSelectedSearchWidgetLayer,
+  setViirsEnd,
+  setViirsStart
 } from '../store/appState/actions';
-import { LayerProps, LayerFeatureResult, FeatureResult } from '../store/mapview/types';
+import { FeatureResult, LayerFeatureResult, LayerProps } from '../store/mapview/types';
 import { OptionType } from '../types/measureWidget';
 import { queryLayersForFeatures } from '../helpers/dataPanel/DataPanel';
-import { setNewGraphic } from '../helpers/MapGraphics';
 
 import { MODISLayerIDs } from '../../../configs/modis-viirs';
-import { supportedLayers } from '../../../configs/layer-config';
-import { parseURLandApplyChanges, getLayerInfoFromURL, LayerInfo } from '../helpers/shareFunctionality';
+import { getLayerInfoFromURL, LayerInfo, parseURLandApplyChanges } from '../helpers/shareFunctionality';
 import {
   determineLayerOpacity,
   determineLayerVisibility,
@@ -184,8 +185,7 @@ export class MapController {
         ]);
         store.dispatch(isMapReady(true));
         //default scale for map
-        const wbBase = this._map?.basemap.clone();
-        this._webmapBasemap = wbBase;
+        this._webmapBasemap = this._map?.basemap.clone();
         if (!this._mapview) return;
         store.dispatch(changeMapScale(this._mapview.scale));
         const { latitude, longitude } = this._mapview.center;
@@ -327,6 +327,7 @@ export class MapController {
               newRemoteLayerObject.legendInfo = remoteLayerObject.layer.metadata.legendConfig;
               newRemoteLayerObject.dashboardURL = remoteLayerObject.dashboardURL;
               newRemoteLayerObject.popup = remoteLayerObject.popup;
+              newRemoteLayerObject.uiParams = remoteLayerObject.uiParams;
             } else {
               if (remoteLayerObject.versions && remoteLayerObject.versions[0].url) {
                 remoteLayerObject.layerIds = remoteLayerObject.versions[0].layerIds;
@@ -335,8 +336,7 @@ export class MapController {
               }
 
               //Attempt to fetch legend info from layer service
-              const legendInfoObject = await this.retrieveLegendInfo(remoteLayerObject);
-              newRemoteLayerObject.legendInfo = legendInfoObject;
+              newRemoteLayerObject.legendInfo = await this.retrieveLegendInfo(remoteLayerObject);
               newRemoteLayerObject.id = remoteLayerObject.id;
               newRemoteLayerObject.title = remoteLayerObject.label[appState.selectedLanguage]
                 ? remoteLayerObject.label[appState.selectedLanguage]
@@ -471,8 +471,7 @@ export class MapController {
     } else {
       const maxDate = await getMaxDateForViirsTiles();
       const fDate = parse(maxDate, 'yyyy-MM-dd', new Date());
-      const oneDayAgo = format(subDays(fDate, 1), 'yyyy-MM-dd');
-      sDate = oneDayAgo;
+      sDate = format(subDays(fDate, 1), 'yyyy-MM-dd');
       eDate = maxDate;
     }
     store.dispatch(setViirsStart(sDate));
@@ -523,8 +522,7 @@ export class MapController {
     const newWebMapId = lang === language ? webmap : alternativeWebmap;
     const nonWebmapLayers = mapviewState.allAvailableLayers.filter(layer => layer.origin !== 'webmap');
     const esriNonWebmapLayers = nonWebmapLayers.map((l: LayerProps) => {
-      const layerOnMap = this._map?.findLayerById(l.id);
-      return layerOnMap;
+      return this._map?.findLayerById(l.id);
     });
 
     this._map.removeAll();
@@ -564,8 +562,7 @@ export class MapController {
     this._mapview?.when(async () => {
       if (!this._mapview) return;
       //Set default state and other event listeners
-      const wbBase = this._map?.basemap.clone();
-      this._webmapBasemap = wbBase;
+      this._webmapBasemap = this._map?.basemap.clone();
       store.dispatch(isMapReady(true));
       store.dispatch(setLanguage(lang));
       store.dispatch(changeMapScale(this._mapview.scale));
@@ -652,8 +649,7 @@ export class MapController {
 
       //Update the layer objects with new titles based on current language
       const updatedLayerObjects = nonWebmapLayers.map(layerObject => {
-        const layerTitle = layerObject.label[lang] ? layerObject.label[lang] : 'Untitled Layer';
-        layerObject.title = layerTitle;
+        layerObject.title = layerObject.label[lang] ? layerObject.label[lang] : 'Untitled Layer';
         return layerObject;
       });
       //
@@ -702,20 +698,13 @@ export class MapController {
   async addLandsatLayer(layerConfig: LayerProps, year: string): Promise<void> {
     const [Basemap] = await loadModules(['esri/Basemap']);
     const landsatURL = landsatBaselayerURL;
-    const landsatConfig = {
-      type: 'webtiled',
-      url: landsatURL,
-      title: 'landsat',
-      id: 'landsat'
-    };
     layerConfig.type = 'webtiled';
 
     layerConfig.url = landsatURL.replace(/\/\d{4}\//, `/${year}/`);
     const landsatEsriLayer = await LayerFactory(this._mapview, layerConfig);
-    const landsatBase = new Basemap({
+    this._map!.basemap = new Basemap({
       baseLayers: [landsatEsriLayer]
     });
-    this._map!.basemap = landsatBase;
     store.dispatch(setSelectedBasemap(`landsat-${year}`));
   }
 
@@ -983,13 +972,11 @@ export class MapController {
     if (layer) {
       if (!layer.renderer) {
         layer.load().then(() => {
-          const updatedRenderer = this.updateRendererOpacity(layer.renderer, fill, value);
-          layer.renderer = updatedRenderer;
+          layer.renderer = this.updateRendererOpacity(layer.renderer, fill, value);
         });
       } else {
         //we have renderer available, so use that
-        const updatedRenderer = this.updateRendererOpacity(layer.renderer, fill, value);
-        layer.renderer = updatedRenderer;
+        layer.renderer = this.updateRendererOpacity(layer.renderer, fill, value);
       }
       const { mapviewState } = store.getState();
       const newLayersArray = mapviewState.allAvailableLayers.map(l => {
@@ -1521,9 +1508,7 @@ export class MapController {
     });
 
     if (!this._printTask) return;
-    const mapPDF = await this._printTask.execute(params).catch(e => console.log('error in generateMapPDF()', e));
-
-    return mapPDF;
+    return await this._printTask.execute(params).catch(e => console.log('error in generateMapPDF()', e));
   };
 
   setPolygon = async (points: Array<__esri.Point>): Promise<void> => {
@@ -1694,8 +1679,7 @@ export class MapController {
     const treeLayer: any = this._map?.findLayerById('TREE_COVER');
     if (treeLayer && treeCoverLayerInfo) {
       const oldLayer = treeLayer;
-      const newURL = treeCoverLayerInfo.url.replace('30', value);
-      oldLayer.urlTemplate = newURL;
+      oldLayer.urlTemplate = treeCoverLayerInfo.url.replace('30', value);
       const removeEventListener = this._map?.layers.on(
         'after-remove',
         (event: __esri.CollectionAfterEvent<__esri.WebTileLayer>) => {
@@ -1753,8 +1737,7 @@ export class MapController {
   async setActiveBasemap(id: string): Promise<void> {
     const [Basemap] = await loadModules(['esri/Basemap']);
     if (this._map) {
-      const basemap = Basemap.fromId(id);
-      this._map.basemap = basemap;
+      this._map.basemap = Basemap.fromId(id);
       store.dispatch(setSelectedBasemap(id));
     }
   }
@@ -1772,10 +1755,9 @@ export class MapController {
     const wriLayer = new WebTileLayer({
       urlTemplate: basemapURL
     });
-    const baselayer = new Basemap({
+    this._map.basemap = new Basemap({
       baseLayers: [wriLayer]
     });
-    this._map.basemap = baselayer;
     store.dispatch(setSelectedBasemap(id));
   }
 
@@ -1866,7 +1848,7 @@ export class MapController {
   }
 
   initializeAndSetMODISLayers(MapImageLayer: any) {
-    const modisLayers = MODISLayerIDs.map(({ id, url, layerIds }) => {
+    return MODISLayerIDs.map(({ id, url, layerIds }) => {
       return new MapImageLayer({
         id: id,
         url,
@@ -1879,7 +1861,6 @@ export class MapController {
         ]
       });
     });
-    return modisLayers;
   }
 
   setMODISDefinedRange(sublayerType: string): void {
@@ -2137,10 +2118,9 @@ export class MapController {
     if (intersects) {
       drawIntersectingGraphic(intersecting);
 
-      const intersectingGraphics = intersecting;
       const intersectingFeature = {
         attributes: {},
-        geometry: intersectingGraphics,
+        geometry: intersecting,
         objectid: 0
       } as any;
       const drawnFeatures: LayerFeatureResult = {
