@@ -197,7 +197,7 @@ export default {
       layers: [
         {
           id: 'TREE_COVER_LOSS',
-          order: 2,
+          order: 1,
           type: 'remoteDataLayer',
           uuid: '2aed67b3-3643-40d3-9c1e-8af9afb5d9e2',
           uiParams: {
