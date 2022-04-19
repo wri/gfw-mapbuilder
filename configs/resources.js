@@ -46,7 +46,7 @@ export default {
   recentImagery: true,
   carbonSequence: true,
   carbonEmissions: true,
-  treeCoverHeight: false,
+  treeCoverHeight: true,
   treeCover: true,
   treeCoverGain: true,
   treeCoverLoss: true,
