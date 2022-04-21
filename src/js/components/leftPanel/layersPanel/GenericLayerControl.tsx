@@ -21,7 +21,7 @@ import {
   setGladConfirmed,
   setHighConfidenceConfirmed,
   setGfwIntegratedStart,
-  setGfwIntegratedEnd
+  setGfwIntegratedEnd,
 } from '../../../store/appState/actions';
 import { RootState } from '../../../store';
 import { LayerProps } from '../../../store/mapview/types';
@@ -50,7 +50,7 @@ interface CheckBoxWrapperProps {
 
 const CheckboxWrapper = styled.div<CheckBoxWrapperProps>`
   .styled-checkbox:checked + .styled-checkboxlabel:before {
-    background-color: ${props => props.customColorTheme};
+    background-color: ${(props) => props.customColorTheme};
   }
 `;
 
@@ -181,7 +181,7 @@ const GladControls = (props: GladControlsProps): JSX.Element => {
     const [VectorTileLayer] = await loadModules(['esri/layers/VectorTileLayer']);
     const geographicCoverageLayer = new VectorTileLayer({
       url: 'https://tiles.globalforestwatch.org/umd_glad_landsat_alerts_coverage/v2014/default/root.json',
-      id: 'GEOGRAPHIC_COVERAGE_LAYER'
+      id: 'GEOGRAPHIC_COVERAGE_LAYER',
     });
     setGeographicCoverageToggle(!geographicCoverageToggle);
     if (geographicCoverageToggle) {
@@ -252,7 +252,7 @@ const GladControls = (props: GladControlsProps): JSX.Element => {
           <label htmlFor="start-date">{layerControlsTranslations[props.selectedLanguage].timeStart}</label>
           <DatePicker
             placeholderText="select a day"
-            onChange={date => handleStartDateChange(date)}
+            onChange={(date) => handleStartDateChange(date)}
             selected={new Date(startDate)}
           />
         </div>
@@ -261,7 +261,7 @@ const GladControls = (props: GladControlsProps): JSX.Element => {
           <label htmlFor="end-date">{layerControlsTranslations[props.selectedLanguage].timeEnd}</label>
           <DatePicker
             placeholderText="select a day"
-            onChange={date => handleEndDateChange(date)}
+            onChange={(date) => handleEndDateChange(date)}
             selected={new Date(endDate)}
           />
         </div>
@@ -295,7 +295,7 @@ const LayerFilterSelection = (props: LayerInfo): JSX.Element => {
         where: '1=1',
         returnGeometry: false,
         outFields: layerInfo.filterField[selectedLanguage],
-        returnDistinctValues: true
+        returnDistinctValues: true,
       };
 
       if (layerInfo.type === 'feature') {
@@ -305,7 +305,7 @@ const LayerFilterSelection = (props: LayerInfo): JSX.Element => {
           const entry = feature.attributes[layerInfo.filterField[selectedLanguage]];
           return {
             label: entry,
-            value: entry
+            value: entry,
           };
         });
         setOptions(fieldOptions);
@@ -314,7 +314,7 @@ const LayerFilterSelection = (props: LayerInfo): JSX.Element => {
           const subUrl = `${layerInfo.url}/${id}`;
           return esriQuery(subUrl, queryParams);
         });
-        Promise.all(fieldPromises).then(values => {
+        Promise.all(fieldPromises).then((values) => {
           const allFieldOptions: any = [];
           values.forEach((value: any) => {
             const fieldOptions = value.features
@@ -322,7 +322,7 @@ const LayerFilterSelection = (props: LayerInfo): JSX.Element => {
                 const entry = feature.attributes[layerInfo.filterField[selectedLanguage]];
                 return {
                   label: entry,
-                  value: entry
+                  value: entry,
                 };
               })
               .filter((option: any) => option.label !== null);
@@ -339,26 +339,26 @@ const LayerFilterSelection = (props: LayerInfo): JSX.Element => {
     clearIndicator: (provided: any) => ({
       ...provided,
       cursor: 'pointer',
-      padding: '4px'
+      padding: '4px',
     }),
     dropdownIndicator: (provided: any) => ({
       ...provided,
       cursor: 'pointer',
-      padding: '4px'
+      padding: '4px',
     }),
     container: (provided: any) => ({
       ...provided,
       fontSize: '12px',
-      width: '200px'
+      width: '200px',
     }),
     indicatorsContainer: (provided: any) => ({
       ...provided,
-      padding: '4px'
+      padding: '4px',
     }),
     control: (provided: any) => ({
       ...provided,
-      minHeight: '20px'
-    })
+      minHeight: '20px',
+    }),
   };
 
   return (
@@ -527,7 +527,7 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
     userSelect: 'none',
     border: isDragging ? '2px solid #f0ab01' : '',
     boxSizing: isDragging ? 'border-box' : '',
-    ...draggableStyle
+    ...draggableStyle,
   });
 
   const returnLayerControl = (): JSX.Element => {
