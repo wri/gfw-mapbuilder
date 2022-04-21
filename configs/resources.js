@@ -28,7 +28,7 @@ export default {
   initialExtent: {
     x: null,
     y: null,
-    z: null,
+    z: null
   },
   includeDocumentsTab: false,
   iso: '',
@@ -60,7 +60,7 @@ export default {
   cartoApiKey: 'your key here',
   cartoGroupLabel: {
     en: 'Carto Layers',
-    fr: 'Carto Layers',
+    fr: 'Carto Layers'
   },
   enabledRWLayers: ['DRY_SPELLS', 'AIR_QUALITY', 'WIND_SPEED'], //'DRY_SPELLS', 'AIR_QUALITY', 'WIND_SPEED'
   disabledAnalysisModules: [], //'VIIRS_FIRES', 'GLAD_ALERTS', 'TC_LOSS', 'IFL', 'LCC'
@@ -68,7 +68,7 @@ export default {
     GROUP_WEBMAP: {
       order: 2,
       label: {},
-      layers: [],
+      layers: []
     },
     GROUP_CLIMATE: {
       groupType: 'default',
@@ -83,82 +83,22 @@ export default {
         ka: 'კლიმატი',
         hy: 'Կլիմա',
         az: 'İqlim',
-        nl: 'Klimaat',
+        nl: 'Klimaat'
       },
       layers: [
         {
           id: 'CARBON_SEQ',
           order: 1,
           type: 'remoteDataLayer',
-          uuid: 'e7208398-0acd-4f73-a824-c4fe1e356e0c',
+          uuid: 'e7208398-0acd-4f73-a824-c4fe1e356e0c'
         },
         {
           id: 'CARBON_EMISSIONS',
           order: 2,
           type: 'remoteDataLayer',
-          uuid: '6d989ac9-ab57-4f95-8475-2e747a3adc10',
-        },
-        {
-          groupId: 'GROUP_CLIMATE',
-          id: 'DRY_SPELLS',
-          datasetURL: 'https://data-api.globalforestwatch.org/dataset/nexgddp_change_dry_spells_2000_2080/latest',
-          datasetLegendConfigURL:
-            'https://api.resourcewatch.org/v1/layer/7c497efb-1671-49bf-87a2-3c96ddb9ff88?filterIncludesByEnv=true&includes=vocabulary,metadata&env=production',
-          type: 'resourcewatch',
-          order: 3,
-          origin: 'rw-api',
-          opacity: 1,
-          sublabel: {
-            en: '(0.25°, global, 2000-2080, WRI/Vizzuality)',
-            es: '(0.25°, global, 2000-2080, WRI/Vizzuality)',
-            fr: '(0.25°, global, 2000-2080, WRI/Vizzuality)',
-            id: '(0.25°, global, 2000-2080, WRI/Vizzuality)',
-            ka: '(0.25°, global, 2000-2080, WRI/Vizzuality)',
-            pt: '(0.25°, global, 2000-2080, WRI/Vizzuality)',
-            zh: '(0.25°, global, 2000-2080, WRI/Vizzuality)',
-          },
-        },
-        {
-          groupId: 'GROUP_CLIMATE',
-          id: 'AIR_QUALITY',
-          datasetURL: 'https://data-api.globalforestwatch.org/dataset/tropomi_avg_nitrogen_dioxide_last_month/latest',
-          datasetLegendConfigURL:
-            'https://api.resourcewatch.org/v1/layer/61989f1f-65af-40e7-bf45-49b27eb2b9da?filterIncludesByEnv=true&includes=vocabulary,metadata&env=production',
-          type: 'resourcewatch',
-          order: 4,
-          origin: 'rw-api',
-          opacity: 1,
-          sublabel: {
-            en: '(3.5 x 5.5 km, global, 2018, TROPOMI/ESA/KNMI/DLR/SRON/BIRA-IASB/STFC/MPIC/S&T/Uni-Bremen)',
-            es: '(3.5 x 5.5 km, global, 2018, TROPOMI/ESA/KNMI/DLR/SRON/BIRA-IASB/STFC/MPIC/S&T/Uni-Bremen)',
-            fr: '(3.5 x 5.5 km, global, 2018, TROPOMI/ESA/KNMI/DLR/SRON/BIRA-IASB/STFC/MPIC/S&T/Uni-Bremen)',
-            id: '(3.5 x 5.5 km, global, 2018, TROPOMI/ESA/KNMI/DLR/SRON/BIRA-IASB/STFC/MPIC/S&T/Uni-Bremen)',
-            ka: '(3.5 x 5.5 km, global, 2018, TROPOMI/ESA/KNMI/DLR/SRON/BIRA-IASB/STFC/MPIC/S&T/Uni-Bremen)',
-            pt: '(3.5 x 5.5 km, global, 2018, TROPOMI/ESA/KNMI/DLR/SRON/BIRA-IASB/STFC/MPIC/S&T/Uni-Bremen)',
-            zh: '(3.5 x 5.5 km, global, 2018, TROPOMI/ESA/KNMI/DLR/SRON/BIRA-IASB/STFC/MPIC/S&T/Uni-Bremen)',
-          },
-        },
-        {
-          groupId: 'GROUP_CLIMATE',
-          id: 'WIND_SPEED',
-          datasetURL: 'https://data-api.globalforestwatch.org/dataset/dtu_wb_wind_speed_potential_2001_2010/latest',
-          datasetLegendConfigURL:
-            'https://api.resourcewatch.org/v1/layer/1ae1f58f-569d-4a21-9835-3e9bdd93759b?filterIncludesByEnv=true&includes=vocabulary,metadata&env=production',
-          type: 'resourcewatch',
-          order: 5,
-          origin: 'rw-api',
-          opacity: 1,
-          sublabel: {
-            en: '(1 km, global, DTU/World Bank Group/ESMAP)',
-            es: '(1 km, global, DTU/World Bank Group/ESMAP)',
-            fr: '(1 km, global, DTU/World Bank Group/ESMAP)',
-            id: '(1 km, global, DTU/World Bank Group/ESMAP)',
-            ka: '(1 km, global, DTU/World Bank Group/ESMAP)',
-            pt: '(1 km, global, DTU/World Bank Group/ESMAP)',
-            zh: '(1 km, global, DTU/World Bank Group/ESMAP)',
-          },
-        },
-      ],
+          uuid: '6d989ac9-ab57-4f95-8475-2e747a3adc10'
+        }
+      ]
     },
     GROUP_LCD: {
       groupType: 'default',
@@ -170,79 +110,58 @@ export default {
         pt: 'Dinâmica de cobertura da terra ',
         id: 'Land Cover Dynamics',
         zh: '土地覆盖动态数据',
-        ka: 'მიწის საფარის დინამიკა',
+        ka: 'მიწის საფარის დინამიკა'
       },
       layers: [
         {
           id: 'TREE_COVER_LOSS',
           order: 1,
           type: 'remoteDataLayer',
-          uuid: '2aed67b3-3643-40d3-9c1e-8af9afb5d9e2',
+          uuid: '2aed67b3-3643-40d3-9c1e-8af9afb5d9e2'
         },
         {
           id: 'TREE_COVER_GAIN',
           order: 2,
           type: 'remoteDataLayer',
-          uuid: 'cb016f17-f12d-463a-9dc2-aabcf5db566c',
+          uuid: 'cb016f17-f12d-463a-9dc2-aabcf5db566c'
         },
         {
           id: 'IMAZON_SAD',
           order: 3,
           type: 'remoteDataLayer',
-          uuid: '3e9e86ae-e38d-4c59-8484-c8214ca5186a',
+          uuid: '3e9e86ae-e38d-4c59-8484-c8214ca5186a'
         },
         {
           id: 'FORMA_ALERTS',
           order: 4,
           type: 'remoteDataLayer',
-          uuid: '56aa7e57-0ac4-446c-a82d-7713904b17c3',
+          uuid: '56aa7e57-0ac4-446c-a82d-7713904b17c3'
         },
         {
           id: 'GLAD_ALERTS',
           order: 5,
           type: 'remoteDataLayer',
-          uuid: '356f862b-3e70-493a-997b-dc2a193410e9',
+          uuid: '356f862b-3e70-493a-997b-dc2a193410e9'
         },
         {
           id: 'TERRA_I_ALERTS',
           order: 6,
           type: 'remoteDataLayer',
-          uuid: '1fc7b0c5-259a-4685-8665-b2f1ed3f808f',
+          uuid: '1fc7b0c5-259a-4685-8665-b2f1ed3f808f'
         },
         {
           id: 'VIIRS_ACTIVE_FIRES',
           order: 7,
           type: 'remoteDataLayer',
-          uuid: '6d316908-92c8-4f95-8598-f2a0c72786af',
+          uuid: '6d316908-92c8-4f95-8598-f2a0c72786af'
         },
         {
           id: 'MODIS_ACTIVE_FIRES',
           order: 8,
           type: 'remoteDataLayer',
-          uuid: '8ae39d34-a5e5-4742-b06e-6e913a8f1eb8',
-        },
-        {
-          id: 'GFW_INTEGRATED_ALERTS',
-          order: 9,
-          type: 'remoteDataLayer',
-          uuid: 'bd58f25d-d3bb-4d59-9daa-cecddd27d9f4',
-          groupId: 'GROUP_LCD',
-        },
-        {
-          id: 'GLAD_S2_ALERTS',
-          order: 10,
-          type: 'remoteDataLayer',
-          uuid: '3b869953-48c4-48d0-8023-5c64a311f3dd',
-          groupId: 'GROUP_LCD',
-        },
-        {
-          id: 'RADD_ALERTS',
-          order: 11,
-          type: 'remoteDataLayer',
-          uuid: '440e53d0-36b3-47ad-993a-1c2018c3942c',
-          groupId: 'GROUP_LCD',
-        },
-      ],
+          uuid: '8ae39d34-a5e5-4742-b06e-6e913a8f1eb8'
+        }
+      ]
     },
     GROUP_LC: {
       groupType: 'default',
@@ -254,38 +173,38 @@ export default {
         pt: 'Cobertura do Solo',
         id: 'Land Cover',
         zh: '土地覆盖',
-        ka: 'მიწის საფარი',
+        ka: 'მიწის საფარი'
       },
       layers: [
         {
           id: 'IFL',
           order: 2,
           type: 'remoteDataLayer',
-          uuid: '5f815a7d-457e-4eae-a8e5-8864a60696ad',
+          uuid: '5f815a7d-457e-4eae-a8e5-8864a60696ad'
         },
         {
           id: 'PRIMARY_FORESTS',
           order: 3,
           type: 'remoteDataLayer',
-          uuid: 'edffb745-e523-462d-ad1e-3052006a3dbc',
+          uuid: 'edffb745-e523-462d-ad1e-3052006a3dbc'
         },
         {
           id: 'AG_BIOMASS',
           order: 4,
           type: 'remoteDataLayer',
-          uuid: '04526d47-f3f5-4f76-a939-e5f7861fd085',
+          uuid: '04526d47-f3f5-4f76-a939-e5f7861fd085'
         },
         {
           id: 'LAND_COVER',
           order: 5,
           type: 'remoteDataLayer',
-          uuid: 'b8d3f175-0565-443f-839a-49eb890a4b3d',
+          uuid: 'b8d3f175-0565-443f-839a-49eb890a4b3d'
         },
         {
           id: 'TREE_COVER',
           order: 6,
           type: 'remoteDataLayer',
-          uuid: '2569adca-ef87-42c4-a153-57c5e8ba0ef7',
+          uuid: '2569adca-ef87-42c4-a153-57c5e8ba0ef7'
         },
         {
           groupId: 'GROUP_LC',
@@ -303,7 +222,7 @@ export default {
             id: 'Tree cover height',
             ka: 'Tree cover height',
             pt: 'Tree cover height',
-            zh: 'Tree cover height',
+            zh: 'Tree cover height'
           },
           sublabel: {
             en: '2019, 30m, global, UMD/NASA GEDI',
@@ -312,7 +231,7 @@ export default {
             id: '2019, 30m, global, UMD/NASA GEDI',
             ka: '2019, 30m, global, UMD/NASA GEDI',
             pt: '2019, 30m, global, UMD/NASA GEDI',
-            zh: '2019, 30m, global, UMD/NASA GEDI',
+            zh: '2019, 30m, global, UMD/NASA GEDI'
           },
           legend: {
             name: {
@@ -322,7 +241,7 @@ export default {
               id: 'Tree cover height',
               ka: 'Tree cover height',
               pt: 'Tree cover height',
-              zh: 'Tree cover height',
+              zh: 'Tree cover height'
             },
             type: 'gradient',
             items: [
@@ -336,8 +255,8 @@ export default {
                   id: '3m',
                   ka: '3m',
                   pt: '3m',
-                  zh: '3m',
-                },
+                  zh: '3m'
+                }
               },
               {
                 color: '#045200',
@@ -349,19 +268,19 @@ export default {
                   id: '30m',
                   ka: '30m',
                   pt: '30m',
-                  zh: '30m',
-                },
-              },
-            ],
-          },
+                  zh: '30m'
+                }
+              }
+            ]
+          }
         },
         {
           id: 'TREES_MOSAIC_LANDSCAPES',
           order: 8,
           type: 'remoteDataLayer',
-          uuid: '9e0c1e1e-a0a3-457f-a373-4104820f7a50',
-        },
-      ],
+          uuid: '9e0c1e1e-a0a3-457f-a373-4104820f7a50'
+        }
+      ]
     },
     GROUP_IMAGERY: {
       groupType: 'imagery',
@@ -373,7 +292,7 @@ export default {
         pt: 'Recent Imagery',
         id: 'Recent Imagery',
         zh: 'Recent Imagery',
-        ka: 'Recent Imagery',
+        ka: 'Recent Imagery'
       },
       layers: [
         {
@@ -389,7 +308,7 @@ export default {
             pt: 'Recent Imagery',
             id: 'Recent Imagery',
             zh: 'Recent Imagery',
-            ka: 'Recent Imagery',
+            ka: 'Recent Imagery'
           },
           dynamicSublabel: {
             en: '({DATE_TIME}, {CLOUD_COVERAGE}% cloud coverage, {INSTRUMENT})',
@@ -398,10 +317,10 @@ export default {
             pt: '({DATE_TIME}, {CLOUD_COVERAGE}% cloud coverage, {INSTRUMENT})',
             id: '({DATE_TIME}, {CLOUD_COVERAGE}% cloud coverage, {INSTRUMENT})',
             zh: '({DATE_TIME}, {CLOUD_COVERAGE}% cloud coverage, {INSTRUMENT})',
-            ka: '({DATE_TIME}, {CLOUD_COVERAGE}% cloud coverage, {INSTRUMENT})',
-          },
-        },
-      ],
+            ka: '({DATE_TIME}, {CLOUD_COVERAGE}% cloud coverage, {INSTRUMENT})'
+          }
+        }
+      ]
     },
     GROUP_BASEMAP: {
       groupType: 'basemap',
@@ -413,7 +332,7 @@ export default {
         pt: 'Basemap',
         id: 'Basemap',
         zh: 'Basemap',
-        ka: 'საბაზო რუკა',
+        ka: 'საბაზო რუკა'
       },
       layers: [
         {
@@ -437,7 +356,7 @@ export default {
             '2013',
             '2014',
             '2015',
-            '2016',
+            '2016'
           ],
           title: {
             en: 'Landsat',
@@ -446,8 +365,8 @@ export default {
             pt: 'Landsat',
             id: 'Landsat',
             zh: 'Landsat',
-            ka: 'Landsat',
-          },
+            ka: 'Landsat'
+          }
         },
         {
           id: 'wri_mono',
@@ -459,8 +378,8 @@ export default {
             pt: 'WRI Mono',
             id: 'WRI Mono',
             zh: 'WRI Mono',
-            ka: 'WRI Mono',
-          },
+            ka: 'WRI Mono'
+          }
         },
         {
           id: 'wri_contextual',
@@ -472,8 +391,8 @@ export default {
             pt: 'WRI Contextual',
             id: 'WRI Contextual',
             zh: 'WRI Contextual',
-            ka: 'WRI Contextual',
-          },
+            ka: 'WRI Contextual'
+          }
         },
         {
           id: 'planet',
@@ -488,10 +407,10 @@ export default {
             pt: 'Planet',
             id: 'Planet',
             zh: 'Planet',
-            ka: 'Planet',
-          },
-        },
-      ],
+            ka: 'Planet'
+          }
+        }
+      ]
     },
     extraLayers: [
       {
@@ -500,7 +419,7 @@ export default {
         order: 10000,
         url: 'https://gis.forest-atlas.org/server/rest/services/country_masks/country_mask_global/MapServer',
         opacity: 0.35,
-        layerIds: [0],
+        layerIds: [0]
       },
       {
         id: 'LEGEND_LAYER',
@@ -508,13 +427,13 @@ export default {
         url: 'https://gis-gfw.wri.org/arcgis/rest/services/legends/MapServer',
         visible: false,
         opacity: 0,
-        layerIds: [],
+        layerIds: []
       },
       {
         id: 'USER_FEATURES',
         type: 'graphic',
-        visible: true,
-      },
-    ],
-  },
+        visible: true
+      }
+    ]
+  }
 };
