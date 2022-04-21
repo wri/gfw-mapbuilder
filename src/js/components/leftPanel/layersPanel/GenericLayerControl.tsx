@@ -403,9 +403,9 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
   const densityPicker = layer && densityEnabledLayers.includes(layer.id);
   const altLayerName = layer.label && layer.label[selectedLanguage];
 
-  const returnTimeSlider = (id: string, uiParams: any): any => {
+  const returnTimeSlider = (id: string, uiParams?: any): any => {
+    if (!uiParams) return;
     const { inputType, minDate, maxDate, defaultDate, steps, included, defaultMarks, type }: UiParams = uiParams;
-
     if (inputType !== 'rangeSlider') return;
     if (id === 'DRY_SPELLS') dispatch(setTimeSlider([2030]));
 

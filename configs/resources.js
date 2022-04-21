@@ -64,6 +64,120 @@ export default {
   },
   enabledRWLayers: ['DRY_SPELLS', 'AIR_QUALITY', 'WIND_SPEED'], //'DRY_SPELLS', 'AIR_QUALITY', 'WIND_SPEED'
   disabledAnalysisModules: [], //'VIIRS_FIRES', 'GLAD_ALERTS', 'TC_LOSS', 'IFL', 'LCC'
+  analysisModules: [
+    {
+      analysisId: 'TC_LOSS',
+      uiParams: [
+        {
+          inputType: 'rangeSlider',
+          startParamName: 'period',
+          combineParams: true,
+          valueSeparator: ',',
+          bounds: [2001, 2019],
+          valueType: 'date',
+          label: {
+            en: 'Select range for analysis',
+            fr: 'Sélectionner une plage pour l’analyse:',
+            es: 'Seleccione un rango para el análisis:',
+            pt: 'Selecione o período para análise:',
+            id: 'Pilih rentang untuk analisis:',
+            zh: '选择分析范围:',
+            ka: 'საზღვრების შერჩევა ანალიზისთვის:'
+          },
+          defaultMarks: {
+            '2000': {
+              label: '2000',
+              style: {}
+            },
+            '2001': {
+              label: '2001',
+              style: { display: 'none' }
+            },
+            '2002': {
+              label: '2002',
+              style: { display: 'none' }
+            },
+            '2003': {
+              label: '2003',
+              style: { display: 'none' }
+            },
+            '2004': {
+              label: '2004',
+              style: { display: 'none' }
+            },
+            '2005': {
+              label: '2005',
+              style: {}
+            },
+            '2006': {
+              label: '2006',
+              style: { display: 'none' }
+            },
+            '2007': {
+              label: '2007',
+              style: { display: 'none' }
+            },
+            '2008': {
+              label: '2008',
+              style: { display: 'none' }
+            },
+            '2009': {
+              label: '2009',
+              style: { display: 'none' }
+            },
+            '2010': {
+              label: '2010',
+              style: {}
+            },
+            '2011': {
+              label: '2011',
+              style: { display: 'none' }
+            },
+            '2012': {
+              label: '2012',
+              style: { display: 'none' }
+            },
+            '2013': {
+              label: '2013',
+              style: { display: 'none' }
+            },
+            '2014': {
+              label: '2014',
+              style: { display: 'none' }
+            },
+            '2015': {
+              label: '2015',
+              style: {}
+            },
+            '2016': {
+              label: '2016',
+              style: { display: 'none' }
+            },
+            '2017': {
+              label: '2017',
+              style: { display: 'none' }
+            },
+            '2018': {
+              label: '2018',
+              style: { display: 'none' }
+            },
+            '2019': {
+              label: '2019',
+              style: { display: 'none' }
+            },
+            '2020': {
+              label: '2020',
+              style: {}
+            }
+          },
+          minDate: 2000,
+          maxDate: 2020,
+          steps: 1,
+          included: true
+        }
+      ]
+    }
+  ],
   layerPanel: {
     GROUP_WEBMAP: {
       order: 2,
@@ -116,8 +230,8 @@ export default {
             ka: '(0.25°, global, 2000-2080, WRI/Vizzuality)',
             pt: '(0.25°, global, 2000-2080, WRI/Vizzuality)',
             zh: '(0.25°, global, 2000-2080, WRI/Vizzuality)'
-          },
-          uiParams: {
+          }
+          /*uiParams: {
             inputType: 'rangeSlider',
             defaultDate: [2030],
             defaultMarks: {
@@ -138,7 +252,7 @@ export default {
             maxDate: 2080,
             steps: 50,
             included: false
-          }
+          }*/
         },
         {
           groupId: 'GROUP_CLIMATE',
@@ -199,10 +313,10 @@ export default {
           id: 'TREE_COVER_LOSS',
           order: 1,
           type: 'remoteDataLayer',
-          uuid: '2aed67b3-3643-40d3-9c1e-8af9afb5d9e2',
-          uiParams: {
+          uuid: '2aed67b3-3643-40d3-9c1e-8af9afb5d9e2'
+          /*uiParams: {
             inputType: 'rangeSlider',
-            defaultDate: [2000, 2020],
+            bounds: [2000, 2020],
             defaultMarks: {
               '2000': {
                 label: '2000',
@@ -293,7 +407,7 @@ export default {
             maxDate: 2020,
             steps: 1,
             included: true
-          }
+          }*/
         },
         {
           id: 'TREE_COVER_GAIN',
@@ -341,8 +455,8 @@ export default {
           id: 'GFW_INTEGRATED_ALERTS',
           order: 9,
           type: 'remoteDataLayer',
-          uuid: 'bd58f25d-d3bb-4d59-9daa-cecddd27d9f4',
-          uiParams: {
+          uuid: 'bd58f25d-d3bb-4d59-9daa-cecddd27d9f4'
+          /* uiParams: {
             inputType: 'rangeSlider',
             defaultDate: [2030],
             defaultMarks: {
@@ -367,7 +481,7 @@ export default {
             steps: 33,
             included: true,
             type: 'gfw-integrated-alert'
-          }
+          }*/
         },
         {
           id: 'GLAD_S2_ALERTS',
