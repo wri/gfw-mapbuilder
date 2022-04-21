@@ -1,5 +1,5 @@
 //Helper for determining layer opacity that we start with. Depending on the URL hash, resources file and API response those can be diffent
-import { defaultAPIFlagshipLayers, rDataLayer } from '../../../../configs/layer-config';
+import { defaultAPIFlagshipLayers, newRemoteDataLayers } from '../../../../configs/layer-config';
 import { LayerInfo } from '../shareFunctionality';
 import { LayerProps } from '../../store/mapview/types';
 import store from '../../store';
@@ -292,7 +292,7 @@ export async function getRemoteAndServiceLayers(): Promise<any> {
       }
     });
 
-  rDataLayer
+  newRemoteDataLayers
     .filter(l => checkLayerFilterConfig(l))
     .forEach((layer): void => {
       remoteDataLayers.push({

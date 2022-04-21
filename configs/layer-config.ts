@@ -15,7 +15,12 @@ export const supportedLayers = [
   'co2_emissions',
   'Vector.Layer'
 ];
-export const rDataLayer = [
+
+// @TODO Need to clean up this approach!
+//  Layers are added in layer-config files instead of resource.js file due to applications that use old config files.
+// If new layers are added to the resource.js file they do not come across in applications with old config files
+// and that is why we are using this work-around for the time-being.
+export const newRemoteDataLayers = [
   {
     id: 'TREES_MOSAIC_LANDSCAPES',
     order: 7,
