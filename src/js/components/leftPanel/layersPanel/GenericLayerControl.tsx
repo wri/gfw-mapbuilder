@@ -406,7 +406,7 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
   const returnTimeSlider = (id: string, uiParams: any): any => {
     const { inputType, minDate, maxDate, defaultDate, steps, included, defaultMarks, type }: UiParams = uiParams;
 
-    if (inputType !== 'datepicker') return;
+    if (inputType !== 'rangeSlider') return;
     if (id === 'DRY_SPELLS') dispatch(setTimeSlider([2030]));
 
     return (

@@ -118,7 +118,7 @@ export default {
             zh: '(0.25°, global, 2000-2080, WRI/Vizzuality)'
           },
           uiParams: {
-            inputType: 'datepicker',
+            inputType: 'rangeSlider',
             defaultDate: [2030],
             defaultMarks: {
               '2030': {
@@ -201,7 +201,7 @@ export default {
           type: 'remoteDataLayer',
           uuid: '2aed67b3-3643-40d3-9c1e-8af9afb5d9e2',
           uiParams: {
-            inputType: 'datepicker',
+            inputType: 'rangeSlider',
             defaultDate: [2000, 2020],
             defaultMarks: {
               '2000': {
@@ -343,7 +343,7 @@ export default {
           type: 'remoteDataLayer',
           uuid: 'bd58f25d-d3bb-4d59-9daa-cecddd27d9f4',
           uiParams: {
-            inputType: 'datepicker',
+            inputType: 'rangeSlider',
             defaultDate: [2030],
             defaultMarks: {
               '0': {
