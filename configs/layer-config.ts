@@ -15,7 +15,8 @@ export const supportedLayers = [
   'co2_emissions',
   'Vector.Layer'
 ];
-export const rDataLayer = [
+
+/*export const rDataLayer = [
   {
     id: 'TREES_MOSAIC_LANDSCAPES',
     order: 7,
@@ -174,7 +175,7 @@ export const defaultAPIFlagshipLayers = [
       zh: '(1 km, global, DTU/World Bank Group/ESMAP)'
     }
   }
-];
+];*/
 
 //Layer controls (IDS)
 export const densityEnabledLayers = ['TREE_COVER_LOSS', 'AG_BIOMASS', 'TREE_COVER', 'TREES_MOSAIC_LANDSCAPES'];

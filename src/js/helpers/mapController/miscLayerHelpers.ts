@@ -1,5 +1,5 @@
 //Helper for determining layer opacity that we start with. Depending on the URL hash, resources file and API response those can be diffent
-import { defaultAPIFlagshipLayers, rDataLayer } from '../../../../configs/layer-config';
+// import { defaultAPIFlagshipLayers, rDataLayer } from '../../../../configs/layer-config';
 import { LayerInfo } from '../shareFunctionality';
 import { LayerProps } from '../../store/mapview/types';
 import store from '../../store';
@@ -292,7 +292,7 @@ export async function getRemoteAndServiceLayers(): Promise<any> {
       }
     });
 
-  rDataLayer.forEach((layer: AllLayersConfig): void => {
+  /*rDataLayer.forEach((layer: AllLayersConfig): void => {
     remoteDataLayers.push({
       order: layer.order,
       layerGroupId: layer.groupId,
@@ -314,7 +314,7 @@ export async function getRemoteAndServiceLayers(): Promise<any> {
       legend: layer.legend,
       sublabel: layer.sublabel
     });
-  });
+  });*/
 
   function fetchRemoteApiLayer(item): Promise<any> {
     const baseURL = `https://production-api.globalforestwatch.org/v1/layer/${item?.dataLayer?.uuid}`;
