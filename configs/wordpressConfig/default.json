@@ -67,7 +67,6 @@
       "en": "Carto Layers",
       "fr": "Carto Layers"
     },
-    "enabledRWLayers": ["DRY_SPELLS", "AIR_QUALITY", "WIND_SPEED"],
     "disabledAnalysisModules": [],
     "layerPanel": {
       "GROUP_WEBMAP": {
