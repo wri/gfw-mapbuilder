@@ -51,6 +51,9 @@ export default {
   treeCoverGain: true,
   treeCoverLoss: true,
   treeMosaicLandscapes: true,
+  drySpells: true,
+  airQuality: true,
+  windSpeed: true,
   webmapMenuName: 'Land Use',
   sharinghost: 'https://www.arcgis.com',
   analyticsCode: '',
@@ -62,7 +65,6 @@ export default {
     en: 'Carto Layers',
     fr: 'Carto Layers'
   },
-  enabledRWLayers: ['DRY_SPELLS', 'AIR_QUALITY', 'WIND_SPEED'], //'DRY_SPELLS', 'AIR_QUALITY', 'WIND_SPEED'
   disabledAnalysisModules: [], //'VIIRS_FIRES', 'GLAD_ALERTS', 'TC_LOSS', 'IFL', 'LCC'
   layerPanel: {
     GROUP_WEBMAP: {
@@ -97,6 +99,66 @@ export default {
           order: 2,
           type: 'remoteDataLayer',
           uuid: '6d989ac9-ab57-4f95-8475-2e747a3adc10'
+        },
+        {
+          groupId: 'GROUP_CLIMATE',
+          id: 'DRY_SPELLS',
+          datasetURL: 'https://data-api.globalforestwatch.org/dataset/nexgddp_change_dry_spells_2000_2080/latest',
+          datasetLegendConfigURL:
+            'https://api.resourcewatch.org/v1/layer/7c497efb-1671-49bf-87a2-3c96ddb9ff88?filterIncludesByEnv=true&includes=vocabulary,metadata&env=production',
+          type: 'resourcewatch',
+          order: 3,
+          origin: 'rw-api',
+          opacity: 1,
+          sublabel: {
+            en: '(0.25°, global, 2000-2080, WRI/Vizzuality)',
+            es: '(0.25°, global, 2000-2080, WRI/Vizzuality)',
+            fr: '(0.25°, global, 2000-2080, WRI/Vizzuality)',
+            id: '(0.25°, global, 2000-2080, WRI/Vizzuality)',
+            ka: '(0.25°, global, 2000-2080, WRI/Vizzuality)',
+            pt: '(0.25°, global, 2000-2080, WRI/Vizzuality)',
+            zh: '(0.25°, global, 2000-2080, WRI/Vizzuality)'
+          }
+        },
+        {
+          groupId: 'GROUP_CLIMATE',
+          id: 'AIR_QUALITY',
+          datasetURL: 'https://data-api.globalforestwatch.org/dataset/tropomi_avg_nitrogen_dioxide_last_month/latest',
+          datasetLegendConfigURL:
+            'https://api.resourcewatch.org/v1/layer/61989f1f-65af-40e7-bf45-49b27eb2b9da?filterIncludesByEnv=true&includes=vocabulary,metadata&env=production',
+          type: 'resourcewatch',
+          order: 4,
+          origin: 'rw-api',
+          opacity: 1,
+          sublabel: {
+            en: '(3.5 x 5.5 km, global, 2018, TROPOMI/ESA/KNMI/DLR/SRON/BIRA-IASB/STFC/MPIC/S&T/Uni-Bremen)',
+            es: '(3.5 x 5.5 km, global, 2018, TROPOMI/ESA/KNMI/DLR/SRON/BIRA-IASB/STFC/MPIC/S&T/Uni-Bremen)',
+            fr: '(3.5 x 5.5 km, global, 2018, TROPOMI/ESA/KNMI/DLR/SRON/BIRA-IASB/STFC/MPIC/S&T/Uni-Bremen)',
+            id: '(3.5 x 5.5 km, global, 2018, TROPOMI/ESA/KNMI/DLR/SRON/BIRA-IASB/STFC/MPIC/S&T/Uni-Bremen)',
+            ka: '(3.5 x 5.5 km, global, 2018, TROPOMI/ESA/KNMI/DLR/SRON/BIRA-IASB/STFC/MPIC/S&T/Uni-Bremen)',
+            pt: '(3.5 x 5.5 km, global, 2018, TROPOMI/ESA/KNMI/DLR/SRON/BIRA-IASB/STFC/MPIC/S&T/Uni-Bremen)',
+            zh: '(3.5 x 5.5 km, global, 2018, TROPOMI/ESA/KNMI/DLR/SRON/BIRA-IASB/STFC/MPIC/S&T/Uni-Bremen)'
+          }
+        },
+        {
+          groupId: 'GROUP_CLIMATE',
+          id: 'WIND_SPEED',
+          datasetURL: 'https://data-api.globalforestwatch.org/dataset/dtu_wb_wind_speed_potential_2001_2010/latest',
+          datasetLegendConfigURL:
+            'https://api.resourcewatch.org/v1/layer/1ae1f58f-569d-4a21-9835-3e9bdd93759b?filterIncludesByEnv=true&includes=vocabulary,metadata&env=production',
+          type: 'resourcewatch',
+          order: 5,
+          origin: 'rw-api',
+          opacity: 1,
+          sublabel: {
+            en: '(1 km, global, DTU/World Bank Group/ESMAP)',
+            es: '(1 km, global, DTU/World Bank Group/ESMAP)',
+            fr: '(1 km, global, DTU/World Bank Group/ESMAP)',
+            id: '(1 km, global, DTU/World Bank Group/ESMAP)',
+            ka: '(1 km, global, DTU/World Bank Group/ESMAP)',
+            pt: '(1 km, global, DTU/World Bank Group/ESMAP)',
+            zh: '(1 km, global, DTU/World Bank Group/ESMAP)'
+          }
         }
       ]
     },
@@ -160,6 +222,27 @@ export default {
           order: 8,
           type: 'remoteDataLayer',
           uuid: '8ae39d34-a5e5-4742-b06e-6e913a8f1eb8'
+        },
+        {
+          id: 'GFW_INTEGRATED_ALERTS',
+          order: 9,
+          type: 'remoteDataLayer',
+          uuid: 'bd58f25d-d3bb-4d59-9daa-cecddd27d9f4',
+          groupId: 'GROUP_LCD'
+        },
+        {
+          id: 'GLAD_S2_ALERTS',
+          order: 10,
+          type: 'remoteDataLayer',
+          uuid: '3b869953-48c4-48d0-8023-5c64a311f3dd',
+          groupId: 'GROUP_LCD'
+        },
+        {
+          id: 'RADD_ALERTS',
+          order: 11,
+          type: 'remoteDataLayer',
+          uuid: '440e53d0-36b3-47ad-993a-1c2018c3942c',
+          groupId: 'GROUP_LCD'
         }
       ]
     },

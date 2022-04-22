@@ -1,5 +1,5 @@
 //Helper for determining layer opacity that we start with. Depending on the URL hash, resources file and API response those can be diffent
-import { defaultAPIFlagshipLayers, newRemoteDataLayers } from '../../../../configs/layer-config';
+// import { defaultAPIFlagshipLayers, newRemoteDataLayers } from '../../../../configs/layer-config';
 import { LayerInfo } from '../shareFunctionality';
 import { LayerProps } from '../../store/mapview/types';
 import store from '../../store';
@@ -238,7 +238,10 @@ export async function getRemoteAndServiceLayers(): Promise<any> {
     TREE_COVER_GAIN: 'treeCoverGain',
     TREE_COVER_LOSS: 'treeCoverLoss',
     TREE_COVER_HEIGHT: 'treeCoverHeight',
-    GFW_INTEGRATED_ALERTS: 'gfwIntegratedAlertLayer'
+    GFW_INTEGRATED_ALERTS: 'gfwIntegratedAlertLayer',
+    DRY_SPELLS: 'drySpells',
+    AIR_QUALITY: 'airQuality',
+    WIND_SPEED: 'windSpeed'
   };
   const configLayerIDs = Object.keys(configLayerFilters);
 
@@ -277,7 +280,7 @@ export async function getRemoteAndServiceLayers(): Promise<any> {
           legend: layer.legend,
           sublabel: layer.sublabel
         });
-      } else if (layer.type === 'resourcewatch' && appSettings?.enabledRWLayers?.includes(layer.id)) {
+      } else if (layer.type === 'resourcewatch') {
         remoteDataLayers.push({
           order: layer.order,
           layerGroupId: layer.groupId,
@@ -292,7 +295,7 @@ export async function getRemoteAndServiceLayers(): Promise<any> {
       }
     });
 
-  newRemoteDataLayers
+  /*  newRemoteDataLayers
     .filter(l => checkLayerFilterConfig(l))
     .forEach((layer): void => {
       remoteDataLayers.push({
@@ -305,22 +308,22 @@ export async function getRemoteAndServiceLayers(): Promise<any> {
   defaultAPIFlagshipLayers
     .filter(l => checkLayerFilterConfig(l))
     .forEach((layer): void => {
-      if (appSettings?.enabledRWLayers?.includes(layer.id)) {
-        remoteDataLayers.push({
-          order: layer.order,
-          layerGroupId: layer.groupId,
-          dataLayer: layer,
-          origin: layer.origin,
-          uuid: layer.uuid,
-          label: layer.label,
-          layerType: layer.layerType,
-          id: layer.id,
-          opacity: layer.opacity,
-          legend: layer.legend,
-          sublabel: layer.sublabel
-        });
-      }
-    });
+      // if (appSettings?.enabledRWLayers?.includes(layer.id)) {
+      remoteDataLayers.push({
+        order: layer.order,
+        layerGroupId: layer.groupId,
+        dataLayer: layer,
+        origin: layer.origin,
+        uuid: layer.uuid,
+        label: layer.label,
+        layerType: layer.layerType,
+        id: layer.id,
+        opacity: layer.opacity,
+        legend: layer.legend,
+        sublabel: layer.sublabel
+      });
+      // }
+    });*/
 
   function fetchRemoteApiLayer(item): Promise<any> {
     const baseURL = `https://production-api.globalforestwatch.org/v1/layer/${item?.dataLayer?.uuid}`;
