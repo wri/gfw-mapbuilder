@@ -36,13 +36,9 @@ const Report = (props: ReportProps): JSX.Element => {
 
   const logoURL = useSelector((store: RootState) => store.appSettings.logoUrl);
 
-  const allAvailableLayers = useSelector(
-    (store: RootState) => store.mapviewState.allAvailableLayers
-  );
+  const allAvailableLayers = useSelector((store: RootState) => store.mapviewState.allAvailableLayers);
 
-  const layersLoading = useSelector(
-    (store: RootState) => store.mapviewState.layersLoading
-  );
+  const layersLoading = useSelector((store: RootState) => store.mapviewState.layersLoading);
 
   const [featureGeometry, setFeatureGeometry] = React.useState<any>('');
   const [esriGeometry, setEsriGeometry] = React.useState();
@@ -50,75 +46,61 @@ const Report = (props: ReportProps): JSX.Element => {
   const [sublayerTitle, setSublayerTitle] = React.useState('');
   const [layerTitle, setLayerTitle] = React.useState('');
   const [attributes, setAttributes] = React.useState<null | any>(null);
-  const [hideAttributeTable, setHideAttributeTable] = React.useState<boolean>(
-    false
-  );
+  const [hideAttributeTable, setHideAttributeTable] = React.useState<boolean>(false);
 
-  const isMapReady = useSelector(
-    (store: RootState) => store.mapviewState.isMapReady
-  );
+  const isMapReady = useSelector((store: RootState) => store.mapviewState.isMapReady);
 
   React.useEffect(() => {
-    const geostoreID = new URL(window.location.href).searchParams.get(
-      'geostoreID'
-    );
+    const geostoreID = new URL(window.location.href).searchParams.get('geostoreID');
     //On load using geostoreID coming from the URL, fetch information about the active feature
     async function fetchGeostoreInfo(): Promise<any> {
       fetch(`${geostoreURL}${geostoreID}`)
-        .then(response => response.json())
-        .then(data => {
+        .then((response) => response.json())
+        .then((data) => {
           setFeatureGeometry(data.data.attributes);
           setGeostoreID(geostoreID);
         })
-        .catch(e => console.error(e));
+        .catch((e) => console.error(e));
     }
     fetchGeostoreInfo();
   }, []);
 
   React.useEffect(() => {
     //Transform geojson retrieved earlier to usable esri geometry
-    async function getFeatures(
-      activeLayer: any,
-      activeLayerInfo: ActiveLayerInfo,
-      objectID: any
-    ): Promise<any> {
+    async function getFeatures(activeLayer: any, activeLayerInfo: ActiveLayerInfo, objectID: any): Promise<any> {
       //Get The Fields
       const { layerFields: fields } = activeLayerInfo.sublayer
         ? await getAllLayerFields(activeLayerInfo.sub)
         : await getAllLayerFields(activeLayerInfo.parentLayer);
 
       // Get all attributes that we want to fetch
-      const layerToQuery = activeLayerInfo.sublayer
-        ? activeLayerInfo.sub
-        : activeLayerInfo.parentLayer;
-      const attributesToUse = getAttributesToFetch(
-        layerToQuery,
-        activeLayerInfo.sublayer,
-        fields
-      );
-      const layerOutFields = attributesToUse?.map(f => f.fieldName);
+      const layerToQuery = activeLayerInfo.sublayer ? activeLayerInfo.sub : activeLayerInfo.parentLayer;
+      const attributesToUse = getAttributesToFetch(layerToQuery, activeLayerInfo.sublayer, fields);
+      const layerOutFields = attributesToUse?.map((f) => f.fieldName);
       const qParams = {
         where: '1=1',
         outFields: layerOutFields ? layerOutFields : ['*'],
         returnGeometry: false,
-        objectIds: objectID
+        objectIds: [objectID],
       };
 
       //TODO: this may need more testing, we are accounting here for edge case with layerId prop (usually to do with FeatureServer layers but unclear if this is 100% coverage solution)
       const url = activeLayerInfo?.parentLayer?.hasOwnProperty('layerId')
-        ? activeLayerInfo.parentLayer.url +
-          `/${activeLayerInfo.parentLayer.layerId}`
+        ? activeLayerInfo.parentLayer.url + `/${activeLayerInfo.parentLayer.layerId}`
         : activeLayer.url;
+
       const responseAttributes = await esriQuery(url, qParams);
+
       const [esriIntl] = await loadModules(['esri/intl']);
       const formattedAttributes = await formatAttributeValues(
-        responseAttributes.features[0].attributes,
+        responseAttributes?.features[0].attributes,
         attributesToUse,
         esriIntl
       );
+
       setAttributes({
         attributes: formattedAttributes,
-        fields: attributesToUse
+        fields: attributesToUse,
       });
       setLayerTitle(activeLayer.title);
     }
@@ -141,12 +123,8 @@ const Report = (props: ReportProps): JSX.Element => {
 
       //Grab active Feature layerid, sublayerid and objectid from the url
       const layerID = new URL(window.location.href).searchParams.get('acLayer');
-      const sublayerID = new URL(window.location.href).searchParams.get(
-        'acSublayer'
-      );
-      const objectID = new URL(window.location.href).searchParams.get(
-        'objectid'
-      );
+      const sublayerID = new URL(window.location.href).searchParams.get('acSublayer');
+      const objectID = new URL(window.location.href).searchParams.get('objectid');
 
       // ObjectID comes in as undefined in certain cases such as when report is loaded with user drawn or user uploaded polygon feature, in those cases we do not need attribute table loaded so this will short-circuit the
       // logic below and prevent breaking attribute table logic
@@ -178,9 +156,7 @@ const Report = (props: ReportProps): JSX.Element => {
   return (
     <div className="report">
       <div className="report-header">
-        {logoURL && logoURL.length && (
-          <img src={logoURL} alt="logo" className="logo" />
-        )}
+        {logoURL && logoURL.length && <img src={logoURL} alt="logo" className="logo" />}
         <p className="title">{`${window.document.title} Custom Analysis`}</p>
         <button onClick={printReport}>
           <PrintIcon height={25} width={25} fill={'#fff'} />
@@ -200,18 +176,16 @@ const Report = (props: ReportProps): JSX.Element => {
               height: '500px',
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center'
+              justifyContent: 'center',
             }}
           >
-            <p style={{ textAlign: 'center', marginTop: '30px' }}>
-              Running analysis...
-            </p>
+            <p style={{ textAlign: 'center', marginTop: '30px' }}>Running analysis...</p>
             <Loader
               containerPositionStyling={{
                 position: 'absolute',
                 top: '70%',
                 left: '50%',
-                marginLeft: '-50px'
+                marginLeft: '-50px',
               }}
               color={'#cfcdcd'}
               size={100}

@@ -39,9 +39,10 @@ export default {
   forma: false,
   aboveGroundBiomass: true,
   landCover: true,
-  treeMosaicLandscapes: true,
   mangroves: false,
+  sadAlerts: false,
   gladAlerts: true,
+  gfwIntegratedAlertLayer: true,
   recentImagery: true,
   carbonSequence: true,
   carbonEmissions: true,
@@ -49,6 +50,10 @@ export default {
   treeCover: true,
   treeCoverGain: true,
   treeCoverLoss: true,
+  treeMosaicLandscapes: true,
+  drySpells: true,
+  airQuality: true,
+  windSpeed: true,
   webmapMenuName: 'Land Use',
   sharinghost: 'https://www.arcgis.com',
   analyticsCode: '',
@@ -60,7 +65,6 @@ export default {
     en: 'Carto Layers',
     fr: 'Carto Layers',
   },
-  enabledRWLayers: ['DRY_SPELLS', 'AIR_QUALITY', 'WIND_SPEED'], //'DRY_SPELLS', 'AIR_QUALITY', 'WIND_SPEED'
   disabledAnalysisModules: [], //'VIIRS_FIRES', 'GLAD_ALERTS', 'TC_LOSS', 'IFL', 'LCC'
   layerPanel: {
     GROUP_WEBMAP: {
