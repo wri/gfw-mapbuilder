@@ -401,17 +401,9 @@ const BaseAnalysis = (): JSX.Element => {
             </div>
           )}
           {chartLoading && (
-            <Loader
-              containerPositionStyling={{
-                position: 'absolute',
-                top: '50%',
-                left: '50%',
-                marginTop: '-25px',
-                marginLeft: '-25px'
-              }}
-              color={'#cfcdcd'}
-              size={50}
-            />
+            <>
+              <p style={{ textAlign: 'center', marginTop: '30px' }}>Loading Chart...</p>
+            </>
           )}
           {vegaSpec && (
             <>
