@@ -1,22 +1,22 @@
 import * as React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../../store';
-import { setActiveFeatureIndex, setActiveFeatures, setDocuments } from '../../../../js/store/mapview/actions';
-import { selectActiveTab, setAnalysisFeatureList } from '../../../../js/store/appState/actions';
+import { setActiveFeatureIndex, setActiveFeatures, setDocuments } from '../../../store/mapview/actions';
+import { selectActiveTab, setAnalysisFeatureList } from '../../../store/appState/actions';
 import DataTabFooter from './DataTabFooter';
 import DefaultTabView from './DefaultTabView';
 import LayerSelector from './LayerSelector';
-import { mapController } from '../../../../js/controllers/mapController';
-import { LayerFeatureResult } from '../../../../js/store/mapview/types';
-import { getDocuments } from '../../../../js/helpers/mapController/documentsQuery';
+import { mapController } from '../../../controllers/mapController';
+import { LayerFeatureResult } from '../../../store/mapview/types';
+import { getDocuments } from '../../../helpers/mapController/documentsQuery';
 import { CloseIcon } from '../../../../images/closeIcon';
 import BaseButton from '../../ui/BaseButton';
 import styled from 'styled-components';
 import { addToMultiPolygonLayer, clearGraphics, clearUserGraphics } from '../../../helpers/MapGraphics';
 
-//Constructs layer tile based on sublayer existance
+//Constructs layer tile based on sublayer existence
 function generateLayerTitle(activeLayerInfo: any): string {
-  let result = '';
+  let result;
   const { layerTitle, sublayerTitle, displayField } = activeLayerInfo;
   const displayName = activeLayerInfo.features[0]?.attributes[displayField];
   if (sublayerTitle) {
@@ -193,11 +193,11 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
           layerID
         };
 
-        const docs = getDocuments(urlProperties)
+        getDocuments(urlProperties)
           .then(res => {
             dispatch(setDocuments(res));
           })
-          .catch(e => dispatch(setDocuments(null)));
+          .catch(() => dispatch(setDocuments(null)));
       }, [activeFeatures, activeFeatureIndex]);
 
       const TopWrap = styled.div`
@@ -206,13 +206,12 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
       `;
 
       const AddToAnalysisButton = styled(BaseButton)`
-        margin: 0;
+        margin: 0 0 0 5px;
         background-color: ${customColorTheme};
         color: white;
         font-size: 0.7rem;
         min-height: 15px;
-        padding: 5px 0px 5px 0px;
-        margin-left: 5px;
+        padding: 5px 0 5px 0;
         width: 150px;
       `;
 
@@ -261,7 +260,7 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
 
                   const activeFeature = activeFeatures[activeFeatureIndex[0]].features[activeFeatureIndex[1]];
                   const formatFeatures: LayerFeatureResult = {
-                    layerID: `multi_poly_graphics`,
+                    layerID: 'multi_poly_graphics',
                     featureID: `multi_poly_graphics-${activeFeature.objectid}`,
                     layerTitle: 'Multi Polygon Features',
                     features: [activeFeature],

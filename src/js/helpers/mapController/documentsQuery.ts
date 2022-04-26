@@ -1,5 +1,5 @@
-import { mapController } from '../../../js/controllers/mapController';
-import { Attachment, URLProperties } from '../../../js/types/Attachment';
+import { mapController } from '../../controllers/mapController';
+import { Attachment, URLProperties } from '../../types/Attachment';
 
 export const getDocuments = async (urlProperties: URLProperties): Promise<Array<Attachment> | null> => {
   const { sublayerID, specificFeatureID, layerID } = urlProperties;
@@ -22,7 +22,7 @@ export const getDocuments = async (urlProperties: URLProperties): Promise<Array<
       const { attachmentInfos } = results;
       if (attachmentInfos) {
         return attachmentInfos.map((attachment: Attachment) => {
-          attachment.url = endPoint.replace('attachments?f=pjson', `attachments/${results.attachmentInfos[0].id}`);
+          attachment.url = endPoint.replace('attachments?f=pjson', `attachments/${attachment.id}`);
           return attachment;
         });
       }
