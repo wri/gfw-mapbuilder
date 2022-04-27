@@ -20,7 +20,7 @@ import {
   changeMapCenterCoordinates,
   setLayersLoading,
   setUserCoordinates,
-  setDocuments
+  setDocuments,
 } from '../store/mapview/actions';
 
 import { setSelectedBasemap } from '../store/mapview/actions';
@@ -36,7 +36,7 @@ import {
   setViirsEnd,
   setGladStart,
   setGladEnd,
-  setAnalysisFeatureList
+  setAnalysisFeatureList,
 } from '../store/appState/actions';
 import { LayerProps, LayerFeatureResult, FeatureResult } from '../store/mapview/types';
 import { OptionType } from '../types/measureWidget';
@@ -50,7 +50,7 @@ import {
   determineLayerOpacity,
   determineLayerVisibility,
   extractWebmapLayerObjects,
-  getRemoteAndServiceLayers
+  getRemoteAndServiceLayers,
 } from '../helpers/mapController/miscLayerHelpers';
 import { fetchLegendInfo } from '../helpers/legendInfo';
 import { parseExtentConfig } from '../helpers/mapController/configParsing';
@@ -116,7 +116,7 @@ export class MapController {
       'esri/portal/Portal',
       'esri/layers/GraphicsLayer',
       'esri/geometry/Polygon',
-      'esri/Graphic'
+      'esri/Graphic',
     ]);
 
     this._GraphicsLayer = GraphicsLayer;
@@ -129,13 +129,13 @@ export class MapController {
     this._map = new WebMap({
       portalItem: {
         id: webmapID,
-        portal: new Portal({ url: appSettings.sharinghost })
-      }
+        portal: new Portal({ url: appSettings.sharinghost }),
+      },
     });
 
     this._mapview = new MapView({
       map: this._map,
-      container: domRef.current
+      container: domRef.current,
     });
 
     //if we have init extent, use it.
@@ -180,7 +180,7 @@ export class MapController {
         const [geometryEngine, watchUtils, MapImageLayer] = await loadModules([
           'esri/geometry/geometryEngine',
           'esri/core/watchUtils',
-          'esri/layers/MapImageLayer'
+          'esri/layers/MapImageLayer',
         ]);
         store.dispatch(isMapReady(true));
         //default scale for map
@@ -190,7 +190,7 @@ export class MapController {
         store.dispatch(changeMapScale(this._mapview.scale));
         const { latitude, longitude } = this._mapview.center;
         store.dispatch(changeMapCenterCoordinates({ latitude, longitude }));
-        this._mapview!.watch('extent', newExtent => {
+        this._mapview!.watch('extent', (newExtent) => {
           if (!this._mapview) return;
           throtthledUpdater(newExtent, this._mapview);
         });
@@ -199,7 +199,7 @@ export class MapController {
         this.setVIIRSDates();
         this.setGLADDates();
 
-        this._mapview!.on('click', event => {
+        this._mapview!.on('click', (event) => {
           //clear out map graphics
           clearGraphics();
 
@@ -248,7 +248,7 @@ export class MapController {
                 .map((graphic: __esri.Graphic) => {
                   return {
                     attributes: graphic.attributes,
-                    geometry: graphic.geometry
+                    geometry: graphic.geometry,
                   };
                 })
                 .sort((a: any, b: any) => a.attributes.attributeIndex - b.attributes.attributeIndex);
@@ -256,7 +256,7 @@ export class MapController {
                 layerID: 'user_features',
                 layerTitle: 'User Features',
                 features: userFeatures,
-                fieldNames: null
+                fieldNames: null,
               };
               store.dispatch(setActiveFeatures([featuresOnMap]));
               store.dispatch(setActiveFeatureIndex([0, graphicIndex]));
@@ -276,7 +276,7 @@ export class MapController {
         const layerInfosFromURL = getLayerInfoFromURL();
 
         //@ts-ignore -- this ensures that webmap layers are ready on map before the steps get initialized
-        Promise.all(this._map?.layers.items.map(l => l.load())).then(async () => {
+        Promise.all(this._map?.layers.items.map((l) => l.load())).then(async () => {
           //Add layers that are already on the map (webmap layers) to redux array
           const mapLayerObjects: LayerProps[] = await extractWebmapLayerObjects(this._map);
           store.dispatch(allAvailableLayers(mapLayerObjects));
@@ -300,7 +300,7 @@ export class MapController {
             newRemoteLayerObject['opacity'] = {
               combined: determineLayerOpacity(remoteLayerObject, layerInfosFromURL),
               fill: 1,
-              outline: 1
+              outline: 1,
             };
 
             newRemoteLayerObject['visible'] = determineLayerVisibility(remoteLayerObject, layerInfosFromURL);
@@ -369,8 +369,8 @@ export class MapController {
           //Sync the incoming state from URL hash with webmap layers that have been just loaded in the map
           if (layerInfosFromURL.length) {
             //Sync visibility with existing layer objects before we push them into redux
-            allLayerObjects.forEach(layerObject => {
-              const urlLayer = layerInfosFromURL.find(l => {
+            allLayerObjects.forEach((layerObject) => {
+              const urlLayer = layerInfosFromURL.find((l) => {
                 const id = String(l.sublayerID ? l.sublayerID : l.layerID);
                 return id === String(layerObject.id);
               });
@@ -382,12 +382,12 @@ export class MapController {
           }
 
           store.dispatch(allAvailableLayers(allLayerObjects));
-          const esriRemoteLayersPromises: any = remoteLayerObjects.map(layerObject => {
+          const esriRemoteLayersPromises: any = remoteLayerObjects.map((layerObject) => {
             return LayerFactory(this._mapview, layerObject);
           });
 
-          Promise.all(esriRemoteLayersPromises.map((p: any) => p.catch(() => undefined))).then(values => {
-            const esriRemoteLayers = values.filter(v => v);
+          Promise.all(esriRemoteLayersPromises.map((p: any) => p.catch(() => undefined))).then((values) => {
+            const esriRemoteLayers = values.filter((v) => v);
             const modisLayers = this.initializeAndSetMODISLayers(MapImageLayer);
             const allLayers = [...modisLayers, ...esriRemoteLayers];
             const report = new URL(window.location.href).searchParams.get('report');
@@ -397,7 +397,7 @@ export class MapController {
               const layerID = new URL(window.location.href).searchParams.get('acLayer');
               if (!layerID) return;
               const combinedLayers = [...allLayers, ...(this._map as any)?.layers.items];
-              const activeLayer = combinedLayers.find(l => l.id === layerID);
+              const activeLayer = combinedLayers.find((l) => l.id === layerID);
               if (!activeLayer || activeLayer.loaded === true) {
                 store.dispatch(setLayersLoading(false));
               } else {
@@ -410,7 +410,7 @@ export class MapController {
               //@ts-ignore
               const combinedLayers = [...allLayers, ...(this._map as any)?.layers.items];
 
-              combinedLayers.forEach(l => {
+              combinedLayers.forEach((l) => {
                 if (l.loaded === true) {
                   store.dispatch(setLayersLoading(false));
                 } else {
@@ -428,7 +428,7 @@ export class MapController {
 
             //Reorder layers on the map!
             this._map?.layers.forEach((layer: any) => {
-              const layerIndex = mapLayerIDs!.findIndex(i => i === layer.id);
+              const layerIndex = mapLayerIDs!.findIndex((i) => i === layer.id);
               if (layerIndex !== -1) {
                 this._map?.reorder(layer, layerIndex);
               }
@@ -508,7 +508,7 @@ export class MapController {
       'esri/views/MapView',
       'esri/WebMap',
       'esri/portal/Portal',
-      'esri/geometry/geometryEngine'
+      'esri/geometry/geometryEngine',
     ]);
 
     //reset all active/selected features as we have no way of confirming that new webmap has said feature
@@ -521,7 +521,7 @@ export class MapController {
     this.setPageTitle(lang, appSettings.language, appSettings.title, appSettings.alternativeLanguageTitle);
 
     const newWebMapId = lang === language ? webmap : alternativeWebmap;
-    const nonWebmapLayers = mapviewState.allAvailableLayers.filter(layer => layer.origin !== 'webmap');
+    const nonWebmapLayers = mapviewState.allAvailableLayers.filter((layer) => layer.origin !== 'webmap');
     const esriNonWebmapLayers = nonWebmapLayers.map((l: LayerProps) => {
       const layerOnMap = this._map?.findLayerById(l.id);
       return layerOnMap;
@@ -530,12 +530,12 @@ export class MapController {
     this._map.removeAll();
     this._map = undefined;
     this._map = new WebMap({
-      portalItem: { id: newWebMapId, portal: new Portal({ url: sharinghost }) }
+      portalItem: { id: newWebMapId, portal: new Portal({ url: sharinghost }) },
     });
 
     this._mapview = new MapView({
       map: this._map,
-      container: this._domRef.current
+      container: this._domRef.current,
     });
 
     this._mapview!.ui.remove('zoom');
@@ -571,11 +571,11 @@ export class MapController {
       store.dispatch(changeMapScale(this._mapview.scale));
       const { latitude, longitude } = this._mapview.center;
       store.dispatch(changeMapCenterCoordinates({ latitude, longitude }));
-      this._mapview!.watch('extent', newExtent => {
+      this._mapview!.watch('extent', (newExtent) => {
         if (!this._mapview) return;
         throtthledUpdater(newExtent, this._mapview);
       });
-      this._mapview!.on('click', event => {
+      this._mapview!.on('click', (event) => {
         store.dispatch(setActiveFeatures([]));
         store.dispatch(setActiveFeatureIndex([0, 0]));
         store.dispatch(selectActiveTab('data'));
@@ -622,7 +622,7 @@ export class MapController {
               .map((graphic: __esri.Graphic) => {
                 return {
                   attributes: graphic.attributes,
-                  geometry: graphic.geometry
+                  geometry: graphic.geometry,
                 };
               })
               .sort((a: any, b: any) => a.attributes.attributeIndex - b.attributes.attributeIndex);
@@ -630,7 +630,7 @@ export class MapController {
               layerID: 'user_features',
               layerTitle: 'User Features',
               features: userFeatures,
-              fieldNames: null
+              fieldNames: null,
             };
             store.dispatch(setActiveFeatures([featuresOnMap]));
             store.dispatch(setActiveFeatureIndex([0, graphicIndex]));
@@ -651,7 +651,7 @@ export class MapController {
       const mapLayerObjects: LayerProps[] = await extractWebmapLayerObjects(this._map);
 
       //Update the layer objects with new titles based on current language
-      const updatedLayerObjects = nonWebmapLayers.map(layerObject => {
+      const updatedLayerObjects = nonWebmapLayers.map((layerObject) => {
         const layerTitle = layerObject.label[lang] ? layerObject.label[lang] : 'Untitled Layer';
         layerObject.title = layerTitle;
         return layerObject;
@@ -668,7 +668,7 @@ export class MapController {
 
       //Reorder layers on the map!
       this._map?.layers.forEach((layer: any) => {
-        const layerIndex = mapLayerIDs?.findIndex(i => i === layer.id);
+        const layerIndex = mapLayerIDs?.findIndex((i) => i === layer.id);
         if (layerIndex && layerIndex !== -1) {
           this._map?.reorder(layer, layerIndex);
         }
@@ -706,14 +706,14 @@ export class MapController {
       type: 'webtiled',
       url: landsatURL,
       title: 'landsat',
-      id: 'landsat'
+      id: 'landsat',
     };
     layerConfig.type = 'webtiled';
 
     layerConfig.url = landsatURL.replace(/\/\d{4}\//, `/${year}/`);
     const landsatEsriLayer = await LayerFactory(this._mapview, layerConfig);
     const landsatBase = new Basemap({
-      baseLayers: [landsatEsriLayer]
+      baseLayers: [landsatEsriLayer],
     });
     this._map!.basemap = landsatBase;
     store.dispatch(setSelectedBasemap(`landsat-${year}`));
@@ -730,18 +730,18 @@ export class MapController {
       'esri/Basemap',
       'esri/layers/TileLayer',
       'esri/layers/WebTileLayer',
-      'esri/config'
+      'esri/config',
     ]);
 
     const planetBasemapReferenceLayer1 = new TileLayer({
       id: 'planet-basemap-reference-layer',
       url: 'https://services.arcgisonline.com/arcgis/rest/services/Canvas/World_Dark_Gray_Base/MapServer',
-      visible: true
+      visible: true,
     });
     const planetBasemapReferenceLayer2 = new TileLayer({
       id: 'planet-basemap-reference-layer',
       url: 'https://services.arcgisonline.com/arcgis/rest/services/Canvas/World_Dark_Gray_Reference/MapServer',
-      visible: true
+      visible: true,
     });
 
     const params = `?date_range=${selectedTile}&proc=${planetColor}`;
@@ -749,21 +749,21 @@ export class MapController {
       type: 'webtiled',
       url: proxyURL + params,
       title: 'planet',
-      id: 'planet'
+      id: 'planet',
     };
 
     esriConfig.request.interceptors.push({
       urls: 'https://tiles.globalforestwatch.org/planet',
-      before: function(params) {
+      before: function (params) {
         params.requestOptions['headers'] = { 'x-api-key': apiKey };
-      }
+      },
     });
 
     const planetLayer = new WebTileLayer({
-      urlTemplate: planetConfig.url
+      urlTemplate: planetConfig.url,
     });
     const planetBase = new Basemap({
-      baseLayers: [planetBasemapReferenceLayer1, planetLayer, planetBasemapReferenceLayer2]
+      baseLayers: [planetBasemapReferenceLayer1, planetLayer, planetBasemapReferenceLayer2],
     });
     this._planetBasemap = planetBase;
     this._map!.basemap = planetBase;
@@ -776,7 +776,7 @@ export class MapController {
 
       this._mapview.goTo({
         target: this._mapview.center,
-        zoom: zoomNum
+        zoom: zoomNum,
       });
     }
   }
@@ -785,7 +785,7 @@ export class MapController {
     const [CoordinateConversion] = await loadModules(['esri/widgets/CoordinateConversion']);
     new CoordinateConversion({
       view: this._mapview,
-      container: domref.current
+      container: domref.current,
     });
   }
 
@@ -810,7 +810,7 @@ export class MapController {
     const newLayersArray = mapviewState.allAvailableLayers.map((l: LayerProps) => {
       return {
         ...l,
-        visible: false
+        visible: false,
       };
     });
     store.dispatch(allAvailableLayers(newLayersArray));
@@ -828,7 +828,7 @@ export class MapController {
     const newLayersArray = mapviewState.allAvailableLayers.map((l: LayerProps) => {
       return {
         ...l,
-        visible: true
+        visible: true,
       };
     });
     store.dispatch(allAvailableLayers(newLayersArray));
@@ -847,7 +847,7 @@ export class MapController {
         map: this._map,
         mapview: this._mapview,
         allFeatures: feature,
-        isUploadFile: false
+        isUploadFile: false,
       });
     }
   }
@@ -884,11 +884,11 @@ export class MapController {
       layer.visible = visibility;
       //2. Update redux
       const { mapviewState } = store.getState();
-      const newLayersArray = mapviewState.allAvailableLayers.map(l => {
+      const newLayersArray = mapviewState.allAvailableLayers.map((l) => {
         if (l.id === layerID) {
           return {
             ...l,
-            visible: layer.visible
+            visible: layer.visible,
           };
         } else {
           return l;
@@ -922,11 +922,11 @@ export class MapController {
 
       //2. Update redux
       const { mapviewState } = store.getState();
-      const newLayersArray = mapviewState.allAvailableLayers.map(l => {
+      const newLayersArray = mapviewState.allAvailableLayers.map((l) => {
         if (l.id === layerID) {
           return {
             ...l,
-            visible: layer.visible
+            visible: layer.visible,
           };
         } else {
           return l;
@@ -950,7 +950,7 @@ export class MapController {
   updateRendererOpacity(renderer: any, fill: boolean, opacityValue: number) {
     const rendererClone = renderer.clone();
     if (rendererClone.type === 'unique-value' && rendererClone?.uniqueValueInfos.length !== 0) {
-      rendererClone.uniqueValueInfos.forEach(uniqueValueInfo => {
+      rendererClone.uniqueValueInfos.forEach((uniqueValueInfo) => {
         if (fill) {
           uniqueValueInfo.symbol.color.a = opacityValue;
         } else {
@@ -992,12 +992,12 @@ export class MapController {
         layer.renderer = updatedRenderer;
       }
       const { mapviewState } = store.getState();
-      const newLayersArray = mapviewState.allAvailableLayers.map(l => {
+      const newLayersArray = mapviewState.allAvailableLayers.map((l) => {
         if (l.id === layerID) {
           const opacity = {
             combined: l.opacity.combined,
             fill: 0,
-            outline: 0
+            outline: 0,
           };
           if (fill) {
             opacity['fill'] = value;
@@ -1008,7 +1008,7 @@ export class MapController {
           }
           return {
             ...l,
-            opacity: opacity
+            opacity: opacity,
           };
         } else {
           return l;
@@ -1034,15 +1034,15 @@ export class MapController {
 
       //updating redux arr values
       const { mapviewState } = store.getState();
-      const newLayersArray = mapviewState.allAvailableLayers.map(l => {
+      const newLayersArray = mapviewState.allAvailableLayers.map((l) => {
         if (l.id === layerID) {
           return {
             ...l,
             opacity: {
               combined: Number(value),
               fill: l.opacity.fill,
-              outline: l.opacity.outline
-            }
+              outline: l.opacity.outline,
+            },
           };
         } else {
           return l;
@@ -1059,7 +1059,7 @@ export class MapController {
 
   attachMouseLocationTracking(): void {
     //sets mouse tracking event on the map in order to display coordinates live in the popup when user is editing drawn/uploaded polygon
-    this._mouseTrackingEvent = this._mapview?.on('pointer-move', event => {
+    this._mouseTrackingEvent = this._mapview?.on('pointer-move', (event) => {
       const userPoint = this._mapview?.toMap({ x: event.x, y: event.y });
       store.dispatch(setUserCoordinates(userPoint));
     });
@@ -1082,7 +1082,7 @@ export class MapController {
       enableRotation: false,
       toggleToolOnClick: false,
       enableScaling: false,
-      preserveAspectRatio: false
+      preserveAspectRatio: false,
     };
 
     if (this._sketchVM && this._sketchVMGraphicsLayer) {
@@ -1110,7 +1110,7 @@ export class MapController {
       eventGraphics = event.graphic;
       eventGraphics.attributes = {
         OBJECTID: eventGraphics.uid,
-        attributeIndex: 0
+        attributeIndex: 0,
       };
       eventGraphics.symbol.outline.color = [115, 252, 253];
       eventGraphics.symbol.color = [0, 0, 0, 0];
@@ -1118,7 +1118,7 @@ export class MapController {
         layerID: 'user_features',
         layerTitle: 'User Features',
         features: [eventGraphics],
-        fieldNames: null
+        fieldNames: null,
       };
 
       //Replace all active features with our drawn feature, assigning custom layerID and Title
@@ -1135,7 +1135,7 @@ export class MapController {
   async initializeAndSetSketch(graphics = []): Promise<void> {
     const [GraphicsLayer, SketchViewModel] = await loadModules([
       'esri/layers/GraphicsLayer',
-      'esri/widgets/Sketch/SketchViewModel'
+      'esri/widgets/Sketch/SketchViewModel',
     ]);
     if (this._sketchVMGraphicsLayer) {
       //let's make sure this layer is actually on the map, on lang changes sometimes we have sketchVM
@@ -1143,7 +1143,7 @@ export class MapController {
       const userLayer = this._map?.findLayerById('user_features') as __esri.GraphicsLayer;
       if (!userLayer) {
         this._sketchVMGraphicsLayer = new GraphicsLayer({
-          id: 'user_features'
+          id: 'user_features',
         });
         //@ts-ignore
         this._map?.add(this._sketchVMGraphicsLayer);
@@ -1151,7 +1151,7 @@ export class MapController {
       this._sketchVMGraphicsLayer?.graphics.removeAll();
     } else {
       this._sketchVMGraphicsLayer = new GraphicsLayer({
-        id: 'user_features'
+        id: 'user_features',
       });
       //@ts-ignore
       this._map?.add(this._sketchVMGraphicsLayer);
@@ -1168,8 +1168,8 @@ export class MapController {
       polylineSymbol: {
         type: 'simple-line',
         color: 'red',
-        width: 3
-      }
+        width: 3,
+      },
     });
 
     this._sketchVM?.on('create', (event: any) => {
@@ -1200,17 +1200,17 @@ export class MapController {
       color: '#F2BC94',
       outline: {
         color: '#722620',
-        width: 3
-      }
+        width: 3,
+      },
     };
     const [GraphicsLayer, SketchViewModel] = await loadModules([
       'esri/layers/GraphicsLayer',
-      'esri/widgets/Sketch/SketchViewModel'
+      'esri/widgets/Sketch/SketchViewModel',
     ]);
 
     if (!this._sketchMultipleGLayer) {
       this._sketchMultipleGLayer = new GraphicsLayer({
-        id: 'multi_poly_graphics'
+        id: 'multi_poly_graphics',
       });
       //@ts-ignore
       this._map.add(this._sketchMultipleGLayer);
@@ -1220,18 +1220,18 @@ export class MapController {
       this._sketchMultipleVM = new SketchViewModel({
         view: this._mapview,
         layer: this._sketchMultipleGLayer,
-        polygonSymbol: polygonSymbol
+        polygonSymbol: polygonSymbol,
       });
     }
 
     //ensure we got the view model to work with
     if (!this._sketchMultipleVM) return;
     //event handlers
-    const handleCompletedDrawing = event => {
+    const handleCompletedDrawing = (event) => {
       if (event.state === 'complete') {
         const eventGraphics: any = event.graphic;
         eventGraphics.attributes = {
-          inputIndex: inputIndex
+          inputIndex: inputIndex,
         };
         eventGraphics.symbol.outline.color = [115, 252, 253];
         eventGraphics.symbol.color = [0, 0, 0, 0];
@@ -1239,7 +1239,7 @@ export class MapController {
           layerID: 'multi_poly_graphics',
           layerTitle: 'Multi Polygon Features',
           features: [eventGraphics],
-          fieldNames: null
+          fieldNames: null,
         };
 
         //we should save this into our array
@@ -1253,7 +1253,7 @@ export class MapController {
         this._sketchMultipleVM = undefined;
       }
     };
-    const evt = this._sketchMultipleVM.on('create', event => {
+    const evt = this._sketchMultipleVM.on('create', (event) => {
       handleCompletedDrawing(event);
     });
 
@@ -1263,7 +1263,9 @@ export class MapController {
   clearGraphicFromMultiSelection = (inputIndex: number): void => {
     if (!this._sketchMultipleGLayer) return;
     //@ts-ignore
-    const graphicToRemove = this._sketchMultipleGLayer.graphics.items.find(g => g.attributes.inputIndex === inputIndex);
+    const graphicToRemove = this._sketchMultipleGLayer.graphics.items.find(
+      (g) => g.attributes.inputIndex === inputIndex
+    );
     if (graphicToRemove) {
       this._sketchMultipleGLayer.remove(graphicToRemove);
     }
@@ -1278,11 +1280,11 @@ export class MapController {
         if (optionType === 'area') {
           areaResults = {
             area: this._selectedWidget?.viewModel.measurementLabel['area'],
-            perimeter: this._selectedWidget?.viewModel.measurementLabel['perimeter']
+            perimeter: this._selectedWidget?.viewModel.measurementLabel['perimeter'],
           };
         } else if (optionType === 'distance') {
           distanceResults = {
-            length: this._selectedWidget?.viewModel.measurementLabel
+            length: this._selectedWidget?.viewModel.measurementLabel,
           };
         }
 
@@ -1292,7 +1294,7 @@ export class MapController {
             areaResults,
             distanceResults,
             coordinateMouseClickResults: {},
-            coordinatePointerMoveResults: {}
+            coordinatePointerMoveResults: {},
           })
         );
       }
@@ -1313,19 +1315,19 @@ export class MapController {
   async setActiveMeasureWidget(optionType: OptionType): Promise<void> {
     const [AreaMeasurement2D, DistanceMeasurement2D] = await loadModules([
       'esri/widgets/AreaMeasurement2D',
-      'esri/widgets/DistanceMeasurement2D'
+      'esri/widgets/DistanceMeasurement2D',
     ]);
     switch (optionType) {
       case 'area':
         this._selectedWidget = new AreaMeasurement2D({
           view: this._mapview,
-          unit: 'acres'
+          unit: 'acres',
         });
         break;
       case 'distance':
         this._selectedWidget = new DistanceMeasurement2D({
           view: this._mapview,
-          unit: 'miles'
+          unit: 'miles',
         });
         break;
       case 'coordinates': {
@@ -1356,12 +1358,12 @@ export class MapController {
         case 'area':
           areaResults = {
             area: this._selectedWidget.viewModel.measurementLabel['area'],
-            perimeter: this._selectedWidget.viewModel.measurementLabel['perimeter']
+            perimeter: this._selectedWidget.viewModel.measurementLabel['perimeter'],
           };
           break;
         case 'distance':
           distanceResults = {
-            length: this._selectedWidget.viewModel.measurementLabel
+            length: this._selectedWidget.viewModel.measurementLabel,
           };
           break;
         default:
@@ -1374,7 +1376,7 @@ export class MapController {
           areaResults,
           distanceResults,
           coordinateMouseClickResults: {},
-          coordinatePointerMoveResults: {}
+          coordinatePointerMoveResults: {},
         })
       );
       this._selectedWidget?.watch('viewModel.state', (state: string) => {
@@ -1418,7 +1420,7 @@ export class MapController {
   // }
 
   updateMeasureWidgetOnClick(): void {
-    const mapviewOnClick = this._mapview?.on('click', event => {
+    const mapviewOnClick = this._mapview?.on('click', (event) => {
       event.stopPropagation();
       this._selectedWidget?.viewModel.newMeasurement();
       mapviewOnClick?.remove();
@@ -1483,15 +1485,15 @@ export class MapController {
       'esri/tasks/PrintTask',
       'esri/tasks/support/PrintTemplate',
       'esri/tasks/support/PrintParameters',
-      'esri/layers/GraphicsLayer'
+      'esri/layers/GraphicsLayer',
     ]);
     const printServiceURL = store.getState().appSettings.printServiceUrl;
     let printOptions: Array<string>;
 
     if (printServiceURL && layoutType === 'Landscape') {
       printOptions = await fetch(`${printServiceURL}/?f=json`)
-        .then(res => res.json())
-        .then(results => {
+        .then((res) => res.json())
+        .then((results) => {
           return results.parameters.filter((param: any) => param.name === 'Layout_Template')[0].choiceList;
         });
 
@@ -1500,7 +1502,7 @@ export class MapController {
 
     if (!this._printTask) {
       this._printTask = new PrintTask({
-        url: printServiceURL
+        url: printServiceURL,
       });
     }
 
@@ -1511,17 +1513,17 @@ export class MapController {
       // * custom layout types from GFW print service URL
       layoutOptions: {
         scalebarUnit: 'Kilometers',
-        customTextElements: [{ title: 'GFW Mapbuilder' }, { subtitle: 'Make maps that matter' }]
-      }
+        customTextElements: [{ title: 'GFW Mapbuilder' }, { subtitle: 'Make maps that matter' }],
+      },
     });
 
     const params = new PrintParameters({
       view: this._mapview,
-      template
+      template,
     });
 
     if (!this._printTask) return;
-    const mapPDF = await this._printTask.execute(params).catch(e => console.log('error in generateMapPDF()', e));
+    const mapPDF = await this._printTask.execute(params).catch((e) => console.log('error in generateMapPDF()', e));
 
     return mapPDF;
   };
@@ -1532,7 +1534,7 @@ export class MapController {
       userLayer.graphics.removeAll();
     } else {
       const userLayer = new this._GraphicsLayer({
-        id: 'user_features'
+        id: 'user_features',
       });
       this._map?.add(userLayer);
     }
@@ -1542,26 +1544,26 @@ export class MapController {
       color: [240, 171, 0, 0.0],
       outline: {
         color: [0, 255, 254],
-        width: 2
-      }
+        width: 2,
+      },
     };
 
-    const rings: number[][] = points.map(pt => [pt.x, pt.y]);
+    const rings: number[][] = points.map((pt) => [pt.x, pt.y]);
 
     const polygon = new this._Polygon({
       rings: [rings],
-      spatialReference: { wkid: 102100 }
+      spatialReference: { wkid: 102100 },
     });
 
     const graphic = new this._Graphic({
       geometry: polygon,
-      symbol: simpleFillSymbol
+      symbol: simpleFillSymbol,
     });
     const drawnGraphic: any = graphic.clone();
 
     drawnGraphic.attributes = {
       OBJECTID: 1,
-      attributeIndex: 0
+      attributeIndex: 0,
     };
 
     drawnGraphic.objectid = 1;
@@ -1570,10 +1572,10 @@ export class MapController {
 
     this._mapview?.goTo(
       {
-        target: graphic
+        target: graphic,
       },
       {
-        duration: 1000
+        duration: 1000,
       }
     );
 
@@ -1581,7 +1583,7 @@ export class MapController {
       layerID: 'user_features',
       layerTitle: 'User Features',
       features: [drawnGraphic],
-      fieldNames: null
+      fieldNames: null,
     };
     const multiPolyMethod = store.getState().appState.multiPolygonSelectionMode;
     if (multiPolyMethod) {
@@ -1592,7 +1594,7 @@ export class MapController {
       if (!gLayer) {
         const [GraphicsLayer] = await loadModules(['esri/layers/GraphicsLayer']);
         gLayer = new GraphicsLayer({
-          id: 'multi_poly_graphics'
+          id: 'multi_poly_graphics',
         });
         this._map?.add(gLayer);
       }
@@ -1619,13 +1621,13 @@ export class MapController {
     const searchWidget = new Search({
       view: this._mapview,
       container: searchRef.current,
-      sources: allSources
+      sources: allSources,
     });
 
     searchWidget.on('search-focus', (e: any) => {
       const selectedLayer = {
         displayField: e.target.activeSource.displayField,
-        layerTitle: e.target.activeSource.layer.title
+        layerTitle: e.target.activeSource.layer.title,
       };
       store.dispatch(setSelectedSearchWidgetLayer(selectedLayer));
     });
@@ -1637,7 +1639,7 @@ export class MapController {
 
     const specificPoint = new Point({
       latitude: Number(latitude),
-      longitude: Number(longitude)
+      longitude: Number(longitude),
     });
 
     const simpleMarkerSymbol = {
@@ -1645,23 +1647,23 @@ export class MapController {
       color: [240, 171, 0],
       outline: {
         color: [255, 255, 255],
-        width: 1
-      }
+        width: 1,
+      },
     };
 
     const pointGraphic = new Graphic({
       geometry: specificPoint,
-      symbol: simpleMarkerSymbol
+      symbol: simpleMarkerSymbol,
     });
 
     this._mapview?.graphics.add(pointGraphic);
     this._mapview?.goTo(
       {
         target: specificPoint,
-        zoom: 10
+        zoom: 10,
       },
       {
-        duration: 1000
+        duration: 1000,
       }
     );
     store.dispatch(renderModal(''));
@@ -1690,7 +1692,7 @@ export class MapController {
 
   async updateTreeCoverValue(value: number): Promise<any> {
     const { mapviewState } = store.getState();
-    const treeCoverLayerInfo: any = mapviewState.allAvailableLayers.find(l => l.id === 'TREE_COVER');
+    const treeCoverLayerInfo: any = mapviewState.allAvailableLayers.find((l) => l.id === 'TREE_COVER');
     const treeLayer: any = this._map?.findLayerById('TREE_COVER');
     if (treeLayer && treeCoverLayerInfo) {
       const oldLayer = treeLayer;
@@ -1726,8 +1728,8 @@ export class MapController {
   }
 
   async updateGFWLayer(value: string, gfwLayers: Array<string>): Promise<any> {
-    const turnOffLayersNotSelected = gfwLayers.filter(layer => layer != value);
-    turnOffLayersNotSelected.forEach(gfwLayer => {
+    const turnOffLayersNotSelected = gfwLayers.filter((layer) => layer != value);
+    turnOffLayersNotSelected.forEach((gfwLayer) => {
       const layer = this._map!.findLayerById(gfwLayer);
       if (layer) {
         layer.visible = false;
@@ -1746,7 +1748,7 @@ export class MapController {
     return {
       latitude: latitude.toFixed(7),
       longitude: longitude.toFixed(7),
-      zoom
+      zoom,
     };
   }
 
@@ -1770,10 +1772,10 @@ export class MapController {
     if (!this._map) return;
     const basemapURL = WRIBasemapConfig[id];
     const wriLayer = new WebTileLayer({
-      urlTemplate: basemapURL
+      urlTemplate: basemapURL,
     });
     const baselayer = new Basemap({
-      baseLayers: [wriLayer]
+      baseLayers: [wriLayer],
     });
     this._map.basemap = baselayer;
     store.dispatch(setSelectedBasemap(id));
@@ -1785,7 +1787,7 @@ export class MapController {
         map: this._map,
         mapview: this._mapview,
         allFeatures: esriJson,
-        isUploadFile: true
+        isUploadFile: true,
       });
     }
   }
@@ -1796,7 +1798,7 @@ export class MapController {
         map: this._map,
         mapview: this._mapview,
         allFeatures: esriJson,
-        isUploadFile: false
+        isUploadFile: false,
       });
 
       const graphicsLayer: any = this._map.findLayerById('active-feature-layer');
@@ -1854,8 +1856,8 @@ export class MapController {
       modis24H.visible = false;
       const modis1Y = this._map!.findLayerById('MODIS1Y') as any;
       modis1Y.sublayers.items[0].definitionExpression = defExpression;
-      const modisIds = MODISLayerIDs.map(l => l.id);
-      this._map!.layers.forEach(l => {
+      const modisIds = MODISLayerIDs.map((l) => l.id);
+      this._map!.layers.forEach((l) => {
         if (modisIds.includes(l.id)) {
           l.visible = l.id === 'MODIS1Y';
         }
@@ -1874,9 +1876,9 @@ export class MapController {
         sublayers: [
           {
             id: layerIds[0],
-            visible: true
-          }
-        ]
+            visible: true,
+          },
+        ],
       });
     });
     return modisLayers;
@@ -1969,11 +1971,11 @@ export class MapController {
     }
 
     const { mapviewState } = store.getState();
-    const newLayersArray = mapviewState.allAvailableLayers.map(l => {
+    const newLayersArray = mapviewState.allAvailableLayers.map((l) => {
       if (l.id === layer.id) {
         return {
           ...l,
-          visible: layer.visible
+          visible: layer.visible,
         };
       } else {
         return l;
@@ -1995,11 +1997,11 @@ export class MapController {
 
     layer.opacity.combined = opacity;
     const { mapviewState } = store.getState();
-    const newLayersArray = mapviewState.allAvailableLayers.map(l => {
+    const newLayersArray = mapviewState.allAvailableLayers.map((l) => {
       if (l.id === layerID) {
         return {
           ...l,
-          opacity: layer.opacity
+          opacity: layer.opacity,
         };
       } else {
         return l;
@@ -2048,7 +2050,7 @@ export class MapController {
     this._map?.layers.forEach((webmapLayer: any) => {
       if (webmapLayer.allSublayers && webmapLayer.allSublayers.items.length > 0) {
         webmapLayer.sublayers.items.forEach((sub: __esri.Layer) => {
-          const layerFromURL = layerInfosFromURL.find(l => l.sublayerID && String(l.sublayerID) === String(sub.id));
+          const layerFromURL = layerInfosFromURL.find((l) => l.sublayerID && String(l.sublayerID) === String(sub.id));
           if (layerFromURL) {
             sub.visible = true;
             sub.opacity = layerFromURL.opacity;
@@ -2057,7 +2059,7 @@ export class MapController {
           }
         });
       } else {
-        const layerFromURL = layerInfosFromURL.find(l => l.layerID === webmapLayer.id);
+        const layerFromURL = layerInfosFromURL.find((l) => l.layerID === webmapLayer.id);
         if (layerFromURL) {
           webmapLayer.visible = true;
           webmapLayer.opacity = layerFromURL.opacity;
@@ -2070,13 +2072,13 @@ export class MapController {
 
   disableMapInteractions(): void {
     if (!this._mapview) return;
-    this._mapview.on('mouse-wheel', function(event) {
+    this._mapview.on('mouse-wheel', function (event) {
       event.stopPropagation();
     });
-    this._mapview.on('double-click', function(event) {
+    this._mapview.on('double-click', function (event) {
       event.stopPropagation();
     });
-    this._mapview.on('drag', function(event) {
+    this._mapview.on('drag', function (event) {
       event.stopPropagation();
     });
   }
@@ -2090,7 +2092,7 @@ export class MapController {
     } else if (layerInfo.type === 'dynamic') {
       const layerOnMap = this._map?.findLayerById(layerInfo.id) as __esri.MapImageLayer;
       if (layerOnMap) {
-        layerOnMap.allSublayers.forEach(sub => (sub.definitionExpression = defExp));
+        layerOnMap.allSublayers.forEach((sub) => (sub.definitionExpression = defExp));
       }
     }
   }
@@ -2100,7 +2102,7 @@ export class MapController {
     if (!container.current) return;
     new Attribution({
       view: this._mapview,
-      container: container.current
+      container: container.current,
     });
   }
 
@@ -2111,7 +2113,7 @@ export class MapController {
       view: this._mapview,
       container: container.current,
       style: 'ruler',
-      unit: 'metric'
+      unit: 'metric',
     });
   }
 
@@ -2141,13 +2143,13 @@ export class MapController {
       const intersectingFeature = {
         attributes: {},
         geometry: intersectingGraphics,
-        objectid: 0
+        objectid: 0,
       } as any;
       const drawnFeatures: LayerFeatureResult = {
         layerID: 'overlap-feature-layer',
         layerTitle: 'Intersecting User Features',
         features: [intersectingFeature],
-        fieldNames: null
+        fieldNames: null,
       };
 
       store.dispatch(setActiveFeatures([drawnFeatures]));
