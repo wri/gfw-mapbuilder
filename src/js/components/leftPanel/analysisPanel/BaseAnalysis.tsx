@@ -75,7 +75,6 @@ const BaseAnalysis = (): JSX.Element => {
 
   const activeFeatureIndex = useSelector((store: RootState) => store.mapviewState.activeFeatureIndex);
 
-  // const analysisDateRange = useSelector(selectAnalysisDaterange);
   const analysisDateRange = useSelector((store: RootState) => store.appState.leftPanel.analysisDateRange);
 
   const analysisYearRange = useSelector((store: RootState) => store.appState.leftPanel.analysisYearRange);
