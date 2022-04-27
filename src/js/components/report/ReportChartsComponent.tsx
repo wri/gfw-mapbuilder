@@ -22,7 +22,7 @@ interface CheckBoxWrapperProps {
 }
 const CheckboxWrapper = styled.div<CheckBoxWrapperProps>`
   .styled-checkbox:checked + .styled-checkboxlabel:before {
-    background-color: ${props => props.customColorTheme};
+    background-color: ${(props) => props.customColorTheme};
   }
 `;
 
@@ -35,16 +35,17 @@ function getDefaultYearRange(uiParams: any): null | number[] {
 
 const getTodayDate = new Date().toISOString().split('T')[0];
 
+//@TODO: leave method for now
 function getDefaultStartDate(uiParams: any): string {
   if (uiParams === 'none') return '';
-  const input = uiParams.find((param: any) => param.inputType === 'datepicker');
+  const input = uiParams.find((param: any) => param.type === 'date-picker');
   if (input && input.defaultStartDate) {
     return input.defaultStartDate;
   } else {
     return getTodayDate;
   }
 }
-
+//@TODO: leave method for now
 function getDefaultEndDate(uiParams: any): string {
   if (uiParams === 'none') return '';
   const input = uiParams.find((param: any) => param.inputType === 'datepicker');
@@ -69,6 +70,8 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
   const translatedLabel = label[language] ? label[language] : 'Missing Translation Analysis Label';
 
   const density = useSelector((store: RootState) => store.appState.leftPanel.density);
+  const gladStart = useSelector((store: RootState) => store.appState.leftPanel.gladStart);
+  const gladEnd = useSelector((store: RootState) => store.appState.leftPanel.gladEnd);
   const customColorTheme = useSelector((store: RootState) => store.appSettings.customColorTheme);
   const viirsStart = useSelector((store: RootState) => store.appState.leftPanel.viirsStart);
   const viirsEnd = useSelector((store: RootState) => store.appState.leftPanel.viirsEnd);
@@ -77,8 +80,8 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
   const [baseConfig, setBaseConfig] = React.useState<AnalysisModule>();
   const [inputsAreHidden, setInputsAreHidden] = React.useState(true);
   const [yearRangeValue, setYearRangeValue] = React.useState<null | number[]>(getDefaultYearRange(analysisParams));
-  const [startDate, setStartDate] = React.useState(getDefaultStartDate(analysisParams));
-  const [endDate, setEndDate] = React.useState(getDefaultEndDate(analysisParams));
+  const [startDate, setStartDate] = React.useState(gladStart);
+  const [endDate, setEndDate] = React.useState(gladEnd);
   const [chartLoading, setChartLoading] = React.useState(true);
   const [chartError, setChartError] = React.useState(false);
   const [vegaSpec, setVegaSpec] = React.useState(null);
@@ -89,7 +92,7 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
   const [chartDescription, setChartDescription] = React.useState<null | string>(null);
 
   //We want to re-render chart if user clicks on the 'run analysis' button, this is one way to do it, there may be better options
-  const [forceRender, setForceRender] = React.useReducer(x => x + 1, 0);
+  const [forceRender, setForceRender] = React.useReducer((x) => x + 1, 0);
 
   function updateDate(val: any): void {
     setYearRangeValue(val);
@@ -145,7 +148,7 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
         endDate: enDate,
         density: density,
         analysisId: props.moduleInfo.analysisId,
-        sqlString: props.moduleInfo.sqlString
+        sqlString: props.moduleInfo.sqlString,
       });
 
       fetch(widgetURL)
@@ -161,7 +164,7 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
             .then((data: any) => {
               setChartDescription(data && data?.data[0]?.attributes?.description);
             })
-            .catch(e => {
+            .catch((e) => {
               setChartDescription('Error retrieving chart analysis description.');
               console.error(e);
             });
@@ -175,7 +178,7 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
           newSpec['attributes'] = props.activeFeatureAttributes;
           setVegaSpec(newSpec);
         })
-        .catch(e => {
+        .catch((e) => {
           console.error(e);
           setChartError(true);
           setChartLoading(false);
@@ -303,7 +306,7 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
                     position: 'relative',
                     top: '40%',
                     left: '50%',
-                    marginLeft: '-50px'
+                    marginLeft: '-50px',
                   }}
                   color={'#cfcdcd'}
                   size={100}
@@ -328,10 +331,11 @@ const ReportChartsComponent = (props: ChartProps): JSX.Element => {
   const selectedLanguage = useSelector((store: RootState) => store.appState.selectedLanguage);
   const disabledAnalysisModules = useSelector((store: RootState) => store.appSettings.disabledAnalysisModules);
 
+  console.log('WHAT IS defaultAnalysisModules ======}}}}}}}', defaultAnalysisModules);
   return (
     <div className="chart-area-container">
       {defaultAnalysisModules
-        .filter(m => {
+        .filter((m) => {
           if (disabledAnalysisModules?.length) {
             return !disabledAnalysisModules.includes(m.analysisId);
           }

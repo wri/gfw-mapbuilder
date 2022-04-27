@@ -40,7 +40,7 @@ import {
   SET_VIIRS_END,
   SET_VIIRS_START,
   SET_WIND_SPEED_POTENTIAL,
-  TOGGLE_TABVIEW_PANEL
+  TOGGLE_TABVIEW_PANEL,
 } from './types';
 
 const initialState: AppState = {
@@ -53,14 +53,14 @@ const initialState: AppState = {
   isProfileComplete: false,
   selectedSearchWidgetLayer: {
     displayField: '',
-    layerTitle: ''
+    layerTitle: '',
   },
   leftPanel: {
     tabViewVisible: true,
     activeTab: 'layers',
     openLayerGroup: 'GROUP_WEBMAP',
     density: 5,
-    analysisDateRange: [format(new Date(Date.now()), 'yyyy-MM-dd'), format(new Date(Date.now()), 'yyyy-MM-dd')],
+    analysisDateRange: [format(new Date(2018, 0, 1), 'yyyy-MM-dd'), format(new Date(Date.now()), 'yyyy-MM-dd')],
     analysisYearRange: [2001, 2018],
     gladConfirmed: false,
     highConfidenceConfirmed: false,
@@ -77,21 +77,21 @@ const initialState: AppState = {
     gfwLayer: 'GFW_INTEGRATED_ALERTS',
     gfwLayerLabel: 'Integrated Deforestation Alerts',
     gfwLayerSubtitle: '(daily, 10m, tropics, UMD/GLAD and WUR)',
-    windSpeedPotential: 50
+    windSpeedPotential: 50,
   },
   measureContent: {
     activeButton: '',
     areaResults: {},
     distanceResults: {},
     coordinateMouseClickResults: {},
-    coordinatePointerMoveResults: {}
+    coordinatePointerMoveResults: {},
   },
   renderPopup: false,
   areaImages: [],
   imageObject: {},
   multiPolygonSelectionMode: false,
   activeMultiInput: 0,
-  analysisFeatureList: [undefined, undefined]
+  analysisFeatureList: [undefined, undefined],
 };
 
 export function appStateReducer(state = initialState, action: AppStateTypes): AppState {
@@ -99,20 +99,20 @@ export function appStateReducer(state = initialState, action: AppStateTypes): Ap
     case SET_SELECTED_SEARCH_WIDGET_LAYER:
       return {
         ...state,
-        selectedSearchWidgetLayer: action.payload
+        selectedSearchWidgetLayer: action.payload,
       };
     case TOGGLE_TABVIEW_PANEL:
       return {
         ...state,
         leftPanel: {
           ...state.leftPanel,
-          tabViewVisible: action.payload
-        }
+          tabViewVisible: action.payload,
+        },
       };
     case SET_HIDE_WIDGET:
       return {
         ...state,
-        hideWidgetActive: action.payload
+        hideWidgetActive: action.payload,
       };
     case RENDER_MODAL:
       return { ...state, renderModal: action.payload };
@@ -125,8 +125,8 @@ export function appStateReducer(state = initialState, action: AppStateTypes): Ap
         ...state,
         leftPanel: {
           ...state.leftPanel,
-          activeTab: action.payload
-        }
+          activeTab: action.payload,
+        },
       };
     case SET_LANGUAGE:
       return { ...state, selectedLanguage: action.payload };
@@ -146,167 +146,167 @@ export function appStateReducer(state = initialState, action: AppStateTypes): Ap
         ...state,
         leftPanel: {
           ...state.leftPanel,
-          openLayerGroup: action.payload
-        }
+          openLayerGroup: action.payload,
+        },
       };
     case SET_CANOPY_DENSITY:
       return {
         ...state,
         leftPanel: {
           ...state.leftPanel,
-          density: action.payload
-        }
+          density: action.payload,
+        },
       };
     case SET_ACTIVE_MEASURE_BUTTON:
       return {
         ...state,
         measureContent: {
           ...state.measureContent,
-          activeButton: action.payload
-        }
+          activeButton: action.payload,
+        },
       };
     case SET_MEASURE_RESULTS:
       return {
         ...state,
         measureContent: {
-          ...action.payload
-        }
+          ...action.payload,
+        },
       };
     case SET_ANALYSIS_DATE:
       return {
         ...state,
         leftPanel: {
           ...state.leftPanel,
-          analysisDateRange: action.payload
-        }
+          analysisDateRange: action.payload,
+        },
       };
     case SET_ANALYSIS_YEAR_RANGE:
       return {
         ...state,
         leftPanel: {
           ...state.leftPanel,
-          analysisYearRange: action.payload
-        }
+          analysisYearRange: action.payload,
+        },
       };
     case SET_GLAD_CONFIRMED:
       return {
         ...state,
         leftPanel: {
           ...state.leftPanel,
-          gladConfirmed: action.payload
-        }
+          gladConfirmed: action.payload,
+        },
       };
     case SET_HIGH_CONFIDENCE_CONFIRMED:
       return {
         ...state,
         leftPanel: {
           ...state.leftPanel,
-          highConfidenceConfirmed: action.payload
-        }
+          highConfidenceConfirmed: action.payload,
+        },
       };
     case SET_GLAD_START:
       return {
         ...state,
         leftPanel: {
           ...state.leftPanel,
-          gladStart: action.payload
-        }
+          gladStart: action.payload,
+        },
       };
     case SET_GLAD_END:
       return {
         ...state,
         leftPanel: {
           ...state.leftPanel,
-          gladEnd: action.payload
-        }
+          gladEnd: action.payload,
+        },
       };
     case SET_GFW_INTEGRATED_START:
       return {
         ...state,
         leftPanel: {
           ...state.leftPanel,
-          gfwIntegratedStart: action.payload
-        }
+          gfwIntegratedStart: action.payload,
+        },
       };
     case SET_GFW_INTEGRATED_END:
       return {
         ...state,
         leftPanel: {
           ...state.leftPanel,
-          gfwIntegratedEnd: action.payload
-        }
+          gfwIntegratedEnd: action.payload,
+        },
       };
     case SET_MODIS_START:
       return {
         ...state,
         leftPanel: {
           ...state.leftPanel,
-          modisStart: action.payload
-        }
+          modisStart: action.payload,
+        },
       };
     case SET_MODIS_END:
       return {
         ...state,
         leftPanel: {
           ...state.leftPanel,
-          modisEnd: action.payload
-        }
+          modisEnd: action.payload,
+        },
       };
     case SET_VIIRS_START:
       return {
         ...state,
         leftPanel: {
           ...state.leftPanel,
-          viirsStart: action.payload
-        }
+          viirsStart: action.payload,
+        },
       };
     case SET_VIIRS_END:
       return {
         ...state,
         leftPanel: {
           ...state.leftPanel,
-          viirsEnd: action.payload
-        }
+          viirsEnd: action.payload,
+        },
       };
     case SET_TREE_HEIGHT:
       return {
         ...state,
         leftPanel: {
           ...state.leftPanel,
-          treeHeight: action.payload
-        }
+          treeHeight: action.payload,
+        },
       };
     case SET_GFW_LAYER:
       return {
         ...state,
         leftPanel: {
           ...state.leftPanel,
-          gfwLayer: action.payload
-        }
+          gfwLayer: action.payload,
+        },
       };
     case SET_GFW_LAYER_LABEL:
       return {
         ...state,
         leftPanel: {
           ...state.leftPanel,
-          gfwLayerLabel: action.payload
-        }
+          gfwLayerLabel: action.payload,
+        },
       };
     case SET_GFW_LAYER_SUBTITLE:
       return {
         ...state,
         leftPanel: {
           ...state.leftPanel,
-          gfwLayerSubtitle: action.payload
-        }
+          gfwLayerSubtitle: action.payload,
+        },
       };
     case SET_WIND_SPEED_POTENTIAL:
       return {
         ...state,
         leftPanel: {
           ...state.leftPanel,
-          windSpeedPotential: action.payload
-        }
+          windSpeedPotential: action.payload,
+        },
       };
     case SET_VERSIONED_LAYER: {
       const versionedState = state.leftPanel.versionedLayer;
@@ -315,33 +315,33 @@ export function appStateReducer(state = initialState, action: AppStateTypes): Ap
         ...state,
         leftPanel: {
           ...state.leftPanel,
-          versionedLayer: versionedState
-        }
+          versionedLayer: versionedState,
+        },
       };
     }
     case SET_RENDER_POPUP:
       return {
         ...state,
-        renderPopup: action.payload
+        renderPopup: action.payload,
       };
     case SET_AREA_IMAGES: {
       const newAreaImages = state.areaImages;
-      const incomingArea = newAreaImages.find(areaID => areaID === action.payload);
+      const incomingArea = newAreaImages.find((areaID) => areaID === action.payload);
       if (incomingArea) {
-        const index = newAreaImages.findIndex(areaID => areaID === action.payload);
+        const index = newAreaImages.findIndex((areaID) => areaID === action.payload);
         newAreaImages.splice(index, 0, action.payload);
       } else {
         newAreaImages.push(action.payload);
       }
       return {
         ...state,
-        areaImages: newAreaImages
+        areaImages: newAreaImages,
       };
     }
     case SET_IMAGE_OBJECT:
       return {
         ...state,
-        imageObject: action.payload
+        imageObject: action.payload,
       };
     default:
       return state;

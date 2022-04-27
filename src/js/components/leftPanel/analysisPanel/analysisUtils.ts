@@ -22,8 +22,10 @@ export async function fetchDownloadInfo(url: string): Promise<any> {
     .then((data: any) => {
       const response: DownloadResponse = {
         chartTitle: undefined,
-        downloadUrl: undefined
+        downloadUrl: undefined,
       };
+      console.log('url', url);
+      console.log('data', data);
       response.chartTitle = data.data && data.data.type ? data.data.type + '-analysis.png' : 'analysis.png';
       //unclear why are we matching 'month' here but that's how it was done in 3x
       if (data.data.attributes.downloadUrls?.csv?.includes('month')) {
@@ -47,17 +49,17 @@ export async function fetchWCSAnalysis(
   }
   const geojson = arcgisToGeoJSON(activeFeature.geometry);
   const content = {
-    polygon: geojson.coordinates
+    polygon: geojson.coordinates,
   };
   return await fetch(url, {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
-    body: JSON.stringify(content)
+    body: JSON.stringify(content),
   })
-    .then(response => response.json())
-    .then(data => {
+    .then((response) => response.json())
+    .then((data) => {
       let startYear;
       let endYear;
       if (analysisSettings.uiParams !== 'none' && yearRange) {
@@ -67,7 +69,7 @@ export async function fetchWCSAnalysis(
         analysisSettings.endYear = Number(endYear);
       }
       let totalResult = 0;
-      Object.keys(data).forEach(year => {
+      Object.keys(data).forEach((year) => {
         if (year === 'constant') {
           totalResult = data[year];
         }
@@ -80,7 +82,7 @@ export async function fetchWCSAnalysis(
       data.endYear = yearRange ? yearRange[1] : null;
       data.title = analysisSettings.label[selectedLanguage];
       return {
-        data: data
+        data: data,
       };
     })
     .catch((e: Error) => console.error(e));
@@ -102,7 +104,7 @@ export function generateWidgetURL({
   sqlString,
   startDate,
   endDate,
-  density
+  density,
 }: WidgetGenerateProps): string {
   let baseURL = 'https://api.resourcewatch.org/v1/widget/';
   //1. Add Widget ID
