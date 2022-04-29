@@ -28,10 +28,10 @@ import { defaultAnalysisModules } from '../../../../../configs/analysis-config';
 import '../../../../css/leftpanel.scss';
 import 'react-datepicker/dist/react-datepicker.css';
 
-type InputTypes = 'rangeSlider' | 'tcd' | 'datepicker';
+type InputTypes = 'range-slider' | 'tcd' | 'date-picker';
 
 export interface UIParams {
-  inputType: InputTypes;
+  type: InputTypes;
   startParamName: string;
   combineParams: boolean;
   endParamName?: string;

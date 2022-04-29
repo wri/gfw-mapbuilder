@@ -12,4 +12,9 @@
   background-color: inherit;
   border-radius: 16px;
   color: #555;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
 }

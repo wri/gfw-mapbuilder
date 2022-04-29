@@ -60,7 +60,7 @@ const initialState: AppState = {
     activeTab: 'layers',
     openLayerGroup: 'GROUP_WEBMAP',
     density: 5,
-    analysisDateRange: [format(new Date(2018, 0, 1), 'yyyy-MM-dd'), format(new Date(Date.now()), 'yyyy-MM-dd')],
+    analysisDateRange: [format(new Date(Date.now()), 'yyyy-MM-dd'), format(new Date(Date.now()), 'yyyy-MM-dd')],
     analysisYearRange: [2001, 2018],
     gladConfirmed: false,
     highConfidenceConfirmed: false,

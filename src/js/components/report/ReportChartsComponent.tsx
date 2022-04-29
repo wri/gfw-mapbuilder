@@ -28,7 +28,7 @@ const CheckboxWrapper = styled.div<CheckBoxWrapperProps>`
 
 function getDefaultYearRange(uiParams: any): null | number[] {
   if (uiParams === 'none') return null;
-  const input = uiParams.find((param: any) => param.inputType === 'rangeSlider');
+  const input = uiParams.find((param: any) => param.inputType === 'range-slider');
   if (input) return input.bounds;
   return null;
 }
@@ -105,8 +105,8 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
 
   const renderInputComponent = (props: UIParams, analysisId): JSX.Element | null | undefined => {
     const { multi, minDate, maxDate, defaultStartDate, defaultEndDate, bounds } = props;
-    switch (props.inputType) {
-      case 'rangeSlider':
+    switch (props.type) {
+      case 'range-slider':
         if (bounds)
           return (
             <MemoReportRangeSlider
@@ -118,7 +118,7 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
         break;
       case 'tcd':
         return <CanopyDensityPicker />;
-      case 'datepicker':
+      case 'date-picker':
         return (
           <MemoReportDatePicker
             multi={multi}
@@ -331,7 +331,6 @@ const ReportChartsComponent = (props: ChartProps): JSX.Element => {
   const selectedLanguage = useSelector((store: RootState) => store.appState.selectedLanguage);
   const disabledAnalysisModules = useSelector((store: RootState) => store.appSettings.disabledAnalysisModules);
 
-  console.log('WHAT IS defaultAnalysisModules ======}}}}}}}', defaultAnalysisModules);
   return (
     <div className="chart-area-container">
       {defaultAnalysisModules
