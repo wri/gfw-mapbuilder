@@ -1,22 +1,22 @@
 import * as React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../../store';
-import { setActiveFeatureIndex, setActiveFeatures, setDocuments } from '../../../../js/store/mapview/actions';
-import { selectActiveTab, setAnalysisFeatureList } from '../../../../js/store/appState/actions';
+import { setActiveFeatureIndex, setActiveFeatures, setDocuments } from '../../../store/mapview/actions';
+import { selectActiveTab, setAnalysisFeatureList } from '../../../store/appState/actions';
 import DataTabFooter from './DataTabFooter';
 import DefaultTabView from './DefaultTabView';
 import LayerSelector from './LayerSelector';
-import { mapController } from '../../../../js/controllers/mapController';
-import { LayerFeatureResult } from '../../../../js/store/mapview/types';
-import { getDocuments } from '../../../../js/helpers/mapController/documentsQuery';
+import { mapController } from '../../../controllers/mapController';
+import { LayerFeatureResult } from '../../../store/mapview/types';
+import { getDocuments } from '../../../helpers/mapController/documentsQuery';
 import { CloseIcon } from '../../../../images/closeIcon';
 import BaseButton from '../../ui/BaseButton';
 import styled from 'styled-components';
 import { addToMultiPolygonLayer, clearGraphics, clearUserGraphics } from '../../../helpers/MapGraphics';
 
-//Constructs layer tile based on sublayer existance
+//Constructs layer tile based on sublayer existence
 function generateLayerTitle(activeLayerInfo: any): string {
-  let result = '';
+  let result;
   const { layerTitle, sublayerTitle, displayField } = activeLayerInfo;
   const displayName = activeLayerInfo.features[0]?.attributes[displayField];
   if (sublayerTitle) {
@@ -95,7 +95,7 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
                 ? activeLayerInfo.fieldNames.map((field, i) => {
                     //Grab attribute value irrespective if fieldName is appropriately cased!
                     const attributeKey = Object.keys(props.attributes).find(
-                      a => a.toLowerCase() === field.fieldName.toLowerCase()
+                      (a) => a.toLowerCase() === field.fieldName.toLowerCase()
                     );
                     if (attributeKey) {
                       // Use label unless it is not set, then default to fieldName
@@ -164,11 +164,11 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
       //determine if next/prev buttons are enabled or disabled
       const enabledButtonCustomStyle = {
         backgroundColor: customColorTheme,
-        color: '#FFF'
+        color: '#FFF',
       };
       const disabledButtonCustomStyle = {
         backgroundColor: 'rgb(238, 238, 238)',
-        color: '#555'
+        color: '#555',
       };
 
       const prevBtn = page === 0 ? disabledButtonCustomStyle : enabledButtonCustomStyle;
@@ -190,14 +190,14 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
         const urlProperties = {
           sublayerID,
           specificFeatureID: selectedFeature.objectid,
-          layerID
+          layerID,
         };
 
-        const docs = getDocuments(urlProperties)
-          .then(res => {
+        getDocuments(urlProperties)
+          .then((res) => {
             dispatch(setDocuments(res));
           })
-          .catch(e => dispatch(setDocuments(null)));
+          .catch(() => dispatch(setDocuments(null)));
       }, [activeFeatures, activeFeatureIndex]);
 
       const TopWrap = styled.div`
@@ -206,7 +206,7 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
       `;
 
       const AddToAnalysisButton = styled(BaseButton)`
-        margin: 0;
+        margin: 0 0 0 5px;
         background-color: ${customColorTheme};
         color: white;
         font-size: 0.7rem;
@@ -261,11 +261,11 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
 
                   const activeFeature = activeFeatures[activeFeatureIndex[0]].features[activeFeatureIndex[1]];
                   const formatFeatures: LayerFeatureResult = {
-                    layerID: `multi_poly_graphics`,
+                    layerID: 'multi_poly_graphics',
                     featureID: `multi_poly_graphics-${activeFeature.objectid}`,
                     layerTitle: 'Multi Polygon Features',
                     features: [activeFeature],
-                    fieldNames: null
+                    fieldNames: null,
                   };
                   const oldList = [...analysisFeatureList];
                   oldList[activeMultiInput] = formatFeatures;

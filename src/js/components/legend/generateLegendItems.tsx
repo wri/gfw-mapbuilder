@@ -54,7 +54,7 @@ function getLegendInfoFromRenderer(layer: LayerProps): any {
   const borderStyleMap = {
     dash: 'dashed',
     solid: 'solid',
-    none: 'none'
+    none: 'none',
   };
 
   function createSymbolStyles(symbol: any): JSX.Element | undefined {
@@ -155,9 +155,9 @@ function getLegendInfoFromRenderer(layer: LayerProps): any {
         }
         const gradientElement: GradientItem = {
           colors: [],
-          labels: []
+          labels: [],
         };
-        visualStops.stops.forEach(stop => {
+        visualStops.stops.forEach((stop) => {
           const { r, g, b, a } = stop.color;
           gradientElement.colors.push(`rgba(${r},${g},${b},${a})`);
           gradientElement.labels.push(stop.label);

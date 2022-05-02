@@ -20,43 +20,43 @@ function createChartWrapperStyle(chartType?: string): object {
         maxWidth: '30rem',
         minHeight: '350px',
         width: '100%',
-        margin: '1rem auto'
+        margin: '1rem auto',
       };
     case 'pie':
       return {
         maxWidth: '290px',
         minHeight: '350px',
         width: '100%',
-        margin: '1rem auto'
+        margin: '1rem auto',
       };
     case 'line':
       return {
         maxWidth: '60rem',
         minHeight: '350px',
         width: '100%',
-        margin: '1rem auto'
+        margin: '1rem auto',
       };
     case 'bar':
       return {
         maxWidth: '60rem',
         minHeight: '350px',
         width: '100%',
-        margin: '1rem auto'
+        margin: '1rem auto',
       };
     default:
       return {
         maxWidth: '60rem',
         minHeight: '350px',
         width: '100%',
-        margin: '1rem auto'
+        margin: '1rem auto',
       };
   }
 }
 const Chart = (props: ChartProps): JSX.Element => {
   const chartRef = useRef(null);
-  const { spec, language, report, chartType } = props;
+  const { spec, language, chartType } = props;
   const [dimensions, setDimensions] = React.useState<undefined | any>({
-    dimensions: { width: -1, height: -1 }
+    dimensions: { width: -1, height: -1 },
   });
 
   function callback(payload: any): void {
@@ -64,8 +64,8 @@ const Chart = (props: ChartProps): JSX.Element => {
       props.sendError(payload.error);
     }
 
-    if (props.sendBackURL && payload.hasOwnProperty('url')) {
-      props.sendBackURL(payload?.url);
+    if (props.sendBackURL) {
+      props.sendBackURL(payload);
     }
   }
   React.useEffect(() => {
@@ -88,11 +88,11 @@ const Chart = (props: ChartProps): JSX.Element => {
         {
           events: {
             source: 'window',
-            type: 'resize'
+            type: 'resize',
           },
-          update: 'containerSize()[0]*0.95'
-        }
-      ]
+          update: 'containerSize()[0]*0.95',
+        },
+      ],
     };
     spec.signals.push(resizeWidthSignal);
 
@@ -114,7 +114,7 @@ const Chart = (props: ChartProps): JSX.Element => {
             <div
               className="canvas-chart-wrapper"
               style={{
-                width: dimensions.dimensions.width
+                width: dimensions.dimensions.width,
               }}
               ref={chartRef}
             ></div>

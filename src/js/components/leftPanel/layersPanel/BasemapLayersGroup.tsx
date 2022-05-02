@@ -70,23 +70,23 @@ const PlanetBasemap = (props: BaseLayerPlanet): JSX.Element => {
   useEffect(() => {
     const tileInfoURL = 'https://tiles.globalforestwatch.org/openapi.json';
     fetch(tileInfoURL)
-      .then(res => res.json())
-      .then(data => {
+      .then((res) => res.json())
+      .then((data) => {
         const planetDateRanges: Array<string> = data?.components?.schemas?.PlanetDateRange?.enum;
         const planetTilesFormat = planetDateRanges
           .reverse()
-          .filter(label => label.length > 4)
-          .map(d => {
+          .filter((label) => label.length > 4)
+          .map((d) => {
             const label = d
               .split('_')
-              .map(date => format(new Date(date), 'MMM yyyy'))
+              .map((date) => format(new Date(date), 'MMM yyyy'))
               .join('-');
             return { value: d, label };
           });
         setPlanetTiles(planetTilesFormat);
         setSelectedPlanetTileLayer(planetTilesFormat[0].value);
       })
-      .catch(e => console.log(e));
+      .catch((e) => console.log(e));
   }, []);
 
   function handlePlanetTileChange(name: string): void {
@@ -103,7 +103,7 @@ const PlanetBasemap = (props: BaseLayerPlanet): JSX.Element => {
     mapController.addPlanetTileLayer(url, planetColor, selectedPlanetTileLayer, apiKey);
   }
 
-  const tileOptions = planetTiles?.map(tileInfo => {
+  const tileOptions = planetTiles?.map((tileInfo) => {
     return (
       <option value={tileInfo.value} key={tileInfo.value}>
         {tileInfo.label}
@@ -114,7 +114,7 @@ const PlanetBasemap = (props: BaseLayerPlanet): JSX.Element => {
   const TileColors = () => {
     return (
       <select
-        onChange={e => handlePlanetColorChange(e.target.value)}
+        onChange={(e) => handlePlanetColorChange(e.target.value)}
         value={planetColor}
         style={{ border: `1px solid ${props.customColorTheme}` }}
         className="landsat-years"
@@ -135,7 +135,7 @@ const PlanetBasemap = (props: BaseLayerPlanet): JSX.Element => {
       <span onClick={() => handlePlanetTileClick()}>{title && title[props.selectedLanguage]}</span>
       <div className="planet-selectors">
         <select
-          onChange={e => handlePlanetTileChange(e.target.value)}
+          onChange={(e) => handlePlanetTileChange(e.target.value)}
           value={selectedPlanetTileLayer}
           style={{ border: `1px solid ${props.customColorTheme}` }}
           className="landsat-years"
@@ -150,7 +150,7 @@ const PlanetBasemap = (props: BaseLayerPlanet): JSX.Element => {
         style={{
           marginLeft: 25,
           marginBottom: 30,
-          backgroundColor: `${customColorTheme}`
+          backgroundColor: `${customColorTheme}`,
         }}
       >
         <InfoIcon width={10} height={10} fill={'#fff'} />
@@ -186,7 +186,7 @@ const BaseLayerControlLandsat = (props: BaseLayerControlLandsatProps): JSX.Eleme
   //This is addmitedly odd way of adding an image, but landsat thumbnail url includes multiple thumbnails smushed together, so we slice the appropate one off.
   const imgStyles = {
     backgroundImage: `url('${thumbnailUrl}')`,
-    backgroundRepeat: 'no-repeat center'
+    backgroundRepeat: 'no-repeat center',
   };
 
   return (
@@ -282,7 +282,7 @@ const BasemapLayersGroup = (props: LayerGroupProps): React.ReactElement => {
           key={baselayer.id}
           layerInfo={{
             id: baselayer.id,
-            activeBasemap
+            activeBasemap,
           }}
         />
       );
@@ -295,7 +295,7 @@ const BasemapLayersGroup = (props: LayerGroupProps): React.ReactElement => {
             id: baselayer.id,
             thumbnailUrl: baselayer.thumbnailUrl,
             title: baselayer.title[selectedLanguage] || baselayer.id,
-            activeBasemap
+            activeBasemap,
           }}
         />
       );
@@ -311,7 +311,7 @@ const BasemapLayersGroup = (props: LayerGroupProps): React.ReactElement => {
           id: baselayer.id,
           thumbnailUrl: baselayer.thumbnailUrl,
           title: baselayer.title[selectedLanguage] || baselayer.id,
-          activeBasemap
+          activeBasemap,
         }}
       />
     )

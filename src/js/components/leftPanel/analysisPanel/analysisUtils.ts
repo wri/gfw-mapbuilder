@@ -1,5 +1,5 @@
 import { loadModules } from 'esri-loader';
-import { arcgisToGeoJSON } from '../../../../js/helpers/spatialDataTransformation';
+import { arcgisToGeoJSON } from '../../../helpers/spatialDataTransformation';
 import { markValueMap } from '../../mapWidgets/widgetContent/CanopyDensityContent';
 
 export async function fetchGFWWidgetConfig(url: string): Promise<any> {
@@ -111,7 +111,6 @@ export function generateWidgetURL({
   //2. Add Geostore ID
   baseURL = baseURL.concat(`&geostore_id=${geostoreId}&geostore_origin=rw`);
 
-  console.log(analysisId);
   //3. Add SQL Query if it is defined in the configuration
   if (analysisId === 'VIIRS_FIRES' || analysisId === 'GLAD_ALERTS') {
     let sqlQuery = sqlString;
@@ -125,10 +124,7 @@ export function generateWidgetURL({
     baseURL = baseURL.concat(`&sql=${sqlQuery}`);
   }
   if (analysisId === 'LCC' || analysisId === 'TC_GAIN_TOTAL') {
-    const sqlQuery = sqlString;
-    baseURL = baseURL.concat(`&sql=${sqlQuery}`);
+    baseURL = baseURL.concat(`&sql=${sqlString}`);
   }
-
-  console.log(baseURL);
   return baseURL;
 }
