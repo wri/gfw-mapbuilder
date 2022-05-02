@@ -54,7 +54,7 @@ function createChartWrapperStyle(chartType?: string): object {
 }
 const Chart = (props: ChartProps): JSX.Element => {
   const chartRef = useRef(null);
-  const { spec, language, report, chartType } = props;
+  const { spec, language, chartType } = props;
   const [dimensions, setDimensions] = React.useState<undefined | any>({
     dimensions: { width: -1, height: -1 }
   });
@@ -64,8 +64,8 @@ const Chart = (props: ChartProps): JSX.Element => {
       props.sendError(payload.error);
     }
 
-    if (props.sendBackURL && payload.hasOwnProperty('url')) {
-      props.sendBackURL(payload?.url);
+    if (props.sendBackURL) {
+      props.sendBackURL(payload);
     }
   }
   React.useEffect(() => {

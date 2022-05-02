@@ -3,23 +3,23 @@ import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { createSelector } from 'reselect';
 import ReactTooltip from 'react-tooltip';
-import { RootState } from '../../../../js/store';
-import { setActiveFeatures } from '../../../../js/store/mapview/actions';
-import { setRenderPopup, setMultiPolygonSelectionMode } from '../../../../js/store/appState/actions';
+import { RootState } from '../../../store';
+import { setActiveFeatures } from '../../../store/mapview/actions';
+import { setRenderPopup, setMultiPolygonSelectionMode } from '../../../store/appState/actions';
 
-import { registerGeometry } from '../../../../js/helpers/geometryRegistration';
+import { registerGeometry } from '../../../helpers/geometryRegistration';
 import fragmentationSpec from './fragmentationVegaSpec';
 import VegaChart from './VegaChartContainer';
 import analysisTranslations from './analysisTranslations';
 import { MemoRangeSlider } from './InputComponents';
 import CanopyDensityPicker from '../../../../js/components/sharedComponents/CanopyDensityPicker';
 import { DownloadIcon } from '../../../../images/downloadIcon';
-import { DownloadOptions } from '../../../../js/components/sharedComponents/DownloadOptions';
+import { DownloadOptions } from '../../sharedComponents/DownloadOptions';
 import Loader from '../../../../js/components/sharedComponents/Loader';
-import { mapController } from '../../../../js/controllers/mapController';
+import { mapController } from '../../../controllers/mapController';
 import DataTabFooter from '../dataPanel/DataTabFooter';
 
-import { AnalysisModule, AnalysisParam } from '../../../../js/store/appSettings/types';
+import { AnalysisModule, AnalysisParam } from '../../../store/appSettings/types';
 import { fetchGFWWidgetConfig, fetchDownloadInfo, fetchWCSAnalysis, generateWidgetURL } from './analysisUtils';
 import { DateRangePicker } from '../../sharedComponents/DateRangePicker';
 
@@ -140,8 +140,7 @@ const BaseAnalysis = (): JSX.Element => {
         setVegaSpec(res);
         //grab download urls if they exist
         const widgetConfigData = res.data;
-        const downloadUrl = widgetConfigData.find((e: any) => e.name === 'data');
-        console.log(downloadUrl.url);
+        const downloadUrl = widgetConfigData.find((e: any) => e.name === 'table');
         if (!downloadUrl) return;
         fetchDownloadInfo(downloadUrl.url).then((res: any) => {
           setChartDownTitle(res?.chartTitle ? res.chartTitle : '');
@@ -402,17 +401,9 @@ const BaseAnalysis = (): JSX.Element => {
             </div>
           )}
           {chartLoading && (
-            <Loader
-              containerPositionStyling={{
-                position: 'absolute',
-                top: '50%',
-                left: '50%',
-                marginTop: '-25px',
-                marginLeft: '-25px'
-              }}
-              color={'#cfcdcd'}
-              size={50}
-            />
+            <>
+              <p style={{ textAlign: 'center', marginTop: '30px' }}>Loading Chart...</p>
+            </>
           )}
           {vegaSpec && (
             <>
