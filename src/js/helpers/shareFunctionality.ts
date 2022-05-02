@@ -8,7 +8,7 @@ import {
   setModisEnd,
   setModisStart,
   setViirsEnd,
-  setViirsStart
+  setViirsStart,
 } from '../store/appState/actions';
 import { LayerFeatureResult } from '../store/mapview/types';
 import { registerGeometry } from './geometryRegistration';
@@ -33,15 +33,15 @@ const urlEncodingMap = {
   ve: 'virs_end_date',
   ms: 'modis_start_date',
   me: 'modis_end_date',
-  ty: 'tree_cover_loss_years'
+  ty: 'tree_cover_loss_years',
 };
 
 function getGeostoreID(activeFeatureIndex: number[], activeFeatures: LayerFeatureResult[]): Promise<string> {
   const activeLayer = activeFeatures[activeFeatureIndex[0]];
   const activeFeature = activeLayer?.features[activeFeatureIndex[1]];
   return registerGeometry(activeFeature)
-    .then(response => response.json())
-    .then(res => {
+    .then((response) => response.json())
+    .then((res) => {
       return res.data.id;
     });
 }
@@ -96,10 +96,10 @@ export async function getShareableURL(props: ShareURLProps): Promise<string> {
 
   //Visible Layer IDS Opacity
   const { allAvailableLayers } = mapviewState;
-  const visibleLayers = allAvailableLayers.filter(l => l.visible);
+  const visibleLayers = allAvailableLayers.filter((l) => l.visible);
   const layerIDS: string[] = [];
   const layerOpacities: number[] = [];
-  visibleLayers.forEach(l => {
+  visibleLayers.forEach((l) => {
     if (l.sublayer) {
       layerIDS.push(`${l.parentID}[s]${l.id}`);
     } else {
@@ -117,8 +117,8 @@ export async function getShareableURL(props: ShareURLProps): Promise<string> {
   const gladLayer: any = mapController._map?.findLayerById('GLAD_ALERTS');
   if (gladLayer) {
     urlParams.push(`gladconfirmed=${gladLayer.confirmed}`);
-    urlParams.push(`gs=${leftPanel.gladStart}`);
-    urlParams.push(`ge=${leftPanel.gladEnd}`);
+    urlParams.push(`gs=${leftPanel.analysisDateRange[0]}`);
+    urlParams.push(`ge=${leftPanel.analysisDateRange[1]}`);
   }
 
   const gfwIntegratedLayer: any = mapController._map?.findLayerById('GFW_INTEGRATED_ALERT');
@@ -153,7 +153,7 @@ export function getLayerInfoFromURL(): LayerInfo[] {
   const opacityArray = parsedURL.searchParams
     .get('o')
     ?.split(',')
-    .map(o => Number(o));
+    .map((o) => Number(o));
 
   return allLayerIDS
     ? allLayerIDS.map((id: string, i: number) => {
@@ -202,7 +202,7 @@ export function parseURLandApplyChanges(): void {
           }
           break;
         case 'coords':
-          const coordinates = urlParamValue.split(',').map(c => Number(c));
+          const coordinates = urlParamValue.split(',').map((c) => Number(c));
           mapController._mapview?.goTo(coordinates);
           break;
         case 'd':
@@ -232,7 +232,7 @@ export function parseURLandApplyChanges(): void {
           store.dispatch(setModisEnd(urlParamValue));
           break;
         case 'ty':
-          const yearRange = urlParamValue.split(',').map(c => Number(c));
+          const yearRange = urlParamValue.split(',').map((c) => Number(c));
           store.dispatch(setTimeSlider(yearRange));
           break;
         default:

@@ -13,16 +13,14 @@ const printReportTranslations = {
   en: 'Print Report',
   hy: 'Տպել արդյունքները',
   ka: 'ანგარიშის ბეჭდვა',
-  nl: 'Rapport afdrukken'
+  nl: 'Rapport afdrukken',
 };
 
 export const PrintReportButton = (): JSX.Element => {
-  const selectedLanguage = useSelector(
-    (store: RootState) => store.appState.selectedLanguage
-  );
-  const customColorTheme = useSelector(
-    (store: RootState) => store.appSettings.customColorTheme
-  );
+  const selectedLanguage = useSelector((store: RootState) => store.appState.selectedLanguage);
+  const customColorTheme = useSelector((store: RootState) => store.appSettings.customColorTheme);
+
+  const analysisDateRange = useSelector((store: RootState) => store.appState.leftPanel.analysisDateRange);
 
   async function printReportHandler(): Promise<void> {
     const appID = new URL(window.location.href).searchParams.get('appid');
@@ -38,6 +36,7 @@ export const PrintReportButton = (): JSX.Element => {
   return (
     <button
       className="print-button"
+      disabled={analysisDateRange[0] === analysisDateRange[1]}
       onClick={printReportHandler}
       style={{ border: `1px solid ${customColorTheme}` }}
     >

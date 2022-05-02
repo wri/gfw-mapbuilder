@@ -1,8 +1,5 @@
 import * as React from 'react';
-import {
-  setAnalysisDateRange,
-  setAnalysisYearRange
-} from '../../../../js/store/appState/actions';
+import { setAnalysisDateRange, setAnalysisYearRange } from '../../../../js/store/appState/actions';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../../js/store/index';
 import { createSliderWithTooltip, Range } from 'rc-slider';
@@ -21,18 +18,12 @@ const getTodayDate = new Date().toISOString().split('T')[0];
 const DatePicker = (props: DatePickerProps): JSX.Element => {
   const dispatch = useDispatch();
 
-  const customColorTheme = useSelector(
-    (store: RootState) => store.appSettings.customColorTheme
-  );
+  const customColorTheme = useSelector((store: RootState) => store.appSettings.customColorTheme);
   const { multi, minDate, maxDate, defaultEndDate, defaultStartDate } = props;
 
-  const [startDate, setStartDate] = React.useState(
-    defaultStartDate ? defaultStartDate : getTodayDate
-  );
+  const [startDate, setStartDate] = React.useState(defaultStartDate ? defaultStartDate : getTodayDate);
 
-  const [endDate, setEndDate] = React.useState(
-    defaultEndDate ? defaultEndDate : getTodayDate
-  );
+  const [endDate, setEndDate] = React.useState(defaultEndDate ? defaultEndDate : getTodayDate);
 
   function handleStartDateChange(e: any): void {
     setStartDate(e.target.value);
@@ -99,13 +90,9 @@ interface RangeSliderProps {
 const RangeSlider = (props: RangeSliderProps): JSX.Element => {
   //Sync at the start too
   const dispatch = useDispatch();
-  const customColorTheme = useSelector(
-    (store: RootState) => store.appSettings.customColorTheme
-  );
+  const customColorTheme = useSelector((store: RootState) => store.appSettings.customColorTheme);
 
-  const [activeYearRange, setActiveYearRange] = React.useState<number[]>(
-    props.yearRange
-  );
+  const [activeYearRange, setActiveYearRange] = React.useState<number[]>(props.yearRange);
 
   React.useEffect(() => {
     dispatch(setAnalysisYearRange(activeYearRange));
@@ -116,9 +103,7 @@ const RangeSlider = (props: RangeSliderProps): JSX.Element => {
     dispatch(setAnalysisYearRange(val));
   }
 
-  const marks: any = React.useMemo(() => generateMarks(props.yearRange), [
-    props.yearRange
-  ]);
+  const marks: any = React.useMemo(() => generateMarks(props.yearRange), [props.yearRange]);
 
   return (
     <div className="time-slider-container">
@@ -135,7 +120,7 @@ const RangeSlider = (props: RangeSliderProps): JSX.Element => {
         handleStyle={[{ borderColor: customColorTheme }]}
         dotStyle={{ border: '1px solid #e9e9e9' }}
         activeDotStyle={{
-          border: `1px solid ${customColorTheme}`
+          border: `1px solid ${customColorTheme}`,
         }}
         trackStyle={[{ backgroundColor: customColorTheme }]}
         onChange={(value: Array<number>): void => handleSliderRange(value)}

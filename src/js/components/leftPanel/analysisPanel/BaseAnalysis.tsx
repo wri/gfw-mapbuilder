@@ -28,10 +28,10 @@ import { defaultAnalysisModules } from '../../../../../configs/analysis-config';
 import '../../../../css/leftpanel.scss';
 import 'react-datepicker/dist/react-datepicker.css';
 
-type InputTypes = 'rangeSlider' | 'tcd' | 'datepicker';
+type InputTypes = 'range-slider' | 'tcd' | 'date-picker';
 
 export interface UIParams {
-  inputType: InputTypes;
+  type: InputTypes;
   startParamName: string;
   combineParams: boolean;
   endParamName?: string;
@@ -75,7 +75,7 @@ const BaseAnalysis = (): JSX.Element => {
 
   const activeFeatureIndex = useSelector((store: RootState) => store.mapviewState.activeFeatureIndex);
 
-  const analysisDateRange = useSelector(selectAnalysisDaterange);
+  const analysisDateRange = useSelector((store: RootState) => store.appState.leftPanel.analysisDateRange);
 
   const analysisYearRange = useSelector((store: RootState) => store.appState.leftPanel.analysisYearRange);
 
