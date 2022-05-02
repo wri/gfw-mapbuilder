@@ -1488,16 +1488,20 @@ export class MapController {
       'esri/layers/GraphicsLayer',
     ]);
     const printServiceURL = store.getState().appSettings.printServiceUrl;
-    let printOptions: Array<string>;
+    let printOptions: any = [];
 
-    if (printServiceURL && layoutType === 'Landscape') {
-      printOptions = await fetch(`${printServiceURL}/?f=json`)
-        .then((res) => res.json())
-        .then((results) => {
-          return results.parameters.filter((param: any) => param.name === 'Layout_Template')[0].choiceList;
-        });
+    let layout = '';
 
-      layoutType = printOptions[0];
+    printOptions = await fetch(`${printServiceURL}/?f=json`)
+      .then((res) => res.json())
+      .then((results) => {
+        return results.parameters.filter((param: any) => param.name === 'Layout_Template');
+      });
+
+    if (layoutType === 'Landscape') {
+      layout = printOptions[0]?.defaultValue;
+    } else {
+      layout = printOptions[0]?.choiceList[0];
     }
 
     if (!this._printTask) {
@@ -1508,7 +1512,7 @@ export class MapController {
 
     const template = new PrintTemplate({
       format: 'pdf',
-      layout: layoutType as any,
+      layout,
       // * NOTE - must set 'layout' as type of 'any' in order to assign
       // * custom layout types from GFW print service URL
       layoutOptions: {
