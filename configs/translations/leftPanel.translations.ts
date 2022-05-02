@@ -4,7 +4,7 @@ export const analysisContent = {
     analyzeExistingShapeDirections: [
       'Use the layers tab to turn on a data layer',
       'Select a shape on the map',
-      'Click on the analyze tab'
+      'Click on the analyze tab',
     ],
     analyzeYourShapeTitle: 'Analyze your own shape',
     analyzeYourShapeFirstDirection: ['Choose the draw tool ', ' in the toolbox'],
@@ -13,14 +13,14 @@ export const analysisContent = {
     enterCoordinatesTitle: 'Enter your own coordinates',
     enterCoordinatesDirections: [`Enter at least 3 coordinates`, `Add up to 10 points to make shapes`],
     coordinatesButton: 'Enter Values',
-    visitTitle: ['Add additional shapes in the future by visiting the draw tool']
+    visitTitle: ['Add additional shapes in the future by visiting the draw tool'],
   },
   az: {
     analyzeExistingShapeTitle: 'Təhlil cədvəlinə klikləyin ',
     analyzeExistingShapeDirections: [
       'Məlumatlara çıxış təbəqəsini açmaq üçün təbəqələr cədvəlindən istifadə edin',
       'Xəritədəki formanı seçin',
-      'Təhlil cədvəlinə klikləyin '
+      'Təhlil cədvəlinə klikləyin ',
     ],
     analyzeYourShapeTitle: 'Öz formanızı təhlil edin',
     analyzeYourShapeFirstDirection: ['Alət dəstindəki rəsm alətini seçin', ''],
@@ -29,10 +29,10 @@ export const analysisContent = {
     enterCoordinatesTitle: 'Öz koordinatlarınızı daxil edin',
     enterCoordinatesDirections: [
       'Ən azı 3 koordinatı daxil edin',
-      'Formaları düzəltmək üçün 10-dək nöqtəni əlavə edin'
+      'Formaları düzəltmək üçün 10-dək nöqtəni əlavə edin',
     ],
     coordinatesButton: 'Göstəriciləri daxil edin',
-    visitTitle: ['Gələcəkdə rəsm alətinə daxil olaraq əlavə formalar əlavə edin,']
+    visitTitle: ['Gələcəkdə rəsm alətinə daxil olaraq əlavə formalar əlavə edin,'],
   },
   nl: {
     analyzeExistingShapeTitle: 'Analyze a shape on the map',
@@ -40,7 +40,7 @@ export const analysisContent = {
     analyzeExistingShapeDirections: [
       'Gebruik het tabblad Lagen om een gegevenslaag in te schakelen',
       'Selecteer een vorm op de kaart',
-      'Klik op het tabblad analyse'
+      'Klik op het tabblad analyse',
     ],
     analyzeYourShapeTitle: 'Analyseer je eigen vorm',
     analyzeYourShapeFirstDirection: ['Kies het tekengereedschap ', ' in de gereedschapskist'],
@@ -49,33 +49,33 @@ export const analysisContent = {
     enterCoordinatesTitle: 'Voer uw eigen coördinaten in',
     enterCoordinatesDirections: [`Voer minimaal 3 coördinaten in`, `Voeg maximaal 10 punten toe om vormen te maken`],
     coordinatesButton: 'Voer waarden in',
-    visitTitle: ['Voeg in de toekomst extra vormen toe door naar de tekentool te gaa']
+    visitTitle: ['Voeg in de toekomst extra vormen toe door naar de tekentool te gaa'],
   },
   hy: {
     analyzeExistingShapeTitle: 'Analyze a shape on the map',
     analyzeExistingShapeDirections: [
       'Տվյալների շերտն ակտիվացնելու համար օգտագործել շերտերի ներդիրը ',
       'Քարտեզի վրա ընտրել պատկերը ',
-      'Սեղմել վերլուծության ներդիրը '
+      'Սեղմել վերլուծության ներդիրը ',
     ],
     analyzeYourShapeTitle: 'Վերլուծել սեփական պատկերը ',
     analyzeYourShapeFirstDirection: ['Գործիքների ներդիրից ընտրել ', ' նկարչական գործիքը'],
     analyzeYourShapeDirections: [
       'Քարտեզի որևէ հատվածում նկարել պատկեր ',
-      'Վերլուծությունը սկսելու համար ընտրել որևէ պատկեր '
+      'Վերլուծությունը սկսելու համար ընտրել որևէ պատկեր ',
     ],
     drawButton: 'Նկարել',
     enterCoordinatesTitle: 'Մուտքագրել Ձեր կոորդինատները ',
     enterCoordinatesDirections: [`Մուտքագրել առնվազն 3 կոորդինատ `, 'Ավելացնել մինչև 10 կետեր` պատկեր ստանալու համար '],
     coordinatesButton: 'Մուտքագրել արժեքներ ',
-    visitTitle: ['Add additional shapes in the future by visiting the draw tool']
+    visitTitle: ['Add additional shapes in the future by visiting the draw tool'],
   },
   ka: {
     analyzeExistingShapeTitle: 'ჩაატარეთ ფიგურის ანალიზი რუკაზე',
     analyzeExistingShapeDirections: [
       'მონაცემების ფენის ჩასართავად გამოიყენეთ ფენების მენიუ',
       'აარჩიეთ ფიგურა რუკაზე',
-      'დააჭირეთ ანალიზისი მენიუს'
+      'დააჭირეთ ანალიზისი მენიუს',
     ],
     analyzeYourShapeTitle: 'ჩაატარეთ თქვენი ფიგურის ანალიზი',
     analyzeYourShapeFirstDirection: ['შეარჩიეთ სახაზავი ინსტრუმენტი ', ' ტულბოქსიდან'],
@@ -84,14 +84,14 @@ export const analysisContent = {
     enterCoordinatesTitle: 'შეიტანეთ თქვენი კოორდინატები',
     enterCoordinatesDirections: [`შეიტანეთ მინიმუმ  3 კოორდინატი`, `დაამატეთ 10 წერტილამდე პოლიგონის შესაქმნელად`],
     coordinatesButton: `მნიშვნელობების შეტანა`,
-    visitTitle: ['მომავალში დაამატეთ დამატებითი ფიგურები სახაზავი ინსტრუმენტის ', ' მეშვეობით']
+    visitTitle: ['მომავალში დაამატეთ დამატებითი ფიგურები სახაზავი ინსტრუმენტის ', ' მეშვეობით'],
   },
   fr: {
     analyzeExistingShapeTitle: 'Analysez un polygone sur la carte',
     analyzeExistingShapeDirections: [
       "Utilisez l'onglet Couches pour activer une couche de données",
       'Sélectionnez une entité sur la carte',
-      "Cliquez sur l'onglet analyse"
+      "Cliquez sur l'onglet analyse",
     ],
     analyzeYourShapeTitle: 'Analysez votre propre polygone',
     analyzeYourShapeFirstDirection: ["Utiliser l'outil dessin ", ' dans la boîte à outil`'],
@@ -100,55 +100,55 @@ export const analysisContent = {
     enterCoordinatesTitle: 'Entrez vos propres coordonnées',
     enterCoordinatesDirections: [`Entrez au moins 3 coordonnées`, `Ajoutez jusqu’à 10 points pour définir votre zone`],
     coordinatesButton: `Entrez les valeurs`,
-    visitTitle: ["Ajouter des polygones supplémentaires grâce à l'outil dessin"]
+    visitTitle: ["Ajouter des polygones supplémentaires grâce à l'outil dessin"],
   },
   es: {
     analyzeExistingShapeTitle: 'Analizar un polígono  en el mapa',
     analyzeExistingShapeDirections: [
       'Usar la pestaña de capas para encender una capa',
       'Seleccionar un polígono en el mapa',
-      'Hacer clic en la pestaña de analizar'
+      'Hacer clic en la pestaña de analizar',
     ],
     analyzeYourShapeTitle: 'Analizar su propio polígono',
     analyzeYourShapeFirstDirection: ['Escoger la herramienta de dibujo ', ' en la caja de herramientas'],
     analyzeYourShapeDirections: [
       'Dibujar un polígono en cualquier lugar del mapa',
-      'Seleccionar el polígono para hacer el análisis'
+      'Seleccionar el polígono para hacer el análisis',
     ],
     drawButton: 'Empezar a dibujar',
     enterCoordinatesTitle: 'Ingresa las coordenadas',
     enterCoordinatesDirections: [
       `Ingresa por lo menos 3 coordenadas`,
-      `Agrega hasta 10 puntos para generar el polígono`
+      `Agrega hasta 10 puntos para generar el polígono`,
     ],
     coordinatesButton: `Ingresa valores`,
-    visitTitle: ['Añadir polígonos adicionales en el futuro usando la herramienta de dibujo ']
+    visitTitle: ['Añadir polígonos adicionales en el futuro usando la herramienta de dibujo '],
   },
   pt: {
     analyzeExistingShapeTitle: 'Analise a área selecionada no mapa',
     analyzeExistingShapeDirections: [
       'Use a guia camadas para ativar os dados da camada',
       'Selecione uma área no mapa',
-      'Clique na guia de Análise'
+      'Clique na guia de Análise',
     ],
     analyzeYourShapeTitle: 'Use sua propria área de Análise',
     analyzeYourShapeFirstDirection: ['Escolha a ferramenta de desenho ', ' na caixa de ferramentas'],
     analyzeYourShapeDirections: [
       'Desenhe uma área de interesse no mapa',
-      'Selecione a área na qual irá executar a análise'
+      'Selecione a área na qual irá executar a análise',
     ],
     drawButton: 'Comece a desenhar',
     enterCoordinatesTitle: 'Entre com suas coordenadas',
     enterCoordinatesDirections: [`Insira pelo menos 3 coordenadas`, `Adicione até 10 pontos para desenhar o shape`],
     coordinatesButton: `Entre com os valores`,
-    visitTitle: ['Adicionar formas adicionais no futuro, visitando a ferramenta de desenho']
+    visitTitle: ['Adicionar formas adicionais no futuro, visitando a ferramenta de desenho'],
   },
   id: {
     analyzeExistingShapeTitle: 'Analyze a shape on the map',
     analyzeExistingShapeDirections: [
       'Use the layers tab to turn on a data layer',
       'Select a shape on the map',
-      'Click on the analyze tab'
+      'Click on the analyze tab',
     ],
     analyzeYourShapeTitle: 'Analyze your own shape',
     analyzeYourShapeFirstDirection: ['Choose the draw tool ', ' in the toolbox'],
@@ -157,10 +157,10 @@ export const analysisContent = {
     enterCoordinatesTitle: 'Masukkan koordinat Anda',
     enterCoordinatesDirections: [
       `Masukkan paling sedikit 3 koordinat`,
-      `Tambahkan sampai 10 titik untuk membuat bentuk`
+      `Tambahkan sampai 10 titik untuk membuat bentuk`,
     ],
     coordinatesButton: `Masukkan Nilai`,
-    visitTitle: ['Add additional shapes in the future by visiting the draw tool ']
+    visitTitle: ['Add additional shapes in the future by visiting the draw tool '],
   },
   zh: {
     analyzeExistingShapeTitle: '分析地图上的图形',
@@ -172,8 +172,8 @@ export const analysisContent = {
     enterCoordinatesTitle: '输入你的坐标',
     enterCoordinatesDirections: [`输入至少三个坐标`, `添加最多10个坐标来完成作图`],
     coordinatesButton: `输入`,
-    visitTitle: ['使用绘画工具来添加更多图形']
-  }
+    visitTitle: ['使用绘画工具来添加更多图形'],
+  },
 };
 
 export const basemapLayersContent = {
@@ -188,8 +188,8 @@ export const basemapLayersContent = {
         es: 'Imagery',
         pt: 'Imagery',
         id: 'Imagery',
-        zh: 'Imagery'
-      }
+        zh: 'Imagery',
+      },
     },
     {
       id: 'hybrid',
@@ -201,8 +201,8 @@ export const basemapLayersContent = {
         es: 'Imagery with Labels',
         pt: 'Imagery with Labels',
         id: 'Imagery with Labels',
-        zh: 'Imagery with Labels'
-      }
+        zh: 'Imagery with Labels',
+      },
     },
     {
       id: 'osm',
@@ -214,10 +214,10 @@ export const basemapLayersContent = {
         es: 'Open Street Map',
         pt: 'Open Street Map',
         id: 'Open Street Map',
-        zh: 'Open Street Map'
-      }
-    }
-  ]
+        zh: 'Open Street Map',
+      },
+    },
+  ],
 };
 
 export const layersPanelTranslations = {
@@ -225,348 +225,348 @@ export const layersPanelTranslations = {
     layers: 'Layers',
     selectAll: 'Select All',
     clearAll: 'Clear All',
-    legend: 'Legend'
+    legend: 'Legend',
   },
   az: {
     layers: 'Təbəqələr',
     selectAll: 'Hamısını seçin',
     clearAll: 'Hamısını silin',
-    legend: 'Şərti işarələr'
+    legend: 'Şərti işarələr',
   },
   nl: {
     layers: 'Lagen ',
     selectAll: 'Selecteer alles',
     clearAll: 'Wis alles',
-    legend: 'Legende'
+    legend: 'Legende',
   },
   hy: {
     layers: 'շերտեր',
     selectAll: 'Նշել բոլորը',
     clearAll: 'Ջնջել բոլորը',
-    legend: 'Պայմանական նշաններ'
+    legend: 'Պայմանական նշաններ',
   },
   fr: {
     layers: 'Couches',
     selectAll: 'Tout sélectionner',
     clearAll: 'Tout effacer',
-    legend: 'Légende'
+    legend: 'Légende',
   },
   es: {
     layers: 'Capas',
     selectAll: 'Seleccionar Todo',
     clearAll: 'Borrar Todo',
-    legend: 'Leyenda'
+    legend: 'Leyenda',
   },
   pt: {
     layers: 'Camadas',
     selectAll: 'Selecionar tudo',
     clearAll: 'Limpar tudo',
-    legend: 'Legenda'
+    legend: 'Legenda',
   },
   id: {
     layers: 'Layers',
     selectAll: 'Select All',
     clearAll: 'Clear All',
-    legend: 'Legend'
+    legend: 'Legend',
   },
   zh: {
     layers: '图层',
     selectAll: '全选',
     clearAll: '全部清除',
-    legend: '图例'
+    legend: '图例',
   },
   ka: {
     layers: 'ფენები',
     selectAll: 'ყველაფრის მონიშვნა',
     clearAll: 'ყველაფრის წაშლა',
-    legend: 'ლეგენდა'
-  }
+    legend: 'ლეგენდა',
+  },
 };
 
 export const documentsContent = {
   en: {
     instructions: 'Select an area of interest to see if there are any related documents',
     name: 'Name',
-    pdf: 'PDF',
-    size: 'Size'
+    pdf: 'Attachment',
+    size: 'Size',
   },
   az: {
     instructions: 'Aidiyyəti sənədlərin olub-olmadığını görmək üçün maraq sahəsini seçin',
     name: 'Ad',
-    pdf: 'PDF',
-    size: 'Ölçüsü'
+    pdf: 'Attachment',
+    size: 'Ölçüsü',
   },
   nl: {
     instructions: 'Selecteer een interessegebied om te zien of er gerelateerde documenten zijn',
     name: 'Naam ',
-    pdf: 'PDF',
-    size: 'Grootte'
+    pdf: 'Attachment',
+    size: 'Grootte',
   },
   hy: {
     instructions: 'Ընտրել հետաքրքրող տարածքը և ստուգել դրա հետ կապված փաստաթղթերի առկայությունը ',
     name: 'Անվանում',
-    pdf: 'PDF',
-    size: 'Ծավալ'
+    pdf: 'Attachment',
+    size: 'Ծավալ',
   },
   ka: {
     instructions: 'შეარჩიეთ საინტერესო ტერიტორია, და ნახეთ არის თუ არა მასთან დაკავშირებული დოკუმენტები',
     name: 'სახელი',
-    pdf: 'PDF',
-    size: 'ზომა'
+    pdf: 'Attachment',
+    size: 'ზომა',
   },
   fr: {
     instructions: "Choisisez une région d'intérêt pour voir les documents associés",
     name: 'Nom du fichier',
-    pdf: 'PDF',
-    size: 'Taille'
+    pdf: 'Attachment',
+    size: 'Taille',
   },
   es: {
     instructions: 'Seleccionar una área de interés para ver si haya algún documento relacionado',
     name: 'Nombre',
-    pdf: 'PDF',
-    size: 'Size'
+    pdf: 'Attachment',
+    size: 'Size',
   },
   pt: {
     instructions: 'Selecione área de interesse para verificar a existência de documentos relacionados',
     name: 'Nome',
-    pdf: 'PDF',
-    size: 'Tamanho'
+    pdf: 'Attachment',
+    size: 'Tamanho',
   },
   id: {
     instructions: 'Select an area of interest to see if there are any related documents',
     name: 'Nama',
-    pdf: 'PDF',
-    size: 'Size'
+    pdf: 'Attachment',
+    size: 'Size',
   },
   zh: {
     instructions: '选择感兴趣区域来查看相关文件',
     name: '姓名',
-    pdf: 'PDF',
-    size: 'Size'
-  }
+    pdf: 'Attachment',
+    size: 'Size',
+  },
 };
 
 export const layerControlsTranslations = {
   en: {
     timeStart: 'Start: ',
-    timeEnd: 'End: '
+    timeEnd: 'End: ',
   },
   az: {
     timeStart: 'Başlayın: ',
-    timeEnd: 'Bitirin: '
+    timeEnd: 'Bitirin: ',
   },
   nl: {
     timeStart: 'Begin: ',
-    timeEnd: 'Einde: '
+    timeEnd: 'Einde: ',
   },
   hy: {
     timeStart: 'սկիզբ: ',
-    timeEnd: 'Վերջ: '
+    timeEnd: 'Վերջ: ',
   },
   ka: {
     timeStart: 'დასაწყისი: ',
-    timeEnd: 'დასასრული: '
+    timeEnd: 'დასასრული: ',
   },
   fr: {
     timeStart: 'Début: ',
-    timeEnd: 'Fin: '
+    timeEnd: 'Fin: ',
   },
   es: {
     timeStart: 'Empezar: ',
-    timeEnd: 'Parar: '
+    timeEnd: 'Parar: ',
   },
   pt: {
     timeStart: 'Início: ',
-    timeEnd: 'Fim: '
+    timeEnd: 'Fim: ',
   },
   id: {
     timeStart: 'Start: ',
-    timeEnd: 'End: '
+    timeEnd: 'End: ',
   },
   zh: {
     timeStart: '开始：',
-    timeEnd: '结束：'
-  }
+    timeEnd: '结束：',
+  },
 };
 
 export const dataTabConfig = {
   en: {
     header: 'Select a shape on the map',
-    instructionsList: ['Use the layers tab to turn on a data layer', 'Select a shape on the map']
+    instructionsList: ['Use the layers tab to turn on a data layer', 'Select a shape on the map'],
   },
   az: {
     header: 'Xəritədəki formanı seçin',
     instructionsList: [
       'Məlumatlara çıxış qatını açmaq üçün qatlar cədvəlindən istifadə edin',
-      'Xəritədəki formanı seçin'
-    ]
+      'Xəritədəki formanı seçin',
+    ],
   },
   nl: {
     header: 'Selecteer een vorm op de kaart',
     instructionsList: [
       'Use the layers tab to turn on a data layer ', // * NOTE: translation unavailable
-      'Selecteer een vorm op de kaart'
-    ]
+      'Selecteer een vorm op de kaart',
+    ],
   },
   hy: {
     header: 'Քարտեզի վրա ընտրել պատկեր',
-    instructionsList: ['Տվյալների շերտն ակտիվացնելու համար օգտագործել շերտերի ներդիրը', 'Քարտեզի վրա ընտրել պատկեր']
+    instructionsList: ['Տվյալների շերտն ակտիվացնելու համար օգտագործել շերտերի ներդիրը', 'Քարտեզի վրա ընտրել պատկեր'],
   },
   ka: {
     header: 'აარჩიეთ პოლიგონი რუკაზე',
-    instructionsList: ['მონაცემების ფენის ჩასართავად გამოიყენეთ ფენების მენიუ', 'აარჩიეთ ფიგურა რუკაზე']
+    instructionsList: ['მონაცემების ფენის ჩასართავად გამოიყენეთ ფენების მენიუ', 'აარჩიეთ ფიგურა რუკაზე'],
   },
   fr: {
     header: 'Sélectionnez un polygone sur la carte',
     instructionsList: [
       "Utiliser l'onglet Couches pour activer une couche de données",
-      'Sélectionnez un polygone sur la carte'
-    ]
+      'Sélectionnez un polygone sur la carte',
+    ],
   },
   es: {
     header: 'Seleccionar un polígono en el mapa',
-    instructionsList: ['Usar la pestaña de capas para encender una capa', 'Seleccionar un polígono en el mapa']
+    instructionsList: ['Usar la pestaña de capas para encender una capa', 'Seleccionar un polígono en el mapa'],
   },
   pt: {
     header: 'Selecione uma área no mapa',
-    instructionsList: ['Use a guia camadas para ativar os dados da camada', 'Selecione uma área no mapa']
+    instructionsList: ['Use a guia camadas para ativar os dados da camada', 'Selecione uma área no mapa'],
   },
   id: {
     header: 'Select a shape on the map',
-    instructionsList: ['Use the layers tab to turn on a data layer', 'Select a shape on the map']
+    instructionsList: ['Use the layers tab to turn on a data layer', 'Select a shape on the map'],
   },
   zh: {
     header: '在地图上选择图形',
-    instructionsList: ['使用图层键来打开图层', '在地图上选择图形']
-  }
+    instructionsList: ['使用图层键来打开图层', '在地图上选择图形'],
+  },
 };
 export const treesMosaicConfig = {
   en: {
-    displayLabel: ['Displaying Trees in Mosaic Landscapes with', 'tree cover.']
+    displayLabel: ['Displaying Trees in Mosaic Landscapes with', 'tree cover.'],
   },
   az: {
-    displayLabel: ['Göstərir', 'örtük sıxlığı.']
+    displayLabel: ['Göstərir', 'örtük sıxlığı.'],
   },
   nl: {
-    displayLabel: ['Weergeven', 'luifeldichtheid.']
+    displayLabel: ['Weergeven', 'luifeldichtheid.'],
   },
   hy: {
-    displayLabel: ['Ցուցադրվում է ', 'Սաղարթի խտություն ']
+    displayLabel: ['Ցուցադրվում է ', 'Սաղարթի խտություն '],
   },
   ka: {
-    displayLabel: ['წარმოდგენილია', 'ვარჯის სიმჭიდროვე.']
+    displayLabel: ['წარმოდგენილია', 'ვარჯის სიმჭიდროვე.'],
   },
   fr: {
-    displayLabel: ['Affichage', 'Densité de la canopée.']
+    displayLabel: ['Affichage', 'Densité de la canopée.'],
   },
   es: {
-    displayLabel: ['Mostrando', 'densidad de follaje.']
+    displayLabel: ['Mostrando', 'densidad de follaje.'],
   },
   pt: {
-    displayLabel: ['Exibindo', 'densidade de dossel']
+    displayLabel: ['Exibindo', 'densidade de dossel'],
   },
   id: {
-    displayLabel: ['Displaying Trees in Mosaic Landscapes with', 'tree cover.']
+    displayLabel: ['Displaying Trees in Mosaic Landscapes with', 'tree cover.'],
   },
   zh: {
-    displayLabel: ['显示中', '林冠覆盖密度']
-  }
+    displayLabel: ['显示中', '林冠覆盖密度'],
+  },
 };
 
 export const canopyDensityPickerConfig = {
   en: {
-    displayLabel: ['Displaying', 'canopy density.']
+    displayLabel: ['Displaying', 'canopy density.'],
   },
   az: {
-    displayLabel: ['Göstərir', 'örtük sıxlığı.']
+    displayLabel: ['Göstərir', 'örtük sıxlığı.'],
   },
   nl: {
-    displayLabel: ['Weergeven', 'luifeldichtheid.']
+    displayLabel: ['Weergeven', 'luifeldichtheid.'],
   },
   hy: {
-    displayLabel: ['Ցուցադրվում է ', 'Սաղարթի խտություն ']
+    displayLabel: ['Ցուցադրվում է ', 'Սաղարթի խտություն '],
   },
   ka: {
-    displayLabel: ['წარმოდგენილია', 'ვარჯის სიმჭიდროვე.']
+    displayLabel: ['წარმოდგენილია', 'ვარჯის სიმჭიდროვე.'],
   },
   fr: {
-    displayLabel: ['Affichage', 'Densité de la canopée.']
+    displayLabel: ['Affichage', 'Densité de la canopée.'],
   },
   es: {
-    displayLabel: ['Mostrando', 'densidad de follaje.']
+    displayLabel: ['Mostrando', 'densidad de follaje.'],
   },
   pt: {
-    displayLabel: ['Exibindo', 'densidade de dossel']
+    displayLabel: ['Exibindo', 'densidade de dossel'],
   },
   id: {
-    displayLabel: ['Displaying', 'canopy density.']
+    displayLabel: ['Displaying', 'canopy density.'],
   },
   zh: {
-    displayLabel: ['显示中', '林冠覆盖密度']
-  }
+    displayLabel: ['显示中', '林冠覆盖密度'],
+  },
 };
 
 export const treeHeightConfig = {
   en: {
-    displayLabel: ['Displaying Tree cover height with', 'canopy height']
+    displayLabel: ['Displaying Tree cover height with', 'canopy height'],
   },
   az: {
-    displayLabel: ['Displaying Tree cover height with', 'canopy height']
+    displayLabel: ['Displaying Tree cover height with', 'canopy height'],
   },
   nl: {
-    displayLabel: ['Displaying Tree cover height with', 'canopy height']
+    displayLabel: ['Displaying Tree cover height with', 'canopy height'],
   },
   hy: {
-    displayLabel: ['Displaying Tree cover height with է ', 'canopy height']
+    displayLabel: ['Displaying Tree cover height with է ', 'canopy height'],
   },
   ka: {
-    displayLabel: ['Displaying Tree cover height with', 'canopy height']
+    displayLabel: ['Displaying Tree cover height with', 'canopy height'],
   },
   fr: {
-    displayLabel: ['Displaying Tree cover height with', 'canopy height']
+    displayLabel: ['Displaying Tree cover height with', 'canopy height'],
   },
   es: {
-    displayLabel: ['Displaying Tree cover height with', 'canopy height']
+    displayLabel: ['Displaying Tree cover height with', 'canopy height'],
   },
   pt: {
-    displayLabel: ['Displaying Tree cover height with', 'canopy height']
+    displayLabel: ['Displaying Tree cover height with', 'canopy height'],
   },
   id: {
-    displayLabel: ['Displaying Tree cover height with', 'canopy height']
+    displayLabel: ['Displaying Tree cover height with', 'canopy height'],
   },
   zh: {
-    displayLabel: ['Displaying Tree cover height with', 'canopy height']
-  }
+    displayLabel: ['Displaying Tree cover height with', 'canopy height'],
+  },
 };
 export const windSpeedConfig = {
   en: {
-    displayLabel: ['Displaying wind speed potential at', 'meters']
+    displayLabel: ['Displaying wind speed potential at', 'meters'],
   },
   az: {
-    displayLabel: ['Displaying wind speed potential at', 'meters']
+    displayLabel: ['Displaying wind speed potential at', 'meters'],
   },
   nl: {
-    displayLabel: ['Displaying wind speed potential at', 'meters']
+    displayLabel: ['Displaying wind speed potential at', 'meters'],
   },
   hy: {
-    displayLabel: ['Displaying wind speed potential at', 'meters']
+    displayLabel: ['Displaying wind speed potential at', 'meters'],
   },
   ka: {
-    displayLabel: ['Displaying wind speed potential at', 'meters']
+    displayLabel: ['Displaying wind speed potential at', 'meters'],
   },
   fr: {
-    displayLabel: ['Displaying wind speed potential at', 'meters']
+    displayLabel: ['Displaying wind speed potential at', 'meters'],
   },
   es: {
-    displayLabel: ['Displaying wind speed potential at', 'meters']
+    displayLabel: ['Displaying wind speed potential at', 'meters'],
   },
   pt: {
-    displayLabel: ['Displaying wind speed potential at', 'meters']
+    displayLabel: ['Displaying wind speed potential at', 'meters'],
   },
   id: {
-    displayLabel: ['Displaying wind speed potential at', 'meters']
+    displayLabel: ['Displaying wind speed potential at', 'meters'],
   },
   zh: {
-    displayLabel: ['Displaying wind speed potential at', 'meters']
-  }
+    displayLabel: ['Displaying wind speed potential at', 'meters'],
+  },
 };

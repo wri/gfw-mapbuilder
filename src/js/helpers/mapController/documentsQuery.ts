@@ -1,5 +1,5 @@
-import { mapController } from '../../../js/controllers/mapController';
-import { Attachment, URLProperties } from '../../../js/types/Attachment';
+import { mapController } from '../../controllers/mapController';
+import { Attachment, URLProperties } from '../../types/Attachment';
 
 export const getDocuments = async (urlProperties: URLProperties): Promise<Array<Attachment> | null> => {
   const { sublayerID, specificFeatureID, layerID } = urlProperties;
@@ -7,17 +7,19 @@ export const getDocuments = async (urlProperties: URLProperties): Promise<Array<
   let endPoint = '';
 
   const layer: any = mapController._map?.findLayerById(layerID);
-
-  if (layer.sublayers.length && specificFeatureID) {
-    const sublayer = layer.sublayers.items.filter((s: __esri.Sublayer) => String(s.id) === String(sublayerID));
-
-    endPoint = `${sublayer[0].url}/${specificFeatureID}/attachments?f=pjson`;
+  if (specificFeatureID) {
+    if (layer.sublayers) {
+      const sublayer = layer.sublayers.items.filter((s: __esri.Sublayer) => String(s.id) === String(sublayerID));
+      endPoint = `${sublayer[0].url}/${specificFeatureID}/attachments?f=pjson`;
+    } else {
+      endPoint = `${layer.url}/0/${specificFeatureID}/attachments?f=pjson`;
+    }
   } else {
     return null;
   }
 
   const attachments = await fetch(endPoint)
-    .then(response => response.json())
+    .then((response) => response.json())
     .then((results: { attachmentInfos: Array<Attachment> }) => {
       const { attachmentInfos } = results;
       if (attachmentInfos) {
@@ -27,7 +29,7 @@ export const getDocuments = async (urlProperties: URLProperties): Promise<Array<
         });
       }
     })
-    .catch(e => console.log('error in getDocuments()', e));
+    .catch((e) => console.log('error in getDocuments()', e));
 
   if (attachments && attachments.length) {
     return attachments;
