@@ -77,6 +77,7 @@ export interface AnalysisModule {
 export interface AnalysisParam {
   type: 'tcd' | 'rangeSlider' | 'date-picker';
   bounds?: [number, number];
+  multi?: boolean;
   label: {
     [key: string]: string;
   };
