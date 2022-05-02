@@ -1,5 +1,5 @@
 import { loadModules } from 'esri-loader';
-import { arcgisToGeoJSON } from '../../../../js/helpers/spatialDataTransformation';
+import { arcgisToGeoJSON } from '../../../helpers/spatialDataTransformation';
 import { markValueMap } from '../../mapWidgets/widgetContent/CanopyDensityContent';
 
 export async function fetchGFWWidgetConfig(url: string): Promise<any> {
@@ -22,7 +22,7 @@ export async function fetchDownloadInfo(url: string): Promise<any> {
     .then((data: any) => {
       const response: DownloadResponse = {
         chartTitle: undefined,
-        downloadUrl: undefined
+        downloadUrl: undefined,
       };
       response.chartTitle = data.data && data.data.type ? data.data.type + '-analysis.png' : 'analysis.png';
       //unclear why are we matching 'month' here but that's how it was done in 3x
@@ -47,17 +47,17 @@ export async function fetchWCSAnalysis(
   }
   const geojson = arcgisToGeoJSON(activeFeature.geometry);
   const content = {
-    polygon: geojson.coordinates
+    polygon: geojson.coordinates,
   };
   return await fetch(url, {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
-    body: JSON.stringify(content)
+    body: JSON.stringify(content),
   })
-    .then(response => response.json())
-    .then(data => {
+    .then((response) => response.json())
+    .then((data) => {
       let startYear;
       let endYear;
       if (analysisSettings.uiParams !== 'none' && yearRange) {
@@ -67,7 +67,7 @@ export async function fetchWCSAnalysis(
         analysisSettings.endYear = Number(endYear);
       }
       let totalResult = 0;
-      Object.keys(data).forEach(year => {
+      Object.keys(data).forEach((year) => {
         if (year === 'constant') {
           totalResult = data[year];
         }
@@ -80,7 +80,7 @@ export async function fetchWCSAnalysis(
       data.endYear = yearRange ? yearRange[1] : null;
       data.title = analysisSettings.label[selectedLanguage];
       return {
-        data: data
+        data: data,
       };
     })
     .catch((e: Error) => console.error(e));
@@ -102,7 +102,7 @@ export function generateWidgetURL({
   sqlString,
   startDate,
   endDate,
-  density
+  density,
 }: WidgetGenerateProps): string {
   let baseURL = 'https://api.resourcewatch.org/v1/widget/';
   //1. Add Widget ID
@@ -111,7 +111,6 @@ export function generateWidgetURL({
   //2. Add Geostore ID
   baseURL = baseURL.concat(`&geostore_id=${geostoreId}&geostore_origin=rw`);
 
-  console.log(analysisId);
   //3. Add SQL Query if it is defined in the configuration
   if (analysisId === 'VIIRS_FIRES' || analysisId === 'GLAD_ALERTS') {
     let sqlQuery = sqlString;
@@ -125,10 +124,7 @@ export function generateWidgetURL({
     baseURL = baseURL.concat(`&sql=${sqlQuery}`);
   }
   if (analysisId === 'LCC' || analysisId === 'TC_GAIN_TOTAL') {
-    const sqlQuery = sqlString;
-    baseURL = baseURL.concat(`&sql=${sqlQuery}`);
+    baseURL = baseURL.concat(`&sql=${sqlString}`);
   }
-
-  console.log(baseURL);
   return baseURL;
 }

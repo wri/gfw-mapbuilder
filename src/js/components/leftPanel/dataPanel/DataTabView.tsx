@@ -95,7 +95,7 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
                 ? activeLayerInfo.fieldNames.map((field, i) => {
                     //Grab attribute value irrespective if fieldName is appropriately cased!
                     const attributeKey = Object.keys(props.attributes).find(
-                      a => a.toLowerCase() === field.fieldName.toLowerCase()
+                      (a) => a.toLowerCase() === field.fieldName.toLowerCase()
                     );
                     if (attributeKey) {
                       // Use label unless it is not set, then default to fieldName
@@ -164,11 +164,11 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
       //determine if next/prev buttons are enabled or disabled
       const enabledButtonCustomStyle = {
         backgroundColor: customColorTheme,
-        color: '#FFF'
+        color: '#FFF',
       };
       const disabledButtonCustomStyle = {
         backgroundColor: 'rgb(238, 238, 238)',
-        color: '#555'
+        color: '#555',
       };
 
       const prevBtn = page === 0 ? disabledButtonCustomStyle : enabledButtonCustomStyle;
@@ -190,11 +190,11 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
         const urlProperties = {
           sublayerID,
           specificFeatureID: selectedFeature.objectid,
-          layerID
+          layerID,
         };
 
         getDocuments(urlProperties)
-          .then(res => {
+          .then((res) => {
             dispatch(setDocuments(res));
           })
           .catch(() => dispatch(setDocuments(null)));
@@ -211,7 +211,8 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
         color: white;
         font-size: 0.7rem;
         min-height: 15px;
-        padding: 5px 0 5px 0;
+        padding: 5px 0px 5px 0px;
+        margin-left: 5px;
         width: 150px;
       `;
 
@@ -264,7 +265,7 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
                     featureID: `multi_poly_graphics-${activeFeature.objectid}`,
                     layerTitle: 'Multi Polygon Features',
                     features: [activeFeature],
-                    fieldNames: null
+                    fieldNames: null,
                   };
                   const oldList = [...analysisFeatureList];
                   oldList[activeMultiInput] = formatFeatures;
