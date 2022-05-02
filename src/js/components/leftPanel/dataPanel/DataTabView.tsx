@@ -14,9 +14,9 @@ import BaseButton from '../../ui/BaseButton';
 import styled from 'styled-components';
 import { addToMultiPolygonLayer, clearGraphics, clearUserGraphics } from '../../../helpers/MapGraphics';
 
-//Constructs layer tile based on sublayer existance
+//Constructs layer tile based on sublayer existence
 function generateLayerTitle(activeLayerInfo: any): string {
-  let result = '';
+  let result;
   const { layerTitle, sublayerTitle, displayField } = activeLayerInfo;
   const displayName = activeLayerInfo.features[0]?.attributes[displayField];
   if (sublayerTitle) {
@@ -193,7 +193,7 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
           layerID,
         };
 
-        const docs = getDocuments(urlProperties)
+        getDocuments(urlProperties)
           .then((res) => {
             dispatch(setDocuments(res));
           })
@@ -206,7 +206,7 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
       `;
 
       const AddToAnalysisButton = styled(BaseButton)`
-        margin: 0;
+        margin: 0 0 0 5px;
         background-color: ${customColorTheme};
         color: white;
         font-size: 0.7rem;

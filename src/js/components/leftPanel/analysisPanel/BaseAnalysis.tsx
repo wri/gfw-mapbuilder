@@ -47,7 +47,7 @@ export interface UIParams {
 //Memo'd selectors
 const selectAnalysisDaterange = createSelector(
   (state: RootState) => state.appState,
-  appState => appState.leftPanel.analysisDateRange
+  (appState) => appState.leftPanel.analysisDateRange
 );
 
 const BaseAnalysis = (): JSX.Element => {
@@ -97,8 +97,8 @@ const BaseAnalysis = (): JSX.Element => {
       return;
     } else {
       registerGeometry(activeFeature)
-        .then(response => response.json())
-        .then(res => {
+        .then((response) => response.json())
+        .then((res) => {
           if (res?.errors) {
             throw new Error('failed to register geostore');
           }
@@ -109,7 +109,7 @@ const BaseAnalysis = (): JSX.Element => {
           dispatch(setActiveFeatures(oldActiveFeatures));
           setGeostoreReady(true);
         })
-        .catch(e => console.log('failed to register geostore', e));
+        .catch((e) => console.log('failed to register geostore', e));
     }
   }, [dispatch, activeFeatures, activeFeatureIndex, selectedAnalysis]);
 
@@ -118,7 +118,7 @@ const BaseAnalysis = (): JSX.Element => {
     setBase64ChartURL('');
     setChartLoading(true);
     setVegaSpec(null);
-    const mod = defaultAnalysisModules.find(module => module.analysisId === selectedAnalysis) as AnalysisModule;
+    const mod = defaultAnalysisModules.find((module) => module.analysisId === selectedAnalysis) as AnalysisModule;
     if (!mod) return;
     setBaseConfig(mod);
     const activeLayer = activeFeatures[activeFeatureIndex[0]];
@@ -133,9 +133,9 @@ const BaseAnalysis = (): JSX.Element => {
         sqlString: mod.sqlString,
         startDate: analysisDateRange[0],
         endDate: analysisDateRange[1],
-        density: density
+        density: density,
       });
-      fetchGFWWidgetConfig(widgetURL).then(res => {
+      fetchGFWWidgetConfig(widgetURL).then((res) => {
         //Send attributes over for processing
         setVegaSpec(res);
         //grab download urls if they exist
@@ -183,7 +183,7 @@ const BaseAnalysis = (): JSX.Element => {
 
   const AnalysisInstructions = React.useMemo(
     () => (): JSX.Element | null => {
-      const currentAnalysis = defaultAnalysisModules.find(module => module.analysisId === selectedAnalysis);
+      const currentAnalysis = defaultAnalysisModules.find((module) => module.analysisId === selectedAnalysis);
       if (selectedAnalysis === 'default') {
         return (
           <>
@@ -233,7 +233,7 @@ const BaseAnalysis = (): JSX.Element => {
       <select className="analysis-select" value={selectedAnalysis || 'default'} onChange={handleAnalysisOptionChange}>
         <option value="default">{analysisTranslations.defaultAnalysisLabel[selectedLanguage]}</option>
         {defaultAnalysisModules
-          .filter(m => {
+          .filter((m) => {
             if (disabledAnalysisModules?.length) {
               return !disabledAnalysisModules.includes(m.analysisId);
             }
@@ -300,7 +300,7 @@ const BaseAnalysis = (): JSX.Element => {
           style={{
             textAlign: 'center',
             marginTop: 15,
-            marginBottom: -20
+            marginBottom: -20,
           }}
         >
           <span style={{ fontWeight: 600 }}>From: </span>
@@ -316,7 +316,7 @@ const BaseAnalysis = (): JSX.Element => {
           style={{
             textAlign: 'center',
             marginTop: 15,
-            marginBottom: -20
+            marginBottom: -20,
           }}
         >
           <span style={{ fontWeight: 600 }}>From: </span>
@@ -394,7 +394,7 @@ const BaseAnalysis = (): JSX.Element => {
                 display: 'flex',
                 alignContent: 'center',
                 alignItems: 'center',
-                color: 'red'
+                color: 'red',
               }}
             >
               Error loading chart analysis.
@@ -468,7 +468,7 @@ const BaseAnalysis = (): JSX.Element => {
               top: '50%',
               left: '50%',
               marginTop: '-25px',
-              marginLeft: '-25px'
+              marginLeft: '-25px',
             }}
             color={'#cfcdcd'}
             size={50}
