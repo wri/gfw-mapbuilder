@@ -1302,7 +1302,7 @@ export class MapController {
   }
 
   clearAllWidgets(): void {
-    this._selectedWidget?.viewModel.clearMeasurement();
+    this._selectedWidget?.viewModel.clear();
     this._selectedWidget = undefined;
 
     this._mouseClickEventListener?.remove();
@@ -1331,7 +1331,7 @@ export class MapController {
         });
         break;
       case 'coordinates': {
-        this._selectedWidget?.viewModel.clearMeasurement();
+        this._selectedWidget?.viewModel.clear();
         this._selectedWidget = undefined;
         break;
       }
@@ -1340,7 +1340,7 @@ export class MapController {
     }
 
     if (optionType === 'area' || optionType === 'distance') {
-      this._selectedWidget?.viewModel.newMeasurement();
+      this._selectedWidget?.viewModel.start();
       this.getAndDispatchMeasureResults(optionType);
     }
   }
