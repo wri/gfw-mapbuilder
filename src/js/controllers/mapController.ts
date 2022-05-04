@@ -388,8 +388,8 @@ export class MapController {
 
           Promise.all(esriRemoteLayersPromises.map((p: any) => p.catch(() => undefined))).then((values) => {
             const esriRemoteLayers = values.filter((v) => v);
-            const modisLayers = this.initializeAndSetMODISLayers(MapImageLayer);
-            const allLayers = [...modisLayers, ...esriRemoteLayers];
+            // const modisLayers = this.initializeAndSetMODISLayers(MapImageLayer);
+            const allLayers: any = [...esriRemoteLayers];
             const report = new URL(window.location.href).searchParams.get('report');
 
             //If we have report active, we need to know when our feature layer has loaded
