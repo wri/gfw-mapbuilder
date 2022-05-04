@@ -40,7 +40,7 @@
     "esri-loader": "^3.0.0",
     "immer": "^9.0.12",
     "lodash-es": "^4.17.15",
-    "moment": "^2.29.1",
+    "moment": "^2.29.2",
     "png-ts": "0.0.3",
     "rc-slider": "^9.7.1",
     "react": "^17.0.2",
