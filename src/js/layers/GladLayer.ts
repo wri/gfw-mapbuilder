@@ -1,17 +1,16 @@
 //@ts-nocheck
-import moment from 'moment';
 import { loadModules } from 'esri-loader';
+import { getYear, startOfYear, differenceInDays } from 'date-fns';
 
 // Modify the JS Date object
-Date.prototype.getJulian = function() {
-  // Convert date into moment Object
-  const date = moment(this);
-  // Get the year
-  const year = date.year();
-  // Create a moment object of the beginning of the year
-  const startOfYear = moment(`${year}/01/01`, 'YYYY/MM/DD');
+Date.prototype.getJulian = function () {
+  const year = getYear(this);
+  // Create an object of the beginning of the year
+  const startOfYearValue = startOfYear(new Date(year, 0, 1));
   // Find number of days passed
-  const daysPassed = date.diff(startOfYear, 'days');
+
+  const daysPassed = differenceInDays(this, startOfYearValue);
+
   // Append leading zeros if needed
   let daysPassedFormatted = daysPassed.toString();
   if (daysPassedFormatted.length < 3) {
@@ -19,8 +18,11 @@ Date.prototype.getJulian = function() {
       daysPassedFormatted = `0${daysPassedFormatted}`;
     }
   }
+
+  const getLastDecimals = year.toString().slice(-2);
+
   // Return the correct Julian
-  return `${date.format('YY')}${daysPassedFormatted}`;
+  return `${getLastDecimals}${daysPassedFormatted}`;
 };
 
 export const createGlad = async () => {
@@ -29,17 +31,14 @@ export const createGlad = async () => {
     properties: {
       julianFrom: '15000',
       julianTo: new Date().getJulian(),
-      confirmed: false
+      confirmed: false,
     },
 
-    getTileUrl: function(level, row, column) {
-      return this.urlTemplate
-        .replace('{z}', level)
-        .replace('{x}', column)
-        .replace('{y}', row);
+    getTileUrl: function (level, row, column) {
+      return this.urlTemplate.replace('{z}', level).replace('{x}', column).replace('{y}', row);
     },
 
-    fetchTile: function(level, row, column) {
+    fetchTile: function (level, row, column) {
       // call getTileUrl() method to construct the URL to tiles
       // for a given level, row and col provided by the LayerView
       const url = this.getTileUrl(level, row, column);
@@ -48,11 +47,11 @@ export const createGlad = async () => {
       // cross-domain access to create WebGL textures for 3D.
       return esriRequest(url, {
         responseType: 'image',
-        allowImageDataAccess: true
+        allowImageDataAccess: true,
       }).then(
-        function(response) {
+        function (response) {
           // We use a promise because we can't return an empty canvas before the image data has loaded, been filtered, and properly colored
-          return new Promise(resolve => {
+          return new Promise((resolve) => {
             // when esri request resolves successfully
             // get the image from the response
             const image = response.data;
@@ -83,7 +82,7 @@ export const createGlad = async () => {
       );
     },
 
-    filter: function(data) {
+    filter: function (data) {
       for (let i = 0; i < data.length; i += 4) {
         // Decode the rgba/pixel so I can filter on confidence and date ranges
         const slice = [data[i], data[i + 1], data[i + 2]];
@@ -130,7 +129,7 @@ export const createGlad = async () => {
       return data;
     },
 
-    decodeDate: function(pixel) {
+    decodeDate: function (pixel) {
       // find the total days of the pixel by
       // multiplying the red band by 255 and adding
       // the green band to that
@@ -168,12 +167,12 @@ export const createGlad = async () => {
       return {
         confidence: confidence,
         intensity: intensity,
-        date: date
+        date: date,
       };
     },
-    pad: function(num) {
+    pad: function (num) {
       const str = '00' + num;
       return str.slice(str.length - 3);
-    }
+    },
   });
 };
