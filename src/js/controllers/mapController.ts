@@ -383,7 +383,6 @@ export class MapController {
 
           store.dispatch(allAvailableLayers(allLayerObjects));
           const esriRemoteLayersPromises: any = remoteLayerObjects.map((layerObject) => {
-            console.log('layerObject', layerObject);
             return LayerFactory(this._mapview, layerObject);
           });
 

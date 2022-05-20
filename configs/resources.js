@@ -51,6 +51,8 @@ export default {
   treeCoverLoss: true,
   treeMosaicLandscapes: true,
   forestCarbonGrossRemovals: true,
+  forestCarbonGrossEmissions: true,
+  forestCarbonNetFlux: true,
   drySpells: true,
   airQuality: true,
   windSpeed: true,
@@ -100,6 +102,7 @@ export default {
           type: 'remoteDataLayer',
           uuid: '6d989ac9-ab57-4f95-8475-2e747a3adc10',
         },
+
         {
           groupId: 'GROUP_CLIMATE',
           id: 'DRY_SPELLS',
@@ -159,6 +162,24 @@ export default {
             pt: '(1 km, global, DTU/World Bank Group/ESMAP)',
             zh: '(1 km, global, DTU/World Bank Group/ESMAP)',
           },
+        },
+        {
+          id: 'FOREST_CARBON_GROSS_REMOVALS',
+          order: 6,
+          type: 'remoteDataLayer',
+          uuid: '79010c83-e62e-4744-96ed-130736daa651', // layer id
+        },
+        {
+          id: 'FOREST_CARBON_GROSS_EMISSIONS',
+          order: 7,
+          type: 'remoteDataLayer',
+          uuid: '0b45cb69-6432-449f-af38-25cdcda85d55',
+        },
+        {
+          id: 'FOREST_CARBON_NET_FLUX',
+          order: 8,
+          type: 'remoteDataLayer',
+          uuid: 'bd768c4b-f5f8-47f9-b6a0-5bb6078f0fac',
         },
       ],
     },
@@ -357,26 +378,6 @@ export default {
           type: 'remoteDataLayer',
           uuid: '9e0c1e1e-a0a3-457f-a373-4104820f7a50',
         },
-        //
-        {
-          id: 'FOREST_CARBON_GROSS_REMOVALS',
-          order: 9,
-          type: 'remoteDataLayer',
-          uuid: '79010c83-e62e-4744-96ed-130736daa651', // layer id
-        },
-        {
-          id: 'FOREST_CARBON_GROSS_EMISSIONS',
-          order: 10,
-          type: 'remoteDataLayer',
-          uuid: '0b45cb69-6432-449f-af38-25cdcda85d55',
-        },
-        {
-          id: 'FOREST_CARBON_NET_FLUX',
-          order: 11,
-          type: 'remoteDataLayer',
-          uuid: 'bd768c4b-f5f8-47f9-b6a0-5bb6078f0fac',
-        },
-        //
       ],
     },
     GROUP_IMAGERY: {
