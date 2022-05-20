@@ -21,6 +21,9 @@ import { RootState } from '../../store';
 
 import '../../../css/modalCard.scss';
 import TreeMosaicContent from '../mapWidgets/widgetContent/TreeMosaicContent';
+import ForestGrossRemovalContent from '../mapWidgets/widgetContent/ForestGrossRemovalContent';
+import ForestGrossCarbonEmissionContent from '../mapWidgets/widgetContent/ForestCarbonGrossEmissionContent';
+import ForestCarbonNetFluxContent from '../mapWidgets/widgetContent/ForesCarbonNetFlux';
 
 const ModalCard: FunctionComponent<{}> = () => {
   const modalType = useSelector((state: RootState) => state.appState.renderModal);
@@ -33,11 +36,11 @@ const ModalCard: FunctionComponent<{}> = () => {
   };
 
   useEffect(() => {
-    window.addEventListener('keydown', e => {
+    window.addEventListener('keydown', (e) => {
       handleEscapeKey(e.key);
     });
     return () => {
-      window.removeEventListener('keydown', _ => handleEscapeKey('Escape'));
+      window.removeEventListener('keydown', (_) => handleEscapeKey('Escape'));
     };
   }, []);
 
@@ -63,6 +66,12 @@ const ModalCard: FunctionComponent<{}> = () => {
         return <CanopyDensityContent />;
       case 'treeMosaic':
         return <TreeMosaicContent />;
+      case 'forestCarbonRemoval':
+        return <ForestGrossRemovalContent />;
+      case 'forestCarbonGrossEmissions':
+        return <ForestGrossCarbonEmissionContent />;
+      case 'forestCarbonNetFlux':
+        return <ForestCarbonNetFluxContent />;
       case 'InfoContent':
         return <InfoContent />;
       case 'EditProfile':

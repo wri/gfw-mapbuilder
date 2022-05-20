@@ -12,6 +12,12 @@ import { createTreeMosaicCover } from '../layers/TreeMosaicLayer';
 import { createGFWIntegratedLayer } from '../layers/GFWIntegratedLayer';
 import store from '../../js/store/index';
 import { LayerProps } from '../store/mapview/types';
+import { forestCarbonRemovalValue } from '../components/mapWidgets/widgetContent/ForestGrossRemovalContent';
+import { createForestCarbonRemovals } from '../layers/ForestCarbonGrossRemovals';
+import { forestCarbonGrossEmisionValue } from '../components/mapWidgets/widgetContent/ForestCarbonGrossEmissionContent';
+import { createForestCarbonGrossEmission } from '../layers/ForestCarbonGrossEmission';
+import { forestCarbonNetFluxValue } from '../components/mapWidgets/widgetContent/ForesCarbonNetFlux';
+import { createForestCarbonNetFlux } from '../layers/ForestCarbonNetFlux';
 
 interface LayerOptions {
   id: string;
@@ -24,24 +30,18 @@ interface LayerOptions {
 }
 
 export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promise<any> {
-  const [
-    ImageryLayer,
-    FeatureLayer,
-    MapImageLayer,
-    WebTileLayer,
-    VectorTileLayer,
-    MosaicRule,
-    RasterFunction
-  ] = await loadModules([
-    'esri/layers/ImageryLayer',
-    'esri/layers/FeatureLayer',
-    'esri/layers/MapImageLayer',
-    'esri/layers/WebTileLayer',
-    'esri/layers/VectorTileLayer',
-    'esri/layers/support/MosaicRule',
-    'esri/layers/support/RasterFunction'
-  ]);
+  const [ImageryLayer, FeatureLayer, MapImageLayer, WebTileLayer, VectorTileLayer, MosaicRule, RasterFunction] =
+    await loadModules([
+      'esri/layers/ImageryLayer',
+      'esri/layers/FeatureLayer',
+      'esri/layers/MapImageLayer',
+      'esri/layers/WebTileLayer',
+      'esri/layers/VectorTileLayer',
+      'esri/layers/support/MosaicRule',
+      'esri/layers/support/RasterFunction',
+    ]);
   const { appState, mapviewState } = store.getState();
+
   let esriLayer;
   switch (layerConfig.type) {
     //check for subs and enabled those that were spercified
@@ -54,10 +54,10 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
         id: layerConfig.id,
         title: layerConfig.title,
         visible: layerConfig.visible,
-        url: layerConfig.url
+        url: layerConfig.url,
       };
       if (layerConfig.layerIds) {
-        layerOptions.sublayers = layerConfig.layerIds.map(id => {
+        layerOptions.sublayers = layerConfig.layerIds.map((id) => {
           return { id: id, visible: true };
         });
       }
@@ -68,7 +68,7 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
         id: layerConfig.id,
         visible: layerConfig.visible,
         url: layerConfig.url,
-        opacity: layerConfig.opacity
+        opacity: layerConfig.opacity,
       });
       if (layerConfig.metadata.colormap) {
         const remapRF = new RasterFunction();
@@ -77,14 +77,14 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
           InputRanges: [markValueMap[appState.leftPanel.density], layerConfig.metadata.inputRange[1]],
           OutputValues: layerConfig.metadata.outputRange,
           AllowUnmatched: false,
-          Raster: '$$'
+          Raster: '$$',
         };
         remapRF.outputPixelType = 'u8';
         const colorRF = new RasterFunction();
         colorRF.functionName = 'Colormap';
         colorRF.functionArguments = {
           Colormap: layerConfig.metadata.colormap,
-          Raster: remapRF
+          Raster: remapRF,
         };
         esriLayer.renderingRule = colorRF;
       }
@@ -92,7 +92,7 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
         esriLayer.opacity = layerConfig.opacity.combined;
         //biomass layer expects object id that maps to canopy density values
         esriLayer.mosaicRule = new MosaicRule({
-          where: `OBJECTID = ${appState.leftPanel.density}`
+          where: `OBJECTID = ${appState.leftPanel.density}`,
         });
       }
       break;
@@ -104,7 +104,7 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
         id: layerConfig.id,
         title: layerConfig.title,
         visible: layerConfig.visible,
-        url: layerConfig.url
+        url: layerConfig.url,
       });
       break;
     case 'loss':
@@ -117,7 +117,7 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
         title: layerConfig.title,
         visible: layerConfig.visible,
         urlTemplate: layerConfig.url,
-        view: mapView
+        view: mapView,
       });
       esriLayer = tclLayer;
       esriLayer.minYear = yearRange[0];
@@ -133,9 +133,52 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
         title: layerConfig.title,
         visible: layerConfig.visible,
         urlTemplate: layerConfig.url,
-        view: mapView
+        view: mapView,
       });
       esriLayer = treeMosaicLayer;
+      break;
+    case 'forest-carbon-gross-removals':
+      const forestCarbonRemoval = forestCarbonRemovalValue[appState.leftPanel.density] || forestCarbonRemovalValue[4];
+
+      layerConfig.url = layerConfig.url.replace(/(tcd_)(?:[^/]+)/, `tcd_${forestCarbonRemoval}`);
+      const forestConstructor = await createForestCarbonRemovals();
+      const forestRemovalLayer = new forestConstructor({
+        id: layerConfig.id,
+        title: layerConfig.title,
+        visible: layerConfig.visible,
+        urlTemplate: layerConfig.url,
+        view: mapView,
+      });
+      esriLayer = forestRemovalLayer;
+      break;
+    case 'forest-carbon-gross-emissions':
+      const forestCarbonEmission =
+        forestCarbonGrossEmisionValue[appState.leftPanel.density] || forestCarbonGrossEmisionValue[4];
+
+      layerConfig.url = layerConfig.url.replace(/(tcd_)(?:[^/]+)/, `tcd_${forestCarbonEmission}`);
+      const emissionConstructor = await createForestCarbonGrossEmission();
+      const forestEmissionLayer = new emissionConstructor({
+        id: layerConfig.id,
+        title: layerConfig.title,
+        visible: layerConfig.visible,
+        urlTemplate: layerConfig.url,
+        view: mapView,
+      });
+      esriLayer = forestEmissionLayer;
+      break;
+    case 'forest-carbon-net-flux':
+      const forestCarbonnetFlux = forestCarbonNetFluxValue[appState.leftPanel.density] || forestCarbonNetFluxValue[4];
+
+      layerConfig.url = layerConfig.url.replace(/(tcd_)(?:[^/]+)/, `tcd_${forestCarbonnetFlux}`);
+      const netFluxConstructor = await createForestCarbonNetFlux();
+      const forestNetFluxLayer = new netFluxConstructor({
+        id: layerConfig.id,
+        title: layerConfig.title,
+        visible: layerConfig.visible,
+        urlTemplate: layerConfig.url,
+        view: mapView,
+      });
+      esriLayer = forestNetFluxLayer;
       break;
     case 'gain':
       const gainConstructor = await createGain();
@@ -144,7 +187,7 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
         title: layerConfig.title,
         visible: layerConfig.visible,
         urlTemplate: layerConfig.url,
-        view: mapView
+        view: mapView,
       });
       esriLayer = gainLayer;
       break;
@@ -158,7 +201,7 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
         visible: layerConfig.visible,
         urlTemplate: layerConfig.url,
         view: mapView,
-        config: layerConfig
+        config: layerConfig,
       });
       esriLayer = treeCoverL;
       break;
@@ -170,7 +213,7 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
         title: layerConfig.title,
         visible: layerConfig.visible,
         urlTemplate: url,
-        view: mapView
+        view: mapView,
       });
       esriLayer = heightLayer;
       esriLayer.height = appState.leftPanel.treeHeight;
@@ -182,7 +225,7 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
         title: layerConfig.title,
         visible: layerConfig.visible,
         urlTemplate: layerConfig.url,
-        opacity: layerConfig.opacity.combined
+        opacity: layerConfig.opacity.combined,
       });
       if (
         layerConfig.id === 'LAND_COVER' ||
@@ -199,7 +242,7 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
         title: layerConfig.title,
         visible: layerConfig.visible,
         urlTemplate: layerConfig.url,
-        view: mapView
+        view: mapView,
       });
       esriLayer = imagery;
       break;
@@ -210,7 +253,7 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
         title: layerConfig.title,
         visible: layerConfig.visible,
         urlTemplate: layerConfig.url,
-        view: mapView
+        view: mapView,
       });
       esriLayer = gladLayer;
       esriLayer.confirmed = appState.leftPanel.gladConfirmed;
@@ -228,7 +271,7 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
         title: layerConfig.title,
         visible: layerConfig.visible,
         urlTemplate: layerConfig.url,
-        view: mapView
+        view: mapView,
       });
       esriLayer = integratedAlertLayer;
       esriLayer.highConfidenceConfirmed = appState.leftPanel.highConfidenceConfirmed;
@@ -250,10 +293,10 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
         visible: true,
         url: layerConfig.url,
         //@ts-ignore
-        opacity: layerConfig.opacity
+        opacity: layerConfig.opacity,
       };
       if (layerConfig.layerIds) {
-        maskLayerOptions.sublayers = layerConfig.layerIds.map(id => {
+        maskLayerOptions.sublayers = layerConfig.layerIds.map((id) => {
           return { id: id, visible: true, definitionExpression: maskDefExp };
         });
       }
@@ -267,7 +310,7 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
           id: layerConfig.id,
           url: layerConfig.url,
           visible: layerConfig.visible,
-          opacity: layerConfig.opacity
+          opacity: layerConfig.opacity,
         });
       }
       if (layerConfig.id === 'IFL') {

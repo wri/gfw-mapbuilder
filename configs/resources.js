@@ -50,6 +50,7 @@ export default {
   treeCoverGain: true,
   treeCoverLoss: true,
   treeMosaicLandscapes: true,
+  forestCarbonGrossRemovals: true,
   drySpells: true,
   airQuality: true,
   windSpeed: true,
@@ -356,6 +357,26 @@ export default {
           type: 'remoteDataLayer',
           uuid: '9e0c1e1e-a0a3-457f-a373-4104820f7a50',
         },
+        //
+        {
+          id: 'FOREST_CARBON_GROSS_REMOVALS',
+          order: 9,
+          type: 'remoteDataLayer',
+          uuid: '79010c83-e62e-4744-96ed-130736daa651', // layer id
+        },
+        {
+          id: 'FOREST_CARBON_GROSS_EMISSIONS',
+          order: 10,
+          type: 'remoteDataLayer',
+          uuid: '0b45cb69-6432-449f-af38-25cdcda85d55',
+        },
+        {
+          id: 'FOREST_CARBON_NET_FLUX',
+          order: 11,
+          type: 'remoteDataLayer',
+          uuid: 'bd768c4b-f5f8-47f9-b6a0-5bb6078f0fac',
+        },
+        //
       ],
     },
     GROUP_IMAGERY: {
