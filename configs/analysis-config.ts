@@ -82,12 +82,10 @@ export const defaultAnalysisModules: AnalysisModule[] = [
       zh: '',
       ka: ''
     },
-    useGfwWidget: true,
     widgetId: '4b1676f4-1c07-4c87-80f1-0f348bddc42b',
     analysisParams: [
       /*{
-        multi: true,
-        type: 'date-picker',
+        type: 'date-picker', //'range-slider' | 'tcd' | 'date-picker'
         label: {
           en: 'Select range for analysis',
           fr: 'Sélectionner une plage pour l’analyse',

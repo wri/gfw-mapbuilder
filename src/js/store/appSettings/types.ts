@@ -74,7 +74,7 @@ export interface AnalysisModule {
   description: {
     [key: string]: string;
   };
-  useGfwWidget: boolean;
+  useGfwWidget?: boolean;
   widgetId: string;
   analysisParams: AnalysisParam[] | [];
   analysisUrl?: string;

@@ -182,8 +182,8 @@ export const densityEnabledLayers = [
   'TREE_COVER_LOSS',
   'AG_BIOMASS',
   'TREE_COVER',
-  'TREES_MOSAIC_LANDSCAPES'
-  // 'TEST_LAYER',
+  'TREES_MOSAIC_LANDSCAPES',
+  'TEST_LAYER'
 ];
 
 export const landsatBaselayerURL =

@@ -530,8 +530,8 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
             type={'gfw-integrated-alert'}
           />
         );
-      case 'TEST_LAYER':
-        return <DateRangeModis layer={layer} id={id} />;
+      // case 'TEST_LAYER':
+      //   return <DateRangeModis layer={layer} id={id} />;
       default:
         break;
     }

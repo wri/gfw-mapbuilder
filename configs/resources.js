@@ -84,7 +84,7 @@ export default {
         {
           id: 'TEST_LAYER',
           order: 1,
-          type: 'remoteDataLayer',
+          type: 'remoteDataLayer', //tiled, webtiled, image, dynamic, feature, wms, remoteDataLayer -- https://github.com/wri/gfw-mapbuilder/wiki/Layers
           uuid: 'ea4b7032-280e-4c3b-8717-21bf6c340c62'
         }
       ]
