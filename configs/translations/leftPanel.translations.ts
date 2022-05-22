@@ -475,7 +475,7 @@ export const treesMosaicConfig = {
 
 export const forestCarbonGrossRemovalConfig = {
   en: {
-    displayLabel: ['Displaying Forest carbon gross removals', 'tree cover.'],
+    displayLabel: ['Displaying Forest carbon gross removals', 'canopy density.'],
   },
   az: {
     displayLabel: ['Göstərir', 'örtük sıxlığı.'],
@@ -499,7 +499,7 @@ export const forestCarbonGrossRemovalConfig = {
     displayLabel: ['Exibindo', 'densidade de dossel'],
   },
   id: {
-    displayLabel: ['Displaying Forest carbon gross removals', 'tree cover.'],
+    displayLabel: ['Displaying Forest carbon gross removals', 'canopy density.'],
   },
   zh: {
     displayLabel: ['显示中', '林冠覆盖密度'],
@@ -508,7 +508,7 @@ export const forestCarbonGrossRemovalConfig = {
 
 export const forestCarbonNetFluxConfig = {
   en: {
-    displayLabel: ['Displaying Forest carbon net flux', 'tree cover.'],
+    displayLabel: ['Displaying Forest carbon net flux', 'canopy density.'],
   },
   az: {
     displayLabel: ['Göstərir', 'örtük sıxlığı.'],
@@ -532,7 +532,7 @@ export const forestCarbonNetFluxConfig = {
     displayLabel: ['Exibindo', 'densidade de dossel'],
   },
   id: {
-    displayLabel: ['Displaying Forest carbon net flux', 'tree cover.'],
+    displayLabel: ['Displaying Forest carbon net flux', 'canopy density.'],
   },
   zh: {
     displayLabel: ['显示中', '林冠覆盖密度'],
@@ -541,7 +541,7 @@ export const forestCarbonNetFluxConfig = {
 
 export const forestCarbonGrossEmissionConfig = {
   en: {
-    displayLabel: ['Displaying Forest carbon gross emission', 'tree cover.'],
+    displayLabel: ['Displaying Forest carbon gross emission', 'canopy density.'],
   },
   az: {
     displayLabel: ['Göstərir', 'örtük sıxlığı.'],
@@ -565,7 +565,7 @@ export const forestCarbonGrossEmissionConfig = {
     displayLabel: ['Exibindo', 'densidade de dossel'],
   },
   id: {
-    displayLabel: ['Displaying Forest carbon gross emissions', 'tree cover.'],
+    displayLabel: ['Displaying Forest carbon gross emissions', 'canopy density.'],
   },
   zh: {
     displayLabel: ['显示中', '林冠覆盖密度'],
