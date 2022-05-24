@@ -20,8 +20,6 @@ export const PrintReportButton = (): JSX.Element => {
   const selectedLanguage = useSelector((store: RootState) => store.appState.selectedLanguage);
   const customColorTheme = useSelector((store: RootState) => store.appSettings.customColorTheme);
 
-  const analysisDateRange = useSelector((store: RootState) => store.appState.leftPanel.analysisDateRange);
-
   async function printReportHandler(): Promise<void> {
     const appID = new URL(window.location.href).searchParams.get('appid');
     const baseURL = new URL(window.location.href);
@@ -34,12 +32,7 @@ export const PrintReportButton = (): JSX.Element => {
   }
 
   return (
-    <button
-      className="print-button"
-      disabled={analysisDateRange[0] === analysisDateRange[1]}
-      onClick={printReportHandler}
-      style={{ border: `1px solid ${customColorTheme}` }}
-    >
+    <button className="print-button" onClick={printReportHandler} style={{ border: `1px solid ${customColorTheme}` }}>
       {printReportTranslations[selectedLanguage]}{' '}
       <img src="https://my.gfw-mapbuilder.org/img/print-icon.svg" alt="print" />
     </button>
