@@ -32,13 +32,13 @@ const CanopyDensityPicker = (props: CanopyDensityProps): JSX.Element => {
     densityValueMap = treeMosaicDensityValue[density];
   } else if (props.type === 'FOREST_CARBON_GROSS_REMOVALS') {
     config = forestCarbonGrossRemovalConfig[selectedLanguage];
-    densityValueMap = forestCarbonRemovalValue[density] || forestCarbonRemovalValue[4];
+    densityValueMap = forestCarbonRemovalValue[density] || forestCarbonRemovalValue[2];
   } else if (props.type === 'FOREST_CARBON_GROSS_EMISSIONS') {
     config = forestCarbonGrossEmissionConfig[selectedLanguage];
-    densityValueMap = forestCarbonGrossEmisionValue[density] || forestCarbonRemovalValue[4];
+    densityValueMap = forestCarbonGrossEmisionValue[density] || forestCarbonRemovalValue[2];
   } else if (props.type === 'FOREST_CARBON_NET_FLUX') {
     config = forestCarbonNetFluxConfig[selectedLanguage];
-    densityValueMap = forestCarbonNetFluxValue[density] || forestCarbonRemovalValue[4];
+    densityValueMap = forestCarbonNetFluxValue[density] || forestCarbonRemovalValue[2];
   }
   const { displayLabel } = config;
 

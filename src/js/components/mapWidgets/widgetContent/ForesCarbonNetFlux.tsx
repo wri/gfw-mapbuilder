@@ -38,6 +38,8 @@ const ForestCarbonNetFluxContent = (): JSX.Element => {
     mapController.updateBiodensityValue(value);
   }
 
+  const findDensity = forestCarbonNetFluxValue[density];
+
   return (
     <div className="canopy-density-container">
       <div>{directions}</div>
@@ -50,7 +52,7 @@ const ForestCarbonNetFluxContent = (): JSX.Element => {
         max={8}
         step={null}
         marks={marks}
-        defaultValue={density ?? forestCarbonNetFluxValue[4]}
+        defaultValue={findDensity ? findDensity : 2}
         tipFormatter={(val: number): string => forestCarbonNetFluxValue[val] + '%'}
         railStyle={{ height: 10, backgroundColor: customColorTheme }}
         trackStyle={{ backgroundColor: '#e9e9e9', height: 10 }}

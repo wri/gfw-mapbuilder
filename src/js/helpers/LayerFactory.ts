@@ -138,7 +138,7 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
       esriLayer = treeMosaicLayer;
       break;
     case 'forest-carbon-gross-removals':
-      const forestCarbonRemoval = forestCarbonRemovalValue[appState.leftPanel.density] || forestCarbonRemovalValue[4];
+      const forestCarbonRemoval = forestCarbonRemovalValue[appState.leftPanel.density] || forestCarbonRemovalValue[2];
 
       layerConfig.url = layerConfig.url.replace(/(tcd_)(?:[^/]+)/, `tcd_${forestCarbonRemoval}`);
       const forestConstructor = await createForestCarbonRemovals();
@@ -153,7 +153,7 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
       break;
     case 'forest-carbon-gross-emissions':
       const forestCarbonEmission =
-        forestCarbonGrossEmisionValue[appState.leftPanel.density] || forestCarbonGrossEmisionValue[4];
+        forestCarbonGrossEmisionValue[appState.leftPanel.density] || forestCarbonGrossEmisionValue[2];
 
       layerConfig.url = layerConfig.url.replace(/(tcd_)(?:[^/]+)/, `tcd_${forestCarbonEmission}`);
       const emissionConstructor = await createForestCarbonGrossEmission();
@@ -167,7 +167,7 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
       esriLayer = forestEmissionLayer;
       break;
     case 'forest-carbon-net-flux':
-      const forestCarbonnetFlux = forestCarbonNetFluxValue[appState.leftPanel.density] || forestCarbonNetFluxValue[4];
+      const forestCarbonnetFlux = forestCarbonNetFluxValue[appState.leftPanel.density] || forestCarbonNetFluxValue[2];
 
       layerConfig.url = layerConfig.url.replace(/(tcd_)(?:[^/]+)/, `tcd_${forestCarbonnetFlux}`);
       const netFluxConstructor = await createForestCarbonNetFlux();
