@@ -333,8 +333,6 @@ const InfoContent: FunctionComponent<{}> = (): any => {
           </div>
           {citation && (
             <div className="citation-container">
-              {/* <h4>{cautionsLabel}</h4>
-               */}
               <h4>{newLabel}</h4>
 
               <div dangerouslySetInnerHTML={{ __html: citation }} />

@@ -96,12 +96,6 @@ export default {
           type: 'remoteDataLayer',
           uuid: 'e7208398-0acd-4f73-a824-c4fe1e356e0c',
         },
-        // {
-        //   id: 'CARBON_EMISSIONS',
-        //   order: 2,
-        //   type: 'remoteDataLayer',
-        //   uuid: '6d989ac9-ab57-4f95-8475-2e747a3adc10',
-        // },
         {
           groupId: 'GROUP_CLIMATE',
           id: 'DRY_SPELLS',
