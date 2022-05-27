@@ -112,7 +112,7 @@ export function generateWidgetURL({
   baseURL = baseURL.concat(`&geostore_id=${geostoreId}&geostore_origin=rw`);
 
   //3. Add SQL Query if it is defined in the configuration
-  if (analysisId === 'VIIRS_FIRES' || analysisId === 'GLAD_ALERTS') {
+  if (analysisId === 'VIIRS_FIRES' || analysisId === 'GLAD_ALERTS' || analysisId === 'GFW_INTEGRATED_ALERTS') {
     let sqlQuery = sqlString;
     sqlQuery = sqlQuery.replace('{startDate}', `'${startDate}'`);
     sqlQuery = sqlQuery.replace('{endDate}', `'${endDate}'`);
