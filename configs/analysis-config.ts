@@ -313,7 +313,7 @@ export const defaultAnalysisModules: AnalysisModule[] = [
     analysisId: 'GFW_INTEGRATED_ALERTS',
     chartType: 'badge',
     label: {
-      en: 'Number of Integrated Alerts',
+      en: 'Total Integrated Alerts',
       fr: '',
       es: '',
       pt: '',
@@ -322,7 +322,7 @@ export const defaultAnalysisModules: AnalysisModule[] = [
       ka: '',
     },
     title: {
-      en: 'Number of Integrated Alerts',
+      en: 'Total Integrated Alerts',
       fr: '',
       es: '',
       pt: '',
@@ -331,7 +331,7 @@ export const defaultAnalysisModules: AnalysisModule[] = [
       ka: '',
     },
     description: {
-      en: 'This widget is used in mapbuilder to count the number of integrated alerts that occurred within a specified time range, within a specified area of interest The widgets requries that a geostore ID be appended to the Analysis url.',
+      en: 'Count the number of integrated alerts (GLAD-L/GLAD-S2/RADD) which occurred within the selected time range.',
       fr: '',
       es: '',
       pt: '',
