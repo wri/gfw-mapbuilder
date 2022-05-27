@@ -12,7 +12,7 @@ import { mapController } from '../../../../js/controllers/mapController';
 import styled from 'styled-components';
 
 const getListStyle = (isDraggingOver: boolean) => ({
-  background: isDraggingOver ? 'white' : ''
+  background: isDraggingOver ? 'white' : '',
 });
 
 //Override speudo element styling with our custom style
@@ -21,7 +21,7 @@ interface CheckBoxWrapperProps {
 }
 const CheckboxWrapper = styled.div<CheckBoxWrapperProps>`
   .styled-checkbox:checked + .styled-checkboxlabel:before {
-    background-color: ${props => props.customColorTheme};
+    background-color: ${(props) => props.customColorTheme};
   }
 `;
 
@@ -92,41 +92,39 @@ const NestedLayerGroup = (props: NestedLayerGroupProps): JSX.Element => {
     );
   };
 
-  const layerGroups = props.groupConfig.layers.map(
-    (lGroup: any, k: number): JSX.Element => {
-      const nestedLayerIDs = lGroup.nestedLayers.map((l: any) => l.id);
-      const layers = props.layersInGroup
-        .filter((layer: any) => nestedLayerIDs.includes(layer.id))
-        .map((layer: any, index: number) => {
-          return (
-            <Draggable key={index} index={index} draggableId={index.toString()}>
-              {(providedDraggable, snapshotDraggable) => {
-                return (
-                  <GenericLayerControl
-                    layer={layer}
-                    id={layer.id}
-                    key={layer.id}
-                    type={'default'}
-                    dndProvided={providedDraggable}
-                    dndSnapshot={snapshotDraggable}
-                  />
-                );
-              }}
-            </Draggable>
-          );
-        });
-      return (
-        <LayerGroup
-          key={k}
-          selectedLanguage={props.selectedLanguage}
-          lGroup={lGroup}
-          layers={layers}
-          activeGroups={activeGroups}
-          changeActiveGroups={handleGroupToggle}
-        />
-      );
-    }
-  );
+  const layerGroups = props.groupConfig.layers.map((lGroup: any, k: number): JSX.Element => {
+    const nestedLayerIDs = lGroup.nestedLayers.map((l: any) => l.id);
+    const layers = props.layersInGroup
+      .filter((layer: any) => nestedLayerIDs.includes(layer.id))
+      .map((layer: any, index: number) => {
+        return (
+          <Draggable key={index} index={index} draggableId={index.toString()}>
+            {(providedDraggable, snapshotDraggable) => {
+              return (
+                <GenericLayerControl
+                  layer={layer}
+                  id={layer.id}
+                  key={layer.id}
+                  type={'default'}
+                  dndProvided={providedDraggable}
+                  dndSnapshot={snapshotDraggable}
+                />
+              );
+            }}
+          </Draggable>
+        );
+      });
+    return (
+      <LayerGroup
+        key={k}
+        selectedLanguage={props.selectedLanguage}
+        lGroup={lGroup}
+        layers={layers}
+        activeGroups={activeGroups}
+        changeActiveGroups={handleGroupToggle}
+      />
+    );
+  });
 
   return <>{layerGroups}</>;
 };
@@ -142,7 +140,7 @@ const RadioLayerGroup = (props: RadioLayerGroupProps): JSX.Element => {
 
   //On Component load, ensure that all layers have been turned off
   useEffect(() => {
-    props.layersInGroup.forEach(layerObject => {
+    props.layersInGroup.forEach((layerObject) => {
       const layer = mapController._map?.findLayerById(layerObject.id);
       if (layer) {
         layer.visible = false;
@@ -152,7 +150,7 @@ const RadioLayerGroup = (props: RadioLayerGroupProps): JSX.Element => {
 
   function sendActiveLayer(val: string): void {
     setActiveLayer(val);
-    props.layersInGroup.forEach(layerObject => {
+    props.layersInGroup.forEach((layerObject) => {
       if (layerObject.id === val) {
         mapController.changeLayerVisibility(layerObject.id, true);
       } else {
@@ -196,9 +194,9 @@ const DefaultLayerGroup = ({ layerGroupKey, layerGroupConfig }: LayerGroupProps)
   const openLayerGroup = useSelector((store: RootState) => store.appState.leftPanel.openLayerGroup);
   const allAvailableLayers = useSelector((store: RootState) => store.mapviewState.allAvailableLayers);
   const scale = useSelector((store: RootState) => store.mapviewState.scale);
-  const allLayersInScale = allAvailableLayers.filter(l => layerIsInScale(l, scale));
+  const allLayersInScale = allAvailableLayers.filter((l) => layerIsInScale(l, scale));
 
-  const layersInGroup = allLayersInScale.filter(layer => layer.group === layerGroupKey);
+  const layersInGroup = allLayersInScale.filter((layer) => layer.group === layerGroupKey);
 
   const dispatch = useDispatch();
 
@@ -306,7 +304,7 @@ const DefaultLayerGroup = ({ layerGroupKey, layerGroupConfig }: LayerGroupProps)
     const oldLayerGroup = Array.from(layersInGroup);
     const [movedLayer] = oldLayerGroup.splice(result.source.index, 1);
     oldLayerGroup.splice(result.destination.index, 0, movedLayer);
-    const newOrderedArrayGroup = allAvailableLayers.filter(l => l.group !== layerGroupKey);
+    const newOrderedArrayGroup = allAvailableLayers.filter((l) => l.group !== layerGroupKey);
     const newOrderedArray = [...newOrderedArrayGroup, ...oldLayerGroup];
     dispatch(allAvailableLayersAction(newOrderedArray));
     mapController.reorderLayer(movedLayer.id, result.destination.index);
