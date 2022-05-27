@@ -23,7 +23,7 @@ export interface AppSettings {
   hideFooter?: boolean;
   enabledRWLayers?: string[];
   disabledAnalysisModules?:
-    | ['VIIRS_FIRES', 'GLAD_ALERTS', 'TC_LOSS', 'IFL', 'LCC', 'TC_LOSS_TOTAL', 'TC_GAIN_TOTAL']
+    | ['VIIRS_FIRES', 'GLAD_ALERTS', 'TC_LOSS', 'IFL', 'LCC', 'TC_LOSS_TOTAL', 'TC_GAIN_TOTAL', 'GFW_INTEGRATED_ALERTS']
     | [];
   hideHeader?: boolean;
   hideLegend?: boolean;
@@ -57,7 +57,15 @@ type LayerGroup = {
 };
 
 export interface AnalysisModule {
-  analysisId: 'VIIRS_FIRES' | 'GLAD_ALERTS' | 'TC_LOSS' | 'IFL' | 'LCC' | 'TC_LOSS_TOTAL' | 'TC_GAIN_TOTAL';
+  analysisId:
+    | 'VIIRS_FIRES'
+    | 'GLAD_ALERTS'
+    | 'TC_LOSS'
+    | 'IFL'
+    | 'LCC'
+    | 'TC_LOSS_TOTAL'
+    | 'TC_GAIN_TOTAL'
+    | 'GFW_INTEGRATED_ALERTS';
   chartType: string;
   label: { [key: string]: string };
   title: {
