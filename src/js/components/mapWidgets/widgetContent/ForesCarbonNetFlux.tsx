@@ -13,36 +13,32 @@ const SliderWithTooltip = createSliderWithTooltip(Slider);
 
 //TODO: This needs to be Language aware
 
-export const treeMosaicDensityValue = {
-  2: 20,
-  3: 40,
-  4: 60,
-  5: 80,
+export const forestCarbonNetFluxValue = {
+  2: 30,
+  3: 50,
+  4: 75,
 };
 const marks = {
-  2: { label: '20%', style: {} },
-  3: { label: '40%', style: {} },
-  4: { label: '60%', style: {} },
-  5: { label: '80%', style: {} },
+  2: { label: '30%', style: {} },
+  3: { label: '50%', style: {} },
+  4: { label: '75%', style: {} },
 };
 
-const TreeMosaicContent = (): JSX.Element => {
+const ForestCarbonNetFluxContent = (): JSX.Element => {
   const dispatch = useDispatch();
   const density = useSelector((store: RootState) => store.appState.leftPanel.density);
   const customColorTheme = useSelector((store: RootState) => store.appSettings.customColorTheme);
-
   const selectedLanguage = useSelector((store: RootState) => store.appState.selectedLanguage);
-
   const { directions } = canopyDensityContentConfig[selectedLanguage];
 
   async function handleSliderChange(value: number): Promise<void> {
     dispatch(setCanopyDensity(value));
     //send % value to modify the layer
-    mapController.updateDensityValue(treeMosaicDensityValue[value]);
+    mapController.updateDensityValue(forestCarbonNetFluxValue[value]);
     mapController.updateBiodensityValue(value);
-    const eventHandler = await mapController.updateTreeCoverValue(treeMosaicDensityValue[value]);
-    eventHandler.remove();
   }
+
+  const findDensity = forestCarbonNetFluxValue[density];
 
   return (
     <div className="canopy-density-container">
@@ -56,8 +52,8 @@ const TreeMosaicContent = (): JSX.Element => {
         max={8}
         step={null}
         marks={marks}
-        defaultValue={density}
-        tipFormatter={(val: number): string => treeMosaicDensityValue[val] + '%'}
+        defaultValue={findDensity ? findDensity : 2}
+        tipFormatter={(val: number): string => forestCarbonNetFluxValue[val] + '%'}
         railStyle={{ height: 10, backgroundColor: customColorTheme }}
         trackStyle={{ backgroundColor: '#e9e9e9', height: 10 }}
         activeDotStyle={{ border: '2px solid #e9e9e9' }}
@@ -78,4 +74,4 @@ const TreeMosaicContent = (): JSX.Element => {
   );
 };
 
-export default TreeMosaicContent;
+export default ForestCarbonNetFluxContent;

@@ -2,214 +2,163 @@ export const printContent = {
   en: {
     buttonLabel: 'Choose a print output',
     dropdownLabel: 'Print',
-    printOptions: ['Landscape', 'MAP_ONLY']
+    printOptions: ['Landscape', 'MAP_ONLY'],
   },
   az: {
     buttonLabel: 'Çap çıxışını seçin',
     dropdownLabel: 'Çap eding',
-    printOptions: ['Landscape', 'MAP_ONLY']
+    printOptions: ['Landscape', 'MAP_ONLY'],
   },
   nl: {
     buttonLabel: 'Kies een afdruk output',
     dropdownLabel: 'Afdrukken ',
-    printOptions: ['Landscape', 'MAP_ONLY']
+    printOptions: ['Landscape', 'MAP_ONLY'],
   },
   hy: {
     buttonLabel: 'Ընտրել արդյունքները տպման համար ',
     dropdownLabel: 'տպել',
-    printOptions: ['Landscape', 'MAP_ONLY']
+    printOptions: ['Landscape', 'MAP_ONLY'],
   },
   ka: {
     buttonLabel: 'აარჩიეთ ბეჭდვის ფორმატი',
     dropdownLabel: 'Print',
-    printOptions: ['Landscape', 'MAP_ONLY']
+    printOptions: ['Landscape', 'MAP_ONLY'],
   },
   fr: {
     buttonLabel: "Choisissez un format d'impression",
     dropdownLabel: 'Print',
-    printOptions: ['Landscape', 'MAP_ONLY']
+    printOptions: ['Landscape', 'MAP_ONLY'],
   },
   es: {
     buttonLabel: 'Elegir diseño de página',
     dropdownLabel: 'Print',
-    printOptions: ['Landscape', 'MAP_ONLY']
+    printOptions: ['Landscape', 'MAP_ONLY'],
   },
   pt: {
     buttonLabel: 'Escolher saída de impressão.',
     dropdownLabel: 'Print',
-    printOptions: ['Landscape', 'MAP_ONLY']
+    printOptions: ['Landscape', 'MAP_ONLY'],
   },
   id: {
     buttonLabel: 'Choose a print output',
     dropdownLabel: 'Print',
-    printOptions: ['Landscape', 'MAP_ONLY']
+    printOptions: ['Landscape', 'MAP_ONLY'],
   },
   zh: {
     buttonLabel: '选择打印模板',
     dropdownLabel: 'Print',
-    printOptions: ['Landscape', 'MAP_ONLY']
-  }
+    printOptions: ['Landscape', 'MAP_ONLY'],
+  },
 };
 
 export const shareContent = {
   en: {
-    title: 'Share'
+    title: 'Share',
   },
   az: {
-    title: 'Paylaşın'
+    title: 'Paylaşın',
   },
   nl: {
-    title: 'Delen'
+    title: 'Delen',
   },
   hy: {
-    title: 'կիսվել'
+    title: 'կիսվել',
   },
   ka: {
-    title: 'გაზიარება'
+    title: 'გაზიარება',
   },
   fr: {
-    title: 'Partager'
+    title: 'Partager',
   },
   es: {
-    title: 'Compartir'
+    title: 'Compartir',
   },
   pt: {
-    title: 'Compartilhar'
+    title: 'Compartilhar',
   },
   id: {
-    title: 'Share'
+    title: 'Share',
   },
   zh: {
-    title: '分享'
-  }
+    title: '分享',
+  },
 };
 
 export const penContent = {
   en: {
     drawTitle: 'Analyse your own shape',
-    drawInstructions: [
-      'Draw a shape anywhere on the map',
-      'Select the shape to run the analysis'
-    ],
+    drawInstructions: ['Draw a shape anywhere on the map', 'Select the shape to run the analysis'],
     drawButton: 'Start drawing',
     coordinatesTitle: 'Enter your own coordinates',
-    coordinatesInstructions: [
-      'Enter at least 3 coordinates',
-      'Add up to 10 points to make shapes'
-    ],
-    coordinatesButton: 'Enter Values'
+    coordinatesInstructions: ['Enter at least 3 coordinates', 'Add up to 10 points to make shapes'],
+    coordinatesButton: 'Enter Values',
   },
   az: {
     drawTitle: 'Öz formanızı təhlil edin',
-    drawInstructions: [
-      'Xəritədə istənilən formanı çəkin',
-      'Təhlili aparmaq üçün formanı seçin'
-    ],
+    drawInstructions: ['Xəritədə istənilən formanı çəkin', 'Təhlili aparmaq üçün formanı seçin'],
     drawButton: 'Rəsmi çəkməyə başlayın',
     coordinatesTitle: 'Öz koordinatlarınızı daxil edin',
-    coordinatesInstructions: [
-      'Ən azı 3 koordinatı daxil edin',
-      'Formaları düzəltmək üçün 10-dək nöqtəni əlavə edin'
-    ],
-    coordinatesButton: 'Göstəriciləri daxil edin'
+    coordinatesInstructions: ['Ən azı 3 koordinatı daxil edin', 'Formaları düzəltmək üçün 10-dək nöqtəni əlavə edin'],
+    coordinatesButton: 'Göstəriciləri daxil edin',
   },
   nl: {
     drawTitle: 'Analyseer je eigen vorm',
-    drawInstructions: [
-      'Teken een vorm ergens op de kaart',
-      'Selecteer de vorm om de analyse uit te voeren'
-    ],
+    drawInstructions: ['Teken een vorm ergens op de kaart', 'Selecteer de vorm om de analyse uit te voeren'],
     drawButton: 'Begin met tekenen',
     coordinatesTitle: 'Voer uw eigen coördinaten in',
-    coordinatesInstructions: [
-      'Voer minimaal 3 coördinaten in',
-      'Voeg maximaal 10 punten toe om vormen te maken'
-    ],
-    coordinatesButton: 'Voer waarden in'
+    coordinatesInstructions: ['Voer minimaal 3 coördinaten in', 'Voeg maximaal 10 punten toe om vormen te maken'],
+    coordinatesButton: 'Voer waarden in',
   },
   hy: {
     drawTitle: 'Վերլուծել սեփական պատկերը',
-    drawInstructions: [
-      'Քարտեզի որևէ հատվածում նկարել պատկեր',
-      'Վերլուծությունը սկսելու համար ընտրել որևէ պատկեր'
-    ],
+    drawInstructions: ['Քարտեզի որևէ հատվածում նկարել պատկեր', 'Վերլուծությունը սկսելու համար ընտրել որևէ պատկեր'],
     drawButton: 'Նկարել',
     coordinatesTitle: 'Մուտքագրել Ձեր կոորդինատները',
-    coordinatesInstructions: [
-      'Մուտքագրել առնվազն 3 կոորդինատ',
-      'Ավելացնել մինչև 10 կետեր` պատկեր ստանալու համար'
-    ],
-    coordinatesButton: 'Մուտքագրել արժեքներ'
+    coordinatesInstructions: ['Մուտքագրել առնվազն 3 կոորդինատ', 'Ավելացնել մինչև 10 կետեր` պատկեր ստանալու համար'],
+    coordinatesButton: 'Մուտքագրել արժեքներ',
   },
   ka: {
     drawTitle: 'ჩაატარეთ თქვენი ფიგურის ანალიზი',
-    drawInstructions: [
-      'რუკაზე ნებისმიერი ფიგურა დახაზეთ',
-      'ანალიზის ჩასატარებლად შეარჩიეთ ფიგურა'
-    ],
+    drawInstructions: ['რუკაზე ნებისმიერი ფიგურა დახაზეთ', 'ანალიზის ჩასატარებლად შეარჩიეთ ფიგურა'],
     drawButton: 'დაიწყეთ ხაზვა',
     coordinatesTitle: 'შეიტანეთ თქვენი კოორდინატები',
-    coordinatesInstructions: [
-      `შეიტანეთ მინიმუმ  3 კოორდინატი`,
-      `დაამატეთ 10 წერტილამდე პოლიგონის შესაქმნელად`
-    ],
-    coordinatesButton: `მნიშვნელობების შეტანა`
+    coordinatesInstructions: [`შეიტანეთ მინიმუმ  3 კოორდინატი`, `დაამატეთ 10 წერტილამდე პოლიგონის შესაქმნელად`],
+    coordinatesButton: `მნიშვნელობების შეტანა`,
   },
   fr: {
     drawTitle: 'Analysez votre propre polygone',
-    drawInstructions: [
-      'Tracez un polygone sur la carte',
-      "Cliquez sur le polygone pour lancer l'analyse"
-    ],
+    drawInstructions: ['Tracez un polygone sur la carte', "Cliquez sur le polygone pour lancer l'analyse"],
     drawButton: 'Débutez le dessin',
     coordinatesTitle: 'Entrez vos propres coordonnées',
-    coordinatesInstructions: [
-      `Entrez au moins 3 coordonnées`,
-      `Ajoutez jusqu’à 10 points pour définir votre zone`
-    ],
-    coordinatesButton: `Entrez les valeurs`
+    coordinatesInstructions: [`Entrez au moins 3 coordonnées`, `Ajoutez jusqu’à 10 points pour définir votre zone`],
+    coordinatesButton: `Entrez les valeurs`,
   },
   es: {
     drawTitle: 'Analizar su propio polígono',
     drawInstructions: [
       'Dibujar un polígono en cualquier lugar del mapa',
-      'Seleccionar el polígono para hacer el análisis'
+      'Seleccionar el polígono para hacer el análisis',
     ],
     drawButton: 'Empezar a dibujar',
     coordinatesTitle: 'Ingresa las coordenadas',
-    coordinatesInstructions: [
-      `Ingresa por lo menos 3 coordenadas`,
-      `Agrega hasta 10 puntos para generar el polígono`
-    ],
-    coordinatesButton: `Ingresa valores`
+    coordinatesInstructions: [`Ingresa por lo menos 3 coordenadas`, `Agrega hasta 10 puntos para generar el polígono`],
+    coordinatesButton: `Ingresa valores`,
   },
   pt: {
     drawTitle: 'Use sua propria área de Análise',
-    drawInstructions: [
-      'Desenhe uma área de interesse no mapa',
-      'Selecione a área na qual irá executar a análise'
-    ],
+    drawInstructions: ['Desenhe uma área de interesse no mapa', 'Selecione a área na qual irá executar a análise'],
     drawButton: 'Comece a desenhar',
     coordinatesTitle: 'Entre com suas coordenadas',
-    coordinatesInstructions: [
-      `Insira pelo menos 3 coordenadas`,
-      `Adicione até 10 pontos para desenhar o shape`
-    ],
-    coordinatesButton: `Entre com os valores`
+    coordinatesInstructions: [`Insira pelo menos 3 coordenadas`, `Adicione até 10 pontos para desenhar o shape`],
+    coordinatesButton: `Entre com os valores`,
   },
   id: {
     drawTitle: 'Analyse your own shape',
-    drawInstructions: [
-      'Draw a shape anywhere on the map',
-      'Select the shape to run the analysis'
-    ],
+    drawInstructions: ['Draw a shape anywhere on the map', 'Select the shape to run the analysis'],
     drawButton: 'Start drawing',
     coordinatesTitle: 'Masukkan koordinat Anda',
-    coordinatesInstructions: [
-      `Masukkan paling sedikit 3 koordinat`,
-      `Tambahkan sampai 10 titik untuk membuat bentuk`
-    ],
-    coordinatesButton: `Masukkan Nilai`
+    coordinatesInstructions: [`Masukkan paling sedikit 3 koordinat`, `Tambahkan sampai 10 titik untuk membuat bentuk`],
+    coordinatesButton: `Masukkan Nilai`,
   },
   zh: {
     drawTitle: '分析自定义图形',
@@ -217,8 +166,8 @@ export const penContent = {
     drawButton: '开始绘画',
     coordinatesTitle: '输入你的坐标',
     coordinatesInstructions: [`输入至少三个坐标`, `添加最多10个坐标来完成作图`],
-    coordinatesButton: `输入`
-  }
+    coordinatesButton: `输入`,
+  },
 };
 
 export const searchContent = {
@@ -226,62 +175,62 @@ export const searchContent = {
     latitude: 'Lat',
     longitude: 'Lon',
     title: 'Search for feature:',
-    buttonTitle: 'Search'
+    buttonTitle: 'Search',
   },
   az: {
     latitude: 'Enlik',
     longitude: 'Uzunluq',
     title: 'Xüsusiyyəti axtarın:',
-    buttonTitle: 'Xüsusiyyəti'
+    buttonTitle: 'Xüsusiyyəti',
   },
   nl: {
     latitude: 'Breedtegraad',
     longitude: 'Lengtegraad',
     title: 'Zoeken naar functie:',
-    buttonTitle: 'zoeken'
+    buttonTitle: 'zoeken',
   },
   hy: {
     latitude: 'Լայնություն ',
     longitude: 'Երկայնություն',
     title: 'Փնտրել օբյեկտը:',
-    buttonTitle: 'Search'
+    buttonTitle: 'Search',
   },
   ka: {
     latitude: 'განედი',
     longitude: 'გრძედი',
     title: 'პარამეტრის ძიება:',
-    buttonTitle: 'გადიდება'
+    buttonTitle: 'გადიდება',
   },
   fr: {
     latitude: 'Lat',
     longitude: 'Lon',
     title: 'Recherche de polygones:',
-    buttonTitle: 'Chercher'
+    buttonTitle: 'Chercher',
   },
   es: {
     latitude: 'Latitud',
     longitude: 'Longitud',
     title: 'Buscar polígono:',
-    buttonTitle: 'Buscar'
+    buttonTitle: 'Buscar',
   },
   pt: {
     latitude: 'Lat',
     longitude: 'Lon',
     title: 'Buscar recurso:',
-    buttonTitle: 'Pesquisa:'
+    buttonTitle: 'Pesquisa:',
   },
   id: {
     latitude: 'Lintang',
     longitude: 'Bujur',
     title: 'Search for feature',
-    buttonTitle: 'Search'
+    buttonTitle: 'Search',
   },
   zh: {
     latitude: '纬度',
     longitude: '经度',
     title: '搜寻特征：',
-    buttonTitle: '搜寻'
-  }
+    buttonTitle: '搜寻',
+  },
 };
 
 export const coordinatesContent = {
@@ -295,19 +244,16 @@ export const coordinatesContent = {
     latitudeLabel: 'Latitude',
     longitudeLabel: 'Longitude',
     addMoreLabel: 'Add More',
-    makeShapeLabel: 'Make Shape'
+    makeShapeLabel: 'Make Shape',
   },
   az: {
     title: 'Öz koordinatlarınızı daxil edin',
     dropdownTitle: 'Formatı seçin',
-    decimalOptions: [
-      'Dərəcələr Onluq Saniyələr  (DOS)',
-      'Onluq Dərəcələr (OD)'
-    ],
+    decimalOptions: ['Dərəcələr Onluq Saniyələr  (DOS)', 'Onluq Dərəcələr (OD)'],
     latitudeLabel: 'Enlik',
     longitudeLabel: 'Uzunluq',
     addMoreLabel: 'Daha çox əlavə edin',
-    makeShapeLabel: 'Formaları düzəldin'
+    makeShapeLabel: 'Formaları düzəldin',
   },
   nl: {
     title: 'Voer uw eigen coördinaten in',
@@ -316,19 +262,16 @@ export const coordinatesContent = {
     latitudeLabel: 'Breedtegraad',
     longitudeLabel: 'Lengtegraad',
     addMoreLabel: 'Voeg meer toe ',
-    makeShapeLabel: 'Vorm maken '
+    makeShapeLabel: 'Vorm maken ',
   },
   hy: {
     title: 'Մուտքագրել Ձեր կոորդինատները ',
     dropdownTitle: 'Ընտրել ձևաչափը ',
-    decimalOptions: [
-      'Աստիճաններով տասնորդական վայրկյաններ (DMS)',
-      'Տասնորդական աստիճաններ (DD)'
-    ],
+    decimalOptions: ['Աստիճաններով տասնորդական վայրկյաններ (DMS)', 'Տասնորդական աստիճաններ (DD)'],
     latitudeLabel: 'Լայնություն ',
     longitudeLabel: 'Երկայնություն ',
     addMoreLabel: 'Ավելացնել ',
-    makeShapeLabel: 'Կառուցել պատկեր '
+    makeShapeLabel: 'Կառուցել պատկեր ',
   },
   ka: {
     title: 'შეიტანეთ თქვენი კოორდინატები',
@@ -337,7 +280,7 @@ export const coordinatesContent = {
     latitudeLabel: 'განედი',
     longitudeLabel: 'გრძედი',
     addMoreLabel: 'დამატება',
-    makeShapeLabel: 'პოლიგონის შექმნა'
+    makeShapeLabel: 'პოლიგონის შექმნა',
   },
   fr: {
     title: 'Entrez vos propres coordonnées',
@@ -346,7 +289,7 @@ export const coordinatesContent = {
     latitudeLabel: 'Latitude',
     longitudeLabel: 'Longitude',
     addMoreLabel: 'Ajouter',
-    makeShapeLabel: 'Créer la zone'
+    makeShapeLabel: 'Créer la zone',
   },
   es: {
     title: 'Ingresa las coordenadas',
@@ -355,7 +298,7 @@ export const coordinatesContent = {
     latitudelabel: 'Latitud',
     longitudeLabel: 'Longitud',
     addMoreLabel: 'Agrega más',
-    makeShapeLabel: 'Genera el polígno'
+    makeShapeLabel: 'Genera el polígno',
   },
   pt: {
     title: 'Entre com suas coordenadas',
@@ -364,7 +307,7 @@ export const coordinatesContent = {
     latitudelabel: 'Latitude',
     longitudeLabel: 'Longitude',
     addMoreLabel: 'Adicione mais',
-    makeShapeLabel: ''
+    makeShapeLabel: '',
   },
   id: {
     title: 'Masukkan koordinat Anda',
@@ -373,7 +316,7 @@ export const coordinatesContent = {
     latitudelabel: 'Lintang',
     longitudeLabel: 'Bujur',
     addMoreLabel: 'Tambah Lagi',
-    makeShapeLabel: 'Buat Bentuk'
+    makeShapeLabel: 'Buat Bentuk',
   },
   zh: {
     title: '输入你的坐标',
@@ -382,8 +325,8 @@ export const coordinatesContent = {
     latitudelabel: '纬度',
     longitudeLabel: '经度',
     addMoreLabel: '添加更多',
-    makeShapeLabel: '作图'
-  }
+    makeShapeLabel: '作图',
+  },
 };
 
 export const measureContent = {
@@ -396,7 +339,7 @@ export const measureContent = {
       { text: 'Hectares', esriUnit: 'hectares' },
       { text: 'Sq Yards', esriUnit: 'square-yards' },
       { text: 'Sq Feet(US)', esriUnit: 'square-us-feet' },
-      { text: 'Sq Meters', esriUnit: 'square-meters' }
+      { text: 'Sq Meters', esriUnit: 'square-meters' },
     ],
     distanceUnitsOfLength: [
       { text: 'Miles', esriUnit: 'miles' },
@@ -405,12 +348,12 @@ export const measureContent = {
       { text: 'Feet(US)', esriUnit: 'us-feet' },
       { text: 'Meters', esriUnit: 'meters' },
       { text: 'Yards', esriUnit: 'yards' },
-      { text: 'Nautical Miles', esriUnit: 'nautical-miles' }
+      { text: 'Nautical Miles', esriUnit: 'nautical-miles' },
     ],
     latitudeLongitudeUnits: [
       { text: 'Degree', esriUnit: 'degree' },
-      { text: 'DMS', esriUnit: 'dms' }
-    ]
+      { text: 'DMS', esriUnit: 'dms' },
+    ],
   },
   az: {
     defaultOption: [{ text: 'Unit', esriUnit: '' }],
@@ -421,7 +364,7 @@ export const measureContent = {
       { text: 'Hectares', esriUnit: 'hectares' },
       { text: 'Sq Yards', esriUnit: 'square-yards' },
       { text: 'Sq Feet(US)', esriUnit: 'square-us-feet' },
-      { text: 'Sq Meters', esriUnit: 'square-meters' }
+      { text: 'Sq Meters', esriUnit: 'square-meters' },
     ],
     distanceUnitsOfLength: [
       { text: 'Miles', esriUnit: 'miles' },
@@ -430,12 +373,12 @@ export const measureContent = {
       { text: 'Feet(US)', esriUnit: 'us-feet' },
       { text: 'Meters', esriUnit: 'meters' },
       { text: 'Yards', esriUnit: 'yards' },
-      { text: 'Nautical Miles', esriUnit: 'nautical-miles' }
+      { text: 'Nautical Miles', esriUnit: 'nautical-miles' },
     ],
     latitudeLongitudeUnits: [
       { text: 'Degree', esriUnit: 'degree' },
-      { text: 'DMS', esriUnit: 'dms' }
-    ]
+      { text: 'DMS', esriUnit: 'dms' },
+    ],
   },
   nl: {
     // * NOTE: translation document didn't have this section
@@ -447,7 +390,7 @@ export const measureContent = {
       { text: 'Hectares', esriUnit: 'hectares' },
       { text: 'Sq Yards', esriUnit: 'square-yards' },
       { text: 'Sq Feet(US)', esriUnit: 'square-us-feet' },
-      { text: 'Sq Meters', esriUnit: 'square-meters' }
+      { text: 'Sq Meters', esriUnit: 'square-meters' },
     ],
     distanceUnitsOfLength: [
       { text: 'Miles', esriUnit: 'miles' },
@@ -456,12 +399,12 @@ export const measureContent = {
       { text: 'Feet(US)', esriUnit: 'us-feet' },
       { text: 'Meters', esriUnit: 'meters' },
       { text: 'Yards', esriUnit: 'yards' },
-      { text: 'Nautical Miles', esriUnit: 'nautical-miles' }
+      { text: 'Nautical Miles', esriUnit: 'nautical-miles' },
     ],
     latitudeLongitudeUnits: [
       { text: 'Degree', esriUnit: 'degree' },
-      { text: 'DMS', esriUnit: 'dms' }
-    ]
+      { text: 'DMS', esriUnit: 'dms' },
+    ],
   },
   hy: {
     // * NOTE: translation document didn't have this section
@@ -473,7 +416,7 @@ export const measureContent = {
       { text: 'Hectares', esriUnit: 'hectares' },
       { text: 'Sq Yards', esriUnit: 'square-yards' },
       { text: 'Sq Feet(US)', esriUnit: 'square-us-feet' },
-      { text: 'Sq Meters', esriUnit: 'square-meters' }
+      { text: 'Sq Meters', esriUnit: 'square-meters' },
     ],
     distanceUnitsOfLength: [
       { text: 'Miles', esriUnit: 'miles' },
@@ -482,12 +425,12 @@ export const measureContent = {
       { text: 'Feet(US)', esriUnit: 'us-feet' },
       { text: 'Meters', esriUnit: 'meters' },
       { text: 'Yards', esriUnit: 'yards' },
-      { text: 'Nautical Miles', esriUnit: 'nautical-miles' }
+      { text: 'Nautical Miles', esriUnit: 'nautical-miles' },
     ],
     latitudeLongitudeUnits: [
       { text: 'Degree', esriUnit: 'degree' },
-      { text: 'DMS', esriUnit: 'dms' }
-    ]
+      { text: 'DMS', esriUnit: 'dms' },
+    ],
   },
   ka: {
     defaultOption: [{ text: 'Unit', esriUnit: '' }],
@@ -498,7 +441,7 @@ export const measureContent = {
       { text: 'Hectares', esriUnit: 'hectares' },
       { text: 'Sq Yards', esriUnit: 'square-yards' },
       { text: 'Sq Feet(US)', esriUnit: 'square-us-feet' },
-      { text: 'Sq Meters', esriUnit: 'square-meters' }
+      { text: 'Sq Meters', esriUnit: 'square-meters' },
     ],
     distanceUnitsOfLength: [
       { text: 'Miles', esriUnit: 'miles' },
@@ -507,12 +450,12 @@ export const measureContent = {
       { text: 'Feet(US)', esriUnit: 'us-feet' },
       { text: 'Meters', esriUnit: 'meters' },
       { text: 'Yards', esriUnit: 'yards' },
-      { text: 'Nautical Miles', esriUnit: 'nautical-miles' }
+      { text: 'Nautical Miles', esriUnit: 'nautical-miles' },
     ],
     latitudeLongitudeUnits: [
       { text: 'Degree', esriUnit: 'degree' },
-      { text: 'DMS', esriUnit: 'dms' }
-    ]
+      { text: 'DMS', esriUnit: 'dms' },
+    ],
   },
   fr: {
     defaultOption: [{ text: 'Unit', esriUnit: '' }],
@@ -523,7 +466,7 @@ export const measureContent = {
       { text: 'Hectares', esriUnit: 'hectares' },
       { text: 'Sq Yards', esriUnit: 'square-yards' },
       { text: 'Sq Feet(US)', esriUnit: 'square-us-feet' },
-      { text: 'Sq Meters', esriUnit: 'square-meters' }
+      { text: 'Sq Meters', esriUnit: 'square-meters' },
     ],
     distanceUnitsOfLength: [
       { text: 'Miles', esriUnit: 'miles' },
@@ -532,12 +475,12 @@ export const measureContent = {
       { text: 'Feet(US)', esriUnit: 'us-feet' },
       { text: 'Meters', esriUnit: 'meters' },
       { text: 'Yards', esriUnit: 'yards' },
-      { text: 'Nautical Miles', esriUnit: 'nautical-miles' }
+      { text: 'Nautical Miles', esriUnit: 'nautical-miles' },
     ],
     latitudeLongitudeUnits: [
       { text: 'Degree', esriUnit: 'degree' },
-      { text: 'DMS', esriUnit: 'dms' }
-    ]
+      { text: 'DMS', esriUnit: 'dms' },
+    ],
   },
   es: {
     defaultOption: [{ text: 'Unit', esriUnit: '' }],
@@ -548,7 +491,7 @@ export const measureContent = {
       { text: 'Hectares', esriUnit: 'hectares' },
       { text: 'Sq Yards', esriUnit: 'square-yards' },
       { text: 'Sq Feet(US)', esriUnit: 'square-us-feet' },
-      { text: 'Sq Meters', esriUnit: 'square-meters' }
+      { text: 'Sq Meters', esriUnit: 'square-meters' },
     ],
     distanceUnitsOfLength: [
       { text: 'Miles', esriUnit: 'miles' },
@@ -557,12 +500,12 @@ export const measureContent = {
       { text: 'Feet(US)', esriUnit: 'us-feet' },
       { text: 'Meters', esriUnit: 'meters' },
       { text: 'Yards', esriUnit: 'yards' },
-      { text: 'Nautical Miles', esriUnit: 'nautical-miles' }
+      { text: 'Nautical Miles', esriUnit: 'nautical-miles' },
     ],
     latitudeLongitudeUnits: [
       { text: 'Degree', esriUnit: 'degree' },
-      { text: 'DMS', esriUnit: 'dms' }
-    ]
+      { text: 'DMS', esriUnit: 'dms' },
+    ],
   },
   pt: {
     defaultOption: [{ text: 'Unit', esriUnit: '' }],
@@ -573,7 +516,7 @@ export const measureContent = {
       { text: 'Hectares', esriUnit: 'hectares' },
       { text: 'Sq Yards', esriUnit: 'square-yards' },
       { text: 'Sq Feet(US)', esriUnit: 'square-us-feet' },
-      { text: 'Sq Meters', esriUnit: 'square-meters' }
+      { text: 'Sq Meters', esriUnit: 'square-meters' },
     ],
     distanceUnitsOfLength: [
       { text: 'Miles', esriUnit: 'miles' },
@@ -582,12 +525,12 @@ export const measureContent = {
       { text: 'Feet(US)', esriUnit: 'us-feet' },
       { text: 'Meters', esriUnit: 'meters' },
       { text: 'Yards', esriUnit: 'yards' },
-      { text: 'Nautical Miles', esriUnit: 'nautical-miles' }
+      { text: 'Nautical Miles', esriUnit: 'nautical-miles' },
     ],
     latitudeLongitudeUnits: [
       { text: 'Degree', esriUnit: 'degree' },
-      { text: 'DMS', esriUnit: 'dms' }
-    ]
+      { text: 'DMS', esriUnit: 'dms' },
+    ],
   },
   id: {
     defaultOption: [{ text: 'Unit', esriUnit: '' }],
@@ -598,7 +541,7 @@ export const measureContent = {
       { text: 'Hectares', esriUnit: 'hectares' },
       { text: 'Sq Yards', esriUnit: 'square-yards' },
       { text: 'Sq Feet(US)', esriUnit: 'square-us-feet' },
-      { text: 'Sq Meters', esriUnit: 'square-meters' }
+      { text: 'Sq Meters', esriUnit: 'square-meters' },
     ],
     distanceUnitsOfLength: [
       { text: 'Miles', esriUnit: 'miles' },
@@ -607,12 +550,12 @@ export const measureContent = {
       { text: 'Feet(US)', esriUnit: 'us-feet' },
       { text: 'Meters', esriUnit: 'meters' },
       { text: 'Yards', esriUnit: 'yards' },
-      { text: 'Nautical Miles', esriUnit: 'nautical-miles' }
+      { text: 'Nautical Miles', esriUnit: 'nautical-miles' },
     ],
     latitudeLongitudeUnits: [
       { text: 'Degree', esriUnit: 'degree' },
-      { text: 'DMS', esriUnit: 'dms' }
-    ]
+      { text: 'DMS', esriUnit: 'dms' },
+    ],
   },
   zh: {
     defaultOption: [{ text: 'Unit', esriUnit: '' }],
@@ -623,7 +566,7 @@ export const measureContent = {
       { text: 'Hectares', esriUnit: 'hectares' },
       { text: 'Sq Yards', esriUnit: 'square-yards' },
       { text: 'Sq Feet(US)', esriUnit: 'square-us-feet' },
-      { text: 'Sq Meters', esriUnit: 'square-meters' }
+      { text: 'Sq Meters', esriUnit: 'square-meters' },
     ],
     distanceUnitsOfLength: [
       { text: 'Miles', esriUnit: 'miles' },
@@ -632,13 +575,13 @@ export const measureContent = {
       { text: 'Feet(US)', esriUnit: 'us-feet' },
       { text: 'Meters', esriUnit: 'meters' },
       { text: 'Yards', esriUnit: 'yards' },
-      { text: 'Nautical Miles', esriUnit: 'nautical-miles' }
+      { text: 'Nautical Miles', esriUnit: 'nautical-miles' },
     ],
     latitudeLongitudeUnits: [
       { text: 'Degree', esriUnit: 'degree' },
-      { text: 'DMS', esriUnit: 'dms' }
-    ]
-  }
+      { text: 'DMS', esriUnit: 'dms' },
+    ],
+  },
 };
 
 export const infoContent = {
@@ -655,7 +598,7 @@ export const infoContent = {
     downloadDataLabel: 'download data',
     descriptionLabel: 'description',
     noInfoLabel: 'No Information Available',
-    overviewLabel: 'Overview'
+    overviewLabel: 'Overview',
   },
   az: {
     functionLabel: 'funksiya',
@@ -670,7 +613,7 @@ export const infoContent = {
     downloadDataLabel: 'məlumatları yükləyin',
     descriptionLabel: 'təsviri',
     noInfoLabel: 'Məlumat yoxdur',
-    overviewLabel: 'İcmal'
+    overviewLabel: 'İcmal',
   },
   nl: {
     functionLabel: 'Functie',
@@ -685,7 +628,7 @@ export const infoContent = {
     downloadDataLabel: 'download gegevens ',
     descriptionLabel: 'description',
     noInfoLabel: 'Geen informative beschikbaar',
-    overviewLabel: 'Omschrijving'
+    overviewLabel: 'Omschrijving',
   },
   hy: {
     functionLabel: 'Ֆունկցիա/գործողություն ',
@@ -700,7 +643,7 @@ export const infoContent = {
     downloadDataLabel: 'Ներբեռնել տվյալները ',
     descriptionLabel: 'նկարագրություն',
     noInfoLabel: 'Տեղեկատվությունն առկա չէ ',
-    overviewLabel: 'Ընդհանուր նկարագիր '
+    overviewLabel: 'Ընդհանուր նկարագիր ',
   },
   ka: {
     functionLabel: 'ფუნქცია',
@@ -715,7 +658,7 @@ export const infoContent = {
     downloadDataLabel: 'მონაცემების ჩამოტვირთვა',
     descriptionLabel: 'აღწერა',
     noInfoLabel: 'ინფორმაცია არ არსებობს',
-    overviewLabel: 'მიმოხილვა'
+    overviewLabel: 'მიმოხილვა',
   },
   fr: {
     functionLabel: 'Fonction',
@@ -730,7 +673,7 @@ export const infoContent = {
     downloadDataLabel: 'Téléchargez les données',
     descriptionLabel: 'description',
     noInfoLabel: "Pas d'informations disponibles",
-    overviewLabel: "Vue d'ensemble"
+    overviewLabel: "Vue d'ensemble",
   },
   es: {
     functionLabel: 'Función',
@@ -745,7 +688,7 @@ export const infoContent = {
     downloadDataLabel: 'Descarga información',
     descriptionLabel: 'Descripción',
     noInfoLabel: 'No hay información disponible',
-    overviewLabel: 'Resumen'
+    overviewLabel: 'Resumen',
   },
   pt: {
     functionLabel: 'função',
@@ -760,7 +703,7 @@ export const infoContent = {
     downloadDataLabel: 'Baixar dados',
     descriptionLabel: 'Descrição',
     noInfoLabel: 'Sem informação disponível.',
-    overviewLabel: 'Visão geral'
+    overviewLabel: 'Visão geral',
   },
   id: {
     functionLabel: 'function',
@@ -775,7 +718,7 @@ export const infoContent = {
     downloadDataLabel: 'download data',
     descriptionLabel: 'description',
     noInfoLabel: 'No Information Available',
-    overviewLabel: 'Overview'
+    overviewLabel: 'Overview',
   },
   zh: {
     functionLabel: '功能',
@@ -790,48 +733,39 @@ export const infoContent = {
     downloadDataLabel: '下载数据',
     descriptionLabel: '说明',
     noInfoLabel: '没有相关信息',
-    overviewLabel: '概述'
-  }
+    overviewLabel: '概述',
+  },
 };
 
 export const canopyDensityContentConfig = {
   en: {
-    directions:
-      'Adjust the minimum canopy density for tree cover and tree cover loss'
+    directions: 'Adjust the minimum canopy density for tree cover and tree cover loss',
   },
   az: {
-    directions:
-      'Ağac örtüyü və ağac örtüyü itkisi üçün minimal örtük sıxlığını tənzimləyin'
+    directions: 'Ağac örtüyü və ağac örtüyü itkisi üçün minimal örtük sıxlığını tənzimləyin',
   },
   nl: {
-    directions:
-      'Pas de minimale luifeldichtheid aan voor boombedekking en afname  van boombedekkings'
+    directions: 'Pas de minimale luifeldichtheid aan voor boombedekking en afname  van boombedekkings',
   },
   hy: {
-    directions:
-      'Կարգավորել սաղարթների նվազագույն խտությունը՝ ծառածածկույթի և ծառածակույթի կորստի համար'
+    directions: 'Կարգավորել սաղարթների նվազագույն խտությունը՝ ծառածածկույթի և ծառածակույթի կորստի համար',
   },
   ka: {
-    directions:
-      'დააზუსტეთ მინიმალური ვარჯის სიხშირე, რომ დაინახოთ ხის საფარი და ხის საფარის კარგვა'
+    directions: 'დააზუსტეთ მინიმალური ვარჯის სიხშირე, რომ დაინახოთ ხის საფარი და ხის საფარის კარგვა',
   },
   fr: {
-    directions:
-      'Ajuster la densité minimum de la canopée pour le couvert arboré et la perte en couvert arboré'
+    directions: 'Ajuster la densité minimum de la canopée pour le couvert arboré et la perte en couvert arboré',
   },
   es: {
-    directions:
-      'Ajustar el mínimo densidad del follaje para la cobertura arbórea y la pérdida de la cobertura arbórea'
+    directions: 'Ajustar el mínimo densidad del follaje para la cobertura arbórea y la pérdida de la cobertura arbórea',
   },
   pt: {
-    directions:
-      'Ajuste a densidade mínima de dossel para cobertura florestal e perda de cobertura florestal'
+    directions: 'Ajuste a densidade mínima de dossel para cobertura florestal e perda de cobertura florestal',
   },
   id: {
-    directions:
-      'Adjust the minimum canopy density for tree cover and tree cover loss'
+    directions: 'Adjust the minimum canopy density for tree cover and tree cover loss',
   },
   zh: {
-    directions: '对森林覆盖和森林覆盖损失图层调试最低林冠覆盖密度'
-  }
+    directions: '对森林覆盖和森林覆盖损失图层调试最低林冠覆盖密度',
+  },
 };

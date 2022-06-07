@@ -20,47 +20,32 @@ interface MetadataContent {
 const returnMetadataContent = (xmlResults: any) => {
   const content: MetadataContent = {};
   const results = convert.xml2js(xmlResults);
-  const element = results.elements[0].elements.find(
-    (element: any) => element.name === 'dataIdInfo'
-  );
+  const element = results.elements[0].elements.find((element: any) => element.name === 'dataIdInfo');
   const elementNames = element.elements.map((element: any) => element.name);
 
   content.title = element.elements
     .find((element: any) => element.name === 'idCitation')
-    .elements.find(
-      (subElement: any) => subElement.name === 'resTitle'
-    ).elements[0].text;
-  content.overview = element.elements.find(
-    (element: any) => element.name === 'idAbs'
-  ).elements[0].text;
-  content.functionOrPurpose = element.elements.find(
-    (element: any) => element.name === 'idPurp'
-  ).elements[0].text;
+    .elements.find((subElement: any) => subElement.name === 'resTitle').elements[0].text;
+  content.overview = element.elements.find((element: any) => element.name === 'idAbs').elements[0].text;
+  content.functionOrPurpose = element.elements.find((element: any) => element.name === 'idPurp').elements[0].text;
 
   if (elementNames.includes('dataExt')) {
     content.geographicCoverage = element.elements
       .find((element: any) => element.name === 'dataExt')
-      .elements.find(
-        (subElement: any) => subElement.name === 'exDesc'
-      ).elements[0].text;
+      .elements.find((subElement: any) => subElement.name === 'exDesc').elements[0].text;
   }
 
   return content;
 };
 
-const getMetadata = async (
-  layer: any,
-  sharinghost: RootState['appSettings']['sharinghost']
-): Promise<any> => {
+const getMetadata = async (layer: any, sharinghost: RootState['appSettings']['sharinghost']): Promise<any> => {
   let content: any;
   const metadataURL = `${sharinghost}/sharing/rest/content/items/${layer.portalItemID}/info/metadata/metadata.xml`;
   const layerMetadataURL = `${layer.url}/info/metadata`;
-  const xmlResults = await fetch(metadataURL).then(res => res.text());
-  const layerXMLResults = await fetch(layerMetadataURL).then(res => res.text());
+  const xmlResults = await fetch(metadataURL).then((res) => res.text());
+  const layerXMLResults = await fetch(layerMetadataURL).then((res) => res.text());
   const metadataExists = !xmlResults.includes('Error');
-  const layerMetadataExists =
-    !layerXMLResults.includes('Error') &&
-    !layerXMLResults.includes('invalid request');
+  const layerMetadataExists = !layerXMLResults.includes('Error') && !layerXMLResults.includes('invalid request');
 
   if (metadataExists) {
     content = returnMetadataContent(xmlResults);
@@ -78,7 +63,7 @@ const getWebmapGroupContent = async (
 ): Promise<MetadataContent> => {
   let content: any;
   const metadataURL = `${sharinghost}/sharing/rest/content/items/${layer.portalItemID}/info/metadata/metadata.xml`;
-  const xmlResults = await fetch(metadataURL).then(res => res.text());
+  const xmlResults = await fetch(metadataURL).then((res) => res.text());
 
   const metadataExists = !xmlResults.includes('Error');
 
@@ -90,15 +75,13 @@ const getWebmapGroupContent = async (
     // * if portalItemID exists, fetch info w/ it
 
     if (layer.portalItemID) {
-      const results = await fetch(
-        `${sharinghost}/sharing/rest/content/items/${layer.portalItemID}/?f=pjson`
-      )
-        .then(res => res.json())
-        .then(results => {
+      const results = await fetch(`${sharinghost}/sharing/rest/content/items/${layer.portalItemID}/?f=pjson`)
+        .then((res) => res.json())
+        .then((results) => {
           return {
             description: results.description,
             copyrightText: results.copyrightText,
-            tags: results.tags
+            tags: results.tags,
           };
         });
 
@@ -107,11 +90,11 @@ const getWebmapGroupContent = async (
       // * ELSE, fetch info via layer URL
 
       const results = await fetch(`${layer.url}/?f=pjson`)
-        .then(res => res.json())
-        .then(results => {
+        .then((res) => res.json())
+        .then((results) => {
           return {
             description: results.description,
-            copyrightText: results.copyrightText
+            copyrightText: results.copyrightText,
           };
         });
 
@@ -124,13 +107,12 @@ const getWebmapGroupContent = async (
 
 //Extracting info from Service Layers with technicalName
 const getServiceGroupContent = async (technicalName: string): Promise<any> => {
-  const baseURL =
-    'https://production-api.globalforestwatch.org/v1/gfw-metadata';
+  const baseURL = 'https://production-api.globalforestwatch.org/v1/gfw-metadata';
   const metaURL = `${baseURL}/${technicalName}`;
 
   return await fetch(metaURL)
-    .then(res => res.json())
-    .then(results => {
+    .then((res) => res.json())
+    .then((results) => {
       return results;
     });
 };
@@ -138,18 +120,10 @@ const getServiceGroupContent = async (technicalName: string): Promise<any> => {
 const InfoContent: FunctionComponent<{}> = (): any => {
   const [content, setContent] = useState<any>({});
   const [dataLoading, setDataLoading] = useState(true);
-  const sharinghost = useSelector(
-    (state: RootState) => state.appSettings.sharinghost
-  );
-  const { infoModalLayerID: layerID, selectedLanguage } = useSelector(
-    (store: RootState) => store.appState
-  );
-  const { allAvailableLayers } = useSelector(
-    (store: RootState) => store.mapviewState
-  );
-  const layer = allAvailableLayers.filter(
-    (layer: any) => layer.id === layerID
-  )[0];
+  const sharinghost = useSelector((state: RootState) => state.appSettings.sharinghost);
+  const { infoModalLayerID: layerID, selectedLanguage } = useSelector((store: RootState) => store.appState);
+  const { allAvailableLayers } = useSelector((store: RootState) => store.mapviewState);
+  const layer = allAvailableLayers.filter((layer: any) => layer.id === layerID)[0];
 
   const {
     functionLabel,
@@ -163,7 +137,7 @@ const InfoContent: FunctionComponent<{}> = (): any => {
     downloadDataLabel,
     descriptionLabel,
     noInfoLabel,
-    overviewLabel
+    overviewLabel,
   } = infoContent[selectedLanguage];
 
   useEffect(() => {
@@ -207,12 +181,7 @@ const InfoContent: FunctionComponent<{}> = (): any => {
   const returnWebmapGroupContent = (): JSX.Element | undefined => {
     if (content.title) {
       // * return metadata
-      const {
-        title,
-        functionOrPurpose,
-        geographicCoverage,
-        overview
-      } = content;
+      const { title, functionOrPurpose, geographicCoverage, overview } = content;
       return (
         <div className="header metadata">
           <h2>{title}</h2>
@@ -255,12 +224,7 @@ const InfoContent: FunctionComponent<{}> = (): any => {
                   {content.description && (
                     <tr>
                       <td className="label">{descriptionLabel}</td>
-                      <td
-                        className="label-info"
-                        dangerouslySetInnerHTML={createMarkup(
-                          content.description
-                        )}
-                      ></td>
+                      <td className="label-info" dangerouslySetInnerHTML={createMarkup(content.description)}></td>
                     </tr>
                   )}
                   {content.copyrightText && (
@@ -311,8 +275,11 @@ const InfoContent: FunctionComponent<{}> = (): any => {
         citation,
         title,
         subtitle,
-        download_data
+        download_data,
       } = content;
+
+      const changeLabelBaseOnTitle = ['Net Forest Carbon Flux', 'Forest Carbon Emissions', 'Forest Carbon Removals'];
+      const newLabel = changeLabelBaseOnTitle.includes(title) ? 'Citation' : cautionsLabel;
 
       return (
         <>
@@ -324,17 +291,11 @@ const InfoContent: FunctionComponent<{}> = (): any => {
             <tbody>
               <tr>
                 <td className="label">{functionLabel}</td>
-                <td
-                  className="label-info"
-                  dangerouslySetInnerHTML={{ __html: content.function }}
-                />
+                <td className="label-info" dangerouslySetInnerHTML={{ __html: content.function }} />
               </tr>
               <tr>
                 <td className="label">{resolutionLabel}</td>
-                <td
-                  className="label-info"
-                  dangerouslySetInnerHTML={{ __html: resolution }}
-                />
+                <td className="label-info" dangerouslySetInnerHTML={{ __html: resolution }} />
               </tr>
               <tr>
                 <td className="label">Tags</td>
@@ -342,45 +303,27 @@ const InfoContent: FunctionComponent<{}> = (): any => {
               </tr>
               <tr>
                 <td className="label">{geographicCoverageLabel}</td>
-                <td
-                  className="label-info"
-                  dangerouslySetInnerHTML={{ __html: geographic_coverage }}
-                />
+                <td className="label-info" dangerouslySetInnerHTML={{ __html: geographic_coverage }} />
               </tr>
               <tr>
                 <td className="label">{sourceLabel}</td>
-                <td
-                  className="label-info"
-                  dangerouslySetInnerHTML={{ __html: source }}
-                />
+                <td className="label-info" dangerouslySetInnerHTML={{ __html: source }} />
               </tr>
               <tr>
                 <td className="label">{frequencyLabel}</td>
-                <td
-                  className="label-info"
-                  dangerouslySetInnerHTML={{ __html: frequency_of_updates }}
-                />
+                <td className="label-info" dangerouslySetInnerHTML={{ __html: frequency_of_updates }} />
               </tr>
               <tr>
                 <td className="label">{contentDateLabel}</td>
-                <td
-                  className="label-info"
-                  dangerouslySetInnerHTML={{ __html: date_of_content }}
-                />
+                <td className="label-info" dangerouslySetInnerHTML={{ __html: date_of_content }} />
               </tr>
               <tr>
                 <td className="label">{cautionsLabel}</td>
-                <td
-                  className="label-info"
-                  dangerouslySetInnerHTML={{ __html: cautions }}
-                />
+                <td className="label-info" dangerouslySetInnerHTML={{ __html: cautions }} />
               </tr>
               <tr>
                 <td className="label">{licenseLabel}</td>
-                <td
-                  className="label-info"
-                  dangerouslySetInnerHTML={{ __html: license }}
-                />
+                <td className="label-info" dangerouslySetInnerHTML={{ __html: license }} />
               </tr>
             </tbody>
           </table>
@@ -390,7 +333,8 @@ const InfoContent: FunctionComponent<{}> = (): any => {
           </div>
           {citation && (
             <div className="citation-container">
-              <h4>{cautionsLabel}</h4>
+              <h4>{newLabel}</h4>
+
               <div dangerouslySetInnerHTML={{ __html: citation }} />
             </div>
           )}
@@ -417,10 +361,7 @@ const InfoContent: FunctionComponent<{}> = (): any => {
                 {functionOrPurpose && (
                   <tr>
                     <td className="label">{functionLabel}</td>
-                    <td
-                      className="label-info"
-                      dangerouslySetInnerHTML={{ __html: functionOrPurpose }}
-                    />
+                    <td className="label-info" dangerouslySetInnerHTML={{ __html: functionOrPurpose }} />
                   </tr>
                 )}
               </tbody>
@@ -457,11 +398,7 @@ const InfoContent: FunctionComponent<{}> = (): any => {
     }
   };
 
-  return (
-    <div className="info-content-container">
-      {!dataLoading && <RenderLayerContent />}
-    </div>
-  );
+  return <div className="info-content-container">{!dataLoading && <RenderLayerContent />}</div>;
 };
 
 export default InfoContent;

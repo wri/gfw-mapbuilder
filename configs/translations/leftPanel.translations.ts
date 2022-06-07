@@ -473,6 +473,105 @@ export const treesMosaicConfig = {
   },
 };
 
+export const forestCarbonGrossRemovalConfig = {
+  en: {
+    displayLabel: ['Displaying Forest carbon gross removals', 'canopy density.'],
+  },
+  az: {
+    displayLabel: ['Göstərir', 'örtük sıxlığı.'],
+  },
+  nl: {
+    displayLabel: ['Weergeven', 'luifeldichtheid.'],
+  },
+  hy: {
+    displayLabel: ['Ցուցադրվում է ', 'Սաղարթի խտություն '],
+  },
+  ka: {
+    displayLabel: ['წარმოდგენილია', 'ვარჯის სიმჭიდროვე.'],
+  },
+  fr: {
+    displayLabel: ['Affichage', 'Densité de la canopée.'],
+  },
+  es: {
+    displayLabel: ['Mostrando', 'densidad de follaje.'],
+  },
+  pt: {
+    displayLabel: ['Exibindo', 'densidade de dossel'],
+  },
+  id: {
+    displayLabel: ['Displaying Forest carbon gross removals', 'canopy density.'],
+  },
+  zh: {
+    displayLabel: ['显示中', '林冠覆盖密度'],
+  },
+};
+
+export const forestCarbonNetFluxConfig = {
+  en: {
+    displayLabel: ['Displaying Forest carbon net flux', 'canopy density.'],
+  },
+  az: {
+    displayLabel: ['Göstərir', 'örtük sıxlığı.'],
+  },
+  nl: {
+    displayLabel: ['Weergeven', 'luifeldichtheid.'],
+  },
+  hy: {
+    displayLabel: ['Ցուցադրվում է ', 'Սաղարթի խտություն '],
+  },
+  ka: {
+    displayLabel: ['წარმოდგენილია', 'ვარჯის სიმჭიდროვე.'],
+  },
+  fr: {
+    displayLabel: ['Affichage', 'Densité de la canopée.'],
+  },
+  es: {
+    displayLabel: ['Mostrando', 'densidad de follaje.'],
+  },
+  pt: {
+    displayLabel: ['Exibindo', 'densidade de dossel'],
+  },
+  id: {
+    displayLabel: ['Displaying Forest carbon net flux', 'canopy density.'],
+  },
+  zh: {
+    displayLabel: ['显示中', '林冠覆盖密度'],
+  },
+};
+
+export const forestCarbonGrossEmissionConfig = {
+  en: {
+    displayLabel: ['Displaying Forest carbon gross emission', 'canopy density.'],
+  },
+  az: {
+    displayLabel: ['Göstərir', 'örtük sıxlığı.'],
+  },
+  nl: {
+    displayLabel: ['Weergeven', 'luifeldichtheid.'],
+  },
+  hy: {
+    displayLabel: ['Ցուցադրվում է ', 'Սաղարթի խտություն '],
+  },
+  ka: {
+    displayLabel: ['წარმოდგენილია', 'ვარჯის სიმჭიდროვე.'],
+  },
+  fr: {
+    displayLabel: ['Affichage', 'Densité de la canopée.'],
+  },
+  es: {
+    displayLabel: ['Mostrando', 'densidad de follaje.'],
+  },
+  pt: {
+    displayLabel: ['Exibindo', 'densidade de dossel'],
+  },
+  id: {
+    displayLabel: ['Displaying Forest carbon gross emissions', 'canopy density.'],
+  },
+  zh: {
+    displayLabel: ['显示中', '林冠覆盖密度'],
+  },
+};
+
 export const canopyDensityPickerConfig = {
   en: {
     displayLabel: ['Displaying', 'canopy density.'],
