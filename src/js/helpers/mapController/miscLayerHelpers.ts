@@ -268,6 +268,7 @@ export async function getRemoteAndServiceLayers(): Promise<any> {
           order: layer.order,
           layerGroupId: layer.groupId,
           dataLayer: layer,
+          searchField: layer.searchField,
         });
       } else if (layer.type === 'flagship') {
         remoteDataLayers.push({

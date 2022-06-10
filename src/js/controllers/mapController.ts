@@ -29,7 +29,6 @@ import {
   selectActiveTab,
   setMeasureResults,
   setLanguage,
-  setSelectedSearchWidgetLayer,
   setModisStart,
   setModisEnd,
   setViirsStart,
@@ -70,7 +69,7 @@ interface ZoomParams {
 
 export class MapController {
   _map: __esri.Map | undefined;
-  _mapview: __esri.MapView | undefined;
+  _mapview: any;
   _sketchVM: __esri.SketchViewModel | undefined;
   _sketchMultipleVM: __esri.SketchViewModel | undefined;
   _previousSketchGraphic: any;
@@ -327,6 +326,7 @@ export class MapController {
               newRemoteLayerObject.legendInfo = remoteLayerObject.layer.metadata.legendConfig;
               newRemoteLayerObject.dashboardURL = remoteLayerObject.dashboardURL;
               newRemoteLayerObject.popup = remoteLayerObject.popup;
+              newRemoteLayerObject.searchField = remoteLayerObject.searchField;
             } else {
               if (remoteLayerObject.versions && remoteLayerObject.versions[0].url) {
                 remoteLayerObject.layerIds = remoteLayerObject.versions[0].layerIds;
@@ -1622,19 +1622,19 @@ export class MapController {
     const allSources = await setLayerSearchSource();
     const [Search] = await loadModules(['esri/widgets/Search']);
 
-    const searchWidget = new Search({
+    new Search({
       view: this._mapview,
       container: searchRef.current,
       sources: allSources,
     });
 
-    searchWidget.on('search-focus', (e: any) => {
+    /*searchWidget.on('search-focus', (e: any) => {
       const selectedLayer = {
         displayField: e.target.activeSource.displayField,
         layerTitle: e.target.activeSource.layer.title,
       };
       store.dispatch(setSelectedSearchWidgetLayer(selectedLayer));
-    });
+    });*/
   }
 
   async setSearchWidget(latitude: string, longitude: string): Promise<void> {

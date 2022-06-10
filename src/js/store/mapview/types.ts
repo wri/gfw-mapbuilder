@@ -102,6 +102,7 @@ export interface LayerProps {
   thumbnailUrl?: string;
   apiKey?: string;
   dashboardURL?: string | null;
+  searchField?: string;
 }
 
 interface Attributes {

@@ -69,10 +69,29 @@ export default {
   },
   disabledAnalysisModules: [], //'VIIRS_FIRES', 'GLAD_ALERTS', 'TC_LOSS', 'IFL', 'LCC'
   layerPanel: {
-    GROUP_WEBMAP: {
-      order: 2,
-      label: {},
-      layers: [],
+    GROUP_TEST: {
+      order: 1,
+      label: {
+        en: 'Test Group',
+        fr: '',
+        es: '',
+        pt: '',
+        id: '',
+        zh: '',
+        ka: '',
+        hy: '',
+        az: '',
+        nl: '',
+      },
+      layers: [
+        {
+          id: 'TEST_LAYER',
+          order: 1,
+          type: 'remoteDataLayer',
+          uuid: 'ea4b7032-280e-4c3b-8717-21bf6c340c62',
+          searchField: 'TYPE',
+        },
+      ],
     },
     GROUP_CLIMATE: {
       groupType: 'default',
