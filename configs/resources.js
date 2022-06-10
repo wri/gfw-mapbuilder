@@ -89,7 +89,7 @@ export default {
           order: 1,
           type: 'remoteDataLayer',
           uuid: 'ea4b7032-280e-4c3b-8717-21bf6c340c62',
-          searchField: 'TYPE',
+          searchField: 'NAME',
         },
       ],
     },
