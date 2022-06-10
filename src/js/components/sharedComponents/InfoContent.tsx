@@ -132,7 +132,7 @@ const InfoContent: FunctionComponent<{}> = (): any => {
     sourceLabel,
     frequencyLabel,
     contentDateLabel,
-    cautionsLabel,
+    citationLabel,
     licenseLabel,
     downloadDataLabel,
     descriptionLabel,
@@ -278,9 +278,6 @@ const InfoContent: FunctionComponent<{}> = (): any => {
         download_data,
       } = content;
 
-      const changeLabelBaseOnTitle = ['Net Forest Carbon Flux', 'Forest Carbon Emissions', 'Forest Carbon Removals'];
-      const newLabel = changeLabelBaseOnTitle.includes(title) ? 'Citation' : cautionsLabel;
-
       return (
         <>
           <div className="header">
@@ -318,7 +315,7 @@ const InfoContent: FunctionComponent<{}> = (): any => {
                 <td className="label-info" dangerouslySetInnerHTML={{ __html: date_of_content }} />
               </tr>
               <tr>
-                <td className="label">{cautionsLabel}</td>
+                <td className="label">{citationLabel}</td>
                 <td className="label-info" dangerouslySetInnerHTML={{ __html: cautions }} />
               </tr>
               <tr>
@@ -333,7 +330,7 @@ const InfoContent: FunctionComponent<{}> = (): any => {
           </div>
           {citation && (
             <div className="citation-container">
-              <h4>{newLabel}</h4>
+              <h4>{citationLabel}</h4>
 
               <div dangerouslySetInnerHTML={{ __html: citation }} />
             </div>
