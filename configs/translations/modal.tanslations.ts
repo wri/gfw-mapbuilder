@@ -682,7 +682,7 @@ export const infoContent = {
     sourceLabel: 'Fuente',
     frequencyLabel: 'Frecuencia',
     contentDateLabel: 'Fecha del contenido',
-    citationLabel: 'Precauciones',
+    citationLabel: 'Citación',
     licenseLabel: 'Licencia',
     learnMoreLabel: 'Conozca más',
     downloadDataLabel: 'Descarga información',
