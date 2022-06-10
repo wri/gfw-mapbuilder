@@ -1627,14 +1627,6 @@ export class MapController {
       container: searchRef.current,
       sources: allSources,
     });
-
-    /*searchWidget.on('search-focus', (e: any) => {
-      const selectedLayer = {
-        displayField: e.target.activeSource.displayField,
-        layerTitle: e.target.activeSource.layer.title,
-      };
-      store.dispatch(setSelectedSearchWidgetLayer(selectedLayer));
-    });*/
   }
 
   async setSearchWidget(latitude: string, longitude: string): Promise<void> {
