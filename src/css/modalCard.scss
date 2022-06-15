@@ -236,6 +236,15 @@
   &.search-widget {
     padding-top: 2rem;
     color: $dark-grey;
+    overflow: visible;
+    .search-widget-wrapper {
+      position: relative;
+      top: 16px;
+    }
+    .esri-search {
+      position: relative;
+      top: 1px;
+    }
 
     .modal-content-container {
       display: flex;

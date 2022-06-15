@@ -34,9 +34,9 @@ async function fetchVIIRSFeatures(mapview: __esri.MapView, mapPoint: any, viirsC
   const params = `?lat=${mapPoint.latitude}&lng=${mapPoint.longitude}&z=${mapview.zoom}&start_date=${appState.leftPanel.viirsStart}&end_date=${appState.leftPanel.viirsEnd}`;
   url = url.concat(params);
   return fetch(url)
-    .then(res => res.json())
-    .then(data => data.data)
-    .catch(e => console.log(e));
+    .then((res) => res.json())
+    .then((data) => data.data)
+    .catch((e) => console.log(e));
 }
 
 export async function getAllLayerFields(layer: __esri.FeatureLayer): Promise<LayerFieldInfos> {
@@ -48,10 +48,10 @@ export async function getAllLayerFields(layer: __esri.FeatureLayer): Promise<Lay
   } else {
     layerFields = await fetch(`${layer.url}?f=pjson`, {
       body: null,
-      method: 'GET'
+      method: 'GET',
     })
-      .then(response => response.json())
-      .then(data => {
+      .then((response) => response.json())
+      .then((data) => {
         if (data?.fields) {
           displayField = data.displayField;
           return data.fields;
@@ -80,7 +80,7 @@ async function fetchQueryTask(
     // distance: 0.01 * mapview.resolution, //reduce the distance if you want more precision
     geometry: event.mapPoint,
     // geometryPrecision: 1,
-    returnGeometry: true
+    returnGeometry: true,
   };
   const url = layer.url;
   let displayField = '';
@@ -90,7 +90,7 @@ async function fetchQueryTask(
     let objectid: string | null = null;
     if (allLayerFields) {
       const layerObjectField = allLayerFields.find(
-        field => field.type.toLowerCase() === 'esrifieldtypeoid' || field.type.toLowerCase() === 'oid'
+        (field) => field.type.toLowerCase() === 'esrifieldtypeoid' || field.type.toLowerCase() === 'oid'
       );
       if (layerObjectField?.name) {
         objectid = layerObjectField?.name;
@@ -99,18 +99,18 @@ async function fetchQueryTask(
     }
     const attributesToFetch = getAttributesToFetch(layer, isSubLayer, allLayerFields);
     fieldNames = attributesToFetch;
-    const newOutFields = attributesToFetch?.map(f => f.fieldName);
+    const newOutFields = attributesToFetch?.map((f) => f.fieldName);
     queryParams.outFields = newOutFields ? queryParams.outFields.concat(newOutFields) : ['*'];
     const sublayerResult = await esriQuery(url, queryParams);
     const [esriIntl] = await loadModules(['esri/intl']);
 
     if (sublayerResult.features.length > 0) {
-      featureResult = sublayerResult.features.map(f => {
+      featureResult = sublayerResult.features.map((f) => {
         const formattedAttributes = formatAttributeValues(f.attributes, fieldNames, esriIntl);
         return {
           attributes: formattedAttributes,
           geometry: f.geometry,
-          objectid: objectid ? f.attributes[objectid] : null
+          objectid: objectid ? f.attributes[objectid] : null,
         };
       });
     }
@@ -132,10 +132,10 @@ async function fetchQueryFeatures(
   const queryParams: any = {
     where: '1=1',
     outFields: ['*'],
-    geometry: event.mapPoint,
+    geometry: event.mapPoint || event,
     returnGeometry: true,
     units: 'miles',
-    distance: 0.02 * view.resolution
+    distance: 0.02 * view.resolution,
   };
 
   const attributesToFetch = getAttributesToFetch(layer);
@@ -144,7 +144,7 @@ async function fetchQueryFeatures(
   let objectid: string | null = null;
   if (allLayerFields) {
     const layerObjectField = allLayerFields.find(
-      field => field.type.toLowerCase() === 'esrifieldtypeoid' || field.type.toLowerCase() === 'oid'
+      (field) => field.type.toLowerCase() === 'esrifieldtypeoid' || field.type.toLowerCase() === 'oid'
     );
     if (layerObjectField?.name) {
       objectid = layerObjectField?.name;
@@ -161,7 +161,7 @@ async function fetchQueryFeatures(
         return {
           attributes: f.attributes,
           geometry: f.geometry,
-          objectid: objectid ? f.attributes[objectid] : null
+          objectid: objectid ? f.attributes[objectid] : null,
         };
       });
     }
@@ -195,6 +195,7 @@ export async function queryLayersForFeatures(
         l.id !== 'MASK'
     )
     .toArray();
+
   if (allLayersVisibleLayers) {
     for await (const layer of allLayersVisibleLayers) {
       //for each layer we check if it has subs or not
@@ -211,7 +212,7 @@ export async function queryLayersForFeatures(
               sublayerTitle: sublayer.title,
               features: features,
               fieldNames,
-              displayField
+              displayField,
             });
           }
         }
@@ -226,11 +227,11 @@ export async function queryLayersForFeatures(
               layerTitle: layer.title,
               features: features,
               fieldNames,
-              displayField
+              displayField,
             });
           }
         } else if (layer.type === 'vector-tile' && layer.id === 'VIIRS_ACTIVE_FIRES') {
-          const viirsConfig = mapviewState.allAvailableLayers.find(l => l.id === 'VIIRS_ACTIVE_FIRES');
+          const viirsConfig = mapviewState.allAvailableLayers.find((l) => l.id === 'VIIRS_ACTIVE_FIRES');
           if (!viirsConfig) return;
 
           const [Graphic] = await loadModules(['esri/Graphic']);
@@ -240,17 +241,17 @@ export async function queryLayersForFeatures(
             const popFeats = viirsFeatures.map((f: any) => {
               const markerSymbol = {
                 type: 'simple-marker',
-                color: [226, 119, 40]
+                color: [226, 119, 40],
               };
               const point: any = {
                 type: 'point',
                 longitude: f.longitude,
-                latitude: f.latitude
+                latitude: f.latitude,
               };
               const popF = new Graphic({
                 geometry: point,
                 symbol: markerSymbol,
-                attributes: f
+                attributes: f,
               });
               return popF;
             });
@@ -259,7 +260,7 @@ export async function queryLayersForFeatures(
               layerID: layer.id,
               layerTitle: viirsConfig.label[lang],
               features: popFeats,
-              fieldNames: viirsFieldNames
+              fieldNames: viirsFieldNames,
             });
           }
         } else {
@@ -271,7 +272,7 @@ export async function queryLayersForFeatures(
               layerTitle: layer.title,
               features: features,
               fieldNames,
-              displayField
+              displayField,
             });
           }
         }

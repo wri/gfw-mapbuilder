@@ -105,6 +105,7 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
         title: layerConfig.title,
         visible: layerConfig.visible,
         url: layerConfig.url,
+        searchField: layerConfig.searchField,
       });
       break;
     case 'loss':
