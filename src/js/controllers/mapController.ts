@@ -1635,8 +1635,6 @@ export class MapController {
     });
 
     searchWidget.on('search-complete', (e: any) => {
-      console.log(e);
-      console.log(e.results[0].results[0].feature.geometry.extent);
       queryLayersForFeatures(this._mapview, this._map, e.results[0].results[0].feature.geometry.centroid);
     });
   }
