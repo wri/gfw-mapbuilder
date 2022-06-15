@@ -210,6 +210,7 @@ export class MapController {
           //If user is clicking on the drawn/upload polygon, we should not query all other layers as well, we should just accept that we have clicked on user feature on the map
           const clickGeo = event.mapPoint;
           const userFeatLayer = this._map?.findLayerById('user_features') as any;
+
           if (userFeatLayer && userFeatLayer?.graphics?.items.length) {
             const activeOutlineColor = [115, 252, 253];
             const inactiveOutlineColor = [3, 188, 255];
@@ -251,12 +252,14 @@ export class MapController {
                   };
                 })
                 .sort((a: any, b: any) => a.attributes.attributeIndex - b.attributes.attributeIndex);
+
               const featuresOnMap: LayerFeatureResult = {
                 layerID: 'user_features',
                 layerTitle: 'User Features',
                 features: userFeatures,
                 fieldNames: null,
               };
+
               store.dispatch(setActiveFeatures([featuresOnMap]));
               store.dispatch(setActiveFeatureIndex([0, graphicIndex]));
               store.dispatch(selectActiveTab('analysis'));
@@ -582,6 +585,7 @@ export class MapController {
         //if user is clicking on the drawn/upload polygon, we should not query all other layers as well, we should just accept that we have clicked on user feature on the map
         const clickGeo = event.mapPoint;
         const userFeatLayer = this._map?.findLayerById('user_features') as any;
+
         if (userFeatLayer && userFeatLayer?.graphics?.items.length) {
           //TODO: Needs refactor, we essentially copy pasting this from initialize click event handler
           //need to be extracted into utility method for cleaner approach
@@ -626,12 +630,14 @@ export class MapController {
                 };
               })
               .sort((a: any, b: any) => a.attributes.attributeIndex - b.attributes.attributeIndex);
+
             const featuresOnMap: LayerFeatureResult = {
               layerID: 'user_features',
               layerTitle: 'User Features',
               features: userFeatures,
               fieldNames: null,
             };
+
             store.dispatch(setActiveFeatures([featuresOnMap]));
             store.dispatch(setActiveFeatureIndex([0, graphicIndex]));
             store.dispatch(selectActiveTab('analysis'));
@@ -1622,10 +1628,16 @@ export class MapController {
     const allSources = await setLayerSearchSource();
     const [Search] = await loadModules(['esri/widgets/Search']);
 
-    new Search({
+    const searchWidget = new Search({
       view: this._mapview,
       container: searchRef.current,
       sources: allSources,
+    });
+
+    searchWidget.on('search-complete', (e: any) => {
+      console.log(e);
+      console.log(e.results[0].results[0].feature.geometry.extent);
+      queryLayersForFeatures(this._mapview, this._map, e.results[0].results[0].feature.geometry.centroid);
     });
   }
 
