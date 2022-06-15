@@ -69,6 +69,11 @@ export default {
   },
   disabledAnalysisModules: [], //'VIIRS_FIRES', 'GLAD_ALERTS', 'TC_LOSS', 'IFL', 'LCC'
   layerPanel: {
+    GROUP_WEBMAP: {
+      order: 2,
+      label: {},
+      layers: [],
+    },
     GROUP_CLIMATE: {
       groupType: 'default',
       order: 4,
