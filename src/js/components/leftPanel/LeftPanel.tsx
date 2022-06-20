@@ -209,9 +209,7 @@ const LeftPanel = (): React.ReactElement => {
   return (
     <div className={`left-panel ${hideWidgetActive ? 'hide' : ''}`} data-cy="left-panel">
       <Tabs tabsToRender={tabsToRender} />
-      <div className="wra">
-        <TabViewContainer tabViewsToRender={tabsToRender} />
-      </div>
+      <TabViewContainer tabViewsToRender={tabsToRender} />
     </div>
   );
 };
