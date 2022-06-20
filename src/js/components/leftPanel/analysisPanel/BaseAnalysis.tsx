@@ -408,7 +408,7 @@ const BaseAnalysis = (): JSX.Element => {
           {vegaSpec && (
             <>
               <div
-                style={{ cursor: 'pointer', float: 'right' }}
+                style={{ cursor: 'pointer', float: 'right', border: '1px solid grey' }}
                 onClick={(): void => setDownloadOptionsVisible(!downloadOptionsVisible)}
               >
                 <DownloadIcon width={25} height={25} />

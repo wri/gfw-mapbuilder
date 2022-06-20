@@ -2,10 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import ReactTooltip from 'react-tooltip';
 import { RootState } from '../../../js/store/index';
-import {
-  selectActiveTab,
-  toggleTabviewPanel
-} from '../../../js/store/appState/actions';
+import { selectActiveTab, toggleTabviewPanel } from '../../../js/store/appState/actions';
 import TabViewContainer from './TabViewContainer';
 
 import { LayersTabIcon } from '../../../images/layersTabIcon';
@@ -38,22 +35,16 @@ const Tab = (props: TabProps): React.ReactElement => {
     documentFlashingActive,
     setDocumentFlashing,
     analysisFlashingActive,
-    setAnalysisFlashing
+    setAnalysisFlashing,
   } = props;
 
   const dispatch = useDispatch();
 
-  const tabViewVisible = useSelector(
-    (store: RootState) => store.appState.leftPanel.tabViewVisible
-  );
+  const tabViewVisible = useSelector((store: RootState) => store.appState.leftPanel.tabViewVisible);
 
-  const savedActiveTab = useSelector(
-    (store: RootState) => store.appState.leftPanel.activeTab
-  );
+  const savedActiveTab = useSelector((store: RootState) => store.appState.leftPanel.activeTab);
 
-  const documents = useSelector(
-    (store: RootState) => store.mapviewState.documents
-  );
+  const documents = useSelector((store: RootState) => store.mapviewState.documents);
 
   const setFlashingTab = (): void => {
     if (label === 'documents') {
@@ -93,18 +84,12 @@ const Tab = (props: TabProps): React.ReactElement => {
       <button
         data-tip={label}
         data-offset="{'top': -5}"
-        className={
-          label === activeTab && tabViewVisible
-            ? 'tab-button tab-button__active'
-            : 'tab-button'
-        }
+        className={label === activeTab && tabViewVisible ? 'tab-button tab-button__active' : 'tab-button'}
         aria-label="left panel tab"
         onClick={handleTabClick}
       >
         <Icon width={25} height={25} fill={'#555'} className={setClassName()} />
-        {documentFlashingActive && documents && documents.length && (
-          <span className="yellow-alert" />
-        )}
+        {documentFlashingActive && documents && documents.length && <span className="yellow-alert" />}
         {analysisFlashingActive && <span className="yellow-alert" />}
       </button>
       <ReactTooltip effect="solid" className="tab-tooltip" />
@@ -127,22 +112,15 @@ const Tabs = (props: TabsProps): React.ReactElement => {
   const [documentFlashing, setDocumentFlashing] = useState(false);
   const [analysisFlashing, setAnalysisFlashing] = useState(false);
   //Active Tab in the store
-  const savedActiveTab = useSelector(
-    (store: RootState) => store.appState.leftPanel.activeTab
-  );
+  const savedActiveTab = useSelector((store: RootState) => store.appState.leftPanel.activeTab);
 
-  const activeFeatures = useSelector(
-    (store: RootState) => store.mapviewState.activeFeatures
-  );
+  const activeFeatures = useSelector((store: RootState) => store.mapviewState.activeFeatures);
 
-  const activeFeatureIndex = useSelector(
-    (store: RootState) => store.mapviewState.activeFeatureIndex
-  );
+  const activeFeatureIndex = useSelector((store: RootState) => store.mapviewState.activeFeatureIndex);
 
   const [featureCollectionIndex, featureIndex] = activeFeatureIndex;
 
-  const specificFeature =
-    activeFeatures[featureCollectionIndex]?.features[featureIndex];
+  const specificFeature = activeFeatures[featureCollectionIndex]?.features[featureIndex];
 
   useEffect(() => {
     if (specificFeature) {
@@ -156,9 +134,8 @@ const Tabs = (props: TabsProps): React.ReactElement => {
     }
   }, [specificFeature]);
 
-  const tabsGroupRow = props.tabsToRender.map(tab => {
-    const documentFlashingActive =
-      tab.label === 'documents' && documentFlashing;
+  const tabsGroupRow = props.tabsToRender.map((tab) => {
+    const documentFlashingActive = tab.label === 'documents' && documentFlashing;
     const analysisFlashingActive = tab.label === 'analysis' && analysisFlashing;
 
     return (
@@ -180,21 +157,12 @@ const Tabs = (props: TabsProps): React.ReactElement => {
 };
 
 const LeftPanel = (): React.ReactElement => {
-  const hideWidgetActive = useSelector(
-    (store: RootState) => store.appState.hideWidgetActive
-  );
-  const renderDocTab = useSelector(
-    (store: RootState) => store.appSettings.includeDocumentsTab
-  );
-  const narrative = useSelector(
-    (store: RootState) => store.appSettings.narrative
-  );
-  const alternativeNarrative = useSelector(
-    (store: RootState) => store.appSettings.alternativeNarrative
-  );
+  const hideWidgetActive = useSelector((store: RootState) => store.appState.hideWidgetActive);
+  const renderDocTab = useSelector((store: RootState) => store.appSettings.includeDocumentsTab);
+  const narrative = useSelector((store: RootState) => store.appSettings.narrative);
+  const alternativeNarrative = useSelector((store: RootState) => store.appSettings.alternativeNarrative);
 
-  const renderInfoTab =
-    narrative.length || alternativeNarrative.length ? true : false;
+  const renderInfoTab = narrative.length || alternativeNarrative.length ? true : false;
 
   //Rendering instructions should be likely driven by our config
   const tabsArray = [
@@ -202,49 +170,48 @@ const LeftPanel = (): React.ReactElement => {
       label: 'info',
       icon: InfoTabIcon,
       tooltipText: 'Info',
-      render: renderInfoTab
+      render: renderInfoTab,
     },
     {
       label: 'layers',
       icon: LayersTabIcon,
       tooltipText: 'Layers',
-      render: true
+      render: true,
     },
     {
       label: 'data',
       icon: DataTabIcon,
       tooltipText: 'Data',
-      render: true
+      render: true,
     },
     {
       label: 'analysis',
       icon: AnalysisTabIcon,
       tooltipText: 'Analysis',
-      render: true
+      render: true,
     },
     {
       label: 'documents',
       icon: DocumentsTabIcon,
       tooltipText: 'Documents',
-      render: renderDocTab //Example of it coming from resources file
+      render: renderDocTab, //Example of it coming from resources file
     },
     {
       label: 'menu',
       icon: HamburgerIcon,
       tooltipText: 'Menu',
-      render: true
-    }
+      render: true,
+    },
   ];
 
-  const tabsToRender = tabsArray.filter(tab => tab.render);
+  const tabsToRender = tabsArray.filter((tab) => tab.render);
 
   return (
-    <div
-      className={`left-panel ${hideWidgetActive ? 'hide' : ''}`}
-      data-cy="left-panel"
-    >
+    <div className={`left-panel ${hideWidgetActive ? 'hide' : ''}`} data-cy="left-panel">
       <Tabs tabsToRender={tabsToRender} />
-      <TabViewContainer tabViewsToRender={tabsToRender} />
+      <div className="wra">
+        <TabViewContainer tabViewsToRender={tabsToRender} />
+      </div>
     </div>
   );
 };
