@@ -10,7 +10,6 @@
   background: $white;
   box-shadow: 0 1px 2px rgba(85, 85, 85, 0.25);
   max-height: 50rem;
-  // overflow-y: scroll;
 
   .tab-header-container {
     button {
@@ -239,11 +238,12 @@
   .base-analysis-content {
     color: #6f6f6f;
     padding: 6px;
-    min-height: 500px;
 
     .canvas-chart-wrapper {
+      height: 100%;
       canvas {
         max-width: 100%;
+        height: 100%;
       }
     }
     .chart-icon {

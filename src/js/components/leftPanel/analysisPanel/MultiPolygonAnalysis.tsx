@@ -7,7 +7,7 @@ import { BackIcon } from '../../../../images/backIcon';
 import {
   setMultiPolygonSelectionMode,
   setActiveMultiInput,
-  setAnalysisFeatureList
+  setAnalysisFeatureList,
 } from '../../../store/appState/actions';
 import { mapController } from '../../../controllers/mapController';
 import MethodSelection from './multiPolyAnalysis/MethodSelection';
@@ -15,7 +15,7 @@ import { DeleteIcon } from '../../../../images/deleteIcon';
 import {
   clearMultiPolygonLayer,
   deleteMultiPolygonLayer,
-  removeIntersectingGraphic
+  removeIntersectingGraphic,
 } from '../../../helpers/MapGraphics';
 import { AnalyzingIcon } from '../../../../images/analyzingIcon';
 import { ErrorIcon } from '../../../../images/errorIcon';
@@ -40,7 +40,7 @@ const MultiPolygonAnalysis = ({ initAnalyze }: Props) => {
       //check if we have overlap between the two!
       mapController
         .checkIntersection(analysisFeatureList[0].features[0].geometry, analysisFeatureList[1].features[0].geometry)
-        .then(intersects => {
+        .then((intersects) => {
           setOverlap(intersects ? 'intersect' : 'failed');
         });
     }
