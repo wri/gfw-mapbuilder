@@ -308,5 +308,5 @@ Copy dist > 1.5.0.js file in dist folder into 1.5.0.js file in aws folder
 
 Clear cache
 
-`aws cloudfront create-invalidation --distribution-id E58RE0T7L0R9N --path "/" --profile wri
-aws cloudfront create-invalidation --distribution-id E2B81LN86UDRTJ --path "/" --profile wri`
+`aws cloudfront create-invalidation --distribution-id E58RE0T7L0R9N --path "/" --profile wri`
+`aws cloudfront create-invalidation --distribution-id E2B81LN86UDRTJ --path "/" --profile wri`
