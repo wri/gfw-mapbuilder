@@ -32,7 +32,7 @@ npm run build
 
 ### Configuring
 
-This application has a general [`config.js`][config.js] file that contains things controlled by the developers. There is also a [`resources.js`][resources.js] file which contains more configurations. However the Resources file contains configurations that are controlled via ArcGIS Online or whomever may be deploying the application. You can control things like the layers in the accordion, their source urls, their order on the map and in the UI, service urls (print, geometry, map, etc.), which layers to include in the analysis, and even the configurations for slope analysis and other aspects of the analysis. Anything that needs to be controlled from ArcGIS Online or the person deploying it, should be placed in `resources.js`.
+This application has a general [`resources.js`][resources.js] file that contains things controlled by the developers.  Also, the Resources file contains configurations that are controlled via ArcGIS Online or whomever may be deploying the application. You can control things like the layers in the accordion, their source urls, their order on the map and in the UI, service urls (print, geometry, map, etc.), which layers to include in the analysis, and even the configurations for slope analysis and other aspects of the analysis. Anything that needs to be controlled from ArcGIS Online or the person deploying it, should be placed in `resources.js`.
 
 To ensure that your `resources.js` has a valid configuration run the following command
 
