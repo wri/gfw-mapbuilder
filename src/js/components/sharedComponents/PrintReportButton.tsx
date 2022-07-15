@@ -25,9 +25,13 @@ export const PrintReportButton = (): JSX.Element => {
     const baseURL = new URL(window.location.href);
     let combinedReportURL = baseURL.origin + baseURL.pathname;
     const stateUrl = await getShareableURL({ report: true });
+
     combinedReportURL = appID
       ? combinedReportURL + '?' + 'appid=' + appID + '&' + stateUrl
       : combinedReportURL + '?' + stateUrl;
+
+    console.log('stateUrl', { stateUrl });
+    console.log('combinedReportURL', { combinedReportURL });
     window.open(combinedReportURL);
   }
 

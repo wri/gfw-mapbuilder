@@ -132,6 +132,9 @@ export class MapController {
       },
     });
 
+    console.log('this._wep', this._map);
+    console.log('webmapID', webmapID);
+
     this._mapview = new MapView({
       map: this._map,
       container: domRef.current,
