@@ -30,8 +30,6 @@ export const PrintReportButton = (): JSX.Element => {
       ? combinedReportURL + '?' + 'appid=' + appID + '&' + stateUrl
       : combinedReportURL + '?' + stateUrl;
 
-    console.log('stateUrl', { stateUrl });
-    console.log('combinedReportURL', { combinedReportURL });
     window.open(combinedReportURL);
   }
 
