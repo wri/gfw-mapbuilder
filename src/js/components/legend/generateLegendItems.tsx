@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { BasicItem, GradientItem, LineItem, PointItem, PolyFromMapServer } from './LegendLabelComponents';
 import { mapController } from '../../controllers/mapController';
+import { LAYER_IDS, LAYER_TITLES } from '../../../../configs/layer-config';
 
 interface LegendItemProps {
   visibleLayers: LayerProps[];
@@ -214,12 +215,11 @@ const LegendItems = (props: LegendItemProps): JSX.Element => {
   const windSpeedPotential = useSelector((store: RootState) => store.appState.leftPanel.windSpeedPotential);
   const getLayerTitle = (title: string, layerID: string) => {
     let layerTitle = title;
-    if (layerID === 'WIND_SPEED') {
+    if (layerID === LAYER_IDS.WIND_SPEED) {
       layerTitle = `${title} at ${windSpeedPotential}m (m/s)`;
-    } else if (layerID === 'AIR_QUALITY') {
-      layerTitle =
-        'January 13, 2022 - February 12, 2022 Average Tropospheric Nitrogen Dioxide (NO₂) (mol/m², millionths)';
-    } else if (layerID === 'DRY_SPELLS') {
+    } else if (layerID === LAYER_IDS.AIR_QUALITY) {
+      layerTitle = LAYER_TITLES.AIR_QUALITY;
+    } else if (layerID === LAYER_IDS.DRY_SPELLS) {
       const drySpelllayer: any = mapController._map?.findLayerById(layerID);
       layerTitle = `${drySpelllayer.endDate ? drySpelllayer.endDate : 2030} Projected Change in Dry Spells`;
     }
@@ -291,10 +291,10 @@ const LegendItems = (props: LegendItemProps): JSX.Element => {
       );
     } else if (layer.legendInfo && layer.origin === 'remote') {
       let title = layer.metadata?.legendConfig?.name[language];
-      if (layer.id === 'GLAD_ALERTS') {
+      if (layer.id === LAYER_IDS.GLAD_ALERTS) {
         title = `${layer.title} (${props.gladConfirmed ? 'Confirmed' : 'Unconfirmed'})`;
       }
-      if (layer.id === 'TREE_COVER_LOSS') {
+      if (layer.id === LAYER_IDS.TREE_COVER_LOSS) {
         title = `${layer.title} (${timeSlider[0]} - ${timeSlider[1]})`;
       }
       let labelIcons;
