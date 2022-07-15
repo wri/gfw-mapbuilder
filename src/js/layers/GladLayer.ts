@@ -87,9 +87,8 @@ export const createGlad = async () => {
         // Decode the rgba/pixel so I can filter on confidence and date ranges
         const slice = [data[i], data[i + 1], data[i + 2]];
         const values = this.decodeDate(slice);
-
         // Check if pixel date is between Julian Date properties above
-        if (values.date > this.julianFrom && values.date < this.julianTo) {
+        if (values.date > this.julianFrom || values.date < this.julianTo) {
           // Check if we are only examining confirmed cases or not
 
           data[i + 3] = values.intensity;
