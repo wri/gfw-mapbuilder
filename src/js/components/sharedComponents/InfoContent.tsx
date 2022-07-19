@@ -4,7 +4,6 @@ import convert from 'xml-js';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../js/store';
 import { infoContent } from '../../../../configs/translations/modal.tanslations';
-import './styles/infoContent.scss';
 
 function createMarkup(content: any) {
   return { __html: content };
