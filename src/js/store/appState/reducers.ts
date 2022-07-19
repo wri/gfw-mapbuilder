@@ -41,6 +41,8 @@ import {
   SET_VIIRS_START,
   SET_WIND_SPEED_POTENTIAL,
   TOGGLE_TABVIEW_PANEL,
+  SET_LAND_COVER_YEAR_RANGE,
+  SET_LAND_COVER_YEAR_VALUE,
 } from './types';
 
 const initialState: AppState = {
@@ -92,6 +94,8 @@ const initialState: AppState = {
   multiPolygonSelectionMode: false,
   activeMultiInput: 0,
   analysisFeatureList: [undefined, undefined],
+  landCoverYearRange: [2000],
+  landCoverYearValue: [2000],
 };
 
 export function appStateReducer(state = initialState, action: AppStateTypes): AppState {
@@ -343,6 +347,12 @@ export function appStateReducer(state = initialState, action: AppStateTypes): Ap
         ...state,
         imageObject: action.payload,
       };
+    case SET_LAND_COVER_YEAR_VALUE:
+      return {
+        ...state,
+        landCoverYearValue: action.payload,
+      };
+
     default:
       return state;
   }

@@ -238,6 +238,7 @@ export async function getRemoteAndServiceLayers(): Promise<any> {
     CARBON_SEQ: 'carbonSequence',
     CARBON_EMISSIONS: 'carbonEmissions',
     TREE_COVER: 'treeCover',
+    UMD_LAND_COVER: 'umdLandCover',
     TREE_COVER_GAIN: 'treeCoverGain',
     TREE_COVER_LOSS: 'treeCoverLoss',
     TREE_COVER_HEIGHT: 'treeCoverHeight',

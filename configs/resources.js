@@ -53,6 +53,7 @@ export default {
   forestCarbonGrossRemovals: true,
   forestCarbonGrossEmissions: true,
   forestCarbonNetFlux: true,
+  umdLandCover: true,
   drySpells: true,
   airQuality: true,
   windSpeed: true,
@@ -298,9 +299,15 @@ export default {
           uuid: '2569adca-ef87-42c4-a153-57c5e8ba0ef7',
         },
         {
+          id: 'UMD_LAND_COVER',
+          order: 7,
+          type: 'remoteDataLayer',
+          uuid: 'f22e0529-d398-4ccc-b943-e62d420fea89',
+        },
+        {
           groupId: 'GROUP_LC',
           id: 'TREE_COVER_HEIGHT',
-          order: 7,
+          order: 8,
           type: 'flagship',
           uuid: '9efed1d8-164d-4adb-85a1-e62c6c5c00aa',
           origin: 'gfw-api',
@@ -367,7 +374,7 @@ export default {
         },
         {
           id: 'TREES_MOSAIC_LANDSCAPES',
-          order: 8,
+          order: 9,
           type: 'remoteDataLayer',
           uuid: '9e0c1e1e-a0a3-457f-a373-4104820f7a50',
         },

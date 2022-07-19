@@ -2165,6 +2165,17 @@ export class MapController {
     }
     return false;
   }
+
+  getMapView = () => {
+    return this._mapview;
+  };
+
+  removeMapLayer = (id: string) => {
+    const layer = this._map?.layers.find((layer: any) => layer.id === id);
+    if (layer) {
+      this._map?.remove(layer);
+    }
+  };
 }
 
 export const mapController = new MapController();

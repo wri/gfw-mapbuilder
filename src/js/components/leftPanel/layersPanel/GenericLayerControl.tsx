@@ -26,7 +26,13 @@ import {
 import { RootState } from '../../../store';
 import { LayerProps } from '../../../store/mapview/types';
 import { mapController } from '../../../controllers/mapController';
-import { defaultMarks, densityEnabledLayers, drySpellMarks, gfwMarks } from '../../../../../configs/layer-config';
+import {
+  defaultMarks,
+  densityEnabledLayers,
+  drySpellMarks,
+  gfwMarks,
+  landCoverMarks,
+} from '../../../../../configs/layer-config';
 import { InfoIcon } from '../../../../images/infoIcon';
 import { DashboardIcon } from '../../../../images/dashboardIcon';
 import { LayerVersionPicker } from './LayerVersionPicker';
@@ -42,6 +48,7 @@ import WindSpeedPicker from '../../sharedComponents/WindSpeedPicker';
 import { setTimeSlider } from '../../../store/mapview/actions';
 import SelectGFWAlertLayer from '../../sharedComponents/SelectGFWAlertLayer';
 import { loadModules } from 'esri-loader';
+import RangeSlider from '../../sharedComponents/RangeSldier';
 
 //Dynamic custom theme override using styled-components lib
 interface CheckBoxWrapperProps {
@@ -76,6 +83,7 @@ const GladControls = (props: GladControlsProps): JSX.Element => {
   const [startDate, setStartDate] = React.useState(
     String(props.type === 'gfw-integrated-alert' ? gfwIntegratedStart : gladStart)
   );
+
   const [endDate, setEndDate] = React.useState(props.type === 'gfw-integrated-alert' ? gfwIntegratedEnd : gladEnd);
 
   async function handleStartDateChange(day: any) {
@@ -398,6 +406,8 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
   const gfwLayerLabel = useSelector((store: RootState) => store.appState.leftPanel.gfwLayerLabel);
   const gfwLayerSubtitle = useSelector((store: RootState) => store.appState.leftPanel.gfwLayerSubtitle);
   const allAvailableLayers = useSelector((store: RootState) => store.mapviewState.allAvailableLayers);
+  const rangeSliderYearValue = useSelector((store: RootState) => store.appState.landCoverYearValue);
+  const rangeSliderYearDefaultValue = useSelector((store: RootState) => store.appState.landCoverYearRange);
   const gladLayerConfig: any = allAvailableLayers.filter((layer: any) => layer.id === gfwLayer);
   //Determine if we need density control on this layer
   const densityPicker = layer && densityEnabledLayers.includes(layer.id);
@@ -443,6 +453,24 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
             steps={33}
             included={true}
             type={'gfw-integrated-alert'}
+          />
+        );
+      default:
+        return null;
+    }
+  };
+
+  const returnRangeSlider = (id: string): any => {
+    switch (id) {
+      case 'UMD_LAND_COVER':
+        const umdLayer = allAvailableLayers.find((layer: any) => layer.id === id);
+        return (
+          <RangeSlider
+            id={id}
+            value={rangeSliderYearValue}
+            defaultValue={rangeSliderYearDefaultValue}
+            marks={landCoverMarks}
+            layerConfig={umdLayer}
           />
         );
       default:
@@ -674,6 +702,8 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
         </div>
         {layer?.visible && layer.id === 'GFW_INTEGRATED_ALERTS' && <SelectGFWAlertLayer />}
         {layer?.visible && returnTimeSlider(props.id)}
+        {layer?.visible && returnRangeSlider(props.id)}
+
         {layer?.visible && densityPicker && <CanopyDensityPicker type={layer.id} />}
         {layer?.visible && layer.id === 'TREE_COVER_HEIGHT' && <TreeHeightPicker />}
 

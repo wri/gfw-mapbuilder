@@ -6,6 +6,7 @@ export const supportedLayers = [
   'forest-carbon-gross-removals',
   'forest-carbon-gross-emissions',
   'forest-carbon-net-flux',
+  'umd-land-cover',
   'gain',
   'image',
   'webtiled',
@@ -320,6 +321,19 @@ export const gfwMarks = {
   '730': {
     value: '730',
     label: '2022-03-31',
+    style: {},
+  },
+};
+
+export const landCoverMarks = {
+  '2000': {
+    value: '2000',
+    label: '2000',
+    style: {},
+  },
+  '2020': {
+    value: '2020',
+    label: '2020',
     style: {},
   },
 };

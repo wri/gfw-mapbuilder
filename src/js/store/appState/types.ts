@@ -66,6 +66,8 @@ export interface AppState {
   activeMultiInput: number;
   analysisFeatureList: any[] | LayerFeatureResult[];
   imageObject: any;
+  landCoverYearRange: number[];
+  landCoverYearValue: number[];
 }
 
 //Action names available
@@ -107,6 +109,9 @@ export const SET_WIND_SPEED_POTENTIAL = 'SET_WIND_SPEED_POTENTIAL';
 export const SET_MULTI_POLYGON_SELECTION_MODE = 'SET_MULTI_POLYGON_SELECTION_MODE';
 export const SET_ACTIVE_MULTI_INPUT = 'SET_ACTIVE_MULTI_INPUT';
 export const SET_ANALYSIS_FEATURE_LIST = 'SET_ANALYSIS_FEATURE_LIST';
+
+export const SET_LAND_COVER_YEAR_RANGE = 'SET_LAND_COVER_YEAR_RANGE';
+export const SET_LAND_COVER_YEAR_VALUE = 'SET_LAND_COVER_YEAR_VALUE';
 
 interface SetSelectedSearchWidgetLayer {
   type: typeof SET_SELECTED_SEARCH_WIDGET_LAYER;
@@ -296,6 +301,11 @@ interface SetAnalysisFeatureList {
   payload: any;
 }
 
+interface SetLandCoverYearValue {
+  type: typeof SET_LAND_COVER_YEAR_VALUE;
+  payload: number[];
+}
+
 export type AppStateTypes =
   | ToggleTabviewPanelAction
   | RenderModalAction
@@ -334,4 +344,5 @@ export type AppStateTypes =
   | SetWindSpeedPotential
   | SetMultiPolygonSelectionMode
   | SetActiveMultiInput
-  | SetAnalysisFeatureList;
+  | SetAnalysisFeatureList
+  | SetLandCoverYearValue;
