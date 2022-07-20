@@ -2165,6 +2165,13 @@ export class MapController {
     }
     return false;
   }
+
+  getMapInfo = () => {
+    return {
+      map: this._map,
+      maview: this._mapview,
+    };
+  };
 }
 
 export const mapController = new MapController();
