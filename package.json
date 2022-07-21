@@ -55,6 +55,7 @@
     "redux": "^4.0.5",
     "reselect": "^4.0.0",
     "styled-components": "^5.3.3",
+    "uuid": "^8.3.2",
     "xml-js": "^1.6.11"
   },
   "devDependencies": {
@@ -86,12 +87,12 @@
     "html-webpack-plugin": "^3.2.0",
     "husky": "^4.0.0",
     "mini-css-extract-plugin": "^0.9.0",
-    "node-sass": "^4.13.0",
     "prettier": "^2.6.2",
     "pretty-quick": "^2.0.1",
     "redux-devtools-extension": "^2.13.8",
     "redux-logger": "^3.0.6",
     "resolve-url-loader": "^3.1.1",
+    "sass": "^1.53.0",
     "sass-loader": "^8.0.0",
     "style-loader": "^1.1.2",
     "terser-webpack-plugin": "^2.3.1",
@@ -109,8 +110,5 @@
     "hooks": {
       "pre-commit": "pretty-quick --staged"
     }
-  },
-  "volta": {
-    "node": "14.17.0"
   }
 }
