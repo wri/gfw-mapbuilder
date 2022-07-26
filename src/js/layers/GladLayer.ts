@@ -124,6 +124,12 @@ export const createGlad = async () => {
               data[i + 2] = 108; // B
             }
           }
+        } else {
+          // set color to be transparent
+          data[i] = 255; // R
+          data[i + 1] = 255; // G
+          data[i + 2] = 255; // B
+          data[i + 3] = 0; // A
         }
       }
       return data;

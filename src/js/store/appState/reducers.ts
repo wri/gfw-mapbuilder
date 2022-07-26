@@ -64,7 +64,7 @@ const initialState: AppState = {
     analysisYearRange: [2001, 2018],
     gladConfirmed: false,
     highConfidenceConfirmed: false,
-    gladStart: '2015-01-01',
+    gladStart: '2020-01-02',
     gladEnd: format(new Date(Date.now()), 'yyyy-MM-dd'),
     gfwIntegratedStart: '2020-03-03',
     gfwIntegratedEnd: format(new Date(Date.now()), 'yyyy-MM-dd'),
