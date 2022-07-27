@@ -943,7 +943,7 @@ export class MapController {
         .map((layer: any) => layer.visible);
       if (layer.visible === false) {
         if (!webTileLayerVisible.includes(true)) {
-          this.setWebmapOriginalBasemap('webmap_original');
+          // this.setWebmapOriginalBasemap('webmap_original');
         }
       }
       if (layer.type === 'web-tile' && layer.visible === true) {
