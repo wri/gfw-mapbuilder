@@ -3,11 +3,6 @@
   "version": "1.5.0",
   "description": "Template for the WRI Forest Atlas that will be available through ArcGIS Online.",
   "main": "index.html",
-  "browser": {
-    "fs": false,
-    "path": false,
-    "os": false
-  },
   "scripts": {
     "start": "webpack-dev-server --config webpack.development.js",
     "build": "webpack --config webpack.production.js --display-origins --display-provided-exports --display-reasons",
