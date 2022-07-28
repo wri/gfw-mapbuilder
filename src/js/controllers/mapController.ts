@@ -943,6 +943,7 @@ export class MapController {
       // if Land Cover visibility is true, change the max zoom level for mapview to 12, else max zoom level to 20
       const isUMDLandCover: any = newLayersArray.find((layer: any) => layer.id === LAYER_IDS.UMD_LAND_COVER);
       if (isUMDLandCover.visible) {
+        alert('Land Cover data only available until zoom level 12');
         this._mapview.constraints = {
           maxZoom: 12,
         };
