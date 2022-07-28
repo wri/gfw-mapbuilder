@@ -14,14 +14,11 @@ import {
   checkForReportView,
   loadGoogleAnalytics,
   changeDefaultLanguage,
-  attachCMSEventHandlers
+  attachCMSEventHandlers,
 } from '../helpers/appLoading';
-
 import resources from '../../../configs/resources';
-// import resources from '../../../configs/countryConfigs/cameroon';
-
-import '../../css/index.scss';
 import { allRequiredFieldsPresent, CHECK_LOGGED_URL, getUserData } from './gfwContent/utils';
+import '../../css/index.scss';
 
 const App = (props: AppSettings | any): JSX.Element => {
   //Check for Report param in the URL (if that exists, we render a report view instead of our full scale application
@@ -44,14 +41,14 @@ const App = (props: AppSettings | any): JSX.Element => {
     const portItem = new PortalItem({ id: appID, portal: portalA });
     portItem
       .fetchData('json')
-      .then(res => {
+      .then((res) => {
         console.log(res);
         const { values } = res;
         dispatch(overwriteSettings({ ...resources, ...props, ...values }));
         changeDefaultLanguage(values?.language);
         setShowGlobalSpinner(false);
       })
-      .catch(e => {
+      .catch((e) => {
         console.error(e);
         dispatch(overwriteSettings({ ...resources, ...props }));
         changeDefaultLanguage(resources.language);
@@ -96,19 +93,19 @@ const App = (props: AppSettings | any): JSX.Element => {
         fetch(CHECK_LOGGED_URL, {
           credentials: 'include',
           headers: {
-            Authorization: `Bearer ${userToken}`
-          }
+            Authorization: `Bearer ${userToken}`,
+          },
         })
-          .then(response => {
+          .then((response) => {
             const hasError = response.status !== 200;
-            response.json().then(data => {
+            response.json().then((data) => {
               if (hasError) return;
               localStorage.setItem('userID', data.id);
               localStorage.setItem('email', data?.email);
               dispatch(setLoggedIn(true));
 
               //check if user has completed their profile
-              getUserData(data.id, userToken).then(dataRes => {
+              getUserData(data.id, userToken).then((dataRes) => {
                 if (dataRes?.error) {
                   //handle error
                   console.log('Err:', dataRes.errorMsg);
@@ -121,7 +118,7 @@ const App = (props: AppSettings | any): JSX.Element => {
               });
             });
           })
-          .catch(e => console.error(e));
+          .catch((e) => console.error(e));
       }
     }
 
@@ -138,7 +135,7 @@ const App = (props: AppSettings | any): JSX.Element => {
           containerPositionStyling={{
             position: 'absolute',
             top: '40%',
-            left: '50%'
+            left: '50%',
           }}
           color={'#cfcdcd'}
           size={100}

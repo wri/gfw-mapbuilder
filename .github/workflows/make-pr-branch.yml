@@ -20,6 +20,8 @@ jobs:
         with:
           node-version: '16.x'
       - name: Create Build
+        env:
+          PLANET_API_KEY: ${{ secrets.PLANET_API_KEY }}
         run: |
           npm install
           npm run build
