@@ -132,6 +132,7 @@ const InfoContent: FunctionComponent<{}> = (): any => {
     sourceLabel,
     frequencyLabel,
     contentDateLabel,
+    contentDateRangeLabel,
     citationLabel,
     licenseLabel,
     downloadDataLabel,
@@ -269,7 +270,8 @@ const InfoContent: FunctionComponent<{}> = (): any => {
         geographic_coverage,
         source,
         frequency_of_updates,
-        date_of_content,
+        content_date,
+        content_date_range,
         cautions,
         license,
         overview,
@@ -313,7 +315,16 @@ const InfoContent: FunctionComponent<{}> = (): any => {
               </tr>
               <tr>
                 <td className="label">{contentDateLabel}</td>
-                <td className="label-info" dangerouslySetInnerHTML={{ __html: date_of_content }} />
+                <td className="label-info" dangerouslySetInnerHTML={{ __html: content_date }} />
+              </tr>
+              <tr>
+                <td className="label">{contentDateRangeLabel}</td>
+                <td
+                  className="label-info"
+                  dangerouslySetInnerHTML={{
+                    __html: `${content_date_range?.min} - ${content_date_range?.max}`,
+                  }}
+                />
               </tr>
               <tr>
                 <td className="label">{citationLabel}</td>

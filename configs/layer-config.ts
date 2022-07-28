@@ -337,3 +337,15 @@ export const landCoverMarks = {
     style: {},
   },
 };
+
+export const LAYER_IDS = {
+  AIR_QUALITY: 'AIR_QUALITY',
+  WIND_SPEED: 'WIND_SPEED',
+  DRY_SPELLS: 'DRY_SPELLS',
+  GLAD_ALERTS: 'GLAD_ALERTS',
+  TREE_COVER_LOSS: 'TREE_COVER_LOSS',
+};
+
+export const LAYER_TITLES = {
+  AIR_QUALITY: 'Latest Months Average Tropospheric Nitrogen Dioxide (NO₂) (mol/m², millionths)',
+};

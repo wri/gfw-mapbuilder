@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { BasicItem, GradientItem, LineItem, PointItem, PolyFromMapServer } from './LegendLabelComponents';
 import { mapController } from '../../controllers/mapController';
+import { LAYER_IDS, LAYER_TITLES } from '../../../../configs/layer-config';
 
 interface LegendItemProps {
   visibleLayers: LayerProps[];
@@ -49,6 +50,7 @@ function checkForRenderer(layer: LayerProps): boolean {
 
 function getLegendInfoFromRenderer(layer: LayerProps): any {
   const esriLayer = mapController._map?.findLayerById(layer.id) as any;
+
   if (!esriLayer) return;
 
   const borderStyleMap = {
@@ -56,6 +58,90 @@ function getLegendInfoFromRenderer(layer: LayerProps): any {
     solid: 'solid',
     none: 'none',
   };
+
+  function generatelegendInfo(layer: any) {
+    const container: any = [];
+    if (layer?.renderer?.symbol) {
+      // symbols don't have a label, what should be display?
+      const defaultSymbol = layer.renderer.symbol;
+      const symbolDOMElement = createSymbolStyles(defaultSymbol);
+      container.push(
+        <div className="sublayer-item-feature">
+          <div>{symbolDOMElement}</div>
+          <span>Not provided</span>
+        </div>
+      );
+    } else if (layer?.renderer?.visualVariables?.length) {
+      const visualStops = layer.renderer.visualVariables;
+      // layer.renderer.visualVariables.find((v: any) => v.type === 'color');
+      if (visualStops && visualStops.length) {
+        interface GradientItem {
+          colors: string[];
+          labels: string[];
+        }
+        const gradientElement: GradientItem = {
+          colors: [],
+          labels: [],
+        };
+        visualStops.forEach((item) => {
+          if (item?.stops && item.stops.length) {
+            if (item.type === 'size') {
+              // push elements to size
+            } else if (item.type === 'opacity') {
+              // push elements to opacity
+            } else if (item.type === 'color') {
+              // push elements for color
+              item.stops.forEach((stop) => {
+                const { r, g, b, a } = stop.color;
+                gradientElement.colors.push(`rgba(${r},${g},${b},${a})`);
+                gradientElement.labels.push(stop.label);
+              });
+            }
+          }
+        });
+
+        if (gradientElement.colors.length) {
+          const gradientString = `linear-gradient(180deg, ${gradientElement.colors.join(',')})`;
+          container.push(
+            <div className="sublayer-item-feature gradient">
+              <div className="gradient-icon" style={{ background: gradientString }}></div>
+              <div style={{ fontSize: '0.7rem' }}>
+                {gradientElement.labels.map((l, i) => (
+                  <p key={i} style={{ margin: 0, padding: 0 }}>
+                    {l}
+                  </p>
+                ))}
+              </div>
+              <span className="gradient-label">{visualStops?.field}</span>
+            </div>
+          );
+        }
+      }
+    } else if (layer?.rendererz?.classBreakInfos?.length) {
+      layer.renderer.classBreakInfos.forEach((value: any) => {
+        const defaultSymbol = value.symbol;
+        const symbolDOMElement = createSymbolStyles(defaultSymbol);
+        container.push(
+          <div className="sublayer-item-feature">
+            <div>{symbolDOMElement}</div>
+            <span>{value.label}</span>
+          </div>
+        );
+      });
+    } else if (layer?.renderer?.uniqueValueInfos?.length) {
+      layer.renderer.uniqueValueInfos.forEach((value: any, index) => {
+        const defaultSymbol = value.symbol;
+        const symbolDOMElement = createSymbolStyles(defaultSymbol);
+        container.push(
+          <div className="sublayer-item-feature">
+            <div>{symbolDOMElement}</div>
+            <span>{value.label}</span>
+          </div>
+        );
+      });
+    }
+    return container;
+  }
 
   function createSymbolStyles(symbol: any): JSX.Element | undefined {
     const style = {} as any;
@@ -132,76 +218,26 @@ function getLegendInfoFromRenderer(layer: LayerProps): any {
         break;
     }
     if (symbol.type === 'picture-marker') {
-      style.width = 12;
-      style.height = 12;
+      style.width = '12px';
+      style.height = '12px';
       symbolDOMElement = <img style={style} className="legend-symbol" alt="legend symbol" src={symbol.url} />;
     }
     return symbolDOMElement;
   }
 
   function createLegendSymbol(esriLayer: any): any {
-    if (!esriLayer.renderer) return;
-    const container: any[] = [];
-    if (esriLayer.renderer.symbol) {
-      const defaultSymbol = esriLayer.renderer.symbol;
-      const symbolDOMElement = createSymbolStyles(defaultSymbol);
-      container.push(symbolDOMElement);
-    } else if (esriLayer.renderer?.visualVariables?.length) {
-      const visualStops = esriLayer.renderer.visualVariables.find((v: any) => v.type === 'color');
-      if (visualStops) {
-        interface GradientItem {
-          colors: string[];
-          labels: string[];
-        }
-        const gradientElement: GradientItem = {
-          colors: [],
-          labels: [],
-        };
-        visualStops.stops.forEach((stop) => {
-          const { r, g, b, a } = stop.color;
-          gradientElement.colors.push(`rgba(${r},${g},${b},${a})`);
-          gradientElement.labels.push(stop.label);
-        });
+    // if (esriLayer.type === 'feature' && !esriLayer.renderer) return;
+    let container: any[] = [];
 
-        const gradientString = `linear-gradient(180deg, ${gradientElement.colors.join(',')})`;
-        container.push(
-          <div className="sublayer-item-feature gradient">
-            <div className="gradient-icon" style={{ background: gradientString }}></div>
-            <div style={{ fontSize: '0.7rem' }}>
-              {gradientElement.labels.map((l, i) => (
-                <p key={i} style={{ margin: 0, padding: 0 }}>
-                  {l}
-                </p>
-              ))}
-            </div>
-            <span className="gradient-label">{visualStops?.field}</span>
-          </div>
-        );
-      }
-    } else if (esriLayer.renderer.classBreakInfos?.length) {
-      esriLayer.renderer.classBreakInfos.forEach((value: any) => {
-        const defaultSymbol = value.symbol;
-        const symbolDOMElement = createSymbolStyles(defaultSymbol);
-        container.push(
-          <div className="sublayer-item-feature">
-            <div>{symbolDOMElement}</div>
-            <span>{value.label}</span>
-          </div>
-        );
+    if (esriLayer.type === 'group') {
+      esriLayer.layers.forEach((layer) => {
+        const newLegend = generatelegendInfo(layer);
+        container.push(...newLegend);
       });
-    } else if (esriLayer.renderer.uniqueValueInfos?.length) {
-      esriLayer.renderer.uniqueValueInfos.forEach((value: any) => {
-        const defaultSymbol = value.symbol;
-        const symbolDOMElement = createSymbolStyles(defaultSymbol);
-        container.push(
-          <div className="sublayer-item-feature">
-            <div>{symbolDOMElement}</div>
-            <span>{value.label}</span>
-          </div>
-        );
-      });
+    } else {
+      const newLegend = generatelegendInfo(esriLayer);
+      container.push(...newLegend);
     }
-
     return container;
   }
 
@@ -212,14 +248,14 @@ const LegendItems = (props: LegendItemProps): JSX.Element => {
   const { language } = props;
   const timeSlider = useSelector((store: RootState) => store.mapviewState.timeSlider);
   const windSpeedPotential = useSelector((store: RootState) => store.appState.leftPanel.windSpeedPotential);
+
   const getLayerTitle = (title: string, layerID: string) => {
     let layerTitle = title;
-    if (layerID === 'WIND_SPEED') {
+    if (layerID === LAYER_IDS.WIND_SPEED) {
       layerTitle = `${title} at ${windSpeedPotential}m (m/s)`;
-    } else if (layerID === 'AIR_QUALITY') {
-      layerTitle =
-        'January 13, 2022 - February 12, 2022 Average Tropospheric Nitrogen Dioxide (NO₂) (mol/m², millionths)';
-    } else if (layerID === 'DRY_SPELLS') {
+    } else if (layerID === LAYER_IDS.AIR_QUALITY) {
+      layerTitle = LAYER_TITLES.AIR_QUALITY;
+    } else if (layerID === LAYER_IDS.DRY_SPELLS) {
       const drySpelllayer: any = mapController._map?.findLayerById(layerID);
       layerTitle = `${drySpelllayer.endDate ? drySpelllayer.endDate : 2030} Projected Change in Dry Spells`;
     }
@@ -291,10 +327,10 @@ const LegendItems = (props: LegendItemProps): JSX.Element => {
       );
     } else if (layer.legendInfo && layer.origin === 'remote') {
       let title = layer.metadata?.legendConfig?.name[language];
-      if (layer.id === 'GLAD_ALERTS') {
+      if (layer.id === LAYER_IDS.GLAD_ALERTS) {
         title = `${layer.title} (${props.gladConfirmed ? 'Confirmed' : 'Unconfirmed'})`;
       }
-      if (layer.id === 'TREE_COVER_LOSS') {
+      if (layer.id === LAYER_IDS.TREE_COVER_LOSS) {
         title = `${layer.title} (${timeSlider[0]} - ${timeSlider[1]})`;
       }
       let labelIcons;
