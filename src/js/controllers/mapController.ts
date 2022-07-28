@@ -938,14 +938,7 @@ export class MapController {
           return l;
         }
       });
-      const webTileLayerVisible = newLayersArray
-        .filter((data: any) => data.type === 'webtiled')
-        .map((layer: any) => layer.visible);
-      if (layer.visible === false) {
-        if (!webTileLayerVisible.includes(true)) {
-          // this.setWebmapOriginalBasemap('webmap_original');
-        }
-      }
+
       if (layer.type === 'web-tile' && layer.visible === true) {
         this.setActiveBasemap('hybrid');
       }
