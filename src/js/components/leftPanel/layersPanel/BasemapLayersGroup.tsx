@@ -250,7 +250,6 @@ const BasemapLayersGroup = (props: LayerGroupProps): React.ReactElement => {
   );
 
   //Add BASEMAP from Webmap
-  // basemapsToRender.push({ id: 'webmap_original' });
   basemapsToRender.push({ id: 'webmap' });
 
   const allowedBaseLayers = basemapsToRender.map((baselayer: any) => {

@@ -73,9 +73,7 @@ export async function getShareableURL(props: ShareURLProps): Promise<string> {
 
   //Basemap LayerID
   const { activeBasemap } = mapviewState;
-
-  const updatedBaseMap = activeBasemap === 'webmap_original' ? 'wri_contextual' : activeBasemap;
-  urlParams.push(`b=${updatedBaseMap}`);
+  urlParams.push(`b=${activeBasemap}`);
 
   //Language
   const { selectedLanguage, leftPanel } = appState;
