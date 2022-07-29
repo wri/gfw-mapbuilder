@@ -250,7 +250,7 @@ const BasemapLayersGroup = (props: LayerGroupProps): React.ReactElement => {
   );
 
   //Add BASEMAP from Webmap
-  basemapsToRender.push({ id: 'webmap_original' });
+  basemapsToRender.push({ id: 'webmap' });
 
   const allowedBaseLayers = basemapsToRender.map((baselayer: any) => {
     if (baselayer.id === 'landsat') {
@@ -262,8 +262,7 @@ const BasemapLayersGroup = (props: LayerGroupProps): React.ReactElement => {
           customColorTheme={customColorTheme}
         />
       );
-    }
-    if (baselayer.id === 'planet' && baselayer?.url && baselayer.url.length !== 0) {
+    } else if (baselayer.id === 'planet' && baselayer?.url && baselayer.url.length !== 0) {
       return (
         baselayer.visible && (
           <PlanetBasemap
@@ -275,8 +274,7 @@ const BasemapLayersGroup = (props: LayerGroupProps): React.ReactElement => {
           />
         )
       );
-    }
-    if (baselayer.id === 'webmap_original') {
+    } else if (baselayer.id === 'webmap') {
       return (
         <WebmapOriginal
           key={baselayer.id}
@@ -286,8 +284,7 @@ const BasemapLayersGroup = (props: LayerGroupProps): React.ReactElement => {
           }}
         />
       );
-    }
-    if (baselayer.id === 'wri_mono' || baselayer.id === 'wri_contextual') {
+    } else if (baselayer.id === 'wri_mono' || baselayer.id === 'wri_contextual') {
       return (
         <BaseLayerWRI
           key={baselayer.id}
