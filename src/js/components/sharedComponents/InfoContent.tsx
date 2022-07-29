@@ -270,7 +270,6 @@ const InfoContent: FunctionComponent<{}> = (): any => {
         geographic_coverage,
         source,
         frequency_of_updates,
-        content_date,
         content_date_range,
         cautions,
         license,
@@ -313,19 +312,27 @@ const InfoContent: FunctionComponent<{}> = (): any => {
                 <td className="label">{frequencyLabel}</td>
                 <td className="label-info" dangerouslySetInnerHTML={{ __html: frequency_of_updates }} />
               </tr>
-              <tr>
-                <td className="label">{contentDateLabel}</td>
-                <td className="label-info" dangerouslySetInnerHTML={{ __html: content_date }} />
-              </tr>
-              <tr>
-                <td className="label">{contentDateRangeLabel}</td>
-                <td
-                  className="label-info"
-                  dangerouslySetInnerHTML={{
-                    __html: `${content_date_range?.min} - ${content_date_range?.max}`,
-                  }}
-                />
-              </tr>
+              {!content?.title.includes('Air Quality') && (
+                <tr>
+                  <td className="label">{contentDateLabel}</td>
+                  <td
+                    className="label-info"
+                    dangerouslySetInnerHTML={{ __html: content?.content_date ?? content?.date_of_content }}
+                  />
+                </tr>
+              )}
+
+              {content?.title.includes('Air Quality') && (
+                <tr>
+                  <td className="label">{contentDateRangeLabel}</td>
+                  <td
+                    className="label-info"
+                    dangerouslySetInnerHTML={{
+                      __html: `${content_date_range?.min} - ${content_date_range?.max}`,
+                    }}
+                  />
+                </tr>
+              )}
               <tr>
                 <td className="label">{citationLabel}</td>
                 <td className="label-info" dangerouslySetInnerHTML={{ __html: cautions }} />
