@@ -18,6 +18,7 @@ import { forestCarbonGrossEmisionValue } from '../components/mapWidgets/widgetCo
 import { createForestCarbonGrossEmission } from '../layers/ForestCarbonGrossEmission';
 import { forestCarbonNetFluxValue } from '../components/mapWidgets/widgetContent/ForesCarbonNetFlux';
 import { createForestCarbonNetFlux } from '../layers/ForestCarbonNetFlux';
+import { umdCoverLand } from '../layers/UmdCoverLand';
 
 interface LayerOptions {
   id: string;
@@ -152,6 +153,23 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
       });
       esriLayer = forestRemovalLayer;
       break;
+    case 'umd-land-cover':
+      const rangeYear = appState.landCoverYearValue[0];
+      let updatedUrl = (layerConfig.url = layerConfig.url.replace('{year}', '2020').replace('{year}', `${rangeYear}`));
+
+      const umdConstructor = await umdCoverLand();
+      const umdLayer = new umdConstructor({
+        id: layerConfig.id,
+        url: updatedUrl,
+        title: layerConfig.title,
+        visible: layerConfig.visible,
+        urlTemplate: layerConfig.url,
+        view: mapView,
+      });
+      esriLayer = umdLayer;
+      esriLayer.refresh();
+      break;
+    //
     case 'forest-carbon-gross-emissions':
       const forestCarbonEmission =
         forestCarbonGrossEmisionValue[appState.leftPanel.density] || forestCarbonGrossEmisionValue[2];

@@ -53,6 +53,7 @@ export default {
   forestCarbonGrossRemovals: true,
   forestCarbonGrossEmissions: true,
   forestCarbonNetFlux: true,
+  umdLandCover: true,
   drySpells: true,
   airQuality: true,
   windSpeed: true,
@@ -269,38 +270,44 @@ export default {
       layers: [
         {
           id: 'IFL',
-          order: 2,
+          order: 1,
           type: 'remoteDataLayer',
           uuid: '5f815a7d-457e-4eae-a8e5-8864a60696ad',
         },
         {
           id: 'PRIMARY_FORESTS',
-          order: 3,
+          order: 2,
           type: 'remoteDataLayer',
           uuid: 'edffb745-e523-462d-ad1e-3052006a3dbc',
         },
         {
           id: 'AG_BIOMASS',
-          order: 4,
+          order: 3,
           type: 'remoteDataLayer',
           uuid: '04526d47-f3f5-4f76-a939-e5f7861fd085',
         },
-        {
+        /*{
           id: 'LAND_COVER',
           order: 5,
           type: 'remoteDataLayer',
           uuid: 'b8d3f175-0565-443f-839a-49eb890a4b3d',
-        },
+        },*/
         {
           id: 'TREE_COVER',
-          order: 6,
+          order: 4,
           type: 'remoteDataLayer',
           uuid: '2569adca-ef87-42c4-a153-57c5e8ba0ef7',
         },
         {
+          id: 'UMD_LAND_COVER',
+          order: 5,
+          type: 'remoteDataLayer',
+          uuid: 'f22e0529-d398-4ccc-b943-e62d420fea89',
+        },
+        {
           groupId: 'GROUP_LC',
           id: 'TREE_COVER_HEIGHT',
-          order: 7,
+          order: 6,
           type: 'flagship',
           uuid: '9efed1d8-164d-4adb-85a1-e62c6c5c00aa',
           origin: 'gfw-api',
@@ -367,7 +374,7 @@ export default {
         },
         {
           id: 'TREES_MOSAIC_LANDSCAPES',
-          order: 8,
+          order: 7,
           type: 'remoteDataLayer',
           uuid: '9e0c1e1e-a0a3-457f-a373-4104820f7a50',
         },

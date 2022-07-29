@@ -145,6 +145,7 @@ const InfoContent: FunctionComponent<{}> = (): any => {
     const getWebmapContent = async (): Promise<void> => {
       const results = await getWebmapGroupContent(layer, sharinghost);
 
+      console.log('results', results);
       setContent(results);
       setDataLoading(false);
     };
@@ -361,7 +362,7 @@ const InfoContent: FunctionComponent<{}> = (): any => {
       const { title, functionOrPurpose, overview } = content;
 
       return (
-        <>
+        <div>
           <div className="header">
             <h2>{title}</h2>
             <table>
@@ -381,7 +382,95 @@ const InfoContent: FunctionComponent<{}> = (): any => {
               </div>
             )}
           </div>
-        </>
+        </div>
+      );
+    } else if (content && content?.data) {
+      const {
+        key_restrictions,
+        learn_more,
+        other,
+        update_frequency,
+        resolution,
+        tags,
+        geographic_coverage,
+        source,
+        frequency_of_updates,
+        date_of_content,
+        cautions,
+        license,
+        overview,
+        citation,
+        title,
+        subtitle,
+        download_data,
+      } = content.data.metadata;
+
+      return (
+        <div className="info-modal">
+          <div className="header">
+            <h2>{title}</h2>
+            <h3>{subtitle}</h3>
+          </div>
+          <table>
+            <tbody>
+              <tr>
+                <td className="label">{functionLabel}</td>
+                <td className="label-info" dangerouslySetInnerHTML={{ __html: content.data.metadata.function }} />
+              </tr>
+              <tr>
+                <td className="label">{resolutionLabel}</td>
+                <td className="label-info" dangerouslySetInnerHTML={{ __html: resolution }} />
+              </tr>
+              <tr>
+                <td className="label">Tags</td>
+                <td className="label-info">{tags}</td>
+              </tr>
+              <tr>
+                <td className="label">{geographicCoverageLabel}</td>
+                <td className="label-info" dangerouslySetInnerHTML={{ __html: geographic_coverage }} />
+              </tr>
+              <tr>
+                <td className="label">{sourceLabel}</td>
+                <td className="label-info" dangerouslySetInnerHTML={{ __html: source }} />
+              </tr>
+
+              <tr>
+                <td className="label">{frequencyLabel}</td>
+                <td className="label-info" dangerouslySetInnerHTML={{ __html: update_frequency }} />
+              </tr>
+              <tr>
+                <td className="label">{contentDateLabel}</td>
+                <td className="label-info" dangerouslySetInnerHTML={{ __html: date_of_content }} />
+              </tr>
+              <tr>
+                <td className="label">{citationLabel}</td>
+                <td className="label-info" dangerouslySetInnerHTML={{ __html: cautions }} />
+              </tr>
+              <tr>
+                <td className="label">{licenseLabel}</td>
+                <td className="label-info" dangerouslySetInnerHTML={{ __html: license }} />
+              </tr>
+            </tbody>
+          </table>
+          <div className="overview-container">
+            <h3>{overviewLabel}</h3>
+            <div dangerouslySetInnerHTML={{ __html: overview }} />
+          </div>
+          {citation && (
+            <div className="citation-container">
+              <h4>{citationLabel}</h4>
+
+              <div dangerouslySetInnerHTML={{ __html: citation }} />
+            </div>
+          )}
+          {download_data && (
+            <div className="button-container">
+              <a href={download_data} target="_blank" rel="noopener noreferrer">
+                <button className="orange-button">{downloadDataLabel}</button>
+              </a>
+            </div>
+          )}
+        </div>
       );
     } else {
       console.warn('potential edge case in returnOtherGroupContent()', layer);

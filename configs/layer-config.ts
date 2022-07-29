@@ -6,6 +6,7 @@ export const supportedLayers = [
   'forest-carbon-gross-removals',
   'forest-carbon-gross-emissions',
   'forest-carbon-net-flux',
+  'umd-land-cover',
   'gain',
   'image',
   'webtiled',
@@ -324,12 +325,26 @@ export const gfwMarks = {
   },
 };
 
+export const landCoverMarks = {
+  '2000': {
+    value: '2000',
+    label: '2000',
+    style: {},
+  },
+  '2020': {
+    value: '2020',
+    label: '2020',
+    style: {},
+  },
+};
+
 export const LAYER_IDS = {
   AIR_QUALITY: 'AIR_QUALITY',
   WIND_SPEED: 'WIND_SPEED',
   DRY_SPELLS: 'DRY_SPELLS',
   GLAD_ALERTS: 'GLAD_ALERTS',
   TREE_COVER_LOSS: 'TREE_COVER_LOSS',
+  UMD_LAND_COVER: 'UMD_LAND_COVER',
 };
 
 export const LAYER_TITLES = {

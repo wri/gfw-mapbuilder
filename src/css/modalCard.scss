@@ -3,15 +3,12 @@
 .modal-card-container {
   display: flex;
   align-items: flex-start;
-  justify-content: center;
   position: fixed;
   z-index: 4;
   padding: 1rem;
   background: $white;
   font-family: $fira-sans;
   color: $dark-grey;
-
-  overflow-y: scroll;
   left: 50%;
   top: 50%;
   margin-left: -10rem; // * NOTE: -10rem = negative half the width of .modal-card-container
@@ -78,6 +75,8 @@
   }
 
   &.info-content {
+    display: flex;
+    flex-direction: column;
     width: 58rem;
     height: 35rem;
     margin-left: -25rem;
@@ -87,7 +86,8 @@
 
     .info-content-container {
       padding: 1rem;
-
+      overflow-y: scroll;
+      width: 100%;
       .header {
         &.metadata {
           table {
