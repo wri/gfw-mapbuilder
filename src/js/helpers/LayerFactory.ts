@@ -244,13 +244,8 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
         title: layerConfig.title,
         visible: layerConfig.visible,
         urlTemplate: layerConfig.url,
-        opacity: layerConfig.opacity.combined,
       });
-      if (
-        layerConfig.id === 'LAND_COVER' ||
-        layerConfig.id === 'PRIMARY_FORESTS' ||
-        layerConfig.id === 'CARBON_EMISSIONS'
-      ) {
+      if (layerConfig?.opacity && layerConfig.opacity?.combined) {
         esriLayer.opacity = layerConfig.opacity.combined;
       }
       break;
