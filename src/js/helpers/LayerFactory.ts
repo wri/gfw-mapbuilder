@@ -248,13 +248,6 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
       if (layerConfig?.opacity && layerConfig.opacity?.combined) {
         esriLayer.opacity = layerConfig.opacity.combined;
       }
-      if (
-        layerConfig.id === 'LAND_COVER' ||
-        layerConfig.id === 'PRIMARY_FORESTS' ||
-        layerConfig.id === 'CARBON_EMISSIONS'
-      ) {
-        esriLayer.opacity = layerConfig?.opacity?.combined;
-      }
       break;
     case 'imagery':
       const imageConstructor = await createGain();
