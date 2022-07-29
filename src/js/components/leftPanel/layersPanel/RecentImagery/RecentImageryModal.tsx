@@ -19,24 +19,14 @@ interface ImageryProps {
 const getTodayDate = new Date().toISOString().split('T')[0];
 
 const RecentImagery = (props: ImageryProps): JSX.Element => {
-  const customColorTheme = useSelector(
-    (store: RootState) => store.appSettings.customColorTheme
-  );
-  const { selectedLanguage } = useSelector(
-    (store: RootState) => store.appState
-  );
-  const { mapCenterCoordinates } = useSelector(
-    (store: RootState) => store.mapviewState
-  );
+  const customColorTheme = useSelector((store: RootState) => store.appSettings.customColorTheme);
+  const { selectedLanguage } = useSelector((store: RootState) => store.appState);
+  const { mapCenterCoordinates } = useSelector((store: RootState) => store.mapviewState);
 
   const [day, setDay] = useState(getTodayDate);
-  const [monthRange, setMonthRange] = useState(
-    imageryText[selectedLanguage].monthsOptions[0].value
-  );
+  const [monthRange, setMonthRange] = useState(imageryText[selectedLanguage].monthsOptions[0].value);
   const [cloudRange, setCloudRange] = useState([0, 25]);
-  const [imageryStyle, setImageryStyle] = useState(
-    imageryText[selectedLanguage].imageStyleOptions[0]
-  );
+  const [imageryStyle, setImageryStyle] = useState(imageryText[selectedLanguage].imageStyleOptions[0]);
   const [imageryStyleBands, setImageryStyleBands] = useState('');
   const [recentTiles, setRecentTiles] = useState<any>('');
   const [tilesLoading, setTilesLoading] = useState<any>(true);
@@ -46,26 +36,25 @@ const RecentImagery = (props: ImageryProps): JSX.Element => {
     const sourceData: any[] = tileChunk.map((tile: any) => {
       return { source: tile.attributes.source };
     });
-    const postThumbsURL =
-      'https://production-api.globalforestwatch.org/recent-tiles/thumbs';
+    const postThumbsURL = 'https://production-api.globalforestwatch.org/recent-tiles/thumbs';
     return await fetch(postThumbsURL, {
       method: 'POST',
-      credentials: 'include',
+      // credentials: 'include',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         source_data: sourceData,
-        bands: imageryStyleBands
-      })
+        bands: imageryStyleBands,
+      }),
     })
-      .then(data => data.json())
-      .catch(e => console.log('error', e));
+      .then((data) => data.json())
+      .catch((e) => console.log('error', e));
   };
 
   const getRecentTiles = async (URL: string): Promise<any> => {
     setTilesLoading(true);
-    const res = await fetch(URL).then(res => res.json());
+    const res = await fetch(URL).then((res) => res.json());
     const { tiles } = res.data;
 
     //POST req to Tiles endpoint
@@ -73,38 +62,36 @@ const RecentImagery = (props: ImageryProps): JSX.Element => {
       const sourceData: any[] = tileChunk.map((tile: any) => {
         return { source: tile.attributes.source };
       });
-      const postTilesURL =
-        'https://production-api.globalforestwatch.org/recent-tiles/tiles';
+
+      const postTilesURL = 'https://production-api.globalforestwatch.org/recent-tiles/tiles';
       return await fetch(postTilesURL, {
         method: 'POST',
-        credentials: 'include',
+        // credentials: 'include',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           source_data: sourceData,
-          bands: imageryStyleBands
-        })
+          bands: imageryStyleBands,
+        }),
       })
-        .then(data => data.json())
-        .catch(e => {
+        .then((data) => data.json())
+        .catch((e) => {
           console.log('error', e);
         });
     };
 
     //Chunk tile array into smaller parts so the API does not get overloaded
+    // const chunkedTiles = chunk(tiles, 6);
     const chunkedTiles = chunk(tiles, 6);
+
     let postTileResponses: any[] = [];
     let postThumbResponses: any[] = [];
     for await (const tileChunk of chunkedTiles) {
       const postTilesResponse = await postTiles(tileChunk);
-      postTileResponses = postTileResponses.concat(
-        postTilesResponse?.data?.attributes
-      );
+      postTileResponses = postTileResponses.concat(postTilesResponse?.data?.attributes);
       const postThumbsResponse = await postThumbs(tileChunk);
-      postThumbResponses = postThumbResponses.concat(
-        postThumbsResponse?.data?.attributes
-      );
+      postThumbResponses = postThumbResponses.concat(postThumbsResponse?.data?.attributes);
       const freshTilesChunk = tiles.map((tile: any, i: number) => {
         tile.tileUrl = postTileResponses[i]?.tile_url;
         tile.thumbUrl = postThumbResponses[i]?.thumbnail_url;
@@ -116,14 +103,10 @@ const RecentImagery = (props: ImageryProps): JSX.Element => {
   };
 
   React.useEffect(() => {
-    const satIMGURL =
-      'https://production-api.globalforestwatch.org/recent-tiles';
+    const satIMGURL = 'https://production-api.globalforestwatch.org/recent-tiles';
     const { latitude, longitude } = mapCenterCoordinates;
     const end = day;
-    const start = subMonths(
-      parse(end, 'yyyy-MM-dd', new Date()),
-      Number(monthRange)
-    );
+    const start = subMonths(parse(end, 'yyyy-MM-dd', new Date()), Number(monthRange));
     const startFormatted = format(start, 'yyyy-MM-dd');
     const recentTileURL = `${satIMGURL}?lon=${longitude}&lat=${latitude}&start=${startFormatted}&end=${end}`;
     getRecentTiles(recentTileURL);
@@ -150,24 +133,16 @@ const RecentImagery = (props: ImageryProps): JSX.Element => {
   const handleImageryStyleChange = (e: any): void => {
     setImageryStyle(e.target.value);
     //special vegetarion bands are on the first index of options
-    const styleOptions = imageryText[selectedLanguage].imageStyleOptions.map(
-      (option: any) => option.label
-    );
-    const determineBands =
-      styleOptions.indexOf(e.target.value) === 0 ? '' : '[B8,B11,B2]';
+    const styleOptions = imageryText[selectedLanguage].imageStyleOptions.map((option: any) => option.label);
+    const determineBands = styleOptions.indexOf(e.target.value) === 0 ? '' : '[B8,B11,B2]';
     setImageryStyleBands(determineBands);
   };
 
   return (
     <div className="recent-imagery-container">
       <div className="imagery-header">
-        <span className="title">
-          {imageryText[selectedLanguage].imagery[1]}
-        </span>
-        <button
-          className="exit-button"
-          onClick={(): void => props.modalHandler()}
-        >
+        <span className="title">{imageryText[selectedLanguage].imagery[1]}</span>
+        <button className="exit-button" onClick={(): void => props.modalHandler()}>
           <svg className="svg-icon">
             <svg id="shape-close" viewBox="0 0 25 25">
               <title>Close</title>
@@ -178,17 +153,13 @@ const RecentImagery = (props: ImageryProps): JSX.Element => {
       </div>
       <div className="imagery-filters">
         <div className="imagery-date">
-          <p className="subtitle">
-            {imageryText[selectedLanguage].acquisition}
-          </p>
+          <p className="subtitle">{imageryText[selectedLanguage].acquisition}</p>
           <div className="date-filters">
             <MonthSelector
               lang={selectedLanguage}
               monthRange={monthRange}
               customColorTheme={customColorTheme}
-              changeMonthHandler={(e: any): void =>
-                setMonthRange(e.target.value)
-              }
+              changeMonthHandler={(e: any): void => setMonthRange(e.target.value)}
             />
             <p> {imageryText[selectedLanguage].before}</p>
             <DaySelector
@@ -200,9 +171,7 @@ const RecentImagery = (props: ImageryProps): JSX.Element => {
           </div>
         </div>
         <div className="imagery-cloud">
-          <p className="subtitle">
-            {imageryText[selectedLanguage].cloudPercentage}˝
-          </p>
+          <p className="subtitle">{imageryText[selectedLanguage].cloudPercentage}˝</p>
           <CloudSlider
             customColorTheme={customColorTheme}
             cloudRange={cloudRange}
