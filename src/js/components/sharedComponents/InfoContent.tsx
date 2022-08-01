@@ -134,6 +134,7 @@ const InfoContent: FunctionComponent<{}> = (): any => {
     contentDateLabel,
     contentDateRangeLabel,
     citationLabel,
+    cautionLabel,
     licenseLabel,
     downloadDataLabel,
     descriptionLabel,
@@ -327,7 +328,7 @@ const InfoContent: FunctionComponent<{}> = (): any => {
                 />
               </tr>
               <tr>
-                <td className="label">{citationLabel}</td>
+                <td className="label">{cautionLabel}</td>
                 <td className="label-info" dangerouslySetInnerHTML={{ __html: cautions }} />
               </tr>
               <tr>
