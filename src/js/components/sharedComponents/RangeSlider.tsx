@@ -20,8 +20,7 @@ const RangeSlider = ({ value, defaultValue, marks, id, layerConfig }: RangeSlide
   async function handleSliderRange(val: number[]) {
     if (id === 'UMD_LAND_COVER') {
       dispatch(setLandCoverYearValue(val));
-      const toggleUrl = `https://storage.googleapis.com/lcl_tiles/GLCLU2020/composite${val[0]}/{z}/{x}/{y}.png`;
-      layerConfig.url = toggleUrl;
+      layerConfig.url = `https://storage.googleapis.com/lcl_tiles/GLCLU2020/composite${val[0]}/{z}/{x}/{y}.png`;
 
       const mapview = mapController.getMapView();
       mapController.removeMapLayer(id);

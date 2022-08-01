@@ -48,7 +48,8 @@ import WindSpeedPicker from '../../sharedComponents/WindSpeedPicker';
 import { setTimeSlider } from '../../../store/mapview/actions';
 import SelectGFWAlertLayer from '../../sharedComponents/SelectGFWAlertLayer';
 import { loadModules } from 'esri-loader';
-import RangeSlider from '../../sharedComponents/RangeSldier';
+import RangeSlider from '../../sharedComponents/RangeSlider';
+import { DATE_PICKER_START_DATES } from '../../../../../configs/layer-config';
 
 //Dynamic custom theme override using styled-components lib
 interface CheckBoxWrapperProps {
@@ -72,16 +73,28 @@ const GladControls = (props: GladControlsProps): JSX.Element => {
   const dispatch = useDispatch();
   const gladConfirmed = useSelector((store: RootState) => store.appState.leftPanel.gladConfirmed);
   const highConfidenceConfirmed = useSelector((store: RootState) => store.appState.leftPanel.highConfidenceConfirmed);
-  const gladStart = useSelector((store: RootState) => store.appState.leftPanel.gladStart);
   const gladEnd = useSelector((store: RootState) => store.appState.leftPanel.gladEnd);
-  const gfwIntegratedStart = useSelector((store: RootState) => store.appState.leftPanel.gfwIntegratedStart);
   const gfwIntegratedEnd = useSelector((store: RootState) => store.appState.leftPanel.gfwIntegratedEnd);
   const gfwLayer = useSelector((store: RootState) => store.appState.leftPanel.gfwLayer);
   const allAvailableLayers = useSelector((store: RootState) => store.mapviewState.allAvailableLayers);
   const [unconfirmedAlerts, setUnconfirmedAlerts] = React.useState(gladConfirmed);
   const [geographicCoverageToggle, setGeographicCoverageToggle] = React.useState(false);
   const [startDate, setStartDate] = React.useState(
-    String(props.type === 'gfw-integrated-alert' ? gfwIntegratedStart : gladStart)
+    String(
+      props.type === 'gfw-integrated-alert'
+        ? DATE_PICKER_START_DATES.GFW_INTEGRATED_ALERTS
+        : DATE_PICKER_START_DATES.GLAD_ALERTS
+    )
+  );
+  const [startDateUnformatted, setStartDateUnformatted] = React.useState(
+    String(
+      props.type === 'gfw-integrated-alert'
+        ? DATE_PICKER_START_DATES.GFW_INTEGRATED_ALERTS
+        : DATE_PICKER_START_DATES.GLAD_ALERTS
+    )
+  );
+  const [endDateUnformatted, setEndDateUnformatted] = React.useState(
+    props.type === 'gfw-integrated-alert' ? gfwIntegratedEnd : gladEnd
   );
 
   const [endDate, setEndDate] = React.useState(props.type === 'gfw-integrated-alert' ? gfwIntegratedEnd : gladEnd);
@@ -89,6 +102,7 @@ const GladControls = (props: GladControlsProps): JSX.Element => {
   async function handleStartDateChange(day: any) {
     const dFormat = format(day, 'yyyy-MM-dd');
     setStartDate(dFormat);
+    setStartDateUnformatted(day);
     //@ts-ignore
     const start = new Date(dFormat).getJulian();
     //@ts-ignore
@@ -124,6 +138,7 @@ const GladControls = (props: GladControlsProps): JSX.Element => {
   async function handleEndDateChange(day: any) {
     const dFormat = format(day, 'yyyy-MM-dd');
     setEndDate(dFormat);
+    setEndDateUnformatted(day);
     //@ts-ignore
     const end = new Date(dFormat).getJulian();
     //@ts-ignore
@@ -139,15 +154,15 @@ const GladControls = (props: GladControlsProps): JSX.Element => {
       dispatch(setGfwIntegratedStart(startDate));
       dispatch(setGfwIntegratedEnd(dFormat));
     } else {
-      const gladLayerConfig: any = allAvailableLayers.filter((layer: any) => layer.id === gfwLayer);
-      const gladLayerOld: any = mapController._map!.findLayerById(gfwLayer);
+      const gladLayerConfig: any = allAvailableLayers.filter((layer: any) => layer.id === 'GLAD_ALERTS');
+      const gladLayerOld: any = mapController._map!.findLayerById('GLAD_ALERTS');
       const gladIndex: number = mapController._map!.layers.indexOf(gladLayerOld);
       mapController._map?.remove(gladLayerOld);
       const gladLayerNew: any = await LayerFactory(mapController._mapview, gladLayerConfig[0]);
       gladLayerNew.julianFrom = start;
       gladLayerNew.julianTo = end;
       mapController._map?.add(gladLayerNew, gladIndex);
-      const selectedLayer = mapController._map!.findLayerById(gfwLayer);
+      const selectedLayer = mapController._map!.findLayerById('GLAD_ALERTS');
       selectedLayer.visible = true;
       dispatch(setGladStart(startDate));
       dispatch(setGladEnd(dFormat));
@@ -259,18 +274,33 @@ const GladControls = (props: GladControlsProps): JSX.Element => {
         <div className="date-section-wrapper">
           <label htmlFor="start-date">{layerControlsTranslations[props.selectedLanguage].timeStart}</label>
           <DatePicker
+            showMonthDropdown
+            showYearDropdown
+            dropdownMode="select"
             placeholderText="select a day"
             onChange={(date) => handleStartDateChange(date)}
-            selected={new Date(startDate)}
+            selected={new Date(startDateUnformatted)}
+            minDate={
+              new Date(
+                props.type === 'gfw-integrated-alert'
+                  ? DATE_PICKER_START_DATES.GFW_INTEGRATED_ALERTS
+                  : DATE_PICKER_START_DATES.GLAD_ALERTS
+              )
+            }
+            maxDate={new Date(endDate)}
           />
         </div>
-
         <div className="date-section-wrapper">
           <label htmlFor="end-date">{layerControlsTranslations[props.selectedLanguage].timeEnd}</label>
           <DatePicker
+            showMonthDropdown
+            showYearDropdown
+            dropdownMode="select"
             placeholderText="select a day"
             onChange={(date) => handleEndDateChange(date)}
-            selected={new Date(endDate)}
+            selected={new Date(endDateUnformatted)}
+            minDate={new Date(startDateUnformatted)}
+            maxDate={new Date()}
           />
         </div>
       </div>
@@ -459,11 +489,11 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
         return null;
     }
   };
-
+  //@TODO @anthony this needs to be merged with the Timeslider component above, this is duplicate code
   const returnRangeSlider = (id: string): any => {
+    const umdLayer = allAvailableLayers.find((layer: any) => layer.id === id);
     switch (id) {
       case 'UMD_LAND_COVER':
-        const umdLayer = allAvailableLayers.find((layer: any) => layer.id === id);
         return (
           <RangeSlider
             id={id}
