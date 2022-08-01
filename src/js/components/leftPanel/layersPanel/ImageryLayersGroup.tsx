@@ -5,10 +5,7 @@ import { RootState } from '../../../../js/store';
 import { setOpenLayerGroup } from '../../../../js/store/appState/actions';
 import ImagerySlider from './RecentImagery/ImagerySlider';
 import { InfoIcon } from '../../../../images/infoIcon';
-import {
-  renderModal,
-  setInfoModalLayerID
-} from '../../../../js/store/appState/actions';
+import { renderModal, setInfoModalLayerID } from '../../../../js/store/appState/actions';
 import RecentImagery from './RecentImagery/RecentImageryModal';
 import { format } from 'date-fns';
 import { mapController } from '../../../../js/controllers/mapController';
@@ -22,7 +19,7 @@ interface CheckBoxWrapperProps {
 //Override speudo element styling with our custom style
 const CheckboxWrapper = styled.div<CheckBoxWrapperProps>`
   .styled-checkbox:checked + .styled-checkboxlabel:before {
-    background-color: ${props => props.customColorTheme};
+    background-color: ${(props) => props.customColorTheme};
   }
 `;
 
@@ -33,6 +30,7 @@ interface LayerGroupProps {
 
 const ImageryLayersGroup = (props: LayerGroupProps): React.ReactElement => {
   const [imageryModalOpen, setImageryModalOpen] = useState(false);
+  const [toggleIsOn, setToggleIsOn] = useState(false);
   const [hoverTileData, setHoverTileData] = useState('');
 
   interface ImageryInfo {
@@ -42,9 +40,7 @@ const ImageryLayersGroup = (props: LayerGroupProps): React.ReactElement => {
     id?: string;
   }
   const ImageryLayerControl = (props: ImageryInfo): JSX.Element => {
-    const customColorTheme = useSelector(
-      (store: RootState) => store.appSettings.customColorTheme
-    );
+    const customColorTheme = useSelector((store: RootState) => store.appSettings.customColorTheme);
     const dispatch = useDispatch();
     const openInfoModal = (): void => {
       if (props.id) {
@@ -55,18 +51,14 @@ const ImageryLayersGroup = (props: LayerGroupProps): React.ReactElement => {
 
     const parseDynamicSublabel = (): string => {
       if (hoverTileData) {
-        let sublabelBase =
-          props.info.layers[0].dynamicSublabel[props.selectedLanguage];
+        let sublabelBase = props.info.layers[0].dynamicSublabel[props.selectedLanguage];
         if (sublabelBase) {
           const parsedDate = Date.parse(props.hoverTileData.date_time);
           const formatHoverDay = format(parsedDate, 'dd-MMM-yyyy');
           const hoverCloud = Math.round(props.hoverTileData.cloud_score);
           sublabelBase = sublabelBase.replace('{DATE_TIME}', formatHoverDay);
           sublabelBase = sublabelBase.replace('{CLOUD_COVERAGE}', hoverCloud);
-          sublabelBase = sublabelBase.replace(
-            '{INSTRUMENT}',
-            props.hoverTileData.instrument
-          );
+          sublabelBase = sublabelBase.replace('{INSTRUMENT}', props.hoverTileData.instrument);
         }
         return sublabelBase;
       } else {
@@ -79,14 +71,9 @@ const ImageryLayersGroup = (props: LayerGroupProps): React.ReactElement => {
         <div className="layers-control-checkbox">
           <div className="label-wrapper" style={{ width: 'auto' }}>
             <div className="label-control-top">
-              <ImageryLayerSwitch
-                layerID={props.id}
-                customColorTheme={customColorTheme}
-              />
+              <ImageryLayerSwitch layerID={props.id} customColorTheme={customColorTheme} />
               <div className="title-wrapper">
-                <span className="layer-label">
-                  {props.info?.label[props.selectedLanguage] || 'Imagery Layer'}
-                </span>
+                <span className="layer-label">{props.info?.label[props.selectedLanguage] || 'Imagery Layer'}</span>
               </div>
             </div>
           </div>
@@ -94,7 +81,7 @@ const ImageryLayersGroup = (props: LayerGroupProps): React.ReactElement => {
             style={{
               display: 'grid',
               gridTemplateColumns: '1fr 1fr',
-              alignItems: 'center'
+              alignItems: 'center',
             }}
           >
             <button
@@ -120,7 +107,7 @@ const ImageryLayersGroup = (props: LayerGroupProps): React.ReactElement => {
             margin: 0,
             paddingLeft: '2rem',
             fontSize: '0.7rem',
-            color: '#aaa'
+            color: '#aaa',
           }}
         >
           {parseDynamicSublabel()}
@@ -139,26 +126,15 @@ const ImageryLayersGroup = (props: LayerGroupProps): React.ReactElement => {
     if (props.layerID) {
       imageryLayer = mapController._map?.findLayerById(props.layerID);
     }
-    const [toggleIsOn, setToggleIsOn] = useState(
-      imageryLayer ? imageryLayer.visible : false
-    );
 
     const handleImagerySwitch = (e: any): void => {
-      if (!props.layerID) return;
-      const imgLayer: any = mapController._map?.findLayerById(props.layerID);
-      if (!imgLayer) return;
-      if (toggleIsOn) {
-        if (imgLayer.urlTemplate) {
-          imgLayer.visible = false;
-        }
-        setImageryModalOpen(false);
-        setToggleIsOn(false);
-      } else {
-        if (imgLayer.urlTemplate) {
-          imgLayer.visible = true;
-        }
-        setImageryModalOpen(true);
-        setToggleIsOn(true);
+      const checked = e.target.checked;
+
+      setToggleIsOn(checked);
+      setImageryModalOpen(checked);
+
+      if (imageryLayer.urlTemplate) {
+        imageryLayer.visible = checked;
       }
     };
 
@@ -173,10 +149,7 @@ const ImageryLayersGroup = (props: LayerGroupProps): React.ReactElement => {
             checked={toggleIsOn}
             onChange={handleImagerySwitch}
           />
-          <label
-            className="styled-checkboxlabel"
-            htmlFor={`layer-checkbox-${props.layerID}`}
-          >
+          <label className="styled-checkboxlabel" htmlFor={`layer-checkbox-${props.layerID}`}>
             {props.layerID}
           </label>
         </div>
@@ -186,30 +159,19 @@ const ImageryLayersGroup = (props: LayerGroupProps): React.ReactElement => {
 
   const { layerGroupKey, layerGroupConfig } = props;
 
-  const selectedLanguage = useSelector(
-    (store: RootState) => store.appState.selectedLanguage
-  );
+  const selectedLanguage = useSelector((store: RootState) => store.appState.selectedLanguage);
 
-  const openLayerGroup = useSelector(
-    (store: RootState) => store.appState.leftPanel.openLayerGroup
-  );
+  const openLayerGroup = useSelector((store: RootState) => store.appState.leftPanel.openLayerGroup);
 
-  const allAvailableLayers = useSelector(
-    (store: RootState) => store.mapviewState.allAvailableLayers
-  );
+  const allAvailableLayers = useSelector((store: RootState) => store.mapviewState.allAvailableLayers);
 
-  const imagerylayer = allAvailableLayers.find(
-    l => l.id === layerGroupConfig.layers[0].id
-  );
+  const imagerylayer = allAvailableLayers.find((l) => l.id === layerGroupConfig.layers[0].id);
 
-  const imageryLayerOnMap = mapController._map?.findLayerById(
-    layerGroupConfig.layers[0].id
-  );
+  const imageryLayerOnMap = mapController._map?.findLayerById(layerGroupConfig.layers[0].id);
 
   const dispatch = useDispatch();
 
-  const layerGroupTitle =
-    layerGroupConfig.label?.[selectedLanguage] || 'Recent Imagery';
+  const layerGroupTitle = layerGroupConfig.label?.[selectedLanguage] || 'Recent Imagery';
 
   const groupOpen = openLayerGroup === layerGroupKey;
 
@@ -251,12 +213,7 @@ const ImageryLayersGroup = (props: LayerGroupProps): React.ReactElement => {
           />
         </div>
       </div>
-      {imageryModalOpen && (
-        <RecentImagery
-          modalHandler={handleCloseModal}
-          handleTileHover={handleTileHover}
-        />
-      )}
+      {imageryModalOpen && <RecentImagery modalHandler={handleCloseModal} handleTileHover={handleTileHover} />}
     </>
   );
 };
