@@ -39,7 +39,6 @@ const RecentImagery = (props: ImageryProps): JSX.Element => {
     const postThumbsURL = 'https://production-api.globalforestwatch.org/recent-tiles/thumbs';
     return await fetch(postThumbsURL, {
       method: 'POST',
-      // credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -66,7 +65,6 @@ const RecentImagery = (props: ImageryProps): JSX.Element => {
       const postTilesURL = 'https://production-api.globalforestwatch.org/recent-tiles/tiles';
       return await fetch(postTilesURL, {
         method: 'POST',
-        // credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -82,7 +80,6 @@ const RecentImagery = (props: ImageryProps): JSX.Element => {
     };
 
     //Chunk tile array into smaller parts so the API does not get overloaded
-    // const chunkedTiles = chunk(tiles, 6);
     const chunkedTiles = chunk(tiles, 6);
 
     let postTileResponses: any[] = [];
