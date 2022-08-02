@@ -30,9 +30,13 @@ class MapBuilder {
     this.element = params.el;
     this.builderMain = new MapBuilderMain(params.config);
     console.log(params);
+    this.print(params);
     this.render();
   }
 
+  print(params: any) {
+    console.log('print from lib.tsx parms', params);
+  }
   render(): void {
     ReactDOM.render(
       <Provider store={store}>{this.builderMain.render()}</Provider>,
