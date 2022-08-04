@@ -7,26 +7,27 @@ const TerserPlugin = require('terser-webpack-plugin');
 const path = require('path');
 const webpack = require('webpack');
 const PACKAGE = require('./package.json');
-const fs = require('fs');
-const Dotenv = require('dotenv-webpack');
-const dotenv = require('dotenv');
+// const fs = require('fs');
+// const Dotenv = require('dotenv-webpack');
+// const dotenv = require('dotenv');
 
-const currentPath = path.join(__dirname);
-const basePath = currentPath + '/.env';
-// We're concatenating the environment name to our filename to specify the correct env file!
-const envPath = basePath + '.' + process.env.REACT_APP_PLANET_API_KEY;
-// Check if the file exists, otherwise fall back to the production .env
-const finalPath = fs.existsSync(envPath) ? envPath : basePath;
-// Set the path parameter in the dotenv config
-const fileEnv = dotenv.config({ path: finalPath }).parsed;
-// reduce it to a nice object, the same as before
-const envKeys = Object.keys(fileEnv).reduce((prev, next) => {
-  prev[`process.env.${next}`] = JSON.stringify(fileEnv[next]);
-  return prev;
-}, {});
+// const currentPath = path.join(__dirname);
+// const basePath = currentPath + '/.env';
+// // We're concatenating the environment name to our filename to specify the correct env file!
+// const envPath = basePath + '.' + process.env.REACT_APP_PLANET_API_KEY;
+// // Check if the file exists, otherwise fall back to the production .env
+// const finalPath = fs.existsSync(envPath) ? envPath : basePath;
+// // Set the path parameter in the dotenv config
+// const fileEnv = dotenv.config({ path: finalPath }).parsed;
+// // reduce it to a nice object, the same as before
+// const envKeys = Object.keys(fileEnv).reduce((prev, next) => {
+//   prev[`process.env.${next}`] = JSON.stringify(fileEnv[next]);
+//   return prev;
+// }, {});
 
 module.exports = (env) => {
   //Generate a public path that is pointing at WRI server appropriate folder corresponding to the folder name that reflects the version, this is done so various esri files
+  console.log('from webpack.lib', env);
   //like font files and others are loaded correctly due to dynamic pathing issues
   const base = 'https://wri-sites.s3.amazonaws.com/gfw-mapbuilder.org/library.gfw-mapbuilder.org/';
   const publicPathURL = `${base}${PACKAGE.version}/`;
@@ -102,8 +103,8 @@ module.exports = (env) => {
       new webpack.optimize.LimitChunkCountPlugin({
         maxChunks: 100,
       }),
-      new Dotenv(),
-      new webpack.DefinePlugin(envKeys),
+      // new Dotenv(),
+      // new webpack.DefinePlugin(envKeys),
       new HtmlWebPackPlugin({
         title: 'ArcGIS Template Application',
         template: './src/library.html',
