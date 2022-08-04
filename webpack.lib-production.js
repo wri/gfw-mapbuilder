@@ -106,6 +106,7 @@ module.exports = (env) => {
       // new Dotenv(),
       // new webpack.DefinePlugin(envKeys),
       new Dotenv({
+        path: path.resolve(__dirname, './.env'),
         systemvars: true,
       }),
       new HtmlWebPackPlugin({
