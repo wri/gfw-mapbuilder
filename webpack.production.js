@@ -105,7 +105,6 @@ module.exports = (env) => {
 
       new CopyWebpackPlugin([
         { from: './configs/resources.js', to: 'configuration.js' }, //TODO: this needs to be somehow dynamic
-        { from: './configs/envVariables.ts', to: 'envVariables.ts' }, //TODO: this needs to be somehow dynamic
       ]),
       new Dotenv({
         path: path.resolve(__dirname, './.env'),
