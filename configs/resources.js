@@ -1,7 +1,3 @@
-import { ENV_VARIABLES } from './envVariables';
-
-console.log('ENV_VARIABLES', ENV_VARIABLES);
-
 export default {
   webmap: 'de85e3fcc07948238aa6c1afd2a4ceb0',
   title: 'GFW Mapbuilder',
@@ -493,7 +489,7 @@ export default {
           id: 'planet',
           thumbnailUrl: 'https://my.gfw-mapbuilder.org/img/wri_mono.png',
           url: 'https://tiles.globalforestwatch.org/planet/v1/planet_medres_normalized_analytic/{z}/{x}/{y}.png',
-          apiKey: ENV_VARIABLES.REACT_APP_PLANET_API_KEY,
+          apiKey: process.env.REACT_APP_PLANET_API_KEY,
 
           visible: true,
           title: {
