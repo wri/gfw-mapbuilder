@@ -8,7 +8,7 @@ const TerserPlugin = require('terser-webpack-plugin');
 const path = require('path');
 const webpack = require('webpack');
 // const fs = require('fs');
-// const Dotenv = require('dotenv-webpack');
+const Dotenv = require('dotenv-webpack');
 // const dotenv = require('dotenv');
 
 // const currentPath = path.join(__dirname);
@@ -99,6 +99,9 @@ module.exports = (env) => {
       new CopyWebpackPlugin([
         { from: './configs/resources.js', to: 'configuration.js' }, //TODO: this needs to be somehow dynamic
       ]),
+      new Dotenv({
+        systemvars: true,
+      }),
       // new Dotenv(),
       // new webpack.DefinePlugin(envKeys),
       new HtmlWebPackPlugin({

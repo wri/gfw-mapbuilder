@@ -8,7 +8,7 @@ const path = require('path');
 const webpack = require('webpack');
 const PACKAGE = require('./package.json');
 // const fs = require('fs');
-// const Dotenv = require('dotenv-webpack');
+const Dotenv = require('dotenv-webpack');
 // const dotenv = require('dotenv');
 
 // const currentPath = path.join(__dirname);
@@ -105,6 +105,9 @@ module.exports = (env) => {
       }),
       // new Dotenv(),
       // new webpack.DefinePlugin(envKeys),
+      new Dotenv({
+        systemvars: true,
+      }),
       new HtmlWebPackPlugin({
         title: 'ArcGIS Template Application',
         template: './src/library.html',
