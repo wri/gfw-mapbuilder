@@ -27,6 +27,8 @@ const Dotenv = require('dotenv-webpack');
 
 module.exports = (env) => {
   console.log('from webpack.produciton', env);
+  console.log('from webpack.produciton env |||', process.env.REACT_APP_PLANET_API_KEY);
+
   return {
     mode: 'production',
     entry: {
