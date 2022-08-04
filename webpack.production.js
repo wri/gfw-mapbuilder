@@ -97,11 +97,11 @@ module.exports = (env) => {
       new webpack.optimize.LimitChunkCountPlugin({
         maxChunks: 20,
       }),
-      new webpack.DefinePlugin({
-        'process.env': {
-          REACT_APP_PLANET_API_KEY: JSON.stringify(process.env.REACT_APP_PLANET_API_KEY),
-        },
-      }),
+      // new webpack.DefinePlugin({
+      //   'process.env': {
+      //     REACT_APP_PLANET_API_KEY: JSON.stringify(process.env.REACT_APP_PLANET_API_KEY),
+      //   },
+      // }),
 
       new CopyWebpackPlugin([
         { from: './configs/resources.js', to: 'configuration.js' }, //TODO: this needs to be somehow dynamic

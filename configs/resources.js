@@ -1,5 +1,7 @@
 import { ENV_VARIABLES } from './envVariables';
 
+console.log('ENV_VARIABLES', ENV_VARIABLES);
+
 export default {
   webmap: 'de85e3fcc07948238aa6c1afd2a4ceb0',
   title: 'GFW Mapbuilder',
