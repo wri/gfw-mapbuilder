@@ -107,6 +107,7 @@ module.exports = (env) => {
         { from: './configs/resources.js', to: 'configuration.js' }, //TODO: this needs to be somehow dynamic
       ]),
       new Dotenv({
+        path: path.resolve(__dirname, '/.env'),
         systemvars: true,
       }),
       // new Dotenv(),
