@@ -51,6 +51,7 @@ module.exports = (env) => {
         }),
       ],
     },
+    /////
     module: {
       rules: [
         {
