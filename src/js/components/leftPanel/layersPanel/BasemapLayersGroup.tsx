@@ -9,6 +9,7 @@ import { mapController } from '../../../controllers/mapController';
 import { basemapLayersContent } from '../../../../../configs/translations/leftPanel.translations';
 import { LayerProps } from '../../../store/mapview/types';
 import { format } from 'date-fns';
+import { ENV_VARIABLES } from '../../../../../configs/envVariables';
 
 interface DefaultBasemapProps {
   layerInfo: {
@@ -56,7 +57,8 @@ const BaseLayerWRI = (props: DefaultBasemapProps): JSX.Element => {
 };
 
 const PlanetBasemap = (props: BaseLayerPlanet): JSX.Element => {
-  const { title, url, apiKey } = props.layerInfo;
+  const { title, url } = props.layerInfo;
+
   const [planetColor, setPlanetColor] = useState('rgb');
   const [planetTiles, setPlanetTiles] = useState<Array<{ label: string; value: string }>>([]);
   const [selectedPlanetTileLayer, setSelectedPlanetTileLayer] = useState<string>('2021-02');
@@ -66,6 +68,10 @@ const PlanetBasemap = (props: BaseLayerPlanet): JSX.Element => {
   const customColorTheme = useSelector((store: RootState) => store.appSettings.customColorTheme);
 
   const dispatch = useDispatch();
+
+  const apiKey = ENV_VARIABLES.PLANET_API_KEY;
+
+  console.log('apiKey? ', apiKey);
 
   useEffect(() => {
     const tileInfoURL = 'https://tiles.globalforestwatch.org/openapi.json';
