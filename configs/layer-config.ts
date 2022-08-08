@@ -19,25 +19,6 @@ export const supportedLayers = [
   'Vector.Layer',
 ];
 
-export const testing = [
-  {
-    id: 'planet',
-    thumbnailUrl: 'https://my.gfw-mapbuilder.org/img/wri_mono.png',
-    url: 'https://tiles.globalforestwatch.org/planet/v1/planet_medres_normalized_analytic/{z}/{x}/{y}.png',
-    apiKey: process.env.REACT_APP_PLANET_API_KEY,
-
-    visible: true,
-    title: {
-      en: 'Planet',
-      fr: 'Planet',
-      es: 'Planet',
-      pt: 'Planet',
-      id: 'Planet',
-      zh: 'Planet',
-      ka: 'Planet',
-    },
-  },
-];
 /*export const newRemoteDataLayers = [
   {
     id: 'TREES_MOSAIC_LANDSCAPES',
