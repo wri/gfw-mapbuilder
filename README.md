@@ -8,6 +8,11 @@
 
 Before you can begin, make sure you have [node.js](https://nodejs.org/en/).
 
+### Env variables
+
+Create .env file at the root of the project and add `REACT_APP_PLANET_API_KEY` checkout `.env.examples` file.
+Reach out to point of contact for Mapbuilder and ask for api key
+
 Install all the javascript dependencies.
 
 ```shell
@@ -32,7 +37,7 @@ npm run build
 
 ### Configuring
 
-This application has a general ([`resources.js`](https://github.com/wri/gfw-mapbuilder/blob/develop/configs/resources.js)). file that contains things controlled by the developers.  Also, the Resources file contains configurations that are controlled via ArcGIS Online or whomever may be deploying the application. You can control things like the layers in the accordion, their source urls, their order on the map and in the UI, service urls (print, geometry, map, etc.), which layers to include in the analysis, and even the configurations for slope analysis and other aspects of the analysis. Anything that needs to be controlled from ArcGIS Online or the person deploying it, should be placed in `resources.js`.
+This application has a general ([`resources.js`](https://github.com/wri/gfw-mapbuilder/blob/develop/configs/resources.js)). file that contains things controlled by the developers. Also, the Resources file contains configurations that are controlled via ArcGIS Online or whomever may be deploying the application. You can control things like the layers in the accordion, their source urls, their order on the map and in the UI, service urls (print, geometry, map, etc.), which layers to include in the analysis, and even the configurations for slope analysis and other aspects of the analysis. Anything that needs to be controlled from ArcGIS Online or the person deploying it, should be placed in `resources.js`.
 
 To ensure that your `resources.js` has a valid configuration run the following command
 
@@ -265,7 +270,7 @@ import text from 'js/languages';
 
 export default class MyComponent extends Component {
   static contextTypes = {
-    language: PropTypes.string.isRequired
+    language: PropTypes.string.isRequired,
   };
 
   render() {
@@ -304,7 +309,7 @@ Copy dist folder into 1.5.0 aws folder
 
 Copy dist > 1.5.0.js file in dist folder into 1.5.0.js file in aws folder
 
-`aws s3 cp --content-type "text/html" /Users/dstarr/Documents/dev/gfw-mapbuilder/dist/loader/1.5.0.js  s3://wri-sites/gfw-mapbuilder.org/library.gfw-mapbuilder.org/1.5.0/1.5.0.js --profile wri`  
+`aws s3 cp --content-type "text/html" /Users/dstarr/Documents/dev/gfw-mapbuilder/dist/loader/1.5.0.js s3://wri-sites/gfw-mapbuilder.org/library.gfw-mapbuilder.org/1.5.0/1.5.0.js --profile wri`
 
 Clear cache
 

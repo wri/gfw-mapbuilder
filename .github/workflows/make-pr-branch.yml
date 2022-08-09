@@ -20,6 +20,8 @@ jobs:
         with:
           node-version: '16.x'
       - name: Create Build
+        env:
+          REACT_APP_PLANET_API_KEY: ${{ secrets.REACT_APP_PLANET_API_KEY }}
         run: |
           npm install
           npm run build
