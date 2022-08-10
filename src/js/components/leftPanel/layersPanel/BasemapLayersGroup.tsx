@@ -70,7 +70,6 @@ const PlanetBasemap = (props: BaseLayerPlanet): JSX.Element => {
   const dispatch = useDispatch();
 
   const apiKey = ENV_VARIABLES.PLANET_API_KEY;
-  console.log('PlanetBasemap() apiKey', apiKey);
 
   useEffect(() => {
     const tileInfoURL = 'https://tiles.globalforestwatch.org/openapi.json';
