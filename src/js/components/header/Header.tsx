@@ -13,7 +13,7 @@ import '../../../css/header.scss';
 
 const appSettingsSelector = createSelector(
   (state: RootState) => state.appSettings,
-  appSettings => ({
+  (appSettings) => ({
     language: appSettings.language,
     title: appSettings.title,
     subtitle: appSettings.subtitle,
@@ -27,7 +27,7 @@ const appSettingsSelector = createSelector(
     alternativeLanguageSubtitle: appSettings.alternativeLanguageSubtitle,
     mapThemes: appSettings.mapThemes,
     mapThemeIds: appSettings.mapThemeIds,
-    alternativeMapThemes: appSettings.alternativeMapThemes
+    alternativeMapThemes: appSettings.alternativeMapThemes,
   })
 );
 
@@ -46,60 +46,37 @@ const Header: FunctionComponent = () => {
     alternativeLanguageSubtitle,
     mapThemes,
     mapThemeIds,
-    alternativeMapThemes
+    alternativeMapThemes,
   } = useSelector(appSettingsSelector);
 
-  const selectedLanguage = useSelector(
-    (store: RootState) => store.appState.selectedLanguage
-  );
+  const selectedLanguage = useSelector((store: RootState) => store.appState.selectedLanguage);
 
-  const isLoggedIn = useSelector(
-    (store: RootState) => store.appState.isLoggedIn
-  );
+  const isLoggedIn = useSelector((store: RootState) => store.appState.isLoggedIn);
 
-  const renderGFWDropdown = useSelector(
-    (store: RootState) => store.appState.renderGFWDropdown
-  );
+  const renderGFWDropdown = useSelector((store: RootState) => store.appState.renderGFWDropdown);
 
-  const navLinksInNewTab = useSelector(
-    (store: RootState) => store.appSettings.navLinksInNewTab
-  );
+  const navLinksInNewTab = useSelector((store: RootState) => store.appSettings.navLinksInNewTab);
 
-  const downloadLinkUrl = useSelector(
-    (store: RootState) => store.appSettings.downloadLinkUrl
-  );
+  const downloadLinkUrl = useSelector((store: RootState) => store.appSettings.downloadLinkUrl);
 
-  const aboutLinkUrl = useSelector(
-    (store: RootState) => store.appSettings.aboutLinkUrl
-  );
+  const aboutLinkUrl = useSelector((store: RootState) => store.appSettings.aboutLinkUrl);
 
   const target = navLinksInNewTab ? '_blank' : '_self';
-  const appTitle =
-    selectedLanguage === language ? title : alternativeLanguageTitle;
-  const appSubtitle =
-    selectedLanguage === language ? subtitle : alternativeLanguageSubtitle;
+  const appTitle = selectedLanguage === language ? title : alternativeLanguageTitle;
+  const appSubtitle = selectedLanguage === language ? subtitle : alternativeLanguageSubtitle;
 
   const mapThemeArray = mapThemes?.split(';');
   const mapThemeIDArray = mapThemeIds?.split(';');
   const alternativeMapThemeArray = alternativeMapThemes?.split(';');
-  const renderThemeDropdown =
-    Boolean(mapThemes.length) &&
-    mapThemeIDArray.length === mapThemeArray.length;
+  const renderThemeDropdown = Boolean(mapThemes.length) && mapThemeIDArray.length === mapThemeArray.length;
   return (
     <div className="header-container" data-cy="header">
       <div className="title-container">
-        <a
-          href={logoLinkUrl}
-          target={target}
-          rel="noopener noreferrer"
-          tabIndex={0}
-        >
-          <img
-            src={logoUrl}
-            alt="Global Forest Watch logo"
-            className="gfw-logo"
-          />
-        </a>
+        {logoUrl && logoLinkUrl && (
+          <a href={logoLinkUrl} target={target} rel="noopener noreferrer" tabIndex={0}>
+            <img src={logoUrl} alt="Global Forest Watch logo" className="gfw-logo" />
+          </a>
+        )}
         <div className="titles">
           <h1>{appTitle.toUpperCase()}</h1>
           <h2>{appSubtitle}</h2>
@@ -117,12 +94,7 @@ const Header: FunctionComponent = () => {
         )}
         {downloadLinkUrl && downloadLinkUrl.length && (
           <div>
-            <a
-              className="header-link"
-              href={aboutLinkUrl}
-              target={target}
-              rel="noopener noreferrer"
-            >
+            <a className="header-link" href={aboutLinkUrl} target={target} rel="noopener noreferrer">
               <DownloadIcon width={16} height={16} fill={'#555'} />
               {headerContent[selectedLanguage].download}
             </a>
@@ -130,12 +102,7 @@ const Header: FunctionComponent = () => {
         )}
         {aboutLinkUrl && aboutLinkUrl.length && (
           <div>
-            <a
-              className="header-link"
-              href={aboutLinkUrl}
-              target={target}
-              rel="noopener noreferrer"
-            >
+            <a className="header-link" href={aboutLinkUrl} target={target} rel="noopener noreferrer">
               <AboutIcon width={16} height={16} fill={'#555'} />
               {headerContent[selectedLanguage].about}
             </a>
