@@ -49,6 +49,12 @@ function checkForRenderer(layer: LayerProps): boolean {
 }
 
 function getLegendInfoFromRenderer(layer: LayerProps): any {
+  // TODO: leave for testing purpsoses
+  mapController._map?.layers.forEach((item: any) => {
+    if (item.visible) {
+      // console.log('item', { title: item.title, item });
+    }
+  });
   const esriLayer = mapController._map?.findLayerById(layer.id) as any;
 
   if (!esriLayer) return;
@@ -71,9 +77,8 @@ function getLegendInfoFromRenderer(layer: LayerProps): any {
           <span>Not provided</span>
         </div>
       );
-    } else if (layer?.renderer?.visualVariables?.length) {
+    } else if (layer?.renderer?.visualVariables?.length && layer?.renderer?.type !== 'unique-value') {
       const visualStops = layer.renderer.visualVariables;
-      // layer.renderer.visualVariables.find((v: any) => v.type === 'color');
       if (visualStops && visualStops.length) {
         interface GradientItem {
           colors: string[];
@@ -117,7 +122,7 @@ function getLegendInfoFromRenderer(layer: LayerProps): any {
           );
         }
       }
-    } else if (layer?.rendererz?.classBreakInfos?.length) {
+    } else if (layer?.renderer?.type === 'class-breaks') {
       layer.renderer.classBreakInfos.forEach((value: any) => {
         const defaultSymbol = value.symbol;
         const symbolDOMElement = createSymbolStyles(defaultSymbol);
@@ -128,7 +133,7 @@ function getLegendInfoFromRenderer(layer: LayerProps): any {
           </div>
         );
       });
-    } else if (layer?.renderer?.uniqueValueInfos?.length) {
+    } else if (layer?.renderer?.type === 'unique-value') {
       layer.renderer.uniqueValueInfos.forEach((value: any, index) => {
         const defaultSymbol = value.symbol;
         const symbolDOMElement = createSymbolStyles(defaultSymbol);
@@ -171,8 +176,18 @@ function getLegendInfoFromRenderer(layer: LayerProps): any {
         );
         break;
       }
+      case 'simple-marker': {
+        style.color = `rgba(${symbol.color.r}, ${symbol.color.g}, ${symbol.color.b}, ${symbol.color.a}) `;
+        style.outline = symbol.outline;
+        style.width = '15px';
+        style.height = '15px';
+        symbolDOMElement = (
+          <div style={style} className={`legend-symbol ${symbolType === 'circle' ? 'circle' : ''}`}></div>
+        );
+        break;
+      }
       case 'solid':
-      case 'fill': {
+      case 'simple-fill': {
         //BG FILL COLOR
         style.backgroundColor =
           symbol.color === null
@@ -229,6 +244,8 @@ function getLegendInfoFromRenderer(layer: LayerProps): any {
     // if (esriLayer.type === 'feature' && !esriLayer.renderer) return;
     let container: any[] = [];
 
+    const layerParams = { rendererType: esriLayer?.renderer?.type, layerTitle: esriLayer.title };
+    // console.log('esriLayer', layerParams);
     if (esriLayer.type === 'group') {
       esriLayer.layers.forEach((layer) => {
         const newLegend = generatelegendInfo(layer);
