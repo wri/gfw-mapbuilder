@@ -49,12 +49,6 @@ function checkForRenderer(layer: LayerProps): boolean {
 }
 
 function getLegendInfoFromRenderer(layer: LayerProps): any {
-  // TODO: leave for testing purpsoses
-  mapController._map?.layers.forEach((item: any) => {
-    if (item.visible) {
-      // console.log('item', { title: item.title, item });
-    }
-  });
   const esriLayer = mapController._map?.findLayerById(layer.id) as any;
 
   if (!esriLayer) return;
@@ -241,11 +235,8 @@ function getLegendInfoFromRenderer(layer: LayerProps): any {
   }
 
   function createLegendSymbol(esriLayer: any): any {
-    // if (esriLayer.type === 'feature' && !esriLayer.renderer) return;
     let container: any[] = [];
 
-    const layerParams = { rendererType: esriLayer?.renderer?.type, layerTitle: esriLayer.title };
-    // console.log('esriLayer', layerParams);
     if (esriLayer.type === 'group') {
       esriLayer.layers.forEach((layer) => {
         const newLegend = generatelegendInfo(layer);
