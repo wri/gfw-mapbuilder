@@ -2,7 +2,7 @@ export default {
   webmap: 'de85e3fcc07948238aa6c1afd2a4ceb0',
   title: 'GFW Mapbuilder',
   subtitle: 'Make maps that matter',
-  logoUrl: '',
+  logoUrl: 'https://my.gfw-mapbuilder.org/img/gfw-logo.png',
   logoLinkUrl: 'https://www.gfw-mapbuilder.org/',
   aboutLinkUrl: '',
   downloadLinkUrl: '',
