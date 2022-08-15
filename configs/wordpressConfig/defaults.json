@@ -286,21 +286,28 @@
             "uuid": "04526d47-f3f5-4f76-a939-e5f7861fd085"
           },
           {
-            "id": "TREE_COVER",
+            "id": "LAND_COVER",
             "order": 4,
+            "type": "remoteDataLayer",
+            "uuid": "b8d3f175-0565-443f-839a-49eb890a4b3d"
+          },
+
+          {
+            "id": "TREE_COVER",
+            "order": 5,
             "type": "remoteDataLayer",
             "uuid": "2569adca-ef87-42c4-a153-57c5e8ba0ef7"
           },
           {
             "id": "UMD_LAND_COVER",
-            "order": 5,
+            "order": 6,
             "type": "remoteDataLayer",
             "uuid": "f22e0529-d398-4ccc-b943-e62d420fea89"
           },
           {
             "groupId": "GROUP_LC",
             "id": "TREE_COVER_HEIGHT",
-            "order": 6,
+            "order": 7,
             "type": "flagship",
             "uuid": "9efed1d8-164d-4adb-85a1-e62c6c5c00aa",
             "origin": "gfw-api",
@@ -367,7 +374,7 @@
           },
           {
             "id": "TREES_MOSAIC_LANDSCAPES",
-            "order": 7,
+            "order": 8,
             "type": "remoteDataLayer",
             "uuid": "9e0c1e1e-a0a3-457f-a373-4104820f7a50"
           }
