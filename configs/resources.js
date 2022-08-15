@@ -2,8 +2,8 @@ export default {
   webmap: 'de85e3fcc07948238aa6c1afd2a4ceb0',
   title: 'GFW Mapbuilder',
   subtitle: 'Make maps that matter',
-  logoUrl: 'https://my.gfw-mapbuilder.org/img/gfw-logo.png',
-  logoLinkUrl: 'https://www.gfw-mapbuilder.org/',
+  logoUrl: '',
+  logoLinkUrl: '',
   aboutLinkUrl: '',
   downloadLinkUrl: '',
   printServiceUrl: 'https://gis.forest-atlas.org/server/rest/services/print/ExportWebMap/GPServer/Export%20Web%20Map',
@@ -286,12 +286,6 @@ export default {
           type: 'remoteDataLayer',
           uuid: '04526d47-f3f5-4f76-a939-e5f7861fd085',
         },
-        /*{
-          id: 'LAND_COVER',
-          order: 5,
-          type: 'remoteDataLayer',
-          uuid: 'b8d3f175-0565-443f-839a-49eb890a4b3d',
-        },*/
         {
           id: 'TREE_COVER',
           order: 4,

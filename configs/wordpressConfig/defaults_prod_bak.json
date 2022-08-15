@@ -1,11 +1,11 @@
 {
   "configurationSettings": [],
   "values": {
-    "webmap": "de85e3fcc07948238aa6c1afd2a4ceb0",
+    "webmap": "",
     "title": "GFW Mapbuilder",
     "subtitle": "Make maps that matter",
-    "logoUrl": "",
-    "logoLinkUrl": "",
+    "logoUrl": "https://my.gfw-mapbuilder.org/img/gfw-logo.png",
+    "logoLinkUrl": "https://www.gfw-mapbuilder.org/",
     "aboutLinkUrl": "",
     "downloadLinkUrl": "",
     "printServiceUrl": "https://gis.forest-atlas.org/server/rest/services/print/ExportWebMap/GPServer/Export%20Web%20Map",
@@ -22,11 +22,11 @@
     "useAlternativeLanguage": false,
     "alternativeWebmap": "",
     "alternativeLanguage": "fr",
-    "alternativeLanguageTitle": "MapBuilder",
+    "alternativeLanguageTitle": "GFW Mapbuilder",
     "alternativeLanguageSubtitle": "Make maps that matter",
     "alternativeMapThemes": "",
     "alternativeNarrative": "",
-    "alternativeWebmapMenuName": "Custom Layers",
+    "alternativeWebmapMenuName": "Land Use",
     "initialExtent": {
       "x": null,
       "y": null,
@@ -58,7 +58,7 @@
     "drySpells": false,
     "airQuality": false,
     "windSpeed": false,
-    "webmapMenuName": "Custom Layers",
+    "webmapMenuName": "Land Use",
     "sharinghost": "https://www.arcgis.com",
     "analyticsCode": "",
     "includeCartoTemplateLayers": false,
@@ -97,6 +97,12 @@
             "order": 1,
             "type": "remoteDataLayer",
             "uuid": "e7208398-0acd-4f73-a824-c4fe1e356e0c"
+          },
+          {
+            "id": "CARBON_EMISSIONS",
+            "order": 2,
+            "type": "remoteDataLayer",
+            "uuid": "6d989ac9-ab57-4f95-8475-2e747a3adc10"
           },
           {
             "groupId": "GROUP_CLIMATE",
@@ -268,38 +274,38 @@
         "layers": [
           {
             "id": "IFL",
-            "order": 1,
+            "order": 2,
             "type": "remoteDataLayer",
             "uuid": "5f815a7d-457e-4eae-a8e5-8864a60696ad"
           },
           {
             "id": "PRIMARY_FORESTS",
-            "order": 2,
+            "order": 3,
             "type": "remoteDataLayer",
             "uuid": "edffb745-e523-462d-ad1e-3052006a3dbc"
           },
           {
             "id": "AG_BIOMASS",
-            "order": 3,
+            "order": 4,
             "type": "remoteDataLayer",
             "uuid": "04526d47-f3f5-4f76-a939-e5f7861fd085"
           },
           {
+            "id": "LAND_COVER",
+            "order": 5,
+            "type": "remoteDataLayer",
+            "uuid": "b8d3f175-0565-443f-839a-49eb890a4b3d"
+          },
+          {
             "id": "TREE_COVER",
-            "order": 4,
+            "order": 6,
             "type": "remoteDataLayer",
             "uuid": "2569adca-ef87-42c4-a153-57c5e8ba0ef7"
           },
           {
-            "id": "UMD_LAND_COVER",
-            "order": 5,
-            "type": "remoteDataLayer",
-            "uuid": "f22e0529-d398-4ccc-b943-e62d420fea89"
-          },
-          {
             "groupId": "GROUP_LC",
             "id": "TREE_COVER_HEIGHT",
-            "order": 6,
+            "order": 7,
             "type": "flagship",
             "uuid": "9efed1d8-164d-4adb-85a1-e62c6c5c00aa",
             "origin": "gfw-api",
@@ -366,7 +372,7 @@
           },
           {
             "id": "TREES_MOSAIC_LANDSCAPES",
-            "order": 7,
+            "order": 8,
             "type": "remoteDataLayer",
             "uuid": "9e0c1e1e-a0a3-457f-a373-4104820f7a50"
           }
@@ -488,6 +494,7 @@
             "id": "planet",
             "thumbnailUrl": "https://my.gfw-mapbuilder.org/img/wri_mono.png",
             "url": "https://tiles.globalforestwatch.org/planet/v1/planet_medres_normalized_analytic/{z}/{x}/{y}.png",
+            "apiKey": "90f59f82-8d32-46e4-accb-f8d7f35b309a",
             "visible": true,
             "title": {
               "en": "Planet",
