@@ -55,7 +55,7 @@
     "forestCarbonGrossRemovals": false,
     "forestCarbonGrossEmissions": false,
     "forestCarbonNetFlux": false,
-    "umdLandCover": true,
+    "umdLandCover": false,
     "drySpells": false,
     "airQuality": false,
     "windSpeed": false,
