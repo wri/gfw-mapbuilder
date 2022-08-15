@@ -739,19 +739,15 @@ export class MapController {
       visible: true,
     });
 
-    const params = `?date_range=${selectedTile}&proc=${planetColor}`;
     const planetConfig = {
       type: 'webtiled',
-      url: proxyURL + params,
+      url: `https://tiles.planet.com/basemaps/v1/planet-tiles/planet_medres_normalized_analytic_${selectedTile}_mosaic/gmap/{z}/{x}/{y}.png?proc=${planetColor}&api_key=${apiKey}`,
       title: 'planet',
       id: 'planet',
     };
 
     esriConfig.request.interceptors.push({
-      urls: 'https://tiles.globalforestwatch.org/planet',
-      before: function (params) {
-        params.requestOptions['headers'] = { 'x-api-key': apiKey };
-      },
+      urls: 'https://tiles.globalforestwatch.org/planet/v1/planet_medres_normalized_analytic',
     });
 
     const planetLayer = new WebTileLayer({
