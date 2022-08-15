@@ -426,6 +426,17 @@ export class MapController {
 
             this._map?.addMany(allLayers);
 
+            //Retrieve sorted layer array
+            const mapLayerIDs = getSortedLayers(appSettings.layerPanel, allLayerObjects, this._map);
+
+            //Reorder layers on the map!
+            this._map?.layers.forEach((layer: any) => {
+              const layerIndex = mapLayerIDs!.findIndex((i) => i === layer.id);
+              if (layerIndex !== -1) {
+                this._map?.reorder(layer, layerIndex);
+              }
+            });
+
             //Extra layer group that acts as a "masked" layers with which you cannot interact
             this.addExtraLayers();
             //Sketch view model setup
