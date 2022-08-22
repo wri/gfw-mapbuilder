@@ -924,9 +924,6 @@ export class MapController {
         }
       });
 
-      if (layer.type === 'web-tile' && layer.visible === true) {
-        this.setActiveBasemap('hybrid');
-      }
       store.dispatch(allAvailableLayers(newLayersArray));
 
       // if Land Cover visibility is true, change the max zoom level for mapview to 12, else max zoom level to 20
