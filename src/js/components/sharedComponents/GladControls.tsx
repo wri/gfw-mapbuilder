@@ -20,6 +20,7 @@ const CheckboxWrapper = styled.div<CheckBoxWrapperProps>`
     background-color: ${(props) => props.customColorTheme};
   }
 `;
+
 interface GladControlsProps {
   customColorTheme: string;
   layerConfig: any;
@@ -53,10 +54,16 @@ const GladControls = (props: GladControlsProps): JSX.Element => {
     mapController._map?.remove(gladLayerOld);
   }
 
-  async function handleStartDateChange(day: any) {
+  async function handleDateChange(day: any, type?: string) {
     const dFormat = format(day, 'yyyy-MM-dd');
-    setStartDate(dFormat);
-    setStartDateUnformatted(day);
+    if (type === 'start') {
+      setStartDate(dFormat);
+      setStartDateUnformatted(day);
+    } else {
+      setEndDate(dFormat);
+      setEndDateUnformatted(day);
+    }
+
     //@ts-ignore
     const start = new Date(dFormat).getJulian();
     //@ts-ignore
@@ -68,26 +75,8 @@ const GladControls = (props: GladControlsProps): JSX.Element => {
     const selectedLayer = mapController._map!.findLayerById('GLAD_ALERTS');
     selectedLayer.visible = true;
 
-    dispatch(setGladStart(dFormat));
+    type === 'start' ? dispatch(setGladStart(dFormat)) : dispatch(setGladStart(startDate));
     dispatch(setGladEnd(endDate));
-  }
-
-  async function handleEndDateChange(day: any) {
-    const dFormat = format(day, 'yyyy-MM-dd');
-    setEndDate(dFormat);
-    setEndDateUnformatted(day);
-    //@ts-ignore
-    const end = new Date(dFormat).getJulian();
-    //@ts-ignore
-    const start = new Date(startDate).getJulian();
-
-    await removeGladLayer();
-    await addNewGladLayer(start, end);
-
-    const selectedLayer = mapController._map!.findLayerById('GLAD_ALERTS');
-    selectedLayer.visible = true;
-    dispatch(setGladStart(startDate));
-    dispatch(setGladEnd(dFormat));
   }
 
   function handleConfirmedAlertsToggle(): void {
@@ -127,7 +116,7 @@ const GladControls = (props: GladControlsProps): JSX.Element => {
             showYearDropdown
             dropdownMode="select"
             placeholderText="select a day"
-            onChange={(date) => handleStartDateChange(date)}
+            onChange={(date: Date) => handleDateChange(date, 'start')}
             selected={new Date(startDateUnformatted)}
             minDate={new Date(DATE_PICKER_START_DATES.GLAD_ALERTS)}
             maxDate={new Date(endDate)}
@@ -140,7 +129,7 @@ const GladControls = (props: GladControlsProps): JSX.Element => {
             showYearDropdown
             dropdownMode="select"
             placeholderText="select a day"
-            onChange={(date) => handleEndDateChange(date)}
+            onChange={(date) => handleDateChange(date)}
             selected={new Date(endDateUnformatted)}
             minDate={new Date(startDateUnformatted)}
             maxDate={new Date()}
