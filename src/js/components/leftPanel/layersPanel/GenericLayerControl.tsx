@@ -34,6 +34,7 @@ import { setTimeSlider } from '../../../store/mapview/actions';
 import SelectIntegratedAlertLayer from '../../sharedComponents/SelectIntegratedAlertLayer';
 import RangeSlider from '../../sharedComponents/RangeSlider';
 import GladControls from '../../sharedComponents/GladControls';
+import IntegratedAlertControls from '../../sharedComponents/IntegratedAlertControls';
 
 interface LayerInfo {
   layerInfo: any;
@@ -296,7 +297,7 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
         );
       case 'GFW_INTEGRATED_ALERTS':
         return (
-          <GladControls
+          <IntegratedAlertControls
             customColorTheme={customColorTheme}
             layerConfig={layerConfig}
             selectedLanguage={selectedLanguage}
