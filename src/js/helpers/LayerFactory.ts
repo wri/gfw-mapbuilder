@@ -19,6 +19,7 @@ import { createForestCarbonGrossEmission } from '../layers/ForestCarbonGrossEmis
 import { forestCarbonNetFluxValue } from '../components/mapWidgets/widgetContent/ForesCarbonNetFlux';
 import { createForestCarbonNetFlux } from '../layers/ForestCarbonNetFlux';
 import { umdCoverLand } from '../layers/UmdCoverLand';
+import { createGladS2Layer } from '../layers/GladS2Layer';
 
 interface LayerOptions {
   id: string;
@@ -45,7 +46,6 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
 
   let esriLayer;
   switch (layerConfig.type) {
-    //check for subs and enabled those that were spercified
     case 'dynamic':
       if (layerConfig.versions && layerConfig.versions[0].url) {
         layerConfig.url = layerConfig.versions[0].url;
@@ -155,7 +155,9 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
       break;
     case 'umd-land-cover':
       const rangeYear = appState.landCoverYearValue[0];
-      let updatedUrl = (layerConfig.url = layerConfig.url.replace('{year}', '2020').replace('{year}', `${rangeYear}`));
+      const updatedUrl = (layerConfig.url = layerConfig.url
+        .replace('{year}', '2020')
+        .replace('{year}', `${rangeYear}`));
 
       const umdConstructor = await umdCoverLand();
       const umdLayer = new umdConstructor({
@@ -277,6 +279,24 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
       const endDate = new Date(appState.leftPanel.gladEnd).getJulian();
       esriLayer.julianFrom = startDate;
       esriLayer.julianTo = endDate;
+      break;
+    case 'glad-s2':
+      const glads2Constructor = await createGladS2Layer();
+      const glads2Layer = new glads2Constructor({
+        id: layerConfig.id,
+        title: layerConfig.title,
+        visible: layerConfig.visible,
+        urlTemplate: layerConfig.url,
+        view: mapView,
+        opacity: '.5',
+      });
+
+      esriLayer = glads2Layer;
+      esriLayer.confirmed = appState.leftPanel.gladConfirmed;
+      const gladS2StartDate: any = new Date(appState.leftPanel.gladStart).getJulian() as any;
+      const gladS2endDate = new Date(appState.leftPanel.gladEnd).getJulian();
+      esriLayer.julianFrom = gladS2StartDate;
+      esriLayer.julianTo = gladS2endDate;
       break;
     case 'integrated-alert-layer':
       const integratedAlertConstructor = await createGFWIntegratedLayer();

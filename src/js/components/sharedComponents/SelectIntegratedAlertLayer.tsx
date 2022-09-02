@@ -3,24 +3,24 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store';
 
 import {
-  setGFWLayer,
-  setGFWLayerLabel,
-  setGFWLayerSubtitle,
-  setHighConfidenceConfirmed
+  setIntegratedAlertLayer,
+  setIntegratedAlertLayerLabel,
+  setIntegratedAlertLayerSubtitle,
+  setHighConfidenceConfirmed,
 } from '../../store/appState/actions';
 import { mapController } from '../../controllers/mapController';
 
-const SelectGFWAlertLayer = (): JSX.Element => {
+const SelectIntegratedAlertLayer = (): JSX.Element => {
   const dispatch = useDispatch();
-  const gfwLayer = useSelector((store: RootState) => store.appState.leftPanel.gfwLayer);
+  const gfwLayer = useSelector((store: RootState) => store.appState.leftPanel.integratedAlertLayer);
 
   function handleDensityButtonClick(e): void {
     dispatch(setHighConfidenceConfirmed(false));
-    const gfwLayers = [e.target[0].value, e.target[1].value, e.target[2].value];
-    mapController.updateGFWLayer(e.target.value, gfwLayers);
-    dispatch(setGFWLayer(e.target.value));
-    dispatch(setGFWLayerLabel(e.target.selectedOptions[0].text));
-    dispatch(setGFWLayerSubtitle(e.target.selectedOptions[0].getAttribute('data-subtitle')));
+    const integratedAlertLayers = [e.target[0].value, e.target[1].value, e.target[2].value];
+    mapController.updateGFWLayer(e.target.value, integratedAlertLayers);
+    dispatch(setIntegratedAlertLayer(e.target.value));
+    dispatch(setIntegratedAlertLayerLabel(e.target.selectedOptions[0].text));
+    dispatch(setIntegratedAlertLayerSubtitle(e.target.selectedOptions[0].getAttribute('data-subtitle')));
   }
 
   return (
@@ -31,7 +31,7 @@ const SelectGFWAlertLayer = (): JSX.Element => {
         paddingRight: 20,
         paddingBottom: 20,
         marginTop: 10,
-        display: 'flex'
+        display: 'flex',
       }}
     >
       <span>Select Layer: </span>
@@ -59,4 +59,4 @@ const SelectGFWAlertLayer = (): JSX.Element => {
   );
 };
 
-export default SelectGFWAlertLayer;
+export default SelectIntegratedAlertLayer;

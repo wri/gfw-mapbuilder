@@ -8,7 +8,12 @@ import { setTimeSlider } from '../../store/mapview/actions';
 
 import { RootState } from '../../store';
 import { LayerFactory } from '../../helpers/LayerFactory';
-import { setGfwIntegratedEnd, setGfwIntegratedStart, setGladEnd, setGladStart } from '../../store/appState/actions';
+import {
+  setIntegratedAlertLayerEnd,
+  setIntegratedAlertLayerStart,
+  setGladEnd,
+  setGladStart,
+} from '../../store/appState/actions';
 
 const SliderWithTooltip = createSliderWithTooltip(Range);
 
@@ -33,7 +38,7 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
   const [playButton, setPlayButton] = useState(true);
   const [startTimeSlider, setStartTimeSlider] = useState(false);
   const customColorTheme = useSelector((store: RootState) => store.appSettings.customColorTheme);
-  const gfwLayer = useSelector((store: RootState) => store.appState.leftPanel.gfwLayer);
+  const gfwLayer = useSelector((store: RootState) => store.appState.leftPanel.integratedAlertLayer);
   const allAvailableLayers = useSelector((store: RootState) => store.mapviewState.allAvailableLayers);
   const [marks, setMarks] = useState(props.defaultMarks);
 
@@ -89,7 +94,7 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
     };
   }, [startTimeSlider, range[1], timeSlider[1]]);
 
-  const convertDate = value => {
+  const convertDate = (value) => {
     const nextStartDate = new Date(min.getTime() || max.getTime());
     nextStartDate.setDate(value);
     return new Date(nextStartDate.getTime() - nextStartDate.getTimezoneOffset() * 60000).toISOString().split('T')[0];
@@ -114,8 +119,8 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
       gfwIntegratedLayerNew.gfwjulianTo = convertEndDate;
       mapController._map?.add(gfwIntegratedLayerNew, gfwIntegratedIndex);
 
-      dispatch(setGfwIntegratedStart(convertStartDate));
-      dispatch(setGfwIntegratedEnd(convertEndDate));
+      dispatch(setIntegratedAlertLayerStart(convertStartDate));
+      dispatch(setIntegratedAlertLayerEnd(convertEndDate));
     } else {
       const gladLayerConfig: any = allAvailableLayers.filter((layer: any) => layer.id === gfwLayer);
       const gladLayerOld: any = mapController._map!.findLayerById(gfwLayer);
@@ -176,7 +181,7 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
         }
         tipProps={{
           placement: 'top',
-          prefixCls: 'rc-slider-tooltip'
+          prefixCls: 'rc-slider-tooltip',
         }}
         dots={true}
         marks={marks}
@@ -184,7 +189,7 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
         handleStyle={[{ borderColor: customColorTheme }]}
         dotStyle={{ border: '1px solid #e9e9e9' }}
         activeDotStyle={{
-          border: `1px solid ${customColorTheme}`
+          border: `1px solid ${customColorTheme}`,
         }}
         included={props.included}
         // @ts-ignore

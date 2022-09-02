@@ -41,7 +41,6 @@ import {
   SET_VIIRS_START,
   SET_WIND_SPEED_POTENTIAL,
   TOGGLE_TABVIEW_PANEL,
-  SET_LAND_COVER_YEAR_RANGE,
   SET_LAND_COVER_YEAR_VALUE,
 } from './types';
 
@@ -76,7 +75,7 @@ const initialState: AppState = {
     viirsStart: format(subYears(new Date(Date.now()), 1), 'yyyy-MM-dd'),
     versionedLayer: {},
     treeHeight: 3,
-    gfwLayer: 'GFW_INTEGRATED_ALERTS',
+    integratedAlertLayer: 'GFW_INTEGRATED_ALERTS',
     gfwLayerLabel: 'Integrated Deforestation Alerts',
     gfwLayerSubtitle: '(daily, 10m, tropics, UMD/GLAD and WUR)',
     windSpeedPotential: 50,
@@ -285,7 +284,7 @@ export function appStateReducer(state = initialState, action: AppStateTypes): Ap
         ...state,
         leftPanel: {
           ...state.leftPanel,
-          gfwLayer: action.payload,
+          integratedAlertLayer: action.payload,
         },
       };
     case SET_GFW_LAYER_LABEL:

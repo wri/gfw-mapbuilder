@@ -18,7 +18,7 @@ export interface LeftPanel {
   viirsStart: string;
   viirsEnd: string;
   treeHeight: number;
-  gfwLayer: string;
+  integratedAlertLayer: string;
   gfwLayerLabel: string;
   gfwLayerSubtitle: string;
   windSpeedPotential: number;
@@ -248,7 +248,7 @@ interface SetTreeHeight {
 
 interface SetGFWLayer {
   type: typeof SET_GFW_LAYER;
-  payload: AppState['leftPanel']['gfwLayer'];
+  payload: AppState['leftPanel']['integratedAlertLayer'];
 }
 
 interface SetGFWLayerLabel {
