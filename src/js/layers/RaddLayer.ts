@@ -44,8 +44,9 @@ export const createRadd = async () => {
 
     filter: function (data) {
       for (let i = 0; i < data.length; i += 4) {
+        // This makes the black background opaque
         if (data[i] === 0 || data[i + 1] === 0 || data[i + 3] === 0) {
-          data[i + 3] = 0; // B
+          data[i + 3] = 0;
         } else {
           data[i] = 220; // R
           data[i + 1] = 102; // G
