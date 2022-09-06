@@ -19,6 +19,7 @@ import {
   SET_SELECTED_SEARCH_WIDGET_LAYER,
   SET_GLAD_CONFIRMED,
   SET_HIGH_CONFIDENCE_CONFIRMED,
+  SET_GEOGRAPHIC_COVERAGE,
   SET_GLAD_START,
   SET_GLAD_END,
   SET_GFW_INTEGRATED_START,
@@ -168,6 +169,13 @@ export function setHighConfidenceConfirmed(payload: AppState['leftPanel']['highC
   };
 }
 
+export function setGeographicCoverage(payload: AppState['leftPanel']['geographicCoverage']) {
+  return {
+    type: SET_GEOGRAPHIC_COVERAGE as typeof SET_GEOGRAPHIC_COVERAGE,
+    payload: payload,
+  };
+}
+
 export function setGladStart(payload: AppState['leftPanel']['gladStart']) {
   return {
     type: SET_GLAD_START as typeof SET_GLAD_START,
@@ -182,14 +190,14 @@ export function setGladEnd(payload: AppState['leftPanel']['gladEnd']) {
   };
 }
 
-export function setGfwIntegratedStart(payload: AppState['leftPanel']['gfwIntegratedStart']) {
+export function setIntegratedAlertLayerStart(payload: AppState['leftPanel']['gfwIntegratedStart']) {
   return {
     type: SET_GFW_INTEGRATED_START as typeof SET_GFW_INTEGRATED_START,
     payload: payload,
   };
 }
 
-export function setGfwIntegratedEnd(payload: AppState['leftPanel']['gfwIntegratedEnd']) {
+export function setIntegratedAlertLayerEnd(payload: AppState['leftPanel']['gfwIntegratedEnd']) {
   return {
     type: SET_GFW_INTEGRATED_END as typeof SET_GFW_INTEGRATED_END,
     payload: payload,
@@ -245,21 +253,21 @@ export function setTreeHeight(payload: number) {
   };
 }
 
-export function setGFWLayer(payload: string) {
+export function setIntegratedAlertLayer(payload: string) {
   return {
     type: SET_GFW_LAYER as typeof SET_GFW_LAYER,
     payload: payload,
   };
 }
 
-export function setGFWLayerLabel(payload: string) {
+export function setIntegratedAlertLayerLabel(payload: string) {
   return {
     type: SET_GFW_LAYER_LABEL as typeof SET_GFW_LAYER_LABEL,
     payload: payload,
   };
 }
 
-export function setGFWLayerSubtitle(payload: string) {
+export function setIntegratedAlertLayerSubtitle(payload: string) {
   return {
     type: SET_GFW_LAYER_SUBTITLE as typeof SET_GFW_LAYER_SUBTITLE,
     payload: payload,

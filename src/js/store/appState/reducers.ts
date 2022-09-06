@@ -21,6 +21,7 @@ import {
   SET_GFW_INTEGRATED_END,
   SET_HIDE_WIDGET,
   SET_HIGH_CONFIDENCE_CONFIRMED,
+  SET_GEOGRAPHIC_COVERAGE,
   SET_IMAGE_OBJECT,
   SET_IS_PROFILE_COMPLETE,
   SET_LANGUAGE,
@@ -41,7 +42,6 @@ import {
   SET_VIIRS_START,
   SET_WIND_SPEED_POTENTIAL,
   TOGGLE_TABVIEW_PANEL,
-  SET_LAND_COVER_YEAR_RANGE,
   SET_LAND_COVER_YEAR_VALUE,
 } from './types';
 
@@ -66,6 +66,7 @@ const initialState: AppState = {
     analysisYearRange: [2001, 2018],
     gladConfirmed: false,
     highConfidenceConfirmed: false,
+    geographicCoverage: false,
     gladStart: '2020-01-02',
     gladEnd: format(new Date(Date.now()), 'yyyy-MM-dd'),
     gfwIntegratedStart: '2020-03-03',
@@ -76,7 +77,7 @@ const initialState: AppState = {
     viirsStart: format(subYears(new Date(Date.now()), 1), 'yyyy-MM-dd'),
     versionedLayer: {},
     treeHeight: 3,
-    gfwLayer: 'GFW_INTEGRATED_ALERTS',
+    integratedAlertLayer: 'GFW_INTEGRATED_ALERTS',
     gfwLayerLabel: 'Integrated Deforestation Alerts',
     gfwLayerSubtitle: '(daily, 10m, tropics, UMD/GLAD and WUR)',
     windSpeedPotential: 50,
@@ -208,6 +209,14 @@ export function appStateReducer(state = initialState, action: AppStateTypes): Ap
           highConfidenceConfirmed: action.payload,
         },
       };
+    case SET_GEOGRAPHIC_COVERAGE:
+      return {
+        ...state,
+        leftPanel: {
+          ...state.leftPanel,
+          geographicCoverage: action.payload,
+        },
+      };
     case SET_GLAD_START:
       return {
         ...state,
@@ -285,7 +294,7 @@ export function appStateReducer(state = initialState, action: AppStateTypes): Ap
         ...state,
         leftPanel: {
           ...state.leftPanel,
-          gfwLayer: action.payload,
+          integratedAlertLayer: action.payload,
         },
       };
     case SET_GFW_LAYER_LABEL:
