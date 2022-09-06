@@ -19,6 +19,7 @@ import {
   SET_SELECTED_SEARCH_WIDGET_LAYER,
   SET_GLAD_CONFIRMED,
   SET_HIGH_CONFIDENCE_CONFIRMED,
+  SET_GEOGRAPHIC_COVERAGE,
   SET_GLAD_START,
   SET_GLAD_END,
   SET_GFW_INTEGRATED_START,
@@ -164,6 +165,13 @@ export function setGladConfirmed(payload: AppState['leftPanel']['gladConfirmed']
 export function setHighConfidenceConfirmed(payload: AppState['leftPanel']['highConfidenceConfirmed']) {
   return {
     type: SET_HIGH_CONFIDENCE_CONFIRMED as typeof SET_HIGH_CONFIDENCE_CONFIRMED,
+    payload: payload,
+  };
+}
+
+export function setGeographicCoverage(payload: AppState['leftPanel']['geographicCoverage']) {
+  return {
+    type: SET_GEOGRAPHIC_COVERAGE as typeof SET_GEOGRAPHIC_COVERAGE,
     payload: payload,
   };
 }

@@ -9,6 +9,7 @@ import {
   setIntegratedAlertLayerEnd,
   setIntegratedAlertLayerStart,
   setHighConfidenceConfirmed,
+  setGeographicCoverage,
 } from '../../store/appState/actions';
 import { loadModules } from 'esri-loader';
 import { createGladS2Layer } from '../../layers/GladS2Layer';
@@ -36,9 +37,9 @@ interface GladControlsProps {
 const IntegratedAlertControls = (props: GladControlsProps): JSX.Element => {
   const dispatch = useDispatch();
   const highConfidenceConfirmed = useSelector((store: RootState) => store.appState.leftPanel.highConfidenceConfirmed);
+  const geographicCoverage = useSelector((store: RootState) => store.appState.leftPanel.geographicCoverage);
   const gfwIntegratedEnd = useSelector((store: RootState) => store.appState.leftPanel.gfwIntegratedEnd);
   const integratedAlertLayer = useSelector((store: RootState) => store.appState.leftPanel.integratedAlertLayer);
-  const [geographicCoverageToggle, setGeographicCoverageToggle] = React.useState(false);
   const [startDate, setStartDate] = React.useState(String(DATE_PICKER_START_DATES.GFW_INTEGRATED_ALERTS));
   const [startDateUnformatted, setStartDateUnformatted] = React.useState(
     String(DATE_PICKER_START_DATES.GFW_INTEGRATED_ALERTS)
@@ -105,7 +106,7 @@ const IntegratedAlertControls = (props: GladControlsProps): JSX.Element => {
     const [VectorTileLayer] = await loadModules(['esri/layers/VectorTileLayer']);
 
     let geographicCoverageLayer;
-    if (integratedAlertLayer === 'GFW_INTEGRATED_ALERTS') {
+    if (integratedAlertLayer === 'GFW_INTEGRATED_ALERTS' || integratedAlertLayer === 'GLAD_ALERTS') {
       geographicCoverageLayer = new VectorTileLayer({
         url: 'https://tiles.globalforestwatch.org/umd_glad_landsat_alerts_coverage/v2014/default/root.json',
         id: 'GEOGRAPHIC_COVERAGE_LAYER',
@@ -131,8 +132,8 @@ const IntegratedAlertControls = (props: GladControlsProps): JSX.Element => {
       });
     }
 
-    setGeographicCoverageToggle(!geographicCoverageToggle);
-    if (geographicCoverageToggle) {
+    dispatch(setGeographicCoverage(!geographicCoverage));
+    if (geographicCoverage) {
       const geographicCoverageLayerOld: any = mapController._map!.findLayerById('GEOGRAPHIC_COVERAGE_LAYER');
       mapController._map?.remove(geographicCoverageLayerOld);
     } else {
@@ -167,7 +168,7 @@ const IntegratedAlertControls = (props: GladControlsProps): JSX.Element => {
                 name="styled-checkbox"
                 className="styled-checkbox"
                 id="layer-checkbox-gfw"
-                checked={geographicCoverageToggle}
+                checked={geographicCoverage}
                 onChange={showGeographicCoverage}
               />
               <label className="styled-checkboxlabel" htmlFor="layer-checkbox-gfw"></label>

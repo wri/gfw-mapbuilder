@@ -7,6 +7,7 @@ import {
   setIntegratedAlertLayerLabel,
   setIntegratedAlertLayerSubtitle,
   setHighConfidenceConfirmed,
+  setGeographicCoverage,
 } from '../../store/appState/actions';
 import { mapController } from '../../controllers/mapController';
 
@@ -16,11 +17,14 @@ const SelectIntegratedAlertLayer = (): JSX.Element => {
 
   function handleDensityButtonClick(e): void {
     dispatch(setHighConfidenceConfirmed(false));
+    dispatch(setGeographicCoverage(false));
     const integratedAlertLayers = [e.target[0].value, e.target[1].value, e.target[2].value];
     mapController.updateGFWLayer(e.target.value, integratedAlertLayers);
     dispatch(setIntegratedAlertLayer(e.target.value));
     dispatch(setIntegratedAlertLayerLabel(e.target.selectedOptions[0].text));
     dispatch(setIntegratedAlertLayerSubtitle(e.target.selectedOptions[0].getAttribute('data-subtitle')));
+    const geographicCoverageLayerOld: any = mapController._map!.findLayerById('GEOGRAPHIC_COVERAGE_LAYER');
+    mapController._map?.remove(geographicCoverageLayerOld);
   }
 
   return (

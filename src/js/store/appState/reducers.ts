@@ -21,6 +21,7 @@ import {
   SET_GFW_INTEGRATED_END,
   SET_HIDE_WIDGET,
   SET_HIGH_CONFIDENCE_CONFIRMED,
+  SET_GEOGRAPHIC_COVERAGE,
   SET_IMAGE_OBJECT,
   SET_IS_PROFILE_COMPLETE,
   SET_LANGUAGE,
@@ -65,6 +66,7 @@ const initialState: AppState = {
     analysisYearRange: [2001, 2018],
     gladConfirmed: false,
     highConfidenceConfirmed: false,
+    geographicCoverage: false,
     gladStart: '2020-01-02',
     gladEnd: format(new Date(Date.now()), 'yyyy-MM-dd'),
     gfwIntegratedStart: '2020-03-03',
@@ -205,6 +207,14 @@ export function appStateReducer(state = initialState, action: AppStateTypes): Ap
         leftPanel: {
           ...state.leftPanel,
           highConfidenceConfirmed: action.payload,
+        },
+      };
+    case SET_GEOGRAPHIC_COVERAGE:
+      return {
+        ...state,
+        leftPanel: {
+          ...state.leftPanel,
+          geographicCoverage: action.payload,
         },
       };
     case SET_GLAD_START:

@@ -9,6 +9,7 @@ export interface LeftPanel {
   analysisYearRange: number[];
   gladConfirmed: boolean;
   highConfidenceConfirmed: boolean;
+  geographicCoverage: boolean;
   gladStart: string;
   gladEnd: string;
   gfwIntegratedStart: string;
@@ -89,6 +90,7 @@ export const SET_ANALYSIS_YEAR_RANGE = 'SET_ANALYSIS_YEAR_RANGE';
 export const SET_SELECTED_SEARCH_WIDGET_LAYER = 'SET_SELECTED_SEARCH_WIDGET_LAYER';
 export const SET_GLAD_CONFIRMED = 'SET_GLAD_CONFIRMED';
 export const SET_HIGH_CONFIDENCE_CONFIRMED = 'SET_HIGH_CONFIDENCE_CONFIRMED';
+export const SET_GEOGRAPHIC_COVERAGE = 'SET_GEOGRAPHIC_COVERAGE';
 export const SET_GLAD_START = 'SET_GLAD_START';
 export const SET_GLAD_END = 'SET_GLAD_END';
 export const SET_GFW_INTEGRATED_START = 'SET_GFW_INTEGRATED_START';
@@ -200,6 +202,10 @@ interface SetGladConfirmed {
 interface SetHighConfidenceConfirmed {
   type: typeof SET_HIGH_CONFIDENCE_CONFIRMED;
   payload: AppState['leftPanel']['highConfidenceConfirmed'];
+}
+interface SetGeographicCoverage {
+  type: typeof SET_GEOGRAPHIC_COVERAGE;
+  payload: AppState['leftPanel']['geographicCoverage'];
 }
 interface SetGladStart {
   type: typeof SET_GLAD_START;
@@ -325,6 +331,7 @@ export type AppStateTypes =
   | SetSelectedSearchWidgetLayer
   | SetGladConfirmed
   | SetHighConfidenceConfirmed
+  | SetGeographicCoverage
   | SetGladStart
   | SetGladEnd
   | SetGfwIntegratedStart
