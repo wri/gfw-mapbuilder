@@ -16,7 +16,6 @@ import {
   setRaddAlertEnd,
   setRaddAlertStart,
 } from '../../store/appState/actions';
-import { loadModules } from 'esri-loader';
 import { layerControlsTranslations } from '../../../../configs/translations/leftPanel.translations';
 import DatePicker from 'react-datepicker';
 import styled from 'styled-components';
@@ -118,8 +117,6 @@ const IntegratedAlertControls = (props: GladControlsProps): JSX.Element => {
 
       dispatch(setIntegratedAlertLayerEnd(date));
     } else if (integratedAlertLayer === LAYER_IDS.GLAD_ALERTS) {
-      mapController.removeMapLayer(LAYER_IDS.GLAD_ALERTS);
-
       await mapController.toggleGladLayer({ id: LAYER_IDS.GLAD_ALERTS, start, end });
 
       const selectedLayer = mapController._map!.findLayerById(LAYER_IDS.GLAD_ALERTS);
@@ -145,9 +142,6 @@ const IntegratedAlertControls = (props: GladControlsProps): JSX.Element => {
   }
 
   async function showGeographicCoverage() {
-    const [VectorTileLayer] = await loadModules(['esri/layers/VectorTileLayer']);
-
-    let geographicCoverageLayer;
     if (integratedAlertLayer === LAYER_IDS.GFW_INTEGRATED_ALERTS) {
       const selectedLayer = mapController._map!.findLayerById(LAYER_IDS.GFW_INTEGRATED_ALERTS);
       selectedLayer.visible = true;
