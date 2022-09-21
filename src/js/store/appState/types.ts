@@ -12,6 +12,10 @@ export interface LeftPanel {
   geographicCoverage: boolean;
   gladStart: string;
   gladEnd: string;
+  glad2Start: string;
+  glad2End: string;
+  raddAlertStart: string;
+  raddAlertEnd: string;
   gfwIntegratedStart: string;
   gfwIntegratedEnd: string;
   modisStart: string;
@@ -19,7 +23,7 @@ export interface LeftPanel {
   viirsStart: string;
   viirsEnd: string;
   treeHeight: number;
-  integratedAlertLayer: string;
+  integratedAlertLayer: 'GLAD_ALERTS' | 'GFW_INTEGRATED_ALERTS' | 'GLAD_S2_ALERTS' | 'RADD_ALERTS' | string;
   gfwLayerLabel: string;
   gfwLayerSubtitle: string;
   windSpeedPotential: number;
@@ -93,6 +97,10 @@ export const SET_HIGH_CONFIDENCE_CONFIRMED = 'SET_HIGH_CONFIDENCE_CONFIRMED';
 export const SET_GEOGRAPHIC_COVERAGE = 'SET_GEOGRAPHIC_COVERAGE';
 export const SET_GLAD_START = 'SET_GLAD_START';
 export const SET_GLAD_END = 'SET_GLAD_END';
+export const SET_GLAD_2_START = 'SET_GLAD_2_START';
+export const SET_GLAD_2_END = 'SET_GLAD_2_END';
+export const SET_RADD_ALERT_START = 'SET_RADD_ALERT_START';
+export const SET_RADD_ALERT_END = 'SET_RADD_ALERT_END';
 export const SET_GFW_INTEGRATED_START = 'SET_GFW_INTEGRATED_START';
 export const SET_GFW_INTEGRATED_END = 'SET_GFW_INTEGRATED_END';
 export const SET_VIIRS_START = 'SET_VIIRS_START';
@@ -217,6 +225,24 @@ interface SetGladEnd {
   payload: AppState['leftPanel']['gladEnd'];
 }
 
+interface SetGlad2Start {
+  type: typeof SET_GLAD_2_START;
+  payload: AppState['leftPanel']['glad2Start'];
+}
+
+interface SetGladEnd2 {
+  type: typeof SET_GLAD_2_END;
+  payload: AppState['leftPanel']['glad2End'];
+}
+interface SetRaddAlertStart {
+  type: typeof SET_RADD_ALERT_START;
+  payload: AppState['leftPanel']['raddAlertStart'];
+}
+interface SetRaddAlertEnd {
+  type: typeof SET_RADD_ALERT_END;
+  payload: AppState['leftPanel']['raddAlertEnd'];
+}
+
 interface SetGfwIntegratedStart {
   type: typeof SET_GFW_INTEGRATED_START;
   payload: AppState['leftPanel']['gfwIntegratedStart'];
@@ -334,6 +360,10 @@ export type AppStateTypes =
   | SetGeographicCoverage
   | SetGladStart
   | SetGladEnd
+  | SetGlad2Start
+  | SetGladEnd2
+  | SetRaddAlertStart
+  | SetRaddAlertEnd
   | SetGfwIntegratedStart
   | SetGfwIntegratedEnd
   | SetModisStart

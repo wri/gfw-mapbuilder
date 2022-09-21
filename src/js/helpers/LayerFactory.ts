@@ -281,6 +281,7 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
       break;
     case 'integrated-alert-layer':
       const integratedAlertConstructor = await createGFWIntegratedLayer();
+
       const integratedAlertLayer = new integratedAlertConstructor({
         id: layerConfig.id,
         title: layerConfig.title,
