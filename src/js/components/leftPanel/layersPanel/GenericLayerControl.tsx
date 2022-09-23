@@ -15,13 +15,7 @@ import { renderModal, setInfoModalLayerID } from '../../../store/appState/action
 import { RootState } from '../../../store';
 import { LayerProps } from '../../../store/mapview/types';
 import { mapController } from '../../../controllers/mapController';
-import {
-  defaultMarks,
-  densityEnabledLayers,
-  drySpellMarks,
-  gfwMarks,
-  landCoverMarks,
-} from '../../../../../configs/layer-config';
+import { densityEnabledLayers, landCoverMarks } from '../../../../../configs/layer-config';
 import { InfoIcon } from '../../../../images/infoIcon';
 import { DashboardIcon } from '../../../../images/dashboardIcon';
 import { LayerVersionPicker } from './LayerVersionPicker';
@@ -174,45 +168,13 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
   const returnTimeSlider = (id: string): any => {
     switch (id) {
       case 'TREE_COVER_LOSS':
-        return (
-          <TimeSlider
-            layerID={id}
-            defaultMarks={defaultMarks}
-            min={2001}
-            max={2021}
-            defaultValue={[2001, 2021]}
-            steps={1}
-            included={true}
-          />
-        );
+        return <TimeSlider layerID={id} />;
       case 'DRY_SPELLS':
         dispatch(setTimeSlider([2030]));
-        return (
-          <TimeSlider
-            layerID={id}
-            defaultMarks={drySpellMarks}
-            min={2030}
-            max={2080}
-            defaultValue={[2030]}
-            steps={100}
-            included={false}
-          />
-        );
+        return <TimeSlider layerID={id} />;
       case 'GFW_INTEGRATED_ALERTS':
         // @ts-ignore
-        return (
-          <TimeSlider
-            layer={layer}
-            layerID={id}
-            defaultMarks={gfwMarks}
-            min={new Date(2020, 3, 3)}
-            max={new Date(2022, 3, 3)}
-            defaultValue={[0, 730]}
-            steps={33}
-            included={true}
-            type={'gfw-integrated-alert'}
-          />
-        );
+        return <TimeSlider layer={layer} layerID={id} />;
       default:
         return null;
     }

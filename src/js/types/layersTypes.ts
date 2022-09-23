@@ -58,3 +58,12 @@ export interface CustomLayerConfig {
   type: 'feature';
   url: string;
 }
+
+export interface TimeSliderLayerProperties {
+  defaultMarks: any;
+  min: number | any;
+  max?: number | any;
+  defaultValue: Array<number> | any;
+  steps?: number | null;
+  included: boolean;
+}
