@@ -18,6 +18,7 @@ export const supportedLayers = [
   'tree-cover-height',
   'co2_emissions',
   'Vector.Layer',
+  'base-tile-layer',
 ];
 
 //Layer controls (IDS) // TODO: add layer id

@@ -332,27 +332,44 @@ export async function getRemoteAndServiceLayers(): Promise<any> {
 
   function fetchRemoteApiLayer(item): Promise<any> {
     const baseURL = `https://production-api.globalforestwatch.org/v1/layer/${item?.dataLayer?.uuid}`;
+
     return fetch(baseURL)
       .then((response) => response.json())
       .then((json) => json.data)
-      .then((layer) =>
-        fetch(layer.attributes.layerConfig.metadata)
-          .then((response) => response.json())
-          .then((metadata) => {
-            const attributes = layer.attributes;
-            const intConfig = layer.attributes?.interactionConfig;
-            const itemGroup = item.group;
-            item.layer = layer.attributes.layerConfig;
-            item.dashboardURL = item.dataLayer?.dashboardURL?.length !== 0 ? item.dataLayer.dashboardURL : null;
-            item.group = itemGroup;
-            item.layer.metadata = {
-              metadata,
-              legendConfig: attributes.legendConfig,
-              interactionConfig: intConfig,
-            };
-            return item;
-          })
-      )
+      .then((layer) => {
+        const attributes = layer.attributes;
+        const intConfig = layer.attributes?.interactionConfig;
+        const itemGroup = item.group;
+        //if metadata url does not exist and a object is in its place
+        if (layer.attributes.layerConfig.metadata.constructor.name === 'Object') {
+          item.layer = layer.attributes.layerConfig;
+          item.dashboardURL = item.dataLayer?.dashboardURL?.length !== 0 ? item.dataLayer.dashboardURL : null;
+          item.group = itemGroup;
+          item.layer.metadata = {
+            colormap: null,
+            inputRange: null,
+            metadata: layer.attributes.layerConfig.metadata,
+            legendConfig: attributes.legendConfig,
+            interactionConfig: intConfig,
+            outputRange: null,
+          };
+          return item;
+        } else {
+          return fetch(layer.attributes.layerConfig.metadata)
+            .then((response) => response.json())
+            .then((metadata) => {
+              item.layer = layer.attributes.layerConfig;
+              item.dashboardURL = item.dataLayer?.dashboardURL?.length !== 0 ? item.dataLayer.dashboardURL : null;
+              item.group = itemGroup;
+              item.layer.metadata = {
+                metadata,
+                legendConfig: attributes.legendConfig,
+                interactionConfig: intConfig,
+              };
+              return item;
+            });
+        }
+      })
       .catch((error) => console.error(error));
   }
 
