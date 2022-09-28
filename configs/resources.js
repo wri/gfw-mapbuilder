@@ -115,26 +115,6 @@ export default {
           type: 'remoteDataLayer',
           uuid: '9fa60bd9-0643-4d0a-a569-0036e902d1f9',
         },
-        /*{
-          groupId: 'GROUP_CLIMATE',
-          id: 'WIND_SPEED',
-          datasetURL: 'https://data-api.globalforestwatch.org/dataset/dtu_wb_wind_speed_potential_2001_2010/latest',
-          datasetLegendConfigURL:
-            'https://api.resourcewatch.org/v1/layer/1ae1f58f-569d-4a21-9835-3e9bdd93759b?filterIncludesByEnv=true&includes=vocabulary,metadata&env=production',
-          type: 'resourcewatch',
-          order: 5,
-          origin: 'rw-api',
-          opacity: 1,
-          sublabel: {
-            en: '(1 km, global, DTU/World Bank Group/ESMAP)',
-            es: '(1 km, global, DTU/World Bank Group/ESMAP)',
-            fr: '(1 km, global, DTU/World Bank Group/ESMAP)',
-            id: '(1 km, global, DTU/World Bank Group/ESMAP)',
-            ka: '(1 km, global, DTU/World Bank Group/ESMAP)',
-            pt: '(1 km, global, DTU/World Bank Group/ESMAP)',
-            zh: '(1 km, global, DTU/World Bank Group/ESMAP)',
-          },
-        },*/
         {
           id: 'FOREST_CARBON_GROSS_REMOVALS',
           order: 6,
