@@ -19,6 +19,7 @@ import { createForestCarbonGrossEmission } from '../layers/ForestCarbonGrossEmis
 import { forestCarbonNetFluxValue } from '../components/mapWidgets/widgetContent/ForesCarbonNetFlux';
 import { createForestCarbonNetFlux } from '../layers/ForestCarbonNetFlux';
 import { umdCoverLand } from '../layers/UmdCoverLand';
+import { createBaseTileLayer } from '../layers/BaseTileLayer';
 
 interface LayerOptions {
   id: string;
@@ -200,6 +201,7 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
       });
       esriLayer = forestNetFluxLayer;
       break;
+
     case 'gain':
       const gainConstructor = await createGain();
       const gainLayer = new gainConstructor({
@@ -237,6 +239,16 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
       });
       esriLayer = heightLayer;
       esriLayer.height = appState.leftPanel.treeHeight;
+      break;
+    case 'base-tile-layer':
+      const baseTileLayer = await createBaseTileLayer();
+      esriLayer = new baseTileLayer({
+        id: layerConfig.id,
+        title: layerConfig.title,
+        visible: layerConfig.visible,
+        urlTemplate: layerConfig.url,
+        view: mapView,
+      });
       break;
     case 'primed':
     case 'webtiled':
