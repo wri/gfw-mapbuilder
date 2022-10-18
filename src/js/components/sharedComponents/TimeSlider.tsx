@@ -97,7 +97,7 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
 
       setRange([range[0], newMaxYear]);
       updateMarks(newMaxYear);
-      if (layerID === 'GFW_INTEGRATED_ALERTS') {
+      if (layerID === LAYER_IDS.GFW_INTEGRATED_ALERTS) {
         const dateStart = new Date(range[0], 0, 0).toLocaleString();
         const dateEnd = new Date(newMaxYear, 0, 0).toLocaleString();
         //@ts-ignore
@@ -105,14 +105,14 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
         //@ts-ignore
         const end = new Date(dateEnd).getJulian();
 
-        if (gfwLayer === 'GFW_INTEGRATED_ALERTS') {
-          mapController.updateBaseTile('GFW_INTEGRATED_ALERTS', [start, end], 'gfw');
-        } else if (gfwLayer === 'GLAD_ALERTS') {
-          mapController.updateBaseTile('GLAD_ALERTS', [start, end], 'julia');
-        } else if (gfwLayer === 'GLAD_S2_ALERTS') {
-          mapController.updateBaseTile('GLAD_S2_ALERTS', [start, end], 'julia');
-        } else if (gfwLayer === 'RADD_ALERTS') {
-          mapController.updateBaseTile('RADD_ALERTS', [start, end], 'julia');
+        if (gfwLayer === LAYER_IDS.GFW_INTEGRATED_ALERTS) {
+          mapController.updateBaseTile(LAYER_IDS.GFW_INTEGRATED_ALERTS, [start, end], 'gfw');
+        } else if (gfwLayer === LAYER_IDS.GLAD_ALERTS) {
+          mapController.updateBaseTile(LAYER_IDS.GLAD_ALERTS, [start, end], 'julia');
+        } else if (gfwLayer === LAYER_IDS.GLAD_S2_ALERTS) {
+          mapController.updateBaseTile(LAYER_IDS.GLAD_S2_ALERTS, [start, end], 'julia');
+        } else if (gfwLayer === LAYER_IDS.RADD_ALERTS) {
+          mapController.updateBaseTile(LAYER_IDS.RADD_ALERTS, [start, end], 'julia');
         }
       } else {
         mapController.updateBaseTile(layerID, [range[0], newMaxYear]);
@@ -139,7 +139,7 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
     const handleDateRangeValues = () => {
       let minValue = 0;
       let maxValue = 0;
-      if (props.layerID === 'GFW_INTEGRATED_ALERTS') {
+      if (props.layerID === LAYER_IDS.GFW_INTEGRATED_ALERTS) {
         if (gfwLayer === LAYER_IDS.GFW_INTEGRATED_ALERTS) {
           minValue = getYearFromStringDate(gfwIntegratedStart);
           maxValue = getYearFromStringDate(gfwIntegratedEnd);
@@ -179,18 +179,20 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
   };
 
   const resetIntegratedAlertsDates = () => {
-    const convertStartDate = generateDate(props.min);
-    const convertEndDate = generateDate(props.max);
+    if (props.layerID === LAYER_IDS.GFW_INTEGRATED_ALERTS) {
+      const convertStartDate = generateDate(props.min);
+      const convertEndDate = generateDate(props.max);
 
-    dispatch(setIntegratedAlertLayerStart(convertStartDate));
-    dispatch(setGladStart(convertStartDate));
-    dispatch(setGlad2Start(convertStartDate));
-    dispatch(setRaddAlertStart(convertStartDate));
+      dispatch(setIntegratedAlertLayerStart(convertStartDate));
+      dispatch(setGladStart(convertStartDate));
+      dispatch(setGlad2Start(convertStartDate));
+      dispatch(setRaddAlertStart(convertStartDate));
 
-    dispatch(setIntegratedAlertLayerEnd(convertEndDate));
-    dispatch(setGladEnd(convertEndDate));
-    dispatch(setGlad2End(convertEndDate));
-    dispatch(setRaddAlertEnd(convertEndDate));
+      dispatch(setIntegratedAlertLayerEnd(convertEndDate));
+      dispatch(setGladEnd(convertEndDate));
+      dispatch(setGlad2End(convertEndDate));
+      dispatch(setRaddAlertEnd(convertEndDate));
+    }
   };
   const setSelectedRange = async (selectedRange: Array<number>) => {
     setRange(selectedRange);
@@ -205,7 +207,7 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
     //@ts-ignore
     const end = new Date(convertEndDate).getJulian();
 
-    if (props.layerID === 'GFW_INTEGRATED_ALERTS') {
+    if (props.layerID === LAYER_IDS.GFW_INTEGRATED_ALERTS) {
       dispatch(setIntegratedAlertLayerStart(convertStartDate));
       dispatch(setGladStart(convertStartDate));
       dispatch(setGlad2Start(convertStartDate));
@@ -217,24 +219,20 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
       dispatch(setRaddAlertEnd(convertEndDate));
     }
 
-    if (props.layerID === 'GFW_INTEGRATED_ALERTS' && gfwLayer === 'GFW_INTEGRATED_ALERTS') {
+    if (props.layerID === LAYER_IDS.GFW_INTEGRATED_ALERTS && gfwLayer === LAYER_IDS.GFW_INTEGRATED_ALERTS) {
       await mapController.toggleGladLayer({ id: LAYER_IDS.GFW_INTEGRATED_ALERTS, start, end });
 
-      console.log('GFW_INTEGRATED_ALERTS');
       dispatch(setIntegratedAlertLayerStart(convertStartDate));
       dispatch(setIntegratedAlertLayerEnd(convertEndDate));
-    } else if (gfwLayer === 'GLAD_ALERTS') {
-      console.log('GLAD_ALERTS');
+    } else if (gfwLayer === LAYER_IDS.GLAD_ALERTS) {
       await mapController.toggleGladLayer({ id: LAYER_IDS.GLAD_ALERTS, start, end });
       dispatch(setGladStart(convertStartDate));
       dispatch(setGladEnd(convertEndDate));
-    } else if (gfwLayer === 'GLAD_S2_ALERTS') {
-      console.log('GLAD_S2_ALERTS');
+    } else if (gfwLayer === LAYER_IDS.GLAD_S2_ALERTS) {
       await mapController.toggleGladLayer({ id: LAYER_IDS.GLAD_S2_ALERTS, start, end });
       dispatch(setGlad2Start(convertStartDate));
       dispatch(setGlad2End(convertEndDate));
-    } else if (gfwLayer === 'RADD_ALERTS') {
-      console.log('RADD_ALERTS');
+    } else if (gfwLayer === LAYER_IDS.RADD_ALERTS) {
       await mapController.toggleGladLayer({ id: LAYER_IDS.RADD_ALERTS, start, end });
       dispatch(setRaddAlertStart(convertStartDate));
       dispatch(setRaddAlertEnd(convertEndDate));
@@ -269,15 +267,15 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
       resetIntegratedAlertsDates();
 
       setMarks(props.defaultMarks);
-      if (layerID === 'GFW_INTEGRATED_ALERTS') {
-        if (gfwLayer === 'GFW_INTEGRATED_ALERTS') {
-          mapController.updateBaseTile('GFW_INTEGRATED_ALERTS', timeSlider);
-        } else if (gfwLayer === 'GLAD_ALERTS') {
-          mapController.updateBaseTile('GLAD_ALERTS', timeSlider);
-        } else if (gfwLayer === 'GLAD_S2_ALERTS') {
-          mapController.updateBaseTile('GLAD_S2_ALERTS', timeSlider);
-        } else if (gfwLayer === 'RADD_ALERTS') {
-          mapController.updateBaseTile('RADD_ALERTS', timeSlider);
+      if (layerID === LAYER_IDS.GFW_INTEGRATED_ALERTS) {
+        if (gfwLayer === LAYER_IDS.GFW_INTEGRATED_ALERTS) {
+          mapController.updateBaseTile(LAYER_IDS.GFW_INTEGRATED_ALERTS, timeSlider);
+        } else if (gfwLayer === LAYER_IDS.GLAD_ALERTS) {
+          mapController.updateBaseTile(LAYER_IDS.GLAD_ALERTS, timeSlider);
+        } else if (gfwLayer === LAYER_IDS.GLAD_S2_ALERTS) {
+          mapController.updateBaseTile(LAYER_IDS.GLAD_S2_ALERTS, timeSlider);
+        } else if (gfwLayer === LAYER_IDS.RADD_ALERTS) {
+          mapController.updateBaseTile(LAYER_IDS.RADD_ALERTS, timeSlider);
         }
       } else {
         mapController.updateBaseTile(layerID, timeSlider);
