@@ -15,13 +15,7 @@ import { renderModal, setInfoModalLayerID } from '../../../store/appState/action
 import { RootState } from '../../../store';
 import { LayerProps } from '../../../store/mapview/types';
 import { mapController } from '../../../controllers/mapController';
-import {
-  defaultMarks,
-  densityEnabledLayers,
-  drySpellMarks,
-  gfwMarks,
-  landCoverMarks,
-} from '../../../../../configs/layer-config';
+import { densityEnabledLayers, landCoverMarks } from '../../../../../configs/layer-config';
 import { InfoIcon } from '../../../../images/infoIcon';
 import { DashboardIcon } from '../../../../images/dashboardIcon';
 import { LayerVersionPicker } from './LayerVersionPicker';
@@ -171,13 +165,31 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
   const densityPicker = layer && densityEnabledLayers.includes(layer.id);
   const altLayerName = layer.label && layer.label[selectedLanguage];
 
+  const generateDefaultMarks = (params: any) => {
+    const { start, end } = params;
+    let index = start;
+    const newMarks = {};
+    const yearsAvailable = end - start;
+
+    while (index <= end) {
+      const display = index % 5 === 0 ? 'block' : 'none';
+      newMarks[index] = {
+        style: { display: yearsAvailable < 5 ? 'block' : display },
+        label: index,
+      };
+
+      index++;
+    }
+    return newMarks;
+  };
+
   const returnTimeSlider = (id: string): any => {
     switch (id) {
       case 'TREE_COVER_LOSS':
         return (
           <TimeSlider
             layerID={id}
-            defaultMarks={defaultMarks}
+            defaultMarks={generateDefaultMarks({ start: 2000, end: 2021 })}
             min={2001}
             max={2021}
             defaultValue={[2001, 2021]}
@@ -190,7 +202,7 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
         return (
           <TimeSlider
             layerID={id}
-            defaultMarks={drySpellMarks}
+            defaultMarks={generateDefaultMarks({ start: 2030, end: 2080 })}
             min={2030}
             max={2080}
             defaultValue={[2030]}
@@ -204,13 +216,12 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
           <TimeSlider
             layer={layer}
             layerID={id}
-            defaultMarks={gfwMarks}
-            min={new Date(2020, 3, 3)}
-            max={new Date(2022, 3, 3)}
-            defaultValue={[0, 730]}
-            steps={33}
+            defaultMarks={generateDefaultMarks({ start: 2020, end: 2022 })}
+            min={2020}
+            max={2022}
+            defaultValue={[2020, 2022]}
+            steps={1}
             included={true}
-            type={'gfw-integrated-alert'}
           />
         );
       default:
