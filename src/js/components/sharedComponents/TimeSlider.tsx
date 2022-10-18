@@ -177,6 +177,21 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
   const generateDate = (year: number) => {
     return new Date(year, 0, 1).toLocaleString();
   };
+
+  const resetIntegratedAlertsDates = () => {
+    const convertStartDate = generateDate(props.min);
+    const convertEndDate = generateDate(props.max);
+
+    dispatch(setIntegratedAlertLayerStart(convertStartDate));
+    dispatch(setGladStart(convertStartDate));
+    dispatch(setGlad2Start(convertStartDate));
+    dispatch(setRaddAlertStart(convertStartDate));
+
+    dispatch(setIntegratedAlertLayerEnd(convertEndDate));
+    dispatch(setGladEnd(convertEndDate));
+    dispatch(setGlad2End(convertEndDate));
+    dispatch(setRaddAlertEnd(convertEndDate));
+  };
   const setSelectedRange = async (selectedRange: Array<number>) => {
     setRange(selectedRange);
     dispatch(setTimeSlider(selectedRange));
@@ -251,6 +266,7 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
     } else {
       // * NOTE: stops & resets time slider
       setRange(timeSlider);
+      resetIntegratedAlertsDates();
 
       setMarks(props.defaultMarks);
       if (layerID === 'GFW_INTEGRATED_ALERTS') {
