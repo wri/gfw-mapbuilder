@@ -2156,6 +2156,22 @@ export class MapController {
       this._map?.remove(layer);
     }
   };
+
+  toggleGladLayer = async (params: { id: string; start: Date; end: Date }) => {
+    const allAvailableLayers = store.getState().mapviewState.allAvailableLayers;
+    const { id, start, end } = params;
+
+    const gladLayerConfig: any = allAvailableLayers.find((layer: any) => layer.id === id);
+    const gladLayerOld: any = this._map!.findLayerById(id);
+    const gladIndex: number = this._map!.layers.indexOf(gladLayerOld);
+    mapController.removeMapLayer(id);
+
+    const gladLayerNew: any = await LayerFactory(this._mapview, { ...gladLayerConfig, visible: true });
+
+    gladLayerNew.julianFrom = start;
+    gladLayerNew.julianTo = end;
+    this._map?.add(gladLayerNew, gladIndex);
+  };
 }
 
 export const mapController = new MapController();

@@ -9,15 +9,12 @@ export const createGFWIntegratedLayer = async () => {
     properties: {
       gfwjulianFrom: '20063',
       gfwjulianTo: new Date().getJulian(),
-      highConfidenceConfirmed: false
+      highConfidenceConfirmed: false,
     },
-    getTileUrl: function(level, row, column) {
-      return this.urlTemplate
-        .replace('{z}', level)
-        .replace('{x}', column)
-        .replace('{y}', row);
+    getTileUrl: function (level, row, column) {
+      return this.urlTemplate.replace('{z}', level).replace('{x}', column).replace('{y}', row);
     },
-    fetchTile: function(level, row, column) {
+    fetchTile: function (level, row, column) {
       const url = this.getTileUrl(level, row, column);
       const canvas = document.createElement('canvas');
       const context = canvas.getContext('2d');
@@ -26,7 +23,7 @@ export const createGFWIntegratedLayer = async () => {
       canvas.width = width;
       canvas.height = height;
 
-      return this.fetchTileArrayBuffer(url).then(r => {
+      return this.fetchTileArrayBuffer(url).then((r) => {
         const data = new Uint8Array(r);
         const png = new PNG(data);
         const pngImage = PNG.load(png.data, canvas);
@@ -37,11 +34,11 @@ export const createGFWIntegratedLayer = async () => {
         return canvas;
       });
     },
-    fetchTileArrayBuffer: async function(url) {
+    fetchTileArrayBuffer: async function (url) {
       const response = await fetch(url);
       return response.arrayBuffer();
     },
-    processData: function(data) {
+    processData: function (data) {
       for (let i = 0; i < data.length; i += 4) {
         const slice = [data[i], data[i + 1], data[i + 2], data[i + 3]];
         const values = this.decodeDate(slice);
@@ -83,14 +80,15 @@ export const createGFWIntegratedLayer = async () => {
           }
           // }
         } else {
-          data[i] = 201; // R
-          data[i + 1] = 42; // G
-          data[i + 2] = 108; // B
+          data[i] = 255; // R
+          data[i + 1] = 255; // G
+          data[i + 2] = 255; // B
+          data[i + 3] = 0; // A
         }
       }
       return data;
     },
-    decodeDate: function(pixel) {
+    decodeDate: function (pixel) {
       const total_days = pixel[0] * 255 + pixel[1];
       const year_int = parseInt(total_days / 365) + 15;
       const year = parseInt(year_int * 1000);
@@ -106,12 +104,12 @@ export const createGFWIntegratedLayer = async () => {
       return {
         confidence: confidence,
         intensity: intensity,
-        date: date
+        date: date,
       };
     },
-    pad: function(num) {
+    pad: function (num) {
       const str = '00' + num;
       return str.slice(str.length - 3);
-    }
+    },
   });
 };

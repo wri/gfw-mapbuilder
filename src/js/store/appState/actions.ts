@@ -41,6 +41,10 @@ import {
   SET_GFW_LAYER_SUBTITLE,
   SET_IMAGE_OBJECT,
   SET_LAND_COVER_YEAR_VALUE,
+  SET_GLAD_2_START,
+  SET_GLAD_2_END,
+  SET_RADD_ALERT_START,
+  SET_RADD_ALERT_END,
 } from './types';
 
 export function setSelectedSearchWidgetLayer(payload: AppState['selectedSearchWidgetLayer']) {
@@ -186,6 +190,34 @@ export function setGladStart(payload: AppState['leftPanel']['gladStart']) {
 export function setGladEnd(payload: AppState['leftPanel']['gladEnd']) {
   return {
     type: SET_GLAD_END as typeof SET_GLAD_END,
+    payload: payload,
+  };
+}
+
+export function setRaddAlertStart(payload: AppState['leftPanel']['raddAlertStart']) {
+  return {
+    type: SET_RADD_ALERT_START as typeof SET_RADD_ALERT_START,
+    payload: payload,
+  };
+}
+
+export function setRaddAlertEnd(payload: AppState['leftPanel']['raddAlertEnd']) {
+  return {
+    type: SET_RADD_ALERT_END as typeof SET_RADD_ALERT_END,
+    payload: payload,
+  };
+}
+
+export function setGlad2Start(payload: AppState['leftPanel']['glad2Start']) {
+  return {
+    type: SET_GLAD_2_START as typeof SET_GLAD_2_START,
+    payload: payload,
+  };
+}
+
+export function setGlad2End(payload: AppState['leftPanel']['glad2End']) {
+  return {
+    type: SET_GLAD_2_END as typeof SET_GLAD_2_END,
     payload: payload,
   };
 }

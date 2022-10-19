@@ -17,6 +17,8 @@ import {
   SET_GLAD_CONFIRMED,
   SET_GLAD_END,
   SET_GLAD_START,
+  SET_GLAD_2_END,
+  SET_GLAD_2_START,
   SET_GFW_INTEGRATED_START,
   SET_GFW_INTEGRATED_END,
   SET_HIDE_WIDGET,
@@ -43,6 +45,8 @@ import {
   SET_WIND_SPEED_POTENTIAL,
   TOGGLE_TABVIEW_PANEL,
   SET_LAND_COVER_YEAR_VALUE,
+  SET_RADD_ALERT_START,
+  SET_RADD_ALERT_END,
 } from './types';
 
 const initialState: AppState = {
@@ -69,6 +73,10 @@ const initialState: AppState = {
     geographicCoverage: false,
     gladStart: '2020-01-02',
     gladEnd: format(new Date(Date.now()), 'yyyy-MM-dd'),
+    glad2Start: '2020-01-02',
+    glad2End: format(new Date(Date.now()), 'yyyy-MM-dd'),
+    raddAlertStart: '2020-01-02',
+    raddAlertEnd: format(new Date(Date.now()), 'yyyy-MM-dd'),
     gfwIntegratedStart: '2020-03-03',
     gfwIntegratedEnd: format(new Date(Date.now()), 'yyyy-MM-dd'),
     modisEnd: format(new Date(Date.now()), 'yyyy-MM-dd'),
@@ -231,6 +239,38 @@ export function appStateReducer(state = initialState, action: AppStateTypes): Ap
         leftPanel: {
           ...state.leftPanel,
           gladEnd: action.payload,
+        },
+      };
+    case SET_GLAD_2_START:
+      return {
+        ...state,
+        leftPanel: {
+          ...state.leftPanel,
+          glad2Start: action.payload,
+        },
+      };
+    case SET_GLAD_2_END:
+      return {
+        ...state,
+        leftPanel: {
+          ...state.leftPanel,
+          glad2End: action.payload,
+        },
+      };
+    case SET_RADD_ALERT_START:
+      return {
+        ...state,
+        leftPanel: {
+          ...state.leftPanel,
+          raddAlertStart: action.payload,
+        },
+      };
+    case SET_RADD_ALERT_END:
+      return {
+        ...state,
+        leftPanel: {
+          ...state.leftPanel,
+          raddAlertEnd: action.payload,
         },
       };
     case SET_GFW_INTEGRATED_START:
