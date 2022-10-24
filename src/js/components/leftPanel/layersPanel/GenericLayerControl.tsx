@@ -217,7 +217,7 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
           <IntegratedAlertTimeSlider
             layer={layer}
             layerID={id}
-            defaultMarks={generateDefaultMarks({ start: 0, end: 730 })}
+            defaultMarks={generateDefaultMarks({ start: 2020, end: 2022 })}
             min={2020}
             max={2022}
             defaultValue={[2020, 2022]}
