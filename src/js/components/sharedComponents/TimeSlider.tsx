@@ -21,7 +21,7 @@ import {
 import { LAYER_IDS } from '../../../../configs/layer-config';
 
 const SliderWithTooltip = createSliderWithTooltip(Range);
-
+import { format } from 'date-fns';
 interface TimeSliderProps {
   layer?: any;
   layerID: string;
@@ -32,12 +32,14 @@ interface TimeSliderProps {
   steps?: number | null;
   included: boolean;
   type?: string;
+  dots?: boolean;
+  intervalSpeed?: number;
 }
 
 const TimeSlider = (props: TimeSliderProps): JSX.Element => {
   const dispatch = useDispatch();
   const timeSliderRef = useRef();
-  const { layerID } = props;
+  const { layerID, dots = true, intervalSpeed = 1000 } = props;
   const timeSlider = props.defaultValue;
   const [range, setRange] = useState(props.defaultValue);
 
@@ -61,6 +63,32 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
 
   const raddAlertStart = useSelector((store: RootState) => store.appState.leftPanel.raddAlertStart);
   const raddAlertEnd = useSelector((store: RootState) => store.appState.leftPanel.raddAlertEnd);
+
+  const formatDateString = (date: string) => {
+    const newDate = new Date(date);
+    return format(newDate, 'P');
+  };
+
+  const findObjectKeys = (marks: any, value: string) => {
+    for (let key in marks) {
+      const markLabel = marks[key].label;
+      if (markLabel === value) {
+        return Number(key);
+      }
+    }
+    return null;
+  };
+
+  const generateDate = (year: number) => {
+    return new Date(year, 0, 1).toLocaleString();
+  };
+
+  const handleSelectedDate = (keys: number[], marks: any) => {
+    const startDate = marks[keys[0]]?.label;
+    const endDate = marks[keys[1]]?.label;
+
+    return { startDate, endDate };
+  };
 
   useEffect(() => {
     const updateMarks = (newMaxYear: number): void => {
@@ -98,8 +126,10 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
       setRange([range[0], newMaxYear]);
       updateMarks(newMaxYear);
       if (layerID === LAYER_IDS.GFW_INTEGRATED_ALERTS) {
-        const dateStart = new Date(range[0], 0, 0).toLocaleString();
-        const dateEnd = new Date(newMaxYear, 0, 0).toLocaleString();
+        const { startDate, endDate } = handleSelectedDate([range[0], newMaxYear], props.defaultMarks);
+
+        const dateStart = startDate;
+        const dateEnd = endDate;
         //@ts-ignore
         const start = new Date(dateStart).getJulian();
         //@ts-ignore
@@ -120,9 +150,10 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
     };
 
     if (startTimeSlider && range[1] !== timeSlider[1]) {
-      (timeSliderRef as any).current = setInterval(playSequence, 1000);
+      (timeSliderRef as any).current = setInterval(playSequence, intervalSpeed);
     } else if (startTimeSlider && range[1] === timeSlider[1]) {
-      setRange([range[0], range[0]]);
+      setRange([props.min, props.max]);
+
       setMarks(props.defaultMarks);
     }
 
@@ -131,27 +162,31 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
     };
   }, [startTimeSlider, range[1], timeSlider[1]]);
 
-  const getYearFromStringDate = (date: string): number => {
-    return new Date(date).getFullYear();
-  };
-
   useEffect(() => {
     const handleDateRangeValues = () => {
       let minValue = 0;
       let maxValue = 0;
       if (props.layerID === LAYER_IDS.GFW_INTEGRATED_ALERTS) {
         if (gfwLayer === LAYER_IDS.GFW_INTEGRATED_ALERTS) {
-          minValue = getYearFromStringDate(gfwIntegratedStart);
-          maxValue = getYearFromStringDate(gfwIntegratedEnd);
+          const startKey = findObjectKeys(props.defaultMarks, formatDateString(gfwIntegratedStart));
+          const endKey = findObjectKeys(props.defaultMarks, formatDateString(gfwIntegratedEnd));
+          minValue = startKey !== null ? startKey : props.min;
+          maxValue = endKey !== null ? endKey : props.max;
         } else if (gfwLayer === LAYER_IDS.GLAD_S2_ALERTS) {
-          minValue = getYearFromStringDate(glad2Start);
-          maxValue = getYearFromStringDate(glad2End);
+          const startKey = findObjectKeys(props.defaultMarks, formatDateString(glad2Start));
+          const endKey = findObjectKeys(props.defaultMarks, formatDateString(glad2End));
+          minValue = startKey !== null ? startKey : props.min;
+          maxValue = endKey !== null ? endKey : props.max;
         } else if (gfwLayer === LAYER_IDS.GLAD_ALERTS) {
-          minValue = getYearFromStringDate(gladStart);
-          maxValue = getYearFromStringDate(gladEnd);
+          const startKey = findObjectKeys(props.defaultMarks, formatDateString(gladStart));
+          const endKey = findObjectKeys(props.defaultMarks, formatDateString(gladEnd));
+          minValue = startKey !== null ? startKey : props.min;
+          maxValue = endKey !== null ? endKey : props.max;
         } else if (gfwLayer === LAYER_IDS.RADD_ALERTS) {
-          minValue = getYearFromStringDate(raddAlertStart);
-          maxValue = getYearFromStringDate(raddAlertEnd);
+          const startKey = findObjectKeys(props.defaultMarks, formatDateString(raddAlertStart));
+          const endKey = findObjectKeys(props.defaultMarks, formatDateString(raddAlertEnd));
+          minValue = startKey !== null ? startKey : props.min;
+          maxValue = endKey !== null ? endKey : props.max;
         }
       } else {
         minValue = props.min;
@@ -174,14 +209,12 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
     raddAlertEnd,
   ]);
 
-  const generateDate = (year: number) => {
-    return new Date(year, 0, 1).toLocaleString();
-  };
-
   const resetIntegratedAlertsDates = () => {
     if (props.layerID === LAYER_IDS.GFW_INTEGRATED_ALERTS) {
-      const convertStartDate = generateDate(props.min);
-      const convertEndDate = generateDate(props.max);
+      const { startDate, endDate } = handleSelectedDate([props.min, props.max], props.defaultMarks);
+
+      const convertStartDate = startDate;
+      const convertEndDate = endDate;
 
       dispatch(setIntegratedAlertLayerStart(convertStartDate));
       dispatch(setGladStart(convertStartDate));
@@ -194,18 +227,28 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
       dispatch(setRaddAlertEnd(convertEndDate));
     }
   };
+
   const setSelectedRange = async (selectedRange: Array<number>) => {
     setRange(selectedRange);
     dispatch(setTimeSlider(selectedRange));
     mapController.updateBaseTile(layerID, selectedRange);
 
-    const convertStartDate = generateDate(selectedRange[0]);
-    const convertEndDate = generateDate(selectedRange[1]);
+    let convertStartDate;
+    let convertEndDate;
+
+    if (props.layerID === LAYER_IDS.GFW_INTEGRATED_ALERTS) {
+      const { startDate, endDate } = handleSelectedDate(selectedRange, marks);
+      convertStartDate = startDate;
+      convertEndDate = endDate;
+    } else {
+      convertStartDate = generateDate(selectedRange[0]);
+      convertEndDate = generateDate(selectedRange[1]);
+    }
 
     //@ts-ignore
-    const start = new Date(convertStartDate).getJulian();
+    let start = new Date(convertStartDate).getJulian();
     //@ts-ignore
-    const end = new Date(convertEndDate).getJulian();
+    let end = new Date(convertEndDate).getJulian();
 
     if (props.layerID === LAYER_IDS.GFW_INTEGRATED_ALERTS) {
       dispatch(setIntegratedAlertLayerStart(convertStartDate));
@@ -286,6 +329,12 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
     }
   };
 
+  const handleTipFormatter = (val: any) => {
+    if (props.layerID !== LAYER_IDS.GFW_INTEGRATED_ALERTS) return val;
+    const label = props.defaultMarks[val]?.label;
+    return label;
+  };
+
   return (
     <div className="time-slider-container">
       {playButton ? (
@@ -305,12 +354,12 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
         defaultValue={props.defaultValue}
         value={range}
         allowCross={false}
-        tipFormatter={(val: any): any => val}
+        tipFormatter={(val) => handleTipFormatter(val)}
         tipProps={{
           placement: 'top',
           prefixCls: 'rc-slider-tooltip',
         }}
-        dots={true}
+        dots={dots}
         marks={marks}
         railStyle={{ backgroundColor: 'rgb(233, 233, 233)' }}
         handleStyle={[{ borderColor: customColorTheme }]}
