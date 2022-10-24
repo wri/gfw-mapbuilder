@@ -29,6 +29,7 @@ import SelectIntegratedAlertLayer from '../../sharedComponents/SelectIntegratedA
 import RangeSlider from '../../sharedComponents/RangeSlider';
 import GladControls from '../../sharedComponents/GladControls';
 import IntegratedAlertControls from '../../sharedComponents/IntegratedAlertControls';
+import IntegratedAlertTimeSlider from '../../sharedComponents/IntegratedAlertTimeSlider';
 
 interface LayerInfo {
   layerInfo: any;
@@ -213,14 +214,14 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
       case 'GFW_INTEGRATED_ALERTS':
         // @ts-ignore
         return (
-          <TimeSlider
+          <IntegratedAlertTimeSlider
             layer={layer}
             layerID={id}
-            defaultMarks={generateDefaultMarks({ start: 2020, end: 2022 })}
+            defaultMarks={generateDefaultMarks({ start: 0, end: 730 })}
             min={2020}
             max={2022}
             defaultValue={[2020, 2022]}
-            steps={1}
+            steps={33}
             included={true}
           />
         );
