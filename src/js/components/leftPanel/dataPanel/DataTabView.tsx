@@ -101,6 +101,7 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
                       // Use label unless it is not set, then default to fieldName
                       const label = field?.label || field.label !== '' ? field.label : attributeKey;
                       let value = props.attributes[attributeKey];
+
                       //Users can set the href tag on the data attribute on the service, we want to show an actual link instead of plain text
                       if (typeof value === 'string' && value?.includes('href')) {
                         value = <div dangerouslySetInnerHTML={{ __html: value }}></div>;
@@ -108,7 +109,7 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
                       return (
                         <tr key={i}>
                           <td className="first-cell">{label}</td>
-                          <td className="second-cell">{value}</td>
+                          <td className="second-cell">{value ? value : ''}</td>
                         </tr>
                       );
                     } else {
@@ -116,10 +117,11 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
                     }
                   })
                 : Object.keys(props.attributes).map((attribute, i) => {
+                    const value = props.attributes[attribute];
                     return (
                       <tr key={i}>
                         <td className="first-cell">{attribute}</td>
-                        <td className="second-cell">{props.attributes[attribute]}</td>
+                        <td className="second-cell">{value ? value : ''}</td>
                       </tr>
                     );
                   })}
