@@ -15,7 +15,7 @@ import { renderModal, setInfoModalLayerID } from '../../../store/appState/action
 import { RootState } from '../../../store';
 import { LayerProps } from '../../../store/mapview/types';
 import { mapController } from '../../../controllers/mapController';
-import { densityEnabledLayers, landCoverMarks } from '../../../../../configs/layer-config';
+import { densityEnabledLayers, gfwMarks, landCoverMarks } from '../../../../../configs/layer-config';
 import { InfoIcon } from '../../../../images/infoIcon';
 import { DashboardIcon } from '../../../../images/dashboardIcon';
 import { LayerVersionPicker } from './LayerVersionPicker';
@@ -29,6 +29,7 @@ import SelectIntegratedAlertLayer from '../../sharedComponents/SelectIntegratedA
 import RangeSlider from '../../sharedComponents/RangeSlider';
 import GladControls from '../../sharedComponents/GladControls';
 import IntegratedAlertControls from '../../sharedComponents/IntegratedAlertControls';
+import { eachDayOfInterval, format } from 'date-fns';
 import IntegratedAlertTimeSlider from '../../sharedComponents/IntegratedAlertTimeSlider';
 
 interface LayerInfo {
@@ -184,6 +185,26 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
     return newMarks;
   };
 
+  const generateRangeDate = (start: Date, end: Date) => {
+    const datesList = eachDayOfInterval({ start, end });
+
+    const data = {};
+    let max = 0;
+    const middleIndex = Math.floor(datesList.length / 2);
+    const lastIndex = datesList.length - 1;
+
+    datesList.forEach((date, index) => {
+      max = index;
+      data[index] = {
+        label: format(date, 'P'),
+        style: { display: index === 0 || middleIndex === index || lastIndex === index ? 'block' : 'none' },
+        value: index,
+      };
+    });
+
+    return { min: 0, max, marks: data };
+  };
+
   const returnTimeSlider = (id: string): any => {
     switch (id) {
       case 'TREE_COVER_LOSS':
@@ -212,17 +233,19 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
           />
         );
       case 'GFW_INTEGRATED_ALERTS':
-        // @ts-ignore
+        const dateRangeResult = generateRangeDate(new Date(2020, 2, 2), new Date(2022, 9, 23));
         return (
           <IntegratedAlertTimeSlider
             layer={layer}
             layerID={id}
-            defaultMarks={generateDefaultMarks({ start: 2020, end: 2022 })}
-            min={2020}
-            max={2022}
-            defaultValue={[2020, 2022]}
-            steps={33}
+            defaultMarks={dateRangeResult.marks}
+            min={dateRangeResult.min}
+            max={dateRangeResult.max}
+            defaultValue={[dateRangeResult.min, dateRangeResult.max]}
+            steps={1}
             included={true}
+            dots={true}
+            intervalSpeed={100}
           />
         );
       default:
