@@ -244,7 +244,6 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
             steps={1}
             included={true}
             dots={true}
-            intervalSpeed={100}
           />
         );
       default:
