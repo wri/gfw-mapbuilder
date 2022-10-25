@@ -306,19 +306,26 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
       setStartTimeSlider(true);
     } else {
       // * NOTE: stops & resets time slider
+      const { startDate, endDate } = handleSelectedDate(timeSlider, props.defaultMarks);
+
+      //@ts-ignore
+      let start = new Date(startDate).getJulian();
+      //@ts-ignore
+      let end = new Date(endDate).getJulian();
+
       setRange(timeSlider);
       resetIntegratedAlertsDates();
 
       setMarks(props.defaultMarks);
       if (layerID === LAYER_IDS.GFW_INTEGRATED_ALERTS) {
         if (gfwLayer === LAYER_IDS.GFW_INTEGRATED_ALERTS) {
-          mapController.updateBaseTile(LAYER_IDS.GFW_INTEGRATED_ALERTS, timeSlider);
+          mapController.toggleGladLayer({ id: LAYER_IDS.GFW_INTEGRATED_ALERTS, start, end });
         } else if (gfwLayer === LAYER_IDS.GLAD_ALERTS) {
-          mapController.updateBaseTile(LAYER_IDS.GLAD_ALERTS, timeSlider);
+          mapController.toggleGladLayer({ id: LAYER_IDS.GLAD_ALERTS, start, end });
         } else if (gfwLayer === LAYER_IDS.GLAD_S2_ALERTS) {
-          mapController.updateBaseTile(LAYER_IDS.GLAD_S2_ALERTS, timeSlider);
+          mapController.toggleGladLayer({ id: LAYER_IDS.GLAD_S2_ALERTS, start, end });
         } else if (gfwLayer === LAYER_IDS.RADD_ALERTS) {
-          mapController.updateBaseTile(LAYER_IDS.RADD_ALERTS, timeSlider);
+          mapController.toggleGladLayer({ id: LAYER_IDS.RADD_ALERTS, start, end });
         }
       } else {
         mapController.updateBaseTile(layerID, timeSlider);
