@@ -100,61 +100,22 @@
             "uuid": "e7208398-0acd-4f73-a824-c4fe1e356e0c"
           },
           {
-            "groupId": "GROUP_CLIMATE",
             "id": "DRY_SPELLS",
-            "datasetURL": "https://data-api.globalforestwatch.org/dataset/nexgddp_change_dry_spells_2000_2080/latest",
-            "datasetLegendConfigURL": "https://api.resourcewatch.org/v1/layer/7c497efb-1671-49bf-87a2-3c96ddb9ff88?filterIncludesByEnv=true&includes=vocabulary,metadata&env=production",
-            "type": "resourcewatch",
             "order": 3,
-            "origin": "rw-api",
-            "opacity": 1,
-            "sublabel": {
-              "en": "(0.25°, global, 2000-2080, WRI/Vizzuality)",
-              "es": "(0.25°, global, 2000-2080, WRI/Vizzuality)",
-              "fr": "(0.25°, global, 2000-2080, WRI/Vizzuality)",
-              "id": "(0.25°, global, 2000-2080, WRI/Vizzuality)",
-              "ka": "(0.25°, global, 2000-2080, WRI/Vizzuality)",
-              "pt": "(0.25°, global, 2000-2080, WRI/Vizzuality)",
-              "zh": "(0.25°, global, 2000-2080, WRI/Vizzuality)"
-            }
+            "type": "remoteDataLayer",
+            "uuid": "41936f95-094b-4ad9-8b8a-70fc159bd0ba"
           },
           {
-            "groupId": "GROUP_CLIMATE",
             "id": "AIR_QUALITY",
-            "datasetURL": "https://data-api.globalforestwatch.org/dataset/tropomi_avg_nitrogen_dioxide_last_month/latest",
-            "datasetLegendConfigURL": "https://api.resourcewatch.org/v1/layer/61989f1f-65af-40e7-bf45-49b27eb2b9da?filterIncludesByEnv=true&includes=vocabulary,metadata&env=production",
-            "type": "resourcewatch",
-            "order": 4,
-            "origin": "rw-api",
-            "opacity": 1,
-            "sublabel": {
-              "en": "(3.5 x 5.5 km, global, 2018, TROPOMI/ESA/KNMI/DLR/SRON/BIRA-IASB/STFC/MPIC/S&T/Uni-Bremen)",
-              "es": "(3.5 x 5.5 km, global, 2018, TROPOMI/ESA/KNMI/DLR/SRON/BIRA-IASB/STFC/MPIC/S&T/Uni-Bremen)",
-              "fr": "(3.5 x 5.5 km, global, 2018, TROPOMI/ESA/KNMI/DLR/SRON/BIRA-IASB/STFC/MPIC/S&T/Uni-Bremen)",
-              "id": "(3.5 x 5.5 km, global, 2018, TROPOMI/ESA/KNMI/DLR/SRON/BIRA-IASB/STFC/MPIC/S&T/Uni-Bremen)",
-              "ka": "(3.5 x 5.5 km, global, 2018, TROPOMI/ESA/KNMI/DLR/SRON/BIRA-IASB/STFC/MPIC/S&T/Uni-Bremen)",
-              "pt": "(3.5 x 5.5 km, global, 2018, TROPOMI/ESA/KNMI/DLR/SRON/BIRA-IASB/STFC/MPIC/S&T/Uni-Bremen)",
-              "zh": "(3.5 x 5.5 km, global, 2018, TROPOMI/ESA/KNMI/DLR/SRON/BIRA-IASB/STFC/MPIC/S&T/Uni-Bremen)"
-            }
+            "order": 3,
+            "type": "remoteDataLayer",
+            "uuid": "67d8aed9-8eb3-4396-99a4-f0eee7295226"
           },
           {
-            "groupId": "GROUP_CLIMATE",
             "id": "WIND_SPEED",
-            "datasetURL": "https://data-api.globalforestwatch.org/dataset/dtu_wb_wind_speed_potential_2001_2010/latest",
-            "datasetLegendConfigURL": "https://api.resourcewatch.org/v1/layer/1ae1f58f-569d-4a21-9835-3e9bdd93759b?filterIncludesByEnv=true&includes=vocabulary,metadata&env=production",
-            "type": "resourcewatch",
-            "order": 5,
-            "origin": "rw-api",
-            "opacity": 1,
-            "sublabel": {
-              "en": "(1 km, global, DTU/World Bank Group/ESMAP)",
-              "es": "(1 km, global, DTU/World Bank Group/ESMAP)",
-              "fr": "(1 km, global, DTU/World Bank Group/ESMAP)",
-              "id": "(1 km, global, DTU/World Bank Group/ESMAP)",
-              "ka": "(1 km, global, DTU/World Bank Group/ESMAP)",
-              "pt": "(1 km, global, DTU/World Bank Group/ESMAP)",
-              "zh": "(1 km, global, DTU/World Bank Group/ESMAP)"
-            }
+            "order": 4,
+            "type": "remoteDataLayer",
+            "uuid": "9fa60bd9-0643-4d0a-a569-0036e902d1f9"
           },
           {
             "id": "FOREST_CARBON_GROSS_REMOVALS",
@@ -304,72 +265,10 @@
             "uuid": "f22e0529-d398-4ccc-b943-e62d420fea89"
           },
           {
-            "groupId": "GROUP_LC",
             "id": "TREE_COVER_HEIGHT",
             "order": 7,
-            "type": "flagship",
-            "uuid": "9efed1d8-164d-4adb-85a1-e62c6c5c00aa",
-            "origin": "gfw-api",
-            "layerType": "tree-cover-height",
-            "opacity": 1,
-            "label": {
-              "en": "Tree cover height",
-              "es": "Tree cover height",
-              "fr": "Tree cover height",
-              "id": "Tree cover height",
-              "ka": "Tree cover height",
-              "pt": "Tree cover height",
-              "zh": "Tree cover height"
-            },
-            "sublabel": {
-              "en": "2019, 30m, global, UMD/NASA GEDI",
-              "es": "2019, 30m, global, UMD/NASA GEDI",
-              "fr": "2019, 30m, global, UMD/NASA GEDI",
-              "id": "2019, 30m, global, UMD/NASA GEDI",
-              "ka": "2019, 30m, global, UMD/NASA GEDI",
-              "pt": "2019, 30m, global, UMD/NASA GEDI",
-              "zh": "2019, 30m, global, UMD/NASA GEDI"
-            },
-            "legend": {
-              "name": {
-                "en": "Tree cover height",
-                "es": "Tree cover height",
-                "fr": "Tree cover height",
-                "id": "Tree cover height",
-                "ka": "Tree cover height",
-                "pt": "Tree cover height",
-                "zh": "Tree cover height"
-              },
-              "type": "gradient",
-              "items": [
-                {
-                  "color": "#bbffb8",
-                  "value": "3m",
-                  "name": {
-                    "en": "3m",
-                    "es": "3m",
-                    "fr": "3m",
-                    "id": "3m",
-                    "ka": "3m",
-                    "pt": "3m",
-                    "zh": "3m"
-                  }
-                },
-                {
-                  "color": "#045200",
-                  "value": "30m",
-                  "name": {
-                    "en": "30m",
-                    "es": "30m",
-                    "fr": "30m",
-                    "id": "30m",
-                    "ka": "30m",
-                    "pt": "30m",
-                    "zh": "30m"
-                  }
-                }
-              ]
-            }
+            "type": "remoteDataLayer",
+            "uuid": "2a83effa-f8be-425b-9766-502e65525861"
           },
           {
             "id": "TREES_MOSAIC_LANDSCAPES",
