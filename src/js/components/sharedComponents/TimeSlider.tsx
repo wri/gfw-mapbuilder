@@ -366,6 +366,7 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
           placement: 'top',
           prefixCls: 'rc-slider-tooltip',
         }}
+        disabled={!playButton}
         dots={dots}
         marks={marks}
         railStyle={{ backgroundColor: 'rgb(233, 233, 233)' }}
