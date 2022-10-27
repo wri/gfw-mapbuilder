@@ -15,7 +15,7 @@ import { renderModal, setInfoModalLayerID } from '../../../store/appState/action
 import { RootState } from '../../../store';
 import { LayerProps } from '../../../store/mapview/types';
 import { mapController } from '../../../controllers/mapController';
-import { densityEnabledLayers, gfwMarks, landCoverMarks } from '../../../../../configs/layer-config';
+import { densityEnabledLayers, landCoverMarks } from '../../../../../configs/layer-config';
 import { InfoIcon } from '../../../../images/infoIcon';
 import { DashboardIcon } from '../../../../images/dashboardIcon';
 import { LayerVersionPicker } from './LayerVersionPicker';
@@ -29,7 +29,7 @@ import SelectIntegratedAlertLayer from '../../sharedComponents/SelectIntegratedA
 import RangeSlider from '../../sharedComponents/RangeSlider';
 import GladControls from '../../sharedComponents/GladControls';
 import IntegratedAlertControls from '../../sharedComponents/IntegratedAlertControls';
-import { eachDayOfInterval, format } from 'date-fns';
+import { eachDayOfInterval, format, subYears } from 'date-fns';
 
 interface LayerInfo {
   layerInfo: any;
@@ -205,6 +205,8 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
   };
 
   const returnTimeSlider = (id: string): any => {
+    const currentDateMinusTwoYears = subYears(new Date(), 2);
+    const dateRangeResult = generateRangeDate(currentDateMinusTwoYears, new Date());
     switch (id) {
       case 'TREE_COVER_LOSS':
         return (
@@ -232,7 +234,6 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
           />
         );
       case 'GFW_INTEGRATED_ALERTS':
-        const dateRangeResult = generateRangeDate(new Date(2020, 2, 2), new Date(2022, 9, 23));
         return (
           <TimeSlider
             layer={layer}
