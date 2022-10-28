@@ -13,6 +13,8 @@ import { CloseIcon } from '../../../../images/closeIcon';
 import BaseButton from '../../ui/BaseButton';
 import styled from 'styled-components';
 import { addToMultiPolygonLayer, clearGraphics, clearUserGraphics } from '../../../helpers/MapGraphics';
+import { handleTimestampDate } from './helpers/index';
+const attributesDateListToConvert = ['DteApplied', 'DteGranted', 'DteExpires', 'Date', 'Expires'];
 
 //Constructs layer tile based on sublayer existence
 function generateLayerTitle(activeLayerInfo: any): string {
@@ -102,6 +104,12 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
                       const label = field?.label || field.label !== '' ? field.label : attributeKey;
                       let value = props.attributes[attributeKey];
 
+                      const updatedValue = handleTimestampDate({
+                        checkList: attributesDateListToConvert,
+                        label,
+                        value,
+                      });
+
                       //Users can set the href tag on the data attribute on the service, we want to show an actual link instead of plain text
                       if (typeof value === 'string' && value?.includes('href')) {
                         value = <div dangerouslySetInnerHTML={{ __html: value }}></div>;
@@ -109,7 +117,7 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
                       return (
                         <tr key={i}>
                           <td className="first-cell">{label}</td>
-                          <td className="second-cell">{value ? value : ''}</td>
+                          <td className="second-cell">{updatedValue}</td>
                         </tr>
                       );
                     } else {
