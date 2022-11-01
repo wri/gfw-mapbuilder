@@ -96,6 +96,7 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
               {activeLayerInfo.fieldNames
                 ? activeLayerInfo.fieldNames.map((field, i) => {
                     //Grab attribute value irrespective if fieldName is appropriately cased!
+
                     const attributeKey = Object.keys(props.attributes).find(
                       (a) => a.toLowerCase() === field.fieldName.toLowerCase()
                     );

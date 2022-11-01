@@ -24,7 +24,7 @@ export const handleTimestampDate = (params: TimestampDateParams) => {
 
   if (typeof value === 'string') return value;
 
-  if (checkList.includes(label)) {
+  if (label.toLocaleLowerCase().includes('date') || checkList?.includes(label)) {
     return convertTimestampToStringDate(value);
   }
 
