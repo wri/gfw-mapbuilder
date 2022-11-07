@@ -1808,7 +1808,6 @@ export class MapController {
     const [startYear, endYear] = range;
     const layer: any = this._map?.findLayerById(id);
 
-    console.log({ range, layer, id });
     if (layer) {
       if (id === 'DRY_SPELLS') {
         layer.urlTemplate = `https://tiles.globalforestwatch.org/nexgddp_change_dry_spells_2000_2080/v20211015/Change_Num_Dry_Spells_${startYear}/{z}/{x}/{y}.png`;
