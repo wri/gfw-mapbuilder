@@ -109,8 +109,6 @@ const IntegratedAlertControls = (props: GladControlsProps): JSX.Element => {
     setEndDateUnformatted(day);
     //@ts-ignore
     const end = new Date(dFormat).getJulian();
-    //@ts-ignore
-    // const start = new Date(startDate).getJulian();
     let start;
 
     if (integratedAlertLayer === LAYER_IDS.GFW_INTEGRATED_ALERTS) {
@@ -118,15 +116,6 @@ const IntegratedAlertControls = (props: GladControlsProps): JSX.Element => {
       start = new Date(gfwIntegratedStart).getJulian();
       await mapController.toggleGladLayer({ id: LAYER_IDS.GFW_INTEGRATED_ALERTS, start, end });
 
-      // console.log()
-      console.log({
-        id: LAYER_IDS.GFW_INTEGRATED_ALERTS,
-        start,
-        end,
-        from: 'integrated alert control',
-        endDate: dFormat,
-        startDate,
-      });
       dispatch(setIntegratedAlertLayerEnd(date));
     } else if (integratedAlertLayer === LAYER_IDS.GLAD_ALERTS) {
       //@ts-ignore

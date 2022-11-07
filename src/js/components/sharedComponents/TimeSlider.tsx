@@ -265,8 +265,6 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
     if (props.layerID === LAYER_IDS.GFW_INTEGRATED_ALERTS && gfwLayer === LAYER_IDS.GFW_INTEGRATED_ALERTS) {
       await mapController.toggleGladLayer({ id: LAYER_IDS.GFW_INTEGRATED_ALERTS, start, end });
 
-      console.log({ id: LAYER_IDS.GFW_INTEGRATED_ALERTS, start, end });
-
       dispatch(setIntegratedAlertLayerStart(convertStartDate));
       dispatch(setIntegratedAlertLayerEnd(convertEndDate));
     } else if (gfwLayer === LAYER_IDS.GLAD_ALERTS) {

@@ -77,9 +77,7 @@ const initialState: AppState = {
     glad2End: new Date().toString(),
     raddAlertStart: '2020-01-02',
     raddAlertEnd: new Date().toString(),
-    // gfwIntegratedStart: '2020-03-03',
     gfwIntegratedStart: subYears(new Date(), 2).toLocaleDateString(),
-
     gfwIntegratedEnd: new Date().toString(),
     modisEnd: format(new Date(Date.now()), 'yyyy-MM-dd'),
     modisStart: format(subYears(new Date(Date.now()), 1), 'yyyy-MM-dd'),

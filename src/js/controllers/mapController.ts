@@ -2175,11 +2175,7 @@ export class MapController {
     const gladIndex: number = this._map!.layers.indexOf(gladLayerOld);
     mapController.removeMapLayer(id);
 
-    console.log('gladLayerConfig', { gladLayerOld });
-
     const gladLayerNew: any = await LayerFactory(this._mapview, { ...gladLayerConfig, visible: true });
-
-    console.log('gladLayerNew', { gladLayerNew });
 
     gladLayerNew.julianFrom = start;
     gladLayerNew.julianTo = end;
