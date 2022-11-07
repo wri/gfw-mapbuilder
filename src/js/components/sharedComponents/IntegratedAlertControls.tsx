@@ -110,13 +110,28 @@ const IntegratedAlertControls = (props: GladControlsProps): JSX.Element => {
     //@ts-ignore
     const end = new Date(dFormat).getJulian();
     //@ts-ignore
-    const start = new Date(startDate).getJulian();
+    // const start = new Date(startDate).getJulian();
+    let start;
 
     if (integratedAlertLayer === LAYER_IDS.GFW_INTEGRATED_ALERTS) {
+      //@ts-ignore
+      start = new Date(gfwIntegratedStart).getJulian();
       await mapController.toggleGladLayer({ id: LAYER_IDS.GFW_INTEGRATED_ALERTS, start, end });
 
+      // console.log()
+      console.log({
+        id: LAYER_IDS.GFW_INTEGRATED_ALERTS,
+        start,
+        end,
+        from: 'integrated alert control',
+        endDate: dFormat,
+        startDate,
+      });
       dispatch(setIntegratedAlertLayerEnd(date));
     } else if (integratedAlertLayer === LAYER_IDS.GLAD_ALERTS) {
+      //@ts-ignore
+
+      start = new Date(gladStart).getJulian();
       await mapController.toggleGladLayer({ id: LAYER_IDS.GLAD_ALERTS, start, end });
 
       const selectedLayer = mapController._map!.findLayerById(LAYER_IDS.GLAD_ALERTS);
@@ -125,9 +140,14 @@ const IntegratedAlertControls = (props: GladControlsProps): JSX.Element => {
     } else if (integratedAlertLayer === LAYER_IDS.GLAD_S2_ALERTS) {
       dispatch(setGlad2End(date));
 
+      //@ts-ignore
+      start = new Date(glad2Start).getJulian();
       await mapController.toggleGladLayer({ id: LAYER_IDS.GLAD_S2_ALERTS, start, end });
     } else if (integratedAlertLayer === LAYER_IDS.RADD_ALERTS) {
       dispatch(setRaddAlertEnd(date));
+      //@ts-ignore
+
+      start = new Date(raddAlertStart).getJulian();
       await mapController.toggleGladLayer({ id: LAYER_IDS.RADD_ALERTS, start, end });
     }
   }

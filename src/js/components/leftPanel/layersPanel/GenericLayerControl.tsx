@@ -207,6 +207,9 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
   const returnTimeSlider = (id: string): any => {
     const currentDateMinusTwoYears = subYears(new Date(), 2);
     const dateRangeResult = generateRangeDate(currentDateMinusTwoYears, new Date());
+    console.log('currentDateMinusTwoYears', currentDateMinusTwoYears);
+
+    console.log('props:', { props });
     switch (id) {
       case 'TREE_COVER_LOSS':
         return (
