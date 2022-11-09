@@ -10,6 +10,7 @@ import { basemapLayersContent } from '../../../../../configs/translations/leftPa
 import { LayerProps } from '../../../store/mapview/types';
 import { format } from 'date-fns';
 import { ENV_VARIABLES } from '../../../../../configs/envVariables';
+import { handleCustomColorTheme } from '../../../../utils';
 
 interface DefaultBasemapProps {
   layerInfo: {
@@ -70,6 +71,8 @@ const PlanetBasemap = (props: BaseLayerPlanet): JSX.Element => {
   const dispatch = useDispatch();
 
   const apiKey = ENV_VARIABLES.PLANET_API_KEY;
+
+  const themeColor = handleCustomColorTheme(customColorTheme);
 
   useEffect(() => {
     const tileInfoURL = 'https://tiles.globalforestwatch.org/openapi.json';
@@ -154,7 +157,7 @@ const PlanetBasemap = (props: BaseLayerPlanet): JSX.Element => {
         style={{
           marginLeft: 25,
           marginBottom: 30,
-          backgroundColor: `${customColorTheme}`,
+          backgroundColor: `${themeColor}`,
         }}
       >
         <InfoIcon width={10} height={10} fill={'#fff'} />
@@ -240,6 +243,8 @@ const BasemapLayersGroup = (props: LayerGroupProps): React.ReactElement => {
 
   const groupOpen = leftPanel.openLayerGroup === layerGroupKey;
 
+  const themeColor = handleCustomColorTheme(customColorTheme);
+
   const handleGroupToggle = () => {
     const openGroupKey = groupOpen ? '' : layerGroupKey;
     dispatch(setOpenLayerGroup(openGroupKey));
@@ -263,7 +268,7 @@ const BasemapLayersGroup = (props: LayerGroupProps): React.ReactElement => {
           key={baselayer.id}
           layerInfo={baselayer}
           selectedLanguage={selectedLanguage}
-          customColorTheme={customColorTheme}
+          customColorTheme={themeColor}
         />
       );
     } else if (baselayer.id === 'planet' && baselayer?.url && baselayer.url.length !== 0) {
@@ -274,7 +279,7 @@ const BasemapLayersGroup = (props: LayerGroupProps): React.ReactElement => {
             url={baselayer.url}
             layerInfo={baselayer}
             selectedLanguage={selectedLanguage}
-            customColorTheme={customColorTheme}
+            customColorTheme={themeColor}
           />
         )
       );

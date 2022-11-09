@@ -20,6 +20,7 @@ import {
 import { AnalyzingIcon } from '../../../../images/analyzingIcon';
 import { ErrorIcon } from '../../../../images/errorIcon';
 import { setActiveFeatures } from '../../../store/mapview/actions';
+import { handleCustomColorTheme } from '../../../../utils';
 
 interface Props {
   initAnalyze: (val: boolean) => void;
@@ -33,6 +34,8 @@ const MultiPolygonAnalysis = ({ initAnalyze }: Props) => {
 
   //TODO: Add translations
   const [overlap, setOverlap] = React.useState<'intersect' | 'analyzing' | 'failed' | 'idle'>('idle');
+
+  const themeColor = handleCustomColorTheme(customColorTheme);
 
   React.useEffect(() => {
     if (analysisFeatureList[0] && analysisFeatureList[1]) {
@@ -54,8 +57,8 @@ const MultiPolygonAnalysis = ({ initAnalyze }: Props) => {
   `;
   const BackButton = styled(BaseButton)`
     background-color: white;
-    color: ${customColorTheme};
-    border: 2px solid ${customColorTheme};
+    color: ${themeColor};
+    border: 2px solid ${themeColor};
     text-transform: capitalize;
   `;
   const MultiPolyWrap = styled.div`
@@ -113,7 +116,7 @@ const MultiPolygonAnalysis = ({ initAnalyze }: Props) => {
       align-items: center;
       display: grid;
       height: 35px;
-      border: 1px solid ${customColorTheme};
+      border: 1px solid ${themeColor};
       color: #242121;
       font-size: 0.9rem;
       padding: 5px;
@@ -159,7 +162,7 @@ const MultiPolygonAnalysis = ({ initAnalyze }: Props) => {
     justify-content: center;
     gap: 5px;
     font-size: 0.9rem;
-    color: ${customColorTheme};
+    color: ${themeColor};
     p {
       border: 0;
       padding: 0;
@@ -175,7 +178,7 @@ const MultiPolygonAnalysis = ({ initAnalyze }: Props) => {
         {!analysisFeatureList[0] ? (
           <MethodSelection
             handleInputSelection={handleInputSelection}
-            customColorTheme={customColorTheme}
+            customColorTheme={themeColor}
             selectedLanguage={selectedLanguage}
             placeholder="Select shape 1 ..."
             inputIndex={0}
@@ -186,7 +189,7 @@ const MultiPolygonAnalysis = ({ initAnalyze }: Props) => {
         {!analysisFeatureList[1] ? (
           <MethodSelection
             handleInputSelection={handleInputSelection}
-            customColorTheme={customColorTheme}
+            customColorTheme={themeColor}
             selectedLanguage={selectedLanguage}
             placeholder="Select shape 2 ..."
             inputIndex={1}
@@ -218,11 +221,11 @@ const MultiPolygonAnalysis = ({ initAnalyze }: Props) => {
             clearMultiPolygonLayer();
           }}
         >
-          <BackIcon height={12} width={12} fill={customColorTheme} />
+          <BackIcon height={12} width={12} fill={themeColor} />
           {'Back'}
         </BackButton>
         <BaseButton
-          customColorTheme={customColorTheme}
+          customColorTheme={themeColor}
           disabled={overlap !== 'intersect'}
           onClick={() => {
             initAnalyze(true);

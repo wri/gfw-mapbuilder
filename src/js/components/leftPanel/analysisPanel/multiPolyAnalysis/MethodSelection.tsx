@@ -6,6 +6,7 @@ import { penContent } from '../../../../../../configs/translations/modal.tanslat
 import { PenIcon } from '../../../../../images/penIcon';
 import { PlusIcon } from '../../../../../images/plusIcon';
 import { PolygonIcon } from '../../../../../images/PolygonIcon';
+import { handleCustomColorTheme } from '../../../../../utils';
 import { mapController } from '../../../../controllers/mapController';
 import { renderModal } from '../../../../store/appState/actions';
 import UploadFile from '../../../sharedComponents/UploadFile';
@@ -87,8 +88,10 @@ const MethodSelection = ({ placeholder, inputIndex, selectedLanguage, customColo
     enterCoordinatesTitle,
     enterCoordinatesDirections,
     coordinatesButton,
-    visitTitle
+    visitTitle,
   } = analysisContent[selectedLanguage];
+
+  const themeColor = handleCustomColorTheme(customColorTheme);
 
   const ExistingShapeInstruction = () => {
     return (
@@ -142,7 +145,7 @@ const MethodSelection = ({ placeholder, inputIndex, selectedLanguage, customColo
         <button
           className="orange-button"
           style={{
-            backgroundColor: customColorTheme
+            backgroundColor: themeColor,
           }}
           onClick={() => dispatch(renderModal('PenWidget-CoordinatesForm'))}
         >
@@ -166,10 +169,10 @@ const MethodSelection = ({ placeholder, inputIndex, selectedLanguage, customColo
             ))}
           </ol>
         </figure>
-        <PolygonIcon height={100} width={100} customColorTheme={customColorTheme} />
+        <PolygonIcon height={100} width={100} customColorTheme={themeColor} />
         <button
           style={{
-            backgroundColor: customColorTheme
+            backgroundColor: themeColor,
           }}
           className="orange-button"
           onClick={() => mapController.initSketchForMultiple(inputIndex)}
@@ -186,7 +189,7 @@ const MethodSelection = ({ placeholder, inputIndex, selectedLanguage, customColo
       <StyledSelect
         required
         value={activeInput}
-        onChange={e => {
+        onChange={(e) => {
           setActiveInput(e.target.value);
           handleInputSelection(inputIndex);
         }}

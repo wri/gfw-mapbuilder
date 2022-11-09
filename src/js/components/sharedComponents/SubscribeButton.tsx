@@ -5,6 +5,7 @@ import { renderModal } from '../../../js/store/appState/actions';
 import { RootState } from '../../../js/store/index';
 
 import '../../../css/subscribeButton.scss';
+import { handleCustomColorTheme } from '../../../utils';
 
 const subscribeButtonTranslations = {
   zh: '保存到“我的 GFW”中',
@@ -15,7 +16,7 @@ const subscribeButtonTranslations = {
   fr: 'enregistrer',
   es: 'guardar en My GFW',
   pt: 'salvar no meu GFW',
-  id: 'simpan di gfw saya'
+  id: 'simpan di gfw saya',
 };
 
 export const SubscribeButton = (): JSX.Element => {
@@ -31,6 +32,8 @@ export const SubscribeButton = (): JSX.Element => {
   const selectedFeatureType = selectedFeature.geometry.type;
   const subscribeDisabled = selectedFeatureType === 'point' || selectedFeatureType === 'polyline';
   const backgroundColor = subscribeDisabled ? '#b9b9b9' : 'white';
+
+  const themeColor = handleCustomColorTheme(customColorTheme);
 
   const handleSubscribe = () => {
     //Force user to complete the profile
@@ -48,8 +51,8 @@ export const SubscribeButton = (): JSX.Element => {
         <button
           disabled={subscribeDisabled}
           style={{
-            border: `1px solid ${customColorTheme}`,
-            backgroundColor: `${backgroundColor}`
+            border: `1px solid ${themeColor}`,
+            backgroundColor: `${backgroundColor}`,
           }}
           className="subscribe-button"
           onClick={() => handleSubscribe()}

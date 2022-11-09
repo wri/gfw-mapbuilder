@@ -1,6 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { editProfileTranslations } from '../../../../configs/translations/staticOptions';
+import { handleCustomColorTheme } from '../../../utils';
 import { RootState } from '../../store';
 
 interface Props {
@@ -10,6 +11,8 @@ interface Props {
 export const SuccessScreen = ({ setUpdateSuccess }: Props) => {
   const selectedLanguage = useSelector((store: RootState) => store.appState.selectedLanguage);
   const customColorTheme = useSelector((store: RootState) => store.appSettings.customColorTheme);
+
+  const themeColor = handleCustomColorTheme(customColorTheme);
   return (
     <div className="success-screen">
       <div className="tree-success"></div>
@@ -20,7 +23,7 @@ export const SuccessScreen = ({ setUpdateSuccess }: Props) => {
           href="https://www.globalforestwatch.org/privacy-policy"
           style={{
             cursor: 'pointer',
-            color: customColorTheme
+            color: themeColor,
           }}
         >
           {editProfileTranslations[selectedLanguage].success[2]}
@@ -31,9 +34,9 @@ export const SuccessScreen = ({ setUpdateSuccess }: Props) => {
         className="orange-button profile-submit"
         onClick={() => setUpdateSuccess(false)}
         style={{
-          backgroundColor: customColorTheme,
+          backgroundColor: themeColor,
           marginTop: '30px',
-          width: '200px'
+          width: '200px',
         }}
       >
         {editProfileTranslations[selectedLanguage].back}

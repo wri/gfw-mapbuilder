@@ -7,6 +7,7 @@ import { emailLoginTranslations } from '../../../../configs/translations/staticO
 
 import '../../../css/formInputs.scss';
 import { CHECK_LOGGED_URL } from './utils';
+import { handleCustomColorTheme } from '../../../utils';
 
 const defaultLoginURL = ' https://production-api.globalforestwatch.org/auth/login';
 const registerURL = 'https://production-api.globalforestwatch.org/auth/sign-up';
@@ -25,10 +26,12 @@ export const EmailLogin = () => {
 
   const selectedLanguage = useSelector((store: RootState) => store.appState.selectedLanguage);
 
+  const themeColor = handleCustomColorTheme(customColorTheme);
+
   const {
     register,
     handleSubmit,
-    formState: { errors }
+    formState: { errors },
   } = useForm();
 
   type FormType = 'register' | 'default' | 'forgot';
@@ -64,11 +67,11 @@ export const EmailLogin = () => {
       method: 'POST',
       body: JSON.stringify(data),
       headers: {
-        'Content-Type': 'application/json'
-      }
+        'Content-Type': 'application/json',
+      },
     })
-      .then(res => res.json())
-      .then(data => {
+      .then((res) => res.json())
+      .then((data) => {
         //Early check for error that come in the response object
         if (data.errors && data.errors[0].detail) {
           setDefaultLoginError(data.errors[0].detail);
@@ -83,17 +86,17 @@ export const EmailLogin = () => {
         fetch(CHECK_LOGGED_URL, {
           method: 'GET',
           headers: {
-            Authorization: bearer
-          }
+            Authorization: bearer,
+          },
         })
-          .then(res => res.json())
-          .then(data => {
+          .then((res) => res.json())
+          .then((data) => {
             localStorage.setItem('userID', data.id);
             dispatch(setLoggedIn(true));
           })
-          .catch(e => console.error(e));
+          .catch((e) => console.error(e));
       })
-      .catch(e => {
+      .catch((e) => {
         setDefaultLoginError(e.errors[0].detail);
       });
   };
@@ -103,18 +106,18 @@ export const EmailLogin = () => {
       apps: ['gfw'],
       email: data.email,
       password: data.password,
-      repeatPassword: data.repeatPassword
+      repeatPassword: data.repeatPassword,
     };
 
     fetch(registerURL, {
       method: 'POST',
       body: JSON.stringify(payload),
       headers: {
-        'Content-Type': 'application/json'
-      }
+        'Content-Type': 'application/json',
+      },
     })
-      .then(res => res.json())
-      .then(data => {
+      .then((res) => res.json())
+      .then((data) => {
         if (data.errors && data.errors[0].detail) {
           setDefaultLoginError(data.errors[0].detail);
         }
@@ -122,7 +125,7 @@ export const EmailLogin = () => {
           setRegisterSuccess(true);
         }
       })
-      .catch(e => console.error(e));
+      .catch((e) => console.error(e));
   };
 
   const onForgotSubmit = (data: any): void => {
@@ -130,11 +133,11 @@ export const EmailLogin = () => {
       method: 'POST',
       body: JSON.stringify(data),
       headers: {
-        'Content-Type': 'application/json'
-      }
+        'Content-Type': 'application/json',
+      },
     })
-      .then(res => res.json())
-      .then(data => {
+      .then((res) => res.json())
+      .then((data) => {
         //Early check for error that come in the response object
         if (data.errors && data.errors[0].detail) {
           setDefaultLoginError(data.errors[0].detail);
@@ -143,7 +146,7 @@ export const EmailLogin = () => {
           setResetPasswordSuccess(true);
         }
       })
-      .catch(e => console.error(e));
+      .catch((e) => console.error(e));
   };
 
   return (
@@ -193,10 +196,10 @@ export const EmailLogin = () => {
               <input
                 className="orange-button form-submit"
                 style={{
-                  backgroundColor: customColorTheme,
+                  backgroundColor: themeColor,
                   width: '6rem',
                   marginTop: 0,
-                  fontSize: '0.8rem'
+                  fontSize: '0.8rem',
                 }}
                 type="submit"
                 value={emailLoginTranslations[selectedLanguage].login}
@@ -261,10 +264,10 @@ export const EmailLogin = () => {
                 <input
                   className="orange-button form-submit"
                   style={{
-                    backgroundColor: customColorTheme,
+                    backgroundColor: themeColor,
                     width: '6rem',
                     marginTop: 0,
-                    fontSize: '0.8rem'
+                    fontSize: '0.8rem',
                   }}
                   type="submit"
                   value={emailLoginTranslations[selectedLanguage].register}
@@ -279,10 +282,10 @@ export const EmailLogin = () => {
               <button
                 className="orange-button form-submit"
                 style={{
-                  backgroundColor: customColorTheme,
+                  backgroundColor: themeColor,
                   width: '6rem',
                   marginTop: 0,
-                  fontSize: '0.8rem'
+                  fontSize: '0.8rem',
                 }}
                 onClick={() => handleFormSwitch('default')}
               >
@@ -328,10 +331,10 @@ export const EmailLogin = () => {
                     value={emailLoginTranslations[selectedLanguage].reset}
                     className="orange-button form-submit"
                     style={{
-                      backgroundColor: customColorTheme,
+                      backgroundColor: themeColor,
                       width: '6rem',
                       marginTop: 0,
-                      fontSize: '0.8rem'
+                      fontSize: '0.8rem',
                     }}
                   />
                 </div>
@@ -345,11 +348,11 @@ export const EmailLogin = () => {
               <button
                 className="orange-button form-submit"
                 style={{
-                  backgroundColor: customColorTheme,
+                  backgroundColor: themeColor,
                   width: '6rem',
                   marginTop: 0,
                   fontSize: '0.8rem',
-                  height: '35px'
+                  height: '35px',
                 }}
                 onClick={() => handleFormSwitch('default')}
               >

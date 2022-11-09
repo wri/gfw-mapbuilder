@@ -13,16 +13,17 @@ import { PlusIcon } from '../../../../images/plusIcon';
 import { createSelector } from 'reselect';
 import BaseButton from '../../ui/BaseButton';
 import MultiPolygonAnalysis from './MultiPolygonAnalysis';
+import { handleCustomColorTheme } from '../../../../utils';
 
 //Memo'd selectors
 const selectActiveFeaturesLength = createSelector(
   (state: RootState) => state.mapviewState,
-  mapviewState => mapviewState.activeFeatures.length
+  (mapviewState) => mapviewState.activeFeatures.length
 );
 
 const selectTabview = createSelector(
   (state: RootState) => state.appState,
-  appState => appState.leftPanel.tabViewVisible
+  (appState) => appState.leftPanel.tabViewVisible
 );
 
 interface TabProps {
@@ -47,7 +48,7 @@ const AnalysisTabView = (props: TabProps): JSX.Element => {
     enterCoordinatesTitle,
     enterCoordinatesDirections,
     coordinatesButton,
-    visitTitle
+    visitTitle,
   } = analysisContent[selectedLanguage];
 
   const activeFeaturesLength = useSelector(selectActiveFeaturesLength);
@@ -55,6 +56,8 @@ const AnalysisTabView = (props: TabProps): JSX.Element => {
   const tabview = useSelector(selectTabview);
   const [multiPolyAnalysisReady, setMultiPolyAnalysisReady] = React.useState(false);
   const tabViewIsVisible = tabview && activeTab === props.label;
+
+  const themeColor = handleCustomColorTheme(customColorTheme);
 
   const returnFirstInstruction = (type?): JSX.Element => {
     if (analyzeYourShapeFirstDirection[1]) {
@@ -97,8 +100,8 @@ const AnalysisTabView = (props: TabProps): JSX.Element => {
   const Buffer = () => {
     return (
       <div className="span-wrapper buffer">
-        <span className="left" style={{ borderTop: `1px solid ${customColorTheme}` }} /> Or{' '}
-        <span className="right" style={{ borderBottom: `1px solid ${customColorTheme}` }} />
+        <span className="left" style={{ borderTop: `1px solid ${themeColor}` }} /> Or{' '}
+        <span className="right" style={{ borderBottom: `1px solid ${themeColor}` }} />
       </div>
     );
   };
@@ -120,7 +123,7 @@ const AnalysisTabView = (props: TabProps): JSX.Element => {
           </ol>
         </figure>
         <BaseButton
-          customColorTheme={customColorTheme}
+          customColorTheme={themeColor}
           style={{ width: '15rem' }}
           onClick={() => dispatch(setMultiPolygonSelectionMode(true))}
         >
@@ -138,7 +141,7 @@ const AnalysisTabView = (props: TabProps): JSX.Element => {
             ))}
           </ol>
         </figure>
-        <PolygonIcon width={100} height={100} customColorTheme={customColorTheme} />
+        <PolygonIcon width={100} height={100} customColorTheme={themeColor} />
         <Buffer />
         <figure>
           <figcaption className="title">
@@ -152,7 +155,7 @@ const AnalysisTabView = (props: TabProps): JSX.Element => {
           </ol>
         </figure>
         <button
-          style={{ backgroundColor: customColorTheme }}
+          style={{ backgroundColor: themeColor }}
           className="orange-button"
           onClick={(): void => mapController.createPolygonSketch()}
         >
@@ -171,7 +174,7 @@ const AnalysisTabView = (props: TabProps): JSX.Element => {
           </ol>
         </figure>
         <button
-          style={{ backgroundColor: customColorTheme }}
+          style={{ backgroundColor: themeColor }}
           className="orange-button"
           onClick={() => dispatch(renderModal('PenWidget-CoordinatesForm'))}
         >

@@ -8,6 +8,7 @@ import { setCanopyDensity } from '../../../store/appState/actions';
 import { mapController } from '../../../controllers/mapController';
 
 import { canopyDensityContentConfig } from '../../../../../configs/translations/modal.tanslations';
+import { handleCustomColorTheme } from '../../../../utils/index';
 
 const SliderWithTooltip = createSliderWithTooltip(Slider);
 
@@ -31,6 +32,8 @@ const ForestGrossCarbonEmissionContent = (): JSX.Element => {
   const selectedLanguage = useSelector((store: RootState) => store.appState.selectedLanguage);
   const { directions } = canopyDensityContentConfig[selectedLanguage];
 
+  const themeColor = handleCustomColorTheme(customColorTheme);
+
   async function handleSliderChange(value: number): Promise<void> {
     dispatch(setCanopyDensity(value));
     //send % value to modify the layer
@@ -53,17 +56,17 @@ const ForestGrossCarbonEmissionContent = (): JSX.Element => {
         marks={marks}
         defaultValue={findDensity ? findDensity : 2}
         tipFormatter={(val: number): string => forestCarbonGrossEmisionValue[val] + '%'}
-        railStyle={{ height: 10, backgroundColor: customColorTheme }}
+        railStyle={{ height: 10, backgroundColor: themeColor }}
         trackStyle={{ backgroundColor: '#e9e9e9', height: 10 }}
         activeDotStyle={{ border: '2px solid #e9e9e9' }}
         dotStyle={{
-          border: `2px solid ${customColorTheme}`,
+          border: `2px solid ${themeColor}`,
           height: 10,
           width: 10,
           bottom: -6,
         }}
         handleStyle={{
-          border: `2px solid ${customColorTheme}`,
+          border: `2px solid ${themeColor}`,
           height: 20,
           width: 20,
         }}

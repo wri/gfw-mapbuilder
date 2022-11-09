@@ -7,6 +7,7 @@ import { allRequiredFieldsPresent, Attributes, getUserData } from './utils';
 import { setIsProfileComplete } from '../../store/appState/actions';
 import { SuccessScreen } from './SuccessScreen';
 import ProfileForm from './ProfileForm';
+import { handleCustomColorTheme } from '../../../utils';
 
 const LoadingScreen = () => {
   return <div style={{ padding: 50 }}>User profile loading...</div>;
@@ -28,6 +29,8 @@ const EditProfile = (): JSX.Element => {
   }>({ userToken: null, userID: null, profileURL: null });
 
   const dispatch = useDispatch();
+
+  const themeColor = handleCustomColorTheme(customColorTheme);
 
   React.useEffect(() => {
     setDataLoading(true);
@@ -70,7 +73,7 @@ const EditProfile = (): JSX.Element => {
     const payload = {
       ...data,
       id: userInfo.userID,
-      loggedIn: true
+      loggedIn: true,
     };
 
     if (payload.subsector) {
@@ -80,7 +83,7 @@ const EditProfile = (): JSX.Element => {
     }
 
     if (payload.howDoYouUse.includes('Other') && data?.usageOther?.length !== 0) {
-      const usageArr = payload.howDoYouUse.map(usage => {
+      const usageArr = payload.howDoYouUse.map((usage) => {
         if (usage === 'Other') {
           return `${usage}: ${data.usageOther}`;
         } else {
@@ -98,12 +101,12 @@ const EditProfile = (): JSX.Element => {
       method: 'PATCH',
       headers: {
         Authorization: `Bearer ${userInfo.userToken || userToken}`,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify(payload)
+      body: JSON.stringify(payload),
     })
-      .then(res => res.json())
-      .then(msg => {
+      .then((res) => res.json())
+      .then((msg) => {
         if (msg?.errors) {
           setUpdateError(msg.errors[0].detail);
           dispatch(setIsProfileComplete(true));
@@ -113,7 +116,7 @@ const EditProfile = (): JSX.Element => {
           dispatch(setIsProfileComplete(allRequiredFieldsPresent(msg?.data).length === 0));
         }
       })
-      .catch(e => {
+      .catch((e) => {
         console.log(e);
         setUpdateError(e);
       });
@@ -126,7 +129,7 @@ const EditProfile = (): JSX.Element => {
           selectedLanguage={selectedLanguage}
           isProfileComplete={isProfileComplete}
           onSubmit={onSubmit}
-          customColorTheme={customColorTheme}
+          customColorTheme={themeColor}
           defaultValues={existingProfileInfo}
         />
       )}

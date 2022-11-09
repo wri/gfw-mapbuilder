@@ -16,6 +16,7 @@ import { DownloadIcon } from '../../../images/downloadIcon';
 import fragmentationSpec from '../../../js/components/leftPanel/analysisPanel/fragmentationVegaSpec';
 import { fetchWCSAnalysis, generateWidgetURL } from '../../../js/components/leftPanel/analysisPanel/analysisUtils';
 import { defaultAnalysisModules } from '../../../../configs/analysis-config';
+import { handleCustomColorTheme } from '../../../utils';
 //Dynamic custom theme override using styled-components lib
 interface CheckBoxWrapperProps {
   customColorTheme: string;
@@ -91,6 +92,8 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
   const [base64ChartURL, setBase64ChartURL] = React.useState('');
   const [chartDescription, setChartDescription] = React.useState<null | string>(null);
 
+  const themeColor = handleCustomColorTheme(customColorTheme);
+
   //We want to re-render chart if user clicks on the 'run analysis' button, this is one way to do it, there may be better options
   const [forceRender, setForceRender] = React.useReducer((x) => x + 1, 0);
 
@@ -109,11 +112,7 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
       case 'range-slider':
         if (bounds)
           return (
-            <MemoReportRangeSlider
-              yearRange={bounds}
-              handleSliderChange={updateDate}
-              customColorTheme={customColorTheme}
-            />
+            <MemoReportRangeSlider yearRange={bounds} handleSliderChange={updateDate} customColorTheme={themeColor} />
           );
         break;
       case 'tcd':
@@ -127,7 +126,7 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
             defaultStartDate={analysisId === 'VIIRS_FIRES' ? viirsStart : defaultStartDate}
             defaultEndDate={analysisId === 'VIIRS_FIRES' ? viirsEnd : defaultEndDate}
             sendDateValue={updateDatePickerValues}
-            customColorTheme={customColorTheme}
+            customColorTheme={themeColor}
           />
         );
       default:
@@ -245,7 +244,7 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
             )}
           </div>
 
-          <CheckboxWrapper customColorTheme={customColorTheme}>
+          <CheckboxWrapper customColorTheme={themeColor}>
             <div className="layer-checkbox">
               <input
                 type="checkbox"
@@ -281,7 +280,7 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
           {currentAnalysis?.analysisParams.length !== 0 && (
             <button
               className="orange-button"
-              style={{ backgroundColor: customColorTheme }}
+              style={{ backgroundColor: themeColor }}
               onClick={(): void => setForceRender()}
             >
               {analysisTranslations.runAnalysisButton[language]}

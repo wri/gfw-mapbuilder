@@ -4,6 +4,7 @@ import { RootState } from '../../../js/store';
 import { Attachment } from '../../../js/types/Attachment';
 import { documentsContent } from '../../../../configs/translations/leftPanel.translations';
 import { DocIcon } from '../../../images/documentIcon';
+import { handleCustomColorTheme } from '../../../utils';
 
 interface Props {
   key: string;
@@ -17,6 +18,8 @@ const DocumentsTabView = (props: Props): JSX.Element => {
   const documents = useSelector((store: RootState) => store.mapviewState.documents);
   const selectedLanguage = useSelector((state: RootState) => state.appState.selectedLanguage);
   const customColorTheme = useSelector((state: RootState) => state.appSettings.customColorTheme);
+
+  const themeColor = handleCustomColorTheme(customColorTheme);
 
   const { instructions, name, pdf, size } = documentsContent[selectedLanguage];
   const tabViewIsVisible = tabViewVisible && activeTab === props.label;
@@ -38,7 +41,7 @@ const DocumentsTabView = (props: Props): JSX.Element => {
           <td>{Math.round(size / 1000)} KB</td>
           <td>
             <a href={url} target="_blank" rel="noopener noreferrer">
-              <DocIcon height={20} width={20} fill={customColorTheme} />
+              <DocIcon height={20} width={20} fill={themeColor} />
             </a>
           </td>
         </tr>

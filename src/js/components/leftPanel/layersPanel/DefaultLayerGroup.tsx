@@ -10,6 +10,7 @@ import { RootState } from '../../../../js/store';
 import { setOpenLayerGroup } from '../../../../js/store/appState/actions';
 import { mapController } from '../../../../js/controllers/mapController';
 import styled from 'styled-components';
+import { handleCustomColorTheme } from '../../../../utils';
 
 const getListStyle = (isDraggingOver: boolean) => ({
   background: isDraggingOver ? 'white' : '',
@@ -200,6 +201,8 @@ const DefaultLayerGroup = ({ layerGroupKey, layerGroupConfig }: LayerGroupProps)
 
   const dispatch = useDispatch();
 
+  const themeColor = handleCustomColorTheme(customColorTheme);
+
   //If layer group is nested, layer ids are also nested, so find those appropriatly
   let groupLayerIds: string[] = [];
   if (layerGroupConfig.groupType === 'nested') {
@@ -234,7 +237,7 @@ const DefaultLayerGroup = ({ layerGroupKey, layerGroupConfig }: LayerGroupProps)
                   layersInGroup={layersInGroup}
                   groupConfig={layerGroupConfig}
                   selectedLanguage={selectedLanguage}
-                  customColorTheme={customColorTheme}
+                  customColorTheme={themeColor}
                 />
                 {provided.placeholder}
               </div>

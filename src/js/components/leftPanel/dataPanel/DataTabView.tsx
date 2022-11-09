@@ -13,6 +13,7 @@ import { CloseIcon } from '../../../../images/closeIcon';
 import BaseButton from '../../ui/BaseButton';
 import styled from 'styled-components';
 import { addToMultiPolygonLayer, clearGraphics, clearUserGraphics } from '../../../helpers/MapGraphics';
+import { handleCustomColorTheme } from '../../../../utils';
 
 //Constructs layer tile based on sublayer existence
 function generateLayerTitle(activeLayerInfo: any): string {
@@ -42,6 +43,8 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
   const multiPolygonSelection = useSelector((store: RootState) => store.appState.multiPolygonSelectionMode);
   const analysisFeatureList = useSelector((store: RootState) => store.appState.analysisFeatureList);
   const activeMultiInput = useSelector((store: RootState) => store.appState.activeMultiInput);
+
+  const themeColor = handleCustomColorTheme(customColorTheme);
 
   const FeatureDataView = (): JSX.Element => {
     const activeLayerInfo = activeFeatures[activeFeatureIndex[0]];
@@ -163,7 +166,7 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
 
       //determine if next/prev buttons are enabled or disabled
       const enabledButtonCustomStyle = {
-        backgroundColor: customColorTheme,
+        backgroundColor: themeColor,
         color: '#FFF',
       };
       const disabledButtonCustomStyle = {
@@ -207,7 +210,7 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
 
       const AddToAnalysisButton = styled(BaseButton)`
         margin: 0 0 0 5px;
-        background-color: ${customColorTheme};
+        background-color: ${themeColor};
         color: white;
         font-size: 0.7rem;
         min-height: 15px;
@@ -254,7 +257,7 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
           <TopWrap>
             {multiPolygonSelection && !(analysisFeatureList[0] && analysisFeatureList[1]) && (
               <AddToAnalysisButton
-                customColorTheme={customColorTheme}
+                customColorTheme={themeColor}
                 onClick={() => {
                   clearGraphics();
                   clearUserGraphics();
@@ -301,7 +304,7 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
 
   return (
     <div className={tabViewIsVisible ? 'tabview-container' : 'hide tabview-container'}>
-      {activeFeatures.length === 0 ? <DefaultTabView customColorTheme={customColorTheme} /> : <FeatureDataView />}
+      {activeFeatures.length === 0 ? <DefaultTabView customColorTheme={themeColor} /> : <FeatureDataView />}
     </div>
   );
 };

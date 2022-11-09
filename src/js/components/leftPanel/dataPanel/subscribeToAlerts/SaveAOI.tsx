@@ -19,25 +19,21 @@ import { setActiveFeatures } from '../../../../../js/store/mapview/actions';
 import { RootState } from '../../../../../js/store/index';
 
 import '../../../../../css/saveAOI.scss';
+import { handleCustomColorTheme } from '../../../../../utils';
 
-const subscriptionURL =
-  'https://production-api.globalforestwatch.org/v1/subscriptions';
+const subscriptionURL = 'https://production-api.globalforestwatch.org/v1/subscriptions';
 
 interface AutocompleteWrapperProps {
   customColorTheme: string;
 }
 const AutocompleteWrapper = styled.div<AutocompleteWrapperProps>`
   .MuiChip-root {
-    background-color: ${props => props.customColorTheme};
+    background-color: ${(props) => props.customColorTheme};
   }
 `;
 
 const SaveAOI = (): JSX.Element => {
-  const allSteps: ReadonlyArray<string> = [
-    'SubscribeToAlerts',
-    'NameYourSubscription',
-    'SubscriptionSaved'
-  ];
+  const allSteps: ReadonlyArray<string> = ['SubscribeToAlerts', 'NameYourSubscription', 'SubscriptionSaved'];
   const dispatch = useDispatch();
   const [userEmail, setUserEmail] = useState('');
   const [updateError, setUpdateError] = useState<boolean | string>(false);
@@ -57,34 +53,28 @@ const SaveAOI = (): JSX.Element => {
     register,
     handleSubmit,
     control,
-    formState: { errors }
+    formState: { errors },
   } = useForm();
 
   const iso = useSelector((state: RootState) => state.appSettings.iso);
 
-  const activeFeatures = useSelector(
-    (state: RootState) => state.mapviewState.activeFeatures
-  );
-  const activeFeatureIndex = useSelector(
-    (state: RootState) => state.mapviewState.activeFeatureIndex
-  );
-  const selectedLanguage = useSelector(
-    (store: RootState) => store.appState.selectedLanguage
-  );
-  const customColorTheme = useSelector(
-    (store: RootState) => store.appSettings.customColorTheme
-  );
+  const activeFeatures = useSelector((state: RootState) => state.mapviewState.activeFeatures);
+  const activeFeatureIndex = useSelector((state: RootState) => state.mapviewState.activeFeatureIndex);
+  const selectedLanguage = useSelector((store: RootState) => store.appState.selectedLanguage);
+  const customColorTheme = useSelector((store: RootState) => store.appSettings.customColorTheme);
   const webmapID = useSelector((store: RootState) => store.appSettings.webmap);
   const activeLayer = activeFeatures[activeFeatureIndex[0]];
   const activeFeature = activeLayer?.features[activeFeatureIndex[1]];
+
+  const themeColor = handleCustomColorTheme(customColorTheme);
 
   const getGeostoreID = (): Promise<string> => {
     if ((activeFeature.attributes as any).geostoreId) {
       return (activeFeature.attributes as any).geostoreId;
     } else {
       return registerGeometry(activeFeature)
-        .then(response => response.json())
-        .then(res => {
+        .then((response) => response.json())
+        .then((res) => {
           const oldActiveFeatures = [...activeFeatures];
           const activeLayer = oldActiveFeatures[activeFeatureIndex[0]];
           const activeFeature = activeLayer?.features[activeFeatureIndex[1]];
@@ -108,12 +98,12 @@ const SaveAOI = (): JSX.Element => {
       name: subscriptionName,
       params: {
         geostore: activeFeatureGeostoreId,
-        iso: iso
+        iso: iso,
       },
       resource: {
         type: 'EMAIL',
-        content: userEmail
-      }
+        content: userEmail,
+      },
     };
 
     //Saving subscription : Need to check for flagship flow
@@ -122,18 +112,16 @@ const SaveAOI = (): JSX.Element => {
       credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${userToken}`
+        Authorization: `Bearer ${userToken}`,
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
     })
-      .then(response => {
+      .then((response) => {
         if (response.status === 200) {
           return response.json();
         }
       })
-      .catch(e =>
-        console.error('error POSTING subscriptions in updateSubscriptions()', e)
-      );
+      .catch((e) => console.error('error POSTING subscriptions in updateSubscriptions()', e));
   };
 
   const onDefaultSubmit = async (data: any): Promise<void> => {
@@ -143,14 +131,14 @@ const SaveAOI = (): JSX.Element => {
       geostoreID = activeFeature.attributes.geostoreId;
     } else {
       geostoreID = await registerGeometry(activeFeature)
-        .then(response => response.json())
-        .then(res => {
+        .then((response) => response.json())
+        .then((res) => {
           if (res?.errors) {
             throw new Error('failed to register geostore');
           }
           return res.data.id;
         })
-        .catch(e => console.log('failed to register geostore', e));
+        .catch((e) => console.log('failed to register geostore', e));
     }
     const userToken = localStorage.getItem('userToken');
     const payload = {
@@ -163,7 +151,7 @@ const SaveAOI = (): JSX.Element => {
       type: 'geostore',
       language,
       public: true, //unclear what this means, we are replicating flagship app,
-      tags
+      tags,
     };
 
     const url = editingMode
@@ -175,19 +163,19 @@ const SaveAOI = (): JSX.Element => {
       method: method,
       headers: {
         Authorization: `Bearer ${userToken}`,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify(payload)
+      body: JSON.stringify(payload),
     })
-      .then(res => res.json())
-      .then(msg => {
+      .then((res) => res.json())
+      .then((msg) => {
         if (msg?.errors) {
           setUpdateError(msg.errors[0].detail);
         } else {
           setUpdateSuccess(true);
         }
       })
-      .catch(e => {
+      .catch((e) => {
         setUpdateError(e);
       });
   };
@@ -219,34 +207,31 @@ const SaveAOI = (): JSX.Element => {
   const useCheckboxStyles = makeStyles({
     root: {
       '&:hover': {
-        backgroundColor: 'transparent'
-      }
+        backgroundColor: 'transparent',
+      },
     },
     icon: {
       borderRadius: 3,
       width: '1.4rem',
       height: '1.4rem',
-      boxShadow:
-        'inset 0 0 0 1px rgba(16,22,26,.2), inset 0 -1px 0 rgba(16,22,26,.1)',
+      boxShadow: 'inset 0 0 0 1px rgba(16,22,26,.2), inset 0 -1px 0 rgba(16,22,26,.1)',
       backgroundColor: '#f5f8fa',
-      backgroundImage:
-        'linear-gradient(180deg,hsla(0,0%,100%,.8),hsla(0,0%,100%,0))',
+      backgroundImage: 'linear-gradient(180deg,hsla(0,0%,100%,.8),hsla(0,0%,100%,0))',
       '$root.Mui-focusVisible &': {
-        outline: `2px auto ${customColorTheme}`,
-        outlineOffset: 2
+        outline: `2px auto ${themeColor}`,
+        outlineOffset: 2,
       },
       'input:hover ~ &': {
-        backgroundColor: '#ebf1f5'
+        backgroundColor: '#ebf1f5',
       },
       'input:disabled ~ &': {
         boxShadow: 'none',
-        background: 'rgba(206,217,224,.5)'
-      }
+        background: 'rgba(206,217,224,.5)',
+      },
     },
     checkedIcon: {
-      backgroundColor: `${customColorTheme}`,
-      backgroundImage:
-        'linear-gradient(180deg,hsla(0,0%,100%,.1),hsla(0,0%,100%,0))',
+      backgroundColor: `${themeColor}`,
+      backgroundImage: 'linear-gradient(180deg,hsla(0,0%,100%,.1),hsla(0,0%,100%,0))',
       '&:before': {
         display: 'block',
         width: '1.4rem',
@@ -255,12 +240,12 @@ const SaveAOI = (): JSX.Element => {
           "url(\"data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath" +
           " fill-rule='evenodd' clip-rule='evenodd' d='M12 5c-.28 0-.53.11-.71.29L7 9.59l-2.29-2.3a1.003 " +
           "1.003 0 00-1.42 1.42l3 3c.18.18.43.29.71.29s.53-.11.71-.29l5-5A1.003 1.003 0 0012 5z' fill='%23fff'/%3E%3C/svg%3E\")",
-        content: '""'
+        content: '""',
       },
       'input:hover ~ &': {
-        backgroundColor: `${customColorTheme}`
-      }
-    }
+        backgroundColor: `${themeColor}`,
+      },
+    },
   });
 
   const classes = useCheckboxStyles();
@@ -276,11 +261,11 @@ const SaveAOI = (): JSX.Element => {
       method: 'DELETE',
       headers: {
         Authorization: `Bearer ${userToken}`,
-        'Content-Type': 'application/json'
-      }
+        'Content-Type': 'application/json',
+      },
     })
-      .then(res => res.json())
-      .then(msg => {
+      .then((res) => res.json())
+      .then((msg) => {
         if (msg?.errors) {
           setDeleteSuccess(true);
           setUpdateSuccess(true);
@@ -290,7 +275,7 @@ const SaveAOI = (): JSX.Element => {
           setUpdateSuccess(true);
         }
       })
-      .catch(e => {
+      .catch((e) => {
         setDeleteSuccess(true);
         setUpdateSuccess(true);
         console.log(e);
@@ -301,20 +286,16 @@ const SaveAOI = (): JSX.Element => {
     return (
       <div className="success-screen">
         <div className="tree-success"></div>
-        <p>
-          {deleteSuccess
-            ? saveAOIText[selectedLanguage].deleteText
-            : saveAOIText[selectedLanguage].successText[0]}
-        </p>
+        <p>{deleteSuccess ? saveAOIText[selectedLanguage].deleteText : saveAOIText[selectedLanguage].successText[0]}</p>
         <p>{!deleteSuccess && saveAOIText[selectedLanguage].successText[1]}</p>
         <button
           className="orange-button profile-submit"
           onClick={() => dispatch(renderModal('AOIDashboard'))}
           style={{
-            backgroundColor: customColorTheme,
+            backgroundColor: themeColor,
             marginTop: '30px',
             width: '200px',
-            fontSize: '0.9rem'
+            fontSize: '0.9rem',
           }}
         >
           {saveAOIText[selectedLanguage].successButton}
@@ -347,15 +328,11 @@ const SaveAOI = (): JSX.Element => {
                     value={subscriptionName}
                     onChange={(e): void => setSubscriptionName(e.target.value)}
                   />
-                  {errors.name && (
-                    <p className="input-error">
-                      {saveAOIText[selectedLanguage].required}
-                    </p>
-                  )}
+                  {errors.name && <p className="input-error">{saveAOIText[selectedLanguage].required}</p>}
                 </div>
                 <div className="form-section">
                   <div>
-                    <AutocompleteWrapper customColorTheme={customColorTheme}>
+                    <AutocompleteWrapper customColorTheme={themeColor}>
                       <Autocomplete
                         freeSolo
                         multiple
@@ -367,7 +344,7 @@ const SaveAOI = (): JSX.Element => {
                         onChange={(_, value: any): void => {
                           setTags(value);
                         }}
-                        renderInput={params => (
+                        renderInput={(params) => (
                           <TextField
                             {...params}
                             variant="outlined"
@@ -378,9 +355,7 @@ const SaveAOI = (): JSX.Element => {
                       />
                     </AutocompleteWrapper>
                   </div>
-                  <span style={{ fontSize: '0.6rem' }}>
-                    {saveAOIText[selectedLanguage].tagsSubLabel}
-                  </span>
+                  <span style={{ fontSize: '0.6rem' }}>{saveAOIText[selectedLanguage].tagsSubLabel}</span>
                 </div>
                 <div className="alerts-section">
                   <div className="area-alerts-img"></div>
@@ -398,11 +373,7 @@ const SaveAOI = (): JSX.Element => {
                     placeholder="example@globalforestwatch.com"
                     name="email"
                   />
-                  {errors.email && (
-                    <p className="input-error">
-                      {saveAOIText[selectedLanguage].required}
-                    </p>
-                  )}
+                  {errors.email && <p className="input-error">{saveAOIText[selectedLanguage].required}</p>}
                 </div>
                 <div className="form-section">
                   <label htmlFor="notifications" className="input-label">
@@ -421,21 +392,12 @@ const SaveAOI = (): JSX.Element => {
                           disableRipple
                           color="default"
                           icon={<span className={classes.icon} />}
-                          checkedIcon={
-                            <span
-                              className={clsx(
-                                classes.icon,
-                                classes.checkedIcon
-                              )}
-                            />
-                          }
+                          checkedIcon={<span className={clsx(classes.icon, classes.checkedIcon)} />}
                         />
                       )}
                       control={control}
                     />
-                    <label style={{ fontSize: '0.8rem' }}>
-                      {saveAOIText[selectedLanguage].fireDetected}
-                    </label>
+                    <label style={{ fontSize: '0.8rem' }}>{saveAOIText[selectedLanguage].fireDetected}</label>
                   </section>
                   <section>
                     <Controller
@@ -446,23 +408,14 @@ const SaveAOI = (): JSX.Element => {
                           color="default"
                           icon={<span className={classes.icon} />}
                           className={classes.root}
-                          checkedIcon={
-                            <span
-                              className={clsx(
-                                classes.icon,
-                                classes.checkedIcon
-                              )}
-                            />
-                          }
+                          checkedIcon={<span className={clsx(classes.icon, classes.checkedIcon)} />}
                           disableRipple
                           checked={Boolean(deforestation)}
                           onChange={(e: any) => setDeforestationAlerts(e[1])}
                         />
                       )}
                     />
-                    <label style={{ fontSize: '0.8rem' }}>
-                      {saveAOIText[selectedLanguage].forestChange}
-                    </label>
+                    <label style={{ fontSize: '0.8rem' }}>{saveAOIText[selectedLanguage].forestChange}</label>
                   </section>
                   <section>
                     <Controller
@@ -473,33 +426,21 @@ const SaveAOI = (): JSX.Element => {
                           color="default"
                           icon={<span className={classes.icon} />}
                           className={classes.root}
-                          checkedIcon={
-                            <span
-                              className={clsx(
-                                classes.icon,
-                                classes.checkedIcon
-                              )}
-                            />
-                          }
+                          checkedIcon={<span className={clsx(classes.icon, classes.checkedIcon)} />}
                           disableRipple
                           checked={Boolean(monthlySummary)}
                           onChange={(e: any) => setMonthlySummary(e[1])}
                         />
                       )}
                     />
-                    <label style={{ fontSize: '0.8rem' }}>
-                      {saveAOIText[selectedLanguage].monthly}
-                    </label>
+                    <label style={{ fontSize: '0.8rem' }}>{saveAOIText[selectedLanguage].monthly}</label>
                   </section>
                 </div>
                 <div className="form-section">
                   <label htmlFor="language" className="input-label">
                     {saveAOIText[selectedLanguage].language} *
                   </label>
-                  <MemoLanguagePicker
-                    activeLanguageCallback={handleLanguagePicker}
-                    defaultValue={language}
-                  />
+                  <MemoLanguagePicker activeLanguageCallback={handleLanguagePicker} defaultValue={language} />
                 </div>
                 {updateError && <p className="input-error">{updateError}</p>}
                 {editingMode && (
@@ -511,10 +452,10 @@ const SaveAOI = (): JSX.Element => {
                 <input
                   className="orange-button profile-submit"
                   style={{
-                    backgroundColor: customColorTheme,
+                    backgroundColor: themeColor,
                     marginTop: '30px',
                     width: '200px',
-                    cursor: 'pointer'
+                    cursor: 'pointer',
                   }}
                   type="submit"
                   value={saveAOIText[selectedLanguage].save}

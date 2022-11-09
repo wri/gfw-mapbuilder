@@ -5,6 +5,7 @@ import { RootState } from '../../store';
 import { windSpeedConfig } from '../../../../configs/translations/leftPanel.translations';
 import { setWindSpeedPotential } from '../../store/appState/actions';
 import { mapController } from '../../controllers/mapController';
+import { handleCustomColorTheme } from '../../../utils';
 
 const WindSpeedPicker = (): JSX.Element => {
   const dispatch = useDispatch();
@@ -12,6 +13,8 @@ const WindSpeedPicker = (): JSX.Element => {
   const windSpeedPotential = useSelector((store: RootState) => store.appState.leftPanel.windSpeedPotential);
   const selectedLanguage = useSelector((store: RootState) => store.appState.selectedLanguage);
   const { displayLabel } = windSpeedConfig[selectedLanguage];
+
+  const themeColor = handleCustomColorTheme(customColorTheme);
 
   function handleDensityButtonClick(e): void {
     mapController.updateWindSpeedPotentialValue(e.target.value);
@@ -24,13 +27,13 @@ const WindSpeedPicker = (): JSX.Element => {
       style={{
         paddingLeft: 20,
         paddingRight: 20,
-        marginTop: 10
+        marginTop: 10,
       }}
     >
       <span>{displayLabel[0]} </span>
       <select
         className="date-time-toggle"
-        style={{ border: `1px solid ${customColorTheme}`, width: '2.4rem', fontWeight: 600 }}
+        style={{ border: `1px solid ${themeColor}`, width: '2.4rem', fontWeight: 600 }}
         onChange={(e): void => handleDensityButtonClick(e)}
         value={windSpeedPotential}
       >
