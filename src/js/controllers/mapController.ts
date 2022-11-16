@@ -2178,6 +2178,8 @@ export class MapController {
 
     gladLayerNew.julianFrom = start;
     gladLayerNew.julianTo = end;
+    gladLayerNew.gfwjulianFrom = start;
+    gladLayerNew.gfwjulianTo = end;
     this._map?.add(gladLayerNew, gladIndex);
   };
 }
