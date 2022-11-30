@@ -12,6 +12,7 @@ import { mapController } from '../../../../js/controllers/mapController';
 import styled from 'styled-components';
 
 import '../../../../css/layer-toggle-checkbox.scss';
+import { handleCustomColorTheme } from '../../../../utils';
 
 interface CheckBoxWrapperProps {
   customColorTheme: string;
@@ -42,6 +43,8 @@ const ImageryLayersGroup = (props: LayerGroupProps): React.ReactElement => {
   const ImageryLayerControl = (props: ImageryInfo): JSX.Element => {
     const customColorTheme = useSelector((store: RootState) => store.appSettings.customColorTheme);
     const dispatch = useDispatch();
+    const themeColor = handleCustomColorTheme(customColorTheme);
+
     const openInfoModal = (): void => {
       if (props.id) {
         dispatch(renderModal('InfoContent'));
@@ -71,7 +74,7 @@ const ImageryLayersGroup = (props: LayerGroupProps): React.ReactElement => {
         <div className="layers-control-checkbox">
           <div className="label-wrapper" style={{ width: 'auto' }}>
             <div className="label-control-top">
-              <ImageryLayerSwitch layerID={props.id} customColorTheme={customColorTheme} />
+              <ImageryLayerSwitch layerID={props.id} customColorTheme={themeColor} />
               <div className="title-wrapper">
                 <span className="layer-label">{props.info?.label[props.selectedLanguage] || 'Imagery Layer'}</span>
               </div>
@@ -85,7 +88,7 @@ const ImageryLayersGroup = (props: LayerGroupProps): React.ReactElement => {
             }}
           >
             <button
-              style={{ border: `1px solid ${customColorTheme}` }}
+              style={{ border: `1px solid ${themeColor}` }}
               className="imagery-edit-button"
               onClick={(): void => setImageryModalOpen(true)}
             >
@@ -94,7 +97,7 @@ const ImageryLayersGroup = (props: LayerGroupProps): React.ReactElement => {
 
             <div
               className="info-icon-container"
-              style={{ marginLeft: 10, backgroundColor: `${customColorTheme}` }}
+              style={{ marginLeft: 10, backgroundColor: `${themeColor}` }}
               onClick={(): void => openInfoModal()}
             >
               <InfoIcon width={10} height={10} fill={'#fff'} />

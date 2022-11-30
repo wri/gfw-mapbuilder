@@ -6,6 +6,7 @@ import { mapController } from '../../../../js/controllers/mapController';
 import { fetchLegendInfo } from '../../../../js/helpers/legendInfo';
 import { loadModules } from 'esri-loader';
 import { setVersionedLayer } from '../../../store/appState/actions';
+import { handleCustomColorTheme } from '../../../../utils';
 
 interface LayerVersionPickerProps {
   layerInfo: any;
@@ -18,19 +19,11 @@ interface VersionInfo {
   layerIds: number[];
 }
 
-export const LayerVersionPicker = (
-  props: LayerVersionPickerProps
-): JSX.Element => {
+export const LayerVersionPicker = (props: LayerVersionPickerProps): JSX.Element => {
   const dispatch = useDispatch();
-  const allAvailableLayers = useSelector(
-    (store: RootState) => store.mapviewState.allAvailableLayers
-  );
-  const customColorTheme = useSelector(
-    (store: RootState) => store.appSettings.customColorTheme
-  );
-  const versionedState = useSelector(
-    (store: RootState) => store.appState.leftPanel.versionedLayer
-  );
+  const allAvailableLayers = useSelector((store: RootState) => store.mapviewState.allAvailableLayers);
+  const customColorTheme = useSelector((store: RootState) => store.appSettings.customColorTheme);
+  const versionedState = useSelector((store: RootState) => store.appState.leftPanel.versionedLayer);
   const { layerInfo, selectedLanguage } = props;
 
   function checkForVersion(): string {
@@ -43,14 +36,10 @@ export const LayerVersionPicker = (
 
   const [activeVersion, setActiveVersion] = React.useState(checkForVersion());
 
-  async function swapLayersAndSyncMap(
-    layerInfo: any,
-    versionValue: string
-  ): Promise<void> {
-    const [MapImageLayer, FeatureLayer] = await loadModules([
-      'esri/layers/MapImageLayer',
-      'esri/layers/FeatureLayer'
-    ]);
+  const themeColor = handleCustomColorTheme(customColorTheme);
+
+  async function swapLayersAndSyncMap(layerInfo: any, versionValue: string): Promise<void> {
+    const [MapImageLayer, FeatureLayer] = await loadModules(['esri/layers/MapImageLayer', 'esri/layers/FeatureLayer']);
     //Remove previous version layer from the map
     const prevLayer = mapController._map?.findLayerById(layerInfo.id);
     if (!prevLayer) return;
@@ -67,22 +56,20 @@ export const LayerVersionPicker = (
     const layerLegendInfo =
       legendInfoObject &&
       !legendInfoObject.error &&
-      legendInfoObject?.layers.filter((l: any) =>
-        versionLayerIds.includes(l.layerId)
-      );
+      legendInfoObject?.layers.filter((l: any) => versionLayerIds.includes(l.layerId));
 
     const newconf = Object.assign(layerInfo, {
       layerIds: versionLayerIds,
       url: versionLayerURL,
       legendInfo: layerLegendInfo,
-      versionIndex: newVersionIndex
+      versionIndex: newVersionIndex,
     });
 
     const layerOptions = {
       id: newconf.id,
       title: newconf.title,
       visible: newconf.visible,
-      url: newconf.url
+      url: newconf.url,
     };
 
     if (newconf.type === 'dynamic') {
@@ -97,7 +84,7 @@ export const LayerVersionPicker = (
     }
 
     //Update Redux
-    const newLayersArray = allAvailableLayers.map(l => {
+    const newLayersArray = allAvailableLayers.map((l) => {
       if (l.id === newconf.id) {
         return newconf;
       } else {
@@ -130,7 +117,7 @@ export const LayerVersionPicker = (
     <div className="layer-version-picker-container">
       <p>{layerInfo.versionHeaderText[selectedLanguage]}</p>
       <select
-        style={{ border: `1px solid ${customColorTheme}` }}
+        style={{ border: `1px solid ${themeColor}` }}
         className="date-time-toggle"
         onChange={handleLayerVersionChange}
         value={activeVersion}

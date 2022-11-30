@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../../js/store/index';
 import { getShareableURL } from '../../../js/helpers/shareFunctionality';
 import '../../../css/printButton.scss';
+import { handleCustomColorTheme } from '../../../utils';
 
 const printReportTranslations = {
   fr: 'Imprimer le Rapport',
@@ -20,6 +21,8 @@ export const PrintReportButton = (): JSX.Element => {
   const selectedLanguage = useSelector((store: RootState) => store.appState.selectedLanguage);
   const customColorTheme = useSelector((store: RootState) => store.appSettings.customColorTheme);
 
+  const themeColor = handleCustomColorTheme(customColorTheme);
+
   async function printReportHandler(): Promise<void> {
     const appID = new URL(window.location.href).searchParams.get('appid');
     const baseURL = new URL(window.location.href);
@@ -34,7 +37,7 @@ export const PrintReportButton = (): JSX.Element => {
   }
 
   return (
-    <button className="print-button" onClick={printReportHandler} style={{ border: `1px solid ${customColorTheme}` }}>
+    <button className="print-button" onClick={printReportHandler} style={{ border: `1px solid ${themeColor}` }}>
       {printReportTranslations[selectedLanguage]}{' '}
       <img src="https://my.gfw-mapbuilder.org/img/print-icon.svg" alt="print" />
     </button>

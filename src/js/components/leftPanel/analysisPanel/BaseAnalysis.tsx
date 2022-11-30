@@ -27,6 +27,7 @@ import { defaultAnalysisModules } from '../../../../../configs/analysis-config';
 
 import '../../../../css/leftpanel.scss';
 import 'react-datepicker/dist/react-datepicker.css';
+import { handleCustomColorTheme } from '../../../../utils';
 
 type InputTypes = 'range-slider' | 'tcd' | 'date-picker';
 
@@ -86,6 +87,8 @@ const BaseAnalysis = (): JSX.Element => {
   const disabledAnalysisModules = useSelector((store: RootState) => store.appSettings.disabledAnalysisModules);
 
   const multiPolygonSelection = useSelector((store: RootState) => store.appState.multiPolygonSelectionMode);
+
+  const themeColor = handleCustomColorTheme(customColorTheme);
 
   useEffect(() => {
     const activeLayer = activeFeatures[activeFeatureIndex[0]];
@@ -337,7 +340,7 @@ const BaseAnalysis = (): JSX.Element => {
         <>
           <button
             className="orange-button base-analysis-size"
-            style={{ backgroundColor: customColorTheme }}
+            style={{ backgroundColor: themeColor }}
             onClick={(): void => setEditSketch()}
           >
             {analysisTranslations.editButton[selectedLanguage]}
@@ -354,7 +357,7 @@ const BaseAnalysis = (): JSX.Element => {
         <>
           <button
             className="orange-button base-analysis-size"
-            style={{ backgroundColor: customColorTheme }}
+            style={{ backgroundColor: themeColor }}
             onClick={(): void => setSaveSketch()}
           >
             {analysisTranslations.saveButton[selectedLanguage]}
@@ -436,7 +439,7 @@ const BaseAnalysis = (): JSX.Element => {
             <span data-tip={'Analysis disabled for point and line features'} data-offset="{'top': -5}">
               <button
                 disabled={selectedAnalysis === 'default' || featureIsNotAllowed}
-                style={selectedAnalysis !== 'default' ? { backgroundColor: customColorTheme } : {}}
+                style={selectedAnalysis !== 'default' ? { backgroundColor: themeColor } : {}}
                 className={
                   selectedAnalysis === 'default' || featureIsNotAllowed ? 'orange-button disabled' : 'orange-button'
                 }
@@ -446,7 +449,7 @@ const BaseAnalysis = (): JSX.Element => {
               </button>
               {!multiPolygonSelection && (
                 <button
-                  style={{ backgroundColor: customColorTheme }}
+                  style={{ backgroundColor: themeColor }}
                   className={'orange-button'}
                   onClick={() => {
                     dispatch(setMultiPolygonSelectionMode(true));

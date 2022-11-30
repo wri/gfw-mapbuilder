@@ -14,6 +14,7 @@ import {
 import { forestCarbonRemovalValue } from '../mapWidgets/widgetContent/ForestGrossRemovalContent';
 import { forestCarbonGrossEmisionValue } from '../mapWidgets/widgetContent/ForestCarbonGrossEmissionContent';
 import { forestCarbonNetFluxValue } from '../mapWidgets/widgetContent/ForesCarbonNetFlux';
+import { handleCustomColorTheme } from '../../../utils';
 
 interface CanopyDensityProps {
   type?: string;
@@ -26,6 +27,8 @@ const CanopyDensityPicker = (props: CanopyDensityProps): JSX.Element => {
   const selectedLanguage = useSelector((store: RootState) => store.appState.selectedLanguage);
   let config = canopyDensityPickerConfig[selectedLanguage];
   let densityValueMap = markValueMap[density];
+
+  const themeColor = handleCustomColorTheme(customColorTheme);
 
   if (props.type === 'TREES_MOSAIC_LANDSCAPES') {
     config = treesMosaicConfig[selectedLanguage];
@@ -61,7 +64,7 @@ const CanopyDensityPicker = (props: CanopyDensityProps): JSX.Element => {
       <span>{displayLabel[0]} </span>
       <button
         className="canopy-density-picker"
-        style={{ backgroundColor: `${customColorTheme}` }}
+        style={{ backgroundColor: `${themeColor}` }}
         onClick={handleDensityButtonClick}
       >{`> ${densityValueMap}%`}</button>
       <span> {displayLabel[1]}</span>

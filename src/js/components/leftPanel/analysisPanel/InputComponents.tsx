@@ -3,6 +3,7 @@ import { setAnalysisDateRange, setAnalysisYearRange } from '../../../../js/store
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../../js/store/index';
 import { createSliderWithTooltip, Range } from 'rc-slider';
+import { handleCustomColorTheme } from '../../../../utils';
 const SliderWithTooltip = createSliderWithTooltip(Range);
 
 interface DatePickerProps {
@@ -25,6 +26,8 @@ const DatePicker = (props: DatePickerProps): JSX.Element => {
 
   const [endDate, setEndDate] = React.useState(defaultEndDate ? defaultEndDate : getTodayDate);
 
+  const themeColor = handleCustomColorTheme(customColorTheme);
+
   function handleStartDateChange(e: any): void {
     setStartDate(e.target.value);
     dispatch(setAnalysisDateRange([startDate, endDate]));
@@ -46,7 +49,7 @@ const DatePicker = (props: DatePickerProps): JSX.Element => {
         <label htmlFor="start-date">Start:</label>
         <input
           className="date-time-toggle input"
-          style={{ border: `1px solid ${customColorTheme}` }}
+          style={{ border: `1px solid ${themeColor}` }}
           type="date"
           defaultValue={startDate}
           min={minDate ? minDate : undefined}
@@ -58,7 +61,7 @@ const DatePicker = (props: DatePickerProps): JSX.Element => {
           <label htmlFor="end-date">End:</label>
           <input
             className="date-time-toggle input"
-            style={{ border: `1px solid ${customColorTheme}` }}
+            style={{ border: `1px solid ${themeColor}` }}
             type="date"
             value={endDate}
             max={maxDate ? maxDate : undefined}
@@ -93,6 +96,7 @@ const RangeSlider = (props: RangeSliderProps): JSX.Element => {
   const customColorTheme = useSelector((store: RootState) => store.appSettings.customColorTheme);
 
   const [activeYearRange, setActiveYearRange] = React.useState<number[]>(props.yearRange);
+  const themeColor = handleCustomColorTheme(customColorTheme);
 
   React.useEffect(() => {
     dispatch(setAnalysisYearRange(activeYearRange));
@@ -117,12 +121,12 @@ const RangeSlider = (props: RangeSliderProps): JSX.Element => {
         dots={true}
         marks={marks}
         railStyle={{ backgroundColor: 'rgb(233, 233, 233)' }}
-        handleStyle={[{ borderColor: customColorTheme }]}
+        handleStyle={[{ borderColor: themeColor }]}
         dotStyle={{ border: '1px solid #e9e9e9' }}
         activeDotStyle={{
-          border: `1px solid ${customColorTheme}`,
+          border: `1px solid ${themeColor}`,
         }}
-        trackStyle={[{ backgroundColor: customColorTheme }]}
+        trackStyle={[{ backgroundColor: themeColor }]}
         onChange={(value: Array<number>): void => handleSliderRange(value)}
       />
     </div>

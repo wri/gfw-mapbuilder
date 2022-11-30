@@ -11,10 +11,11 @@ import {
   SpecificDDSection,
   SpecificDMSSection,
   DMSFormValues,
-  DMSCardinalPoint
+  DMSCardinalPoint,
 } from '../../../../js/types/coordinateForm';
 
 import '../../../../css/coordinatesForm';
+import { handleCustomColorTheme } from '../../../../utils';
 
 const CoordinatesForm: FunctionComponent = () => {
   const [selectedFormat, setSelectedFormat] = useState(0);
@@ -22,18 +23,18 @@ const CoordinatesForm: FunctionComponent = () => {
     {
       rowNum: 0,
       latitude: '',
-      longitude: ''
+      longitude: '',
     },
     {
       rowNum: 1,
       latitude: '',
-      longitude: ''
+      longitude: '',
     },
     {
       rowNum: 2,
       latitude: '',
-      longitude: ''
-    }
+      longitude: '',
+    },
   ]);
   const [dmsSections, setDMSForm] = useState([
     {
@@ -42,14 +43,14 @@ const CoordinatesForm: FunctionComponent = () => {
         degree: '',
         minutes: '',
         seconds: '',
-        cardinalPoint: 'N'
+        cardinalPoint: 'N',
       },
       longitude: {
         degree: '',
         minutes: '',
         seconds: '',
-        cardinalPoint: 'E'
-      }
+        cardinalPoint: 'E',
+      },
     },
     {
       rowNum: 1,
@@ -57,14 +58,14 @@ const CoordinatesForm: FunctionComponent = () => {
         degree: '',
         minutes: '',
         seconds: '',
-        cardinalPoint: 'N'
+        cardinalPoint: 'N',
       },
       longitude: {
         degree: '',
         minutes: '',
         seconds: '',
-        cardinalPoint: 'E'
-      }
+        cardinalPoint: 'E',
+      },
     },
     {
       rowNum: 2,
@@ -72,15 +73,15 @@ const CoordinatesForm: FunctionComponent = () => {
         degree: '',
         minutes: '',
         seconds: '',
-        cardinalPoint: 'N'
+        cardinalPoint: 'N',
       },
       longitude: {
         degree: '',
         minutes: '',
         seconds: '',
-        cardinalPoint: 'E'
-      }
-    }
+        cardinalPoint: 'E',
+      },
+    },
   ]);
   const selectedLanguage = useSelector((state: RootState) => state.appState.selectedLanguage);
   const customColorTheme = useSelector((state: RootState) => state.appSettings.customColorTheme);
@@ -88,9 +89,11 @@ const CoordinatesForm: FunctionComponent = () => {
   const { degree, minutes, seconds } = coordinatesContent;
   const { title, dropdownTitle, decimalOptions, addMoreLabel, makeShapeLabel } = coordinatesContent[selectedLanguage];
 
+  const themeColor = handleCustomColorTheme(customColorTheme);
+
   const setDDFormValues = ({ userInput, rowNum, coordinateType }: DDFormValues): void => {
     const sections = [...ddSections];
-    const sectionNum = sections.findIndex(section => section.rowNum === rowNum);
+    const sectionNum = sections.findIndex((section) => section.rowNum === rowNum);
 
     sections[sectionNum][coordinateType] = userInput;
 
@@ -99,7 +102,7 @@ const CoordinatesForm: FunctionComponent = () => {
 
   const setDMSFormValues = ({ coordinateValue, rowNum, coordinateType, degreeType }: DMSFormValues): void => {
     const sections = [...dmsSections];
-    const sectionNum = sections.findIndex(section => section.rowNum === rowNum);
+    const sectionNum = sections.findIndex((section) => section.rowNum === rowNum);
 
     if (coordinateType) {
       sections[sectionNum][coordinateType][degreeType] = coordinateValue;
@@ -110,7 +113,7 @@ const CoordinatesForm: FunctionComponent = () => {
 
   const setDMSCardinalType = ({ specificPoint, rowNum, coordinateType }: DMSCardinalPoint): void => {
     const sections = [...dmsSections];
-    const sectionNum = sections.findIndex(section => section.rowNum === rowNum);
+    const sectionNum = sections.findIndex((section) => section.rowNum === rowNum);
 
     if (coordinateType) {
       sections[sectionNum][coordinateType].cardinalPoint = specificPoint;
@@ -143,30 +146,34 @@ const CoordinatesForm: FunctionComponent = () => {
           degree: '',
           minutes: '',
           seconds: '',
-          cardinalPoint: 'N'
+          cardinalPoint: 'N',
         },
         longitude: {
           degree: '',
           minutes: '',
           seconds: '',
-          cardinalPoint: 'E'
-        }
+          cardinalPoint: 'E',
+        },
       };
 
-      const updatedSections = addOrRemoveSection(defaultDMSSection, allDMSSections, addSection) as Array<
-        SpecificDMSSection
-      >;
+      const updatedSections = addOrRemoveSection(
+        defaultDMSSection,
+        allDMSSections,
+        addSection
+      ) as Array<SpecificDMSSection>;
       setDMSForm(updatedSections);
     } else {
       const allDDSections = [...ddSections];
       const defaultDDSection = {
         rowNum: allDDSections.length + 1,
         latitude: '',
-        longitude: ''
+        longitude: '',
       };
-      const updatedSections = addOrRemoveSection(defaultDDSection, allDDSections, addSection) as Array<
-        SpecificDDSection
-      >;
+      const updatedSections = addOrRemoveSection(
+        defaultDDSection,
+        allDDSections,
+        addSection
+      ) as Array<SpecificDDSection>;
       setDDForm(updatedSections);
     }
   };
@@ -188,7 +195,7 @@ const CoordinatesForm: FunctionComponent = () => {
           <h4 className="title">{title}</h4>
           <p>{dropdownTitle}</p>
         </div>
-        <select onChange={e => setSelectedFormat(Number(e.target.value))}>
+        <select onChange={(e) => setSelectedFormat(Number(e.target.value))}>
           {decimalOptions.map((option: string, index: number) => (
             <option value={index} key={index}>
               {option}
@@ -227,7 +234,7 @@ const CoordinatesForm: FunctionComponent = () => {
           })}
         <div className="buttons-wrapper">
           <button onClick={(): void => setSection(true)}>{addMoreLabel}</button>
-          <button className="orange-button" style={{ backgroundColor: customColorTheme }} onClick={() => setShape()}>
+          <button className="orange-button" style={{ backgroundColor: themeColor }} onClick={() => setShape()}>
             {makeShapeLabel}
           </button>
         </div>

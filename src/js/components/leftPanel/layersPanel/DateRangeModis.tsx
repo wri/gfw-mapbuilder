@@ -8,6 +8,7 @@ import { LayerProps } from '../../../../js/store/mapview/types';
 
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { handleCustomColorTheme } from '../../../../utils';
 
 const getTodayDate = format(new Date(Date.now()), 'yyyy-MM-dd');
 
@@ -16,15 +17,9 @@ interface DateRangeProps {
   id: string;
 }
 const DateRange = (props: DateRangeProps): JSX.Element => {
-  const customColorTheme = useSelector(
-    (store: RootState) => store.appSettings.customColorTheme
-  );
-  const modisStart = useSelector(
-    (store: RootState) => store.appState.leftPanel.modisStart
-  );
-  const modisEnd = useSelector(
-    (store: RootState) => store.appState.leftPanel.modisEnd
-  );
+  const customColorTheme = useSelector((store: RootState) => store.appSettings.customColorTheme);
+  const modisStart = useSelector((store: RootState) => store.appState.leftPanel.modisStart);
+  const modisEnd = useSelector((store: RootState) => store.appState.leftPanel.modisEnd);
 
   const { layer } = props;
 
@@ -32,6 +27,8 @@ const DateRange = (props: DateRangeProps): JSX.Element => {
   const [endDate, setEndDate] = useState(modisEnd);
   const [renderCustomRange, setRenderCustomRange] = useState(false);
   const [definedRange, setDefinedRange] = useState('');
+
+  const themeColor = handleCustomColorTheme(customColorTheme);
 
   const updateStartDate = (day: any): void => {
     const dFormat = format(day, 'yyyy-MM-dd');
@@ -68,7 +65,7 @@ const DateRange = (props: DateRangeProps): JSX.Element => {
       <div className="daterange-wrapper">
         <select
           className="date-time-toggle"
-          style={{ border: `1px solid ${customColorTheme}` }}
+          style={{ border: `1px solid ${themeColor}` }}
           onChange={(e): void => setDefinedDateRange(e)}
           value={definedRange.length ? definedRange : '24 hrs'}
         >
@@ -79,7 +76,7 @@ const DateRange = (props: DateRangeProps): JSX.Element => {
         </select>
         <button
           className="date-time-toggle"
-          style={{ border: `1px solid ${customColorTheme}` }}
+          style={{ border: `1px solid ${themeColor}` }}
           onClick={(): void => setCustomRange()}
         >
           Custom Range
@@ -90,7 +87,7 @@ const DateRange = (props: DateRangeProps): JSX.Element => {
               <label htmlFor="start-date">Start:</label>
               <DatePicker
                 placeholderText="select a day"
-                onChange={date => updateStartDate(date)}
+                onChange={(date) => updateStartDate(date)}
                 selected={new Date(startDate)}
                 maxDate={fToday}
               />
@@ -99,7 +96,7 @@ const DateRange = (props: DateRangeProps): JSX.Element => {
               <label htmlFor="end-date">End:</label>
               <DatePicker
                 placeholderText="select a day"
-                onChange={date => updateEndDate(date)}
+                onChange={(date) => updateEndDate(date)}
                 selected={new Date(endDate)}
                 maxDate={fToday}
                 minDate={fStartDate}

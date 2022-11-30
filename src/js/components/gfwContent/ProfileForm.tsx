@@ -5,6 +5,7 @@ import { MemoCountryPicker } from './CountryPicker';
 import { editProfileTranslations, sectors, topics, usage } from '../../../../configs/translations/staticOptions';
 import clsx from 'clsx';
 import { Attributes } from './utils';
+import { handleCustomColorTheme } from '../../../utils';
 
 const useSelectStyles = makeStyles({
   root: {
@@ -13,14 +14,14 @@ const useSelectStyles = makeStyles({
     height: '2.2rem',
     padding: '0',
     fontSize: '0.8rem',
-    width: '100%'
-  }
+    width: '100%',
+  },
 });
 
 const useMenuItemStyles = makeStyles({
   root: {
-    paddingLeft: '10px'
-  }
+    paddingLeft: '10px',
+  },
 });
 
 interface Props {
@@ -37,10 +38,10 @@ function ProfileForm({ selectedLanguage, isProfileComplete, onSubmit, customColo
     control,
     formState: { errors },
     getValues,
-    watch
+    watch,
   } = useForm({
     reValidateMode: 'onChange',
-    defaultValues: defaultValues
+    defaultValues: defaultValues,
   });
 
   const [activeUsage, setActiveUsage] = React.useState<string[]>([]);
@@ -54,12 +55,14 @@ function ProfileForm({ selectedLanguage, isProfileComplete, onSubmit, customColo
   const selectClasses = useSelectStyles();
   const menuItems = useMenuItemStyles();
 
+  const themeColor = handleCustomColorTheme(customColorTheme);
+
   const useStyles = makeStyles({
     root: {
       fontSize: '0.8rem',
       '&:hover': {
-        backgroundColor: 'transparent'
-      }
+        backgroundColor: 'transparent',
+      },
     },
     icon: {
       borderRadius: '50%',
@@ -70,30 +73,30 @@ function ProfileForm({ selectedLanguage, isProfileComplete, onSubmit, customColo
       backgroundImage: 'linear-gradient(180deg,hsla(0,0%,100%,.8),hsla(0,0%,100%,0))',
       '$root.Mui-focusVisible &': {
         outline: '2px auto rgba(19,124,189,.6)',
-        outlineOffset: 2
+        outlineOffset: 2,
       },
       'input:hover ~ &': {
-        backgroundColor: '#ebf1f5'
+        backgroundColor: '#ebf1f5',
       },
       'input:disabled ~ &': {
         boxShadow: 'none',
-        background: 'rgba(206,217,224,.5)'
-      }
+        background: 'rgba(206,217,224,.5)',
+      },
     },
     checkedIcon: {
-      backgroundColor: customColorTheme,
+      backgroundColor: themeColor,
       backgroundImage: 'linear-gradient(180deg,hsla(0,0%,100%,.1),hsla(0,0%,100%,0))',
       '&:before': {
         display: 'block',
         width: 16,
         height: 16,
         backgroundImage: 'radial-gradient(#fff,#fff 28%,transparent 32%)',
-        content: '""'
+        content: '""',
       },
       'input:hover ~ &': {
-        backgroundColor: customColorTheme
-      }
-    }
+        backgroundColor: themeColor,
+      },
+    },
   });
   const sectorItems = sectors[selectedLanguage].map((sectorObject, i: number) => {
     return (
@@ -121,10 +124,10 @@ function ProfileForm({ selectedLanguage, isProfileComplete, onSubmit, customColo
     //Find the active sector object to fetch the roles for that
     const activeSector = getValues('sector');
     const activeSectorObject = sectors[selectedLanguage].find(
-      sectorObject => sectorObject.sector.value === activeSector
+      (sectorObject) => sectorObject.sector.value === activeSector
     );
 
-    const RoleItems = activeSectorObject?.subsectors.map(s => {
+    const RoleItems = activeSectorObject?.subsectors.map((s) => {
       return <FormControlLabel key={s.id} value={s.id} control={<StyledRadio />} label={s.label} />;
     });
     return <>{RoleItems}</>;
@@ -150,13 +153,13 @@ function ProfileForm({ selectedLanguage, isProfileComplete, onSubmit, customColo
       )}
       <div>
         <form
-          onSubmit={handleSubmit(data =>
+          onSubmit={handleSubmit((data) =>
             onSubmit({
               ...data,
               country: activeCountry !== '' ? activeCountry : 'AFG',
               aoiCountry: interestActiveCountry !== '' ? interestActiveCountry : 'AFG',
               interests: activeTopics.length > 0 ? activeTopics : ['Agricultural_supply_chains'],
-              howDoYouUse: activeUsage.length > 0 ? activeUsage : ['Advocacy/campaigning']
+              howDoYouUse: activeUsage.length > 0 ? activeUsage : ['Advocacy/campaigning'],
             })
           )}
         >
@@ -403,9 +406,9 @@ function ProfileForm({ selectedLanguage, isProfileComplete, onSubmit, customColo
           <input
             className="orange-button profile-submit"
             style={{
-              backgroundColor: customColorTheme,
+              backgroundColor: themeColor,
               marginTop: '30px',
-              width: '200px'
+              width: '200px',
             }}
             type="submit"
             value={editProfileTranslations[selectedLanguage].save}
@@ -418,7 +421,7 @@ function ProfileForm({ selectedLanguage, isProfileComplete, onSubmit, customColo
             href="mailto:gfw@wri-org"
             style={{
               cursor: 'pointer',
-              color: customColorTheme
+              color: themeColor,
             }}
           >
             {editProfileTranslations[selectedLanguage].delete[0]}

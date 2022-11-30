@@ -10,6 +10,7 @@ import { setViirsStart, setViirsEnd } from '../../../../js/store/appState/action
 
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { handleCustomColorTheme } from '../../../../utils';
 
 interface DateRangeProps {
   layer: LayerProps;
@@ -20,7 +21,7 @@ const valueMap = {
   '24 hrs': 1,
   '48 hrs': 2,
   '72 hrs': 3,
-  '7 days': 7
+  '7 days': 7,
 };
 
 const checkForURLRange = (s: string, e: string): string => {
@@ -59,11 +60,13 @@ const DateRange = (props: DateRangeProps): JSX.Element => {
   const [definedRange, setDefinedRange] = useState(checkForURLRange(startDate, endDate)); //this should come from url if at all?
   const dispatch = useDispatch();
 
+  const themeColor = handleCustomColorTheme(customColorTheme);
+
   const updateStartDate = (day): void => {
     const dFormat = format(day, 'yyyy-MM-dd');
     setStartDate(dFormat);
     const viirsOnMap = mapController._map?.findLayerById('VIIRS_ACTIVE_FIRES');
-    const viirsConfig = allAvailableLayers.find(l => l.id === 'VIIRS_ACTIVE_FIRES');
+    const viirsConfig = allAvailableLayers.find((l) => l.id === 'VIIRS_ACTIVE_FIRES');
 
     if (viirsOnMap && mapController._map && viirsConfig) {
       const viirsIndex: number = mapController._map!.layers.indexOf(viirsOnMap);
@@ -79,7 +82,7 @@ const DateRange = (props: DateRangeProps): JSX.Element => {
     setEndDate(dFormat);
 
     const viirsOnMap = mapController._map?.findLayerById('VIIRS_ACTIVE_FIRES');
-    const viirsConfig = allAvailableLayers.find(l => l.id === 'VIIRS_ACTIVE_FIRES');
+    const viirsConfig = allAvailableLayers.find((l) => l.id === 'VIIRS_ACTIVE_FIRES');
     if (viirsOnMap && mapController._map && viirsConfig) {
       const viirsIndex: number = mapController._map!.layers.indexOf(viirsOnMap);
       mapController._map.remove(viirsOnMap);
@@ -94,7 +97,7 @@ const DateRange = (props: DateRangeProps): JSX.Element => {
     setDefinedRange(e.target.value);
 
     const viirsOnMap = mapController._map?.findLayerById('VIIRS_ACTIVE_FIRES');
-    const viirsConfig = allAvailableLayers.find(l => l.id === 'VIIRS_ACTIVE_FIRES');
+    const viirsConfig = allAvailableLayers.find((l) => l.id === 'VIIRS_ACTIVE_FIRES');
     if (viirsOnMap && mapController._map && viirsConfig) {
       const viirsIndex: number = mapController._map!.layers.indexOf(viirsOnMap);
       mapController._map.remove(viirsOnMap);
@@ -131,7 +134,7 @@ const DateRange = (props: DateRangeProps): JSX.Element => {
       <div className={'daterange-wrapper'}>
         <select
           className="date-time-toggle"
-          style={{ border: `1px solid ${customColorTheme}` }}
+          style={{ border: `1px solid ${themeColor}` }}
           onChange={(e): void => setDefinedDateRange(e)}
           value={definedRange}
         >
@@ -142,7 +145,7 @@ const DateRange = (props: DateRangeProps): JSX.Element => {
         </select>
         <button
           className="date-time-toggle"
-          style={{ border: `1px solid ${customColorTheme}` }}
+          style={{ border: `1px solid ${themeColor}` }}
           onClick={(): void => setCustomRange()}
         >
           Custom Range
@@ -153,7 +156,7 @@ const DateRange = (props: DateRangeProps): JSX.Element => {
               <label htmlFor="start-date">Start </label>
               <DatePicker
                 placeholderText="select a day"
-                onChange={date => updateStartDate(date)}
+                onChange={(date) => updateStartDate(date)}
                 selected={new Date(startDate)}
                 maxDate={fMaxDate}
               />
@@ -162,7 +165,7 @@ const DateRange = (props: DateRangeProps): JSX.Element => {
               <label htmlFor="end-date">End </label>
               <DatePicker
                 placeholderText="select a day"
-                onChange={date => updateEndDate(date)}
+                onChange={(date) => updateEndDate(date)}
                 selected={new Date(endDate)}
                 minDate={fMinDate}
                 maxDate={fMaxDate}

@@ -10,6 +10,7 @@ import { ImageStylePicker } from './ImageStylePicker';
 import { subMonths, parse, format } from 'date-fns';
 import { TileThumbnails } from './TileThumbnails';
 import { chunk } from 'lodash-es';
+import { handleCustomColorTheme } from '../../../../../utils';
 
 interface ImageryProps {
   modalHandler: () => void;
@@ -31,6 +32,9 @@ const RecentImagery = (props: ImageryProps): JSX.Element => {
   const [recentTiles, setRecentTiles] = useState<any>('');
   const [tilesLoading, setTilesLoading] = useState<any>(true);
   const [hoverContent, setHoverContent] = useState<any>('');
+
+  const themeColor = handleCustomColorTheme(customColorTheme);
+
   //POST req to Tiles endpoint
   const postThumbs = async (tileChunk: any[]): Promise<any> => {
     const sourceData: any[] = tileChunk.map((tile: any) => {
@@ -155,7 +159,7 @@ const RecentImagery = (props: ImageryProps): JSX.Element => {
             <MonthSelector
               lang={selectedLanguage}
               monthRange={monthRange}
-              customColorTheme={customColorTheme}
+              customColorTheme={themeColor}
               changeMonthHandler={(e: any): void => setMonthRange(e.target.value)}
             />
             <p> {imageryText[selectedLanguage].before}</p>
@@ -163,14 +167,14 @@ const RecentImagery = (props: ImageryProps): JSX.Element => {
               todayDate={getTodayDate}
               day={day}
               setDay={(val: string): void => setDay(val)}
-              customColorTheme={customColorTheme}
+              customColorTheme={themeColor}
             />
           </div>
         </div>
         <div className="imagery-cloud">
           <p className="subtitle">{imageryText[selectedLanguage].cloudPercentage}˝</p>
           <CloudSlider
-            customColorTheme={customColorTheme}
+            customColorTheme={themeColor}
             cloudRange={cloudRange}
             handleSliderChange={(val: number[]): void => setCloudRange(val)}
           />
@@ -192,7 +196,7 @@ const RecentImagery = (props: ImageryProps): JSX.Element => {
           imageryStyle={imageryStyle}
           lang={selectedLanguage}
           changeStyleHandler={handleImageryStyleChange}
-          customColorTheme={customColorTheme}
+          customColorTheme={themeColor}
         />
       </div>
       <div className="imagery-thumbnails">
@@ -201,7 +205,7 @@ const RecentImagery = (props: ImageryProps): JSX.Element => {
             tiles={recentTiles}
             handleHover={handleTileHover}
             cloudCoverRange={cloudRange}
-            customColorTheme={customColorTheme}
+            customColorTheme={themeColor}
           />
         ) : (
           <p>Loading data</p>

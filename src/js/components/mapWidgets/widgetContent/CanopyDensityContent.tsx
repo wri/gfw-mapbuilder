@@ -8,6 +8,7 @@ import { setCanopyDensity } from '../../../store/appState/actions';
 import { mapController } from '../../../controllers/mapController';
 
 import { canopyDensityContentConfig } from '../../../../../configs/translations/modal.tanslations';
+import { handleCustomColorTheme } from '../../../../utils/index';
 
 const SliderWithTooltip = createSliderWithTooltip(Slider);
 
@@ -31,7 +32,7 @@ export const markValueMap = {
   4: 25,
   5: 30,
   6: 50,
-  7: 75
+  7: 75,
 };
 
 const marks = {
@@ -41,7 +42,7 @@ const marks = {
   4: { label: '25%', style: {} },
   5: { label: '30%', style: {} },
   6: { label: '50%', style: {} },
-  7: { label: '75%', style: {} }
+  7: { label: '75%', style: {} },
 };
 
 const CanopyDensityContent = (): JSX.Element => {
@@ -52,6 +53,8 @@ const CanopyDensityContent = (): JSX.Element => {
   const selectedLanguage = useSelector((store: RootState) => store.appState.selectedLanguage);
 
   const { directions } = canopyDensityContentConfig[selectedLanguage];
+
+  const themeColor = handleCustomColorTheme(customColorTheme);
 
   async function handleSliderChange(value: number): Promise<void> {
     dispatch(setCanopyDensity(value));
@@ -76,19 +79,19 @@ const CanopyDensityContent = (): JSX.Element => {
         marks={marks}
         defaultValue={density}
         tipFormatter={(val: number): string => markValueMap[val] + '%'}
-        railStyle={{ height: 10, backgroundColor: customColorTheme }}
+        railStyle={{ height: 10, backgroundColor: themeColor }}
         trackStyle={{ backgroundColor: '#e9e9e9', height: 10 }}
         activeDotStyle={{ border: '2px solid #e9e9e9' }}
         dotStyle={{
-          border: `2px solid ${customColorTheme}`,
+          border: `2px solid ${themeColor}`,
           height: 10,
           width: 10,
-          bottom: -6
+          bottom: -6,
         }}
         handleStyle={{
-          border: `2px solid ${customColorTheme}`,
+          border: `2px solid ${themeColor}`,
           height: 20,
-          width: 20
+          width: 20,
         }}
         onChange={handleSliderChange}
       />

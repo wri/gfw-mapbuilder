@@ -22,6 +22,7 @@ import { LAYER_IDS } from '../../../../configs/layer-config';
 
 const SliderWithTooltip = createSliderWithTooltip(Range);
 import { format } from 'date-fns';
+import { handleCustomColorTheme } from '../../../utils';
 interface TimeSliderProps {
   layer?: any;
   layerID: string;
@@ -63,6 +64,8 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
 
   const raddAlertStart = useSelector((store: RootState) => store.appState.leftPanel.raddAlertStart);
   const raddAlertEnd = useSelector((store: RootState) => store.appState.leftPanel.raddAlertEnd);
+
+  const themeColor = handleCustomColorTheme(customColorTheme);
 
   const formatDateString = (date: string) => {
     const newDate = new Date(date);
@@ -370,16 +373,16 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
         dots={dots}
         marks={marks}
         railStyle={{ backgroundColor: 'rgb(233, 233, 233)' }}
-        handleStyle={[{ borderColor: customColorTheme }]}
+        handleStyle={[{ borderColor: themeColor }]}
         dotStyle={{ border: '1px solid #e9e9e9' }}
         activeDotStyle={{
-          border: `1px solid ${customColorTheme}`,
+          border: `1px solid ${themeColor}`,
         }}
         included={props.included}
         // @ts-ignore
         // This disables marks in between date ranges
         step={props.steps}
-        trackStyle={[{ backgroundColor: customColorTheme }]}
+        trackStyle={[{ backgroundColor: themeColor }]}
         className={playButton ? '' : 'playing'}
         onChange={(value: Array<number>) => setSelectedRange(value)}
       />

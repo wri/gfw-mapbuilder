@@ -30,6 +30,7 @@ import RangeSlider from '../../sharedComponents/RangeSlider';
 import GladControls from '../../sharedComponents/GladControls';
 import IntegratedAlertControls from '../../sharedComponents/IntegratedAlertControls';
 import { eachDayOfInterval, format, subYears } from 'date-fns';
+import { handleCustomColorTheme } from '../../../../utils/index';
 
 interface LayerInfo {
   layerInfo: any;
@@ -165,6 +166,8 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
   //Determine if we need density control on this layer
   const densityPicker = layer && densityEnabledLayers.includes(layer.id);
   const altLayerName = layer.label && layer.label[selectedLanguage];
+
+  const themeColor = handleCustomColorTheme(customColorTheme);
 
   const generateDefaultMarks = (params: any) => {
     const { start, end } = params;
@@ -324,16 +327,12 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
         return <DateRangeModis layer={layer} id={id} />;
       case 'GLAD_ALERTS':
         return (
-          <GladControls
-            customColorTheme={customColorTheme}
-            layerConfig={layerConfig}
-            selectedLanguage={selectedLanguage}
-          />
+          <GladControls customColorTheme={themeColor} layerConfig={layerConfig} selectedLanguage={selectedLanguage} />
         );
       case 'GFW_INTEGRATED_ALERTS':
         return (
           <IntegratedAlertControls
-            customColorTheme={customColorTheme}
+            customColorTheme={themeColor}
             layerConfig={layerConfig}
             selectedLanguage={selectedLanguage}
             type={'gfw-integrated-alert'}
@@ -471,14 +470,14 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
           <div style={{ display: 'flex', gap: 5, flexDirection: 'row' }}>
             <div
               className="info-icon-container"
-              style={{ backgroundColor: `${customColorTheme}` }}
+              style={{ backgroundColor: `${themeColor}` }}
               onClick={(): void => toggleOpacitySlider()}
             >
               <OpacityIcon width={12} height={12} fill={'#fff'} />
             </div>
             <div
               className="info-icon-container"
-              style={{ backgroundColor: `${customColorTheme}` }}
+              style={{ backgroundColor: `${themeColor}` }}
               onClick={(): void => openInfoModal()}
             >
               <InfoIcon width={10} height={10} fill={'#fff'} />
@@ -486,7 +485,7 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
             {layer.dashboardURL && (
               <div
                 className="info-icon-container"
-                style={{ backgroundColor: `${customColorTheme}` }}
+                style={{ backgroundColor: `${themeColor}` }}
                 onClick={(): void => openDashModal()}
               >
                 <DashboardIcon width={10} height={10} fill={'#fff'} />
