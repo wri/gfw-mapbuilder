@@ -7,7 +7,7 @@ export const createGFWIntegratedLayer = async () => {
 
   return BaseTileLayer.createSubclass({
     properties: {
-      gfwjulianFrom: '20063',
+      gfwjulianFrom: '15000',
       gfwjulianTo: new Date().getJulian(),
       highConfidenceConfirmed: false,
     },
@@ -83,7 +83,7 @@ export const createGFWIntegratedLayer = async () => {
           data[i] = 255; // R
           data[i + 1] = 255; // G
           data[i + 2] = 255; // B
-          data[i + 3] = 0; // A
+          // data[i + 3] = 0; // A
         }
       }
       return data;
@@ -94,7 +94,7 @@ export const createGFWIntegratedLayer = async () => {
       const year = parseInt(year_int * 1000);
       const julian_day = total_days % 365;
       const date = year + julian_day;
-      const band3_str = this.pad(pixel[2].toString());
+      const band3_str = this.pad(pixel[3].toString());
       const confidence = parseInt(band3_str[0]) - 1;
       const intensity_raw = parseInt(band3_str.slice(1, 3));
       let intensity = intensity_raw * 50;

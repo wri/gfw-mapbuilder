@@ -178,6 +178,10 @@ export class MapController {
 
     this._mapview!.when(
       async () => {
+        this._mapview.goTo({
+          center: [-41.29426, -12.16152],
+          zoom: 15,
+        });
         const [geometryEngine, watchUtils] = await loadModules([
           'esri/geometry/geometryEngine',
           'esri/core/watchUtils',
