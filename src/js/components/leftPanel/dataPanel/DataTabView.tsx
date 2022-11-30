@@ -14,6 +14,8 @@ import BaseButton from '../../ui/BaseButton';
 import styled from 'styled-components';
 import { addToMultiPolygonLayer, clearGraphics, clearUserGraphics } from '../../../helpers/MapGraphics';
 import { handleCustomColorTheme } from '../../../../utils';
+import { handleTimestampDate } from './helpers/index';
+const attributesDateListToConvert = ['DteApplied', 'DteGranted', 'DteExpires', 'Date', 'Expires'];
 
 //Constructs layer tile based on sublayer existence
 function generateLayerTitle(activeLayerInfo: any): string {
@@ -97,6 +99,7 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
               {activeLayerInfo.fieldNames
                 ? activeLayerInfo.fieldNames.map((field, i) => {
                     //Grab attribute value irrespective if fieldName is appropriately cased!
+
                     const attributeKey = Object.keys(props.attributes).find(
                       (a) => a.toLowerCase() === field.fieldName.toLowerCase()
                     );
@@ -104,6 +107,13 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
                       // Use label unless it is not set, then default to fieldName
                       const label = field?.label || field.label !== '' ? field.label : attributeKey;
                       let value = props.attributes[attributeKey];
+
+                      const updatedValue = handleTimestampDate({
+                        checkList: attributesDateListToConvert,
+                        label,
+                        value,
+                      });
+
                       //Users can set the href tag on the data attribute on the service, we want to show an actual link instead of plain text
                       if (typeof value === 'string' && value?.includes('href')) {
                         value = <div dangerouslySetInnerHTML={{ __html: value }}></div>;
@@ -111,7 +121,7 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
                       return (
                         <tr key={i}>
                           <td className="first-cell">{label}</td>
-                          <td className="second-cell">{value}</td>
+                          <td className="second-cell">{updatedValue}</td>
                         </tr>
                       );
                     } else {
@@ -119,10 +129,11 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
                     }
                   })
                 : Object.keys(props.attributes).map((attribute, i) => {
+                    const value = props.attributes[attribute];
                     return (
                       <tr key={i}>
                         <td className="first-cell">{attribute}</td>
-                        <td className="second-cell">{props.attributes[attribute]}</td>
+                        <td className="second-cell">{value ? value : ''}</td>
                       </tr>
                     );
                   })}
