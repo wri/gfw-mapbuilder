@@ -15,7 +15,7 @@ export const createGFWIntegratedLayer = async () => {
       return this.urlTemplate.replace('{z}', level).replace('{x}', column).replace('{y}', row);
     },
     fetchTile: function (level, row, column) {
-      const url = this.getTileUrl(level, row, column);
+      const url = this.getTileUrl(13, 4374, 3156);
       const canvas = document.createElement('canvas');
       const context = canvas.getContext('2d');
       const width = this.tileInfo.size[0];
@@ -41,6 +41,10 @@ export const createGFWIntegratedLayer = async () => {
     processData: function (data) {
       for (let i = 0; i < data.length; i += 4) {
         const slice = [data[i], data[i + 1], data[i + 2], data[i + 3]];
+
+        if (data[i] > 0) {
+          console.log(slice);
+        }
         const values = this.decodeDate(slice);
 
         if (values.date > this.gfwjulianFrom && values.date < this.gfwjulianTo) {
