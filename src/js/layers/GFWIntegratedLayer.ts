@@ -1,13 +1,13 @@
-//@ts-nocheck
-import PNG from 'png-ts';
-import { loadModules } from 'esri-loader';
-import { confidenceLevelConfig } from '../../../configs/confidence-level';
-
 /**
  * @description This function is used to create a Integrated Alert Layer class that extends the BaseTileLayer class. This class is used to create a Integrated Alert Layer object that is used to display Integrated alerts on the map.
  * The code below is based off of the documentation from https://developers.arcgis.com/javascript/latest/sample-code/layers-custom-tilelayer/
  * @returns {Promise} A promise that resolves to a Integrated Alert Layer class that extends the BaseTileLayer class.
  * */
+
+//@ts-nocheck
+import PNG from 'png-ts';
+import { loadModules } from 'esri-loader';
+import { confidenceLevelConfig } from '../../../configs/confidence-level';
 
 export const createGFWIntegratedLayer = async () => {
   const [BaseTileLayer] = await loadModules(['esri/layers/BaseTileLayer']);
