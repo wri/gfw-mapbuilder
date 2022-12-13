@@ -13,7 +13,7 @@ export const createGFWIntegratedLayer = async () => {
 
   return BaseTileLayer.createSubclass({
     properties: {
-      // days since 12/31/14 (encoded across two bytes (16 bits) today would be 0B54 (2,900 Days)
+      // '2457023' days since 12/31/14 (encoded across two bytes (16 bits) today would be 0B54 (2,900 Days)
       gfwjulianFrom: '2457023',
       gfwjulianTo: new Date().getJulian(),
       //based on only displaying high confidence levels toggle on integrated alert layer
