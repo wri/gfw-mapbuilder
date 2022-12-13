@@ -1,13 +1,14 @@
 /**
  * This config file is used to set the confidence level for the Integrated alerts layer in GFWIntegratedLayer.ts.
  * Confirming order of bits based on alpha value is: 00 10 01 00 --> no GLAD-L, high conf GLAD-S2, low conf RADD
- * one key was the extra "unused" bits shift the row number to become the 4, 8 16, 20 pattern.  This chart is my proposed understanding of "Agreement Value".  In plain English, how the sensors agree as to the confidence of the alert for that pixel.
- * We based the config file off of the following code
+ * one key was the extra "unused" bits shift the row number to become the 4, 8 16, 20 pattern.  This chart is my proposed understanding of "Agreement Value".
+ * In plain English, how the sensors agree as to the confidence of the alert for that pixel.
  * notice, shifting the bits over two places (with the unused bits) turns combo #8 to #32.  Each shift in binary doubles a number, so two shifts is same as x4.
- * the colors are simplified from there;  basically :
+ * the colors are simplified from there:
  * light if only one low value
  * dark if more than one value
  * medium for everything else
+ *  We broke down the config file with the following spreadsheet: https://blueraster.sharepoint.com/:x:/s/Projects/EaFX_QTePW1Imb3CTqOCK_kBdu63BORiMUWR4sZXOwJpGQ?e=OTNm3p and we based the config file off of the following code snippet:
  *    if (alpha == 4. || alpha == 16. || alpha == 64.) {
         // ONE ALERT LOW CONF: 4,8,16,32,64,128 i.e. 2**(2+n) for n<8
         color.r = 237. / 255.;
@@ -28,7 +29,6 @@
         alpha = intensity / 255.;
       }
 
- We broke down the config file with the following spreadsheet: https://blueraster.sharepoint.com/:x:/s/Projects/EaFX_QTePW1Imb3CTqOCK_kBdu63BORiMUWR4sZXOwJpGQ?e=OTNm3p
  */
 
 export const confidenceLevelConfig = {
