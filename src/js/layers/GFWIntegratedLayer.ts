@@ -55,7 +55,7 @@ export const createGFWIntegratedLayer = async () => {
         // B - intensity (ranging from 0-55?)
         const slice = [data[i], data[i + 1], data[i + 2], data[i + 3]];
         const values = this.decodeDate(slice);
-        // if date is > 12/31/14
+
         if (values.date > this.gfwjulianFrom && values.date < this.gfwjulianTo) {
           data[i + 3] = values.intensity;
           //see notes in confidence-level.ts for breakdown of confidence levels
