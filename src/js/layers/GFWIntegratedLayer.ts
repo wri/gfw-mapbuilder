@@ -50,7 +50,7 @@ export const createGFWIntegratedLayer = async () => {
     processData: function (data) {
       for (let i = 0; i < data.length; i += 4) {
         //[R, G, B, A]
-        // //A - integrated confidence (8bit encoding) (what we discussed this morning)
+        // A - integrated confidence (8bit encoding) (what we discussed this morning)
         // RG -- days since 12/31/14 (encoded across two bytes (16 bits) today would be 0B54 (2,900 Days)
         // B - intensity (ranging from 0-55?)
         const slice = [data[i], data[i + 1], data[i + 2], data[i + 3]];
