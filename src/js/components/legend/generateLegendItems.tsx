@@ -3,6 +3,8 @@ import * as React from 'react';
 import { LayerProps } from '../../store/mapview/types';
 import { BasicItem, GradientItem, LineItem, PointItem, PolyFromMapServer } from './LegendLabelComponents';
 import { mapController } from '../../controllers/mapController';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
 
 interface LegendItemProps {
   visibleLayers: LayerProps[];
@@ -251,6 +253,7 @@ function getLegendInfoFromRenderer(layer: LayerProps): any {
 
 const LegendItems = (props: LegendItemProps): JSX.Element => {
   const { language } = props;
+  const integratedAlertLabel = useSelector((store: RootState) => store.appState.leftPanel.gfwLayerLabel);
 
   const items = props.visibleLayers.map((layer, i) => {
     if (!layer.legendInfo) {
@@ -353,9 +356,10 @@ const LegendItems = (props: LegendItemProps): JSX.Element => {
           );
         });
       }
+
       return (
         <div className="layer-item" key={layer.id + `${i}`}>
-          <p className="layer-title">{layer.title}</p>
+          <p className="layer-title">{layer.title === 'GFW Integrated Alerts' ? integratedAlertLabel : layer.title}</p>
           {labelIcons}
         </div>
       );
