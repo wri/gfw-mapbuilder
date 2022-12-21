@@ -75,6 +75,65 @@ export default {
       label: {},
       layers: [],
     },
+    GROUP_TEST: {
+      order: 1,
+      groupType: 'default',
+      label: {
+        en: 'Tiled Layer',
+      },
+      layers: [
+        {
+          order: 3,
+          id: 'drivers_of_defor',
+          type: 'tiled',
+          url: 'https://tiles.arcgis.com/tiles/hBEMHCkbQdfV906F/arcgis/rest/services/Drivers_2021/MapServer',
+          layerIds: [0],
+          label: {
+            en: 'Drivers',
+          },
+          legendConfig: {
+            name: {
+              ka: 'GLAD შეტყობინებები',
+              zh: 'GLAD 预警',
+              id: 'Peringatan GLAD',
+              pt: 'Alertas GLAD',
+              es: 'Alertas GLAD',
+              fr: 'Alertes GLAD',
+              en: 'GLAD Alerts',
+            },
+            type: 'basic',
+            items: [
+              {
+                outlineColor: '#555555',
+                color: '#DC6699',
+                name: {
+                  ka: 'GLAD შეტყობინებები',
+                  zh: 'GLAD 预警',
+                  id: 'Peringatan GLAD',
+                  pt: 'Alertas GLAD',
+                  es: 'Alertas GLAD',
+                  fr: 'Alertes GLAD',
+                  en: 'GLAD Alerts',
+                },
+              },
+              {
+                outlineColor: '#555555',
+                color: '#e4c600',
+                name: {
+                  ka: 'ბოლო შეტყობინებები',
+                  zh: '最近的提醒',
+                  id: 'Lansiran Terbaru',
+                  pt: 'Alertas Recentes',
+                  es: 'Alertas recientes',
+                  fr: 'Alertes récentes',
+                  en: 'Recent Alerts',
+                },
+              },
+            ],
+          },
+        },
+      ],
+    },
     GROUP_CLIMATE: {
       groupType: 'default',
       order: 4,

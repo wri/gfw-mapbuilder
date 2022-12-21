@@ -32,16 +32,25 @@ interface LayerOptions {
 }
 
 export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promise<any> {
-  const [ImageryLayer, FeatureLayer, MapImageLayer, WebTileLayer, VectorTileLayer, MosaicRule, RasterFunction] =
-    await loadModules([
-      'esri/layers/ImageryLayer',
-      'esri/layers/FeatureLayer',
-      'esri/layers/MapImageLayer',
-      'esri/layers/WebTileLayer',
-      'esri/layers/VectorTileLayer',
-      'esri/layers/support/MosaicRule',
-      'esri/layers/support/RasterFunction',
-    ]);
+  const [
+    ImageryLayer,
+    FeatureLayer,
+    MapImageLayer,
+    WebTileLayer,
+    VectorTileLayer,
+    MosaicRule,
+    RasterFunction,
+    TileLayer,
+  ] = await loadModules([
+    'esri/layers/ImageryLayer',
+    'esri/layers/FeatureLayer',
+    'esri/layers/MapImageLayer',
+    'esri/layers/WebTileLayer',
+    'esri/layers/VectorTileLayer',
+    'esri/layers/support/MosaicRule',
+    'esri/layers/support/RasterFunction',
+    'esri/layers/TileLayer',
+  ]);
   const { appState, mapviewState } = store.getState();
 
   let esriLayer;
@@ -257,6 +266,17 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
         title: layerConfig.title,
         visible: layerConfig.visible,
         urlTemplate: layerConfig.url,
+      });
+      if (layerConfig?.opacity && layerConfig.opacity?.combined) {
+        esriLayer.opacity = layerConfig.opacity.combined;
+      }
+      break;
+    case 'tiled':
+      esriLayer = new TileLayer({
+        id: layerConfig.id,
+        title: layerConfig.title,
+        visible: layerConfig.visible,
+        url: layerConfig.url,
       });
       if (layerConfig?.opacity && layerConfig.opacity?.combined) {
         esriLayer.opacity = layerConfig.opacity.combined;
