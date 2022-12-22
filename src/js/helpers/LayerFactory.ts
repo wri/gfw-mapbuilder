@@ -44,7 +44,6 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
     ]);
   const { appState, mapviewState } = store.getState();
 
-  console.log('layerConfig', layerConfig);
   let esriLayer;
   switch (layerConfig.type) {
     case 'dynamic':
