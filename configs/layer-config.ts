@@ -10,6 +10,7 @@ export const supportedLayers = [
   'gain',
   'image',
   'webtiled',
+  'tiled',
   'imagery',
   'glad',
   'integrated-alert-layer',
