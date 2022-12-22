@@ -49,8 +49,11 @@ const App = (props: AppSettings | any): JSX.Element => {
             url: 'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.geojson',
             title: 'geoJSON test data',
             symbolColor: '',
+            definitionExpression: '',
           },
         ];
+
+        console.log('new property geoJSONData:', geoJSONData);
 
         const updatedData = {
           ...resources,
