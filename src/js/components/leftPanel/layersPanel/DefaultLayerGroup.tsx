@@ -220,6 +220,9 @@ const DefaultLayerGroup = ({ layerGroupKey, layerGroupConfig }: LayerGroupProps)
     const openGroupKey = groupOpen ? '' : layerGroupKey;
     dispatch(setOpenLayerGroup(openGroupKey));
   };
+  // console.log('layersInGroup', layersInGroup);
+  // console.log('layerGroupConfig', layerGroupConfig);
+  // console.log('allAvailableLayers', allAvailableLayers);
 
   function renderLayerGroup(): JSX.Element {
     switch (layerGroupConfig.groupType) {

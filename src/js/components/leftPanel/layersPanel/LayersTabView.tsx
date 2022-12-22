@@ -16,19 +16,12 @@ interface LayerControlProps {
 const AllLayerControls = (props: LayerControlProps): JSX.Element => {
   return (
     <div className="all-layer-control-container">
-      <span>
-        {layersPanelTranslations[props.selectedLanguage]?.layers || 'Layers'}
-      </span>
-      <button
-        onClick={() => mapController.selectAllLayers()}
-        data-cy="all-layer-btn"
-      >
-        {layersPanelTranslations[props.selectedLanguage]?.selectAll ||
-          'Select All'}
+      <span>{layersPanelTranslations[props.selectedLanguage]?.layers || 'Layers'}</span>
+      <button onClick={() => mapController.selectAllLayers()} data-cy="all-layer-btn">
+        {layersPanelTranslations[props.selectedLanguage]?.selectAll || 'Select All'}
       </button>
       <button onClick={() => mapController.clearAllLayers()}>
-        {layersPanelTranslations[props.selectedLanguage]?.clearAll ||
-          'Clear All'}
+        {layersPanelTranslations[props.selectedLanguage]?.clearAll || 'Clear All'}
       </button>
     </div>
   );
@@ -39,25 +32,14 @@ interface LayersTabViewProps {
   label: string;
 }
 const LayersTabView = (props: LayersTabViewProps) => {
-  const activeTab = useSelector(
-    (store: RootState) => store.appState.leftPanel.activeTab
-  );
-  const tabViewVisible = useSelector(
-    (store: RootState) => store.appState.leftPanel.tabViewVisible
-  );
-  const hideWidgetActive = useSelector(
-    (store: RootState) => store.appState.hideWidgetActive
-  );
-  const selectedLanguage = useSelector(
-    (store: RootState) => store.appState.selectedLanguage
-  );
-  const recentImagery = useSelector(
-    (store: RootState) => store.appSettings.recentImagery
-  );
+  const activeTab = useSelector((store: RootState) => store.appState.leftPanel.activeTab);
+  const tabViewVisible = useSelector((store: RootState) => store.appState.leftPanel.tabViewVisible);
+  const hideWidgetActive = useSelector((store: RootState) => store.appState.hideWidgetActive);
+  const selectedLanguage = useSelector((store: RootState) => store.appState.selectedLanguage);
+  const recentImagery = useSelector((store: RootState) => store.appSettings.recentImagery);
 
-  const layerPanel = useSelector(
-    (store: RootState) => store.appSettings.layerPanel
-  );
+  const layerPanel = useSelector((store: RootState) => store.appSettings.layerPanel);
+
   const tabViewIsVisible = tabViewVisible && activeTab === props.label;
   const layerGroupsToRender = Object.keys(layerPanel)
     .sort((a: string, b: string) => layerPanel[a].order - layerPanel[b].order)
@@ -105,13 +87,7 @@ const LayersTabView = (props: LayersTabViewProps) => {
       {tabViewIsVisible && (
         <>
           <AllLayerControls selectedLanguage={selectedLanguage} />
-          <div
-            className={
-              hideWidgetActive
-                ? 'hide layer-tabview-container'
-                : 'layer-tabview-container'
-            }
-          >
+          <div className={hideWidgetActive ? 'hide layer-tabview-container' : 'layer-tabview-container'}>
             <div>{layerGroupsToRender}</div>
           </div>
         </>

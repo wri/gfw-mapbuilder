@@ -454,6 +454,36 @@ export class MapController {
     });
   }
 
+  addGeoJSONLayer = async (params: any) => {
+    const { url, layerParams } = params;
+    const [GeoJSONLayer] = await loadModules(['esri/layers/GeoJSONLayer']);
+
+    const renderer = {
+      type: 'simple',
+      symbol: {
+        type: 'simple-marker',
+        color: layerParams.symbolColor ? layerParams.symbolColor : 'orange',
+        outline: {
+          color: 'white',
+        },
+      },
+    };
+    const layer = new GeoJSONLayer({
+      url,
+      title: layerParams.title ? layerParams.title : 'No title provided',
+      copyright: layerParams.title,
+      renderer: renderer,
+    });
+
+    if (!layer) return;
+    this._mapview.when(() => {
+      const layerByTitle = this._map?.layers.find((l) => l.title === layer.title);
+      if (!layerByTitle) {
+        this._map?.add(layer);
+      }
+    });
+  };
+
   setPageTitle(currentLanguage: string, defaultLanguage: string, primaryTitle: string, secondaryTitle: string): void {
     if (currentLanguage === defaultLanguage) {
       window.document.title = primaryTitle;

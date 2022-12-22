@@ -88,12 +88,10 @@ export async function extractWebmapLayerObjects(esriMap?: __esri.Map): Promise<L
   if (!esriMap) return [];
 
   const layerArray = esriMap.layers.toArray() as any;
-
   for (const layer of layerArray) {
     if (layer.type === 'graphics') continue;
     //Get the legend information for each layer
 
-    //Dealing with sublayers first
     if (layer.sublayers && layer.sublayers.length > 0) {
       const legendInfo = await fetchLegendInfo(layer.url);
       layer.sublayers.forEach((sub: any) => {
