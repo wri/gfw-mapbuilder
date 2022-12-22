@@ -454,27 +454,40 @@ export class MapController {
     });
   }
 
-  addGeoJSONLayer = async (params: any) => {
-    const { url, layerParams } = params;
+  addGeoJSONLayer = async (data: any) => {
+    // const { url, layerParams } = params;
     const [GeoJSONLayer] = await loadModules(['esri/layers/GeoJSONLayer']);
 
     const renderer = {
       type: 'simple',
       symbol: {
         type: 'simple-marker',
-        color: layerParams.symbolColor ? layerParams.symbolColor : 'orange',
+        color: 'orange',
         outline: {
           color: 'white',
         },
       },
     };
-    const layer = new GeoJSONLayer({
-      url,
-      title: layerParams.title ? layerParams.title : 'No title provided',
-      copyright: layerParams.title,
-      renderer: renderer,
+    const blob = new Blob([JSON.stringify(data[0])], {
+      type: 'application/json',
     });
+    const url = URL.createObjectURL(blob);
+    const layer = new GeoJSONLayer({ url, renderer, title: 'geoJSON test data' });
 
+    // const layer = new GeoJSONLayer({
+    //   url,
+    //   title: layerParams.title ? layerParams.title : 'No title provided',
+    //   copyright: layerParams.title,
+    //   renderer: renderer,
+    // });
+
+    // if (!layer) return;
+    // this._mapview.when(() => {
+    //   const layerByTitle = this._map?.layers.find((l) => l.title === layer.title);
+    //   if (!layerByTitle) {
+    //     this._map?.add(layer);
+    //   }
+    // });
     if (!layer) return;
     this._mapview.when(() => {
       const layerByTitle = this._map?.layers.find((l) => l.title === layer.title);
