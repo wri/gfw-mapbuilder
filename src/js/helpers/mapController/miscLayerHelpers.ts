@@ -11,6 +11,7 @@ import {
   RWLayerConfig,
 } from '../../types/layersTypes';
 import { fetchLegendInfo } from '../legendInfo';
+import { mapController } from '../../controllers/mapController';
 
 async function createVectorLayerLegendInfo(layer: any): Promise<any> {
   const layerStyleInfo = await fetch(layer.url)
@@ -94,7 +95,7 @@ export async function extractWebmapLayerObjects(esriMap?: __esri.Map): Promise<L
     //Get the legend information for each layer
 
     //Dealing with sublayers first
-    if (layer.sublayers && layer.sublayers.length > 0) {
+    if (layer.sublayers && layer.sublayers.length > 0 && layer.type !== 'tile') {
       const legendInfo = await fetchLegendInfo(layer.url);
       layer.sublayers.forEach((sub: any) => {
         //get sublayer legend info
@@ -152,7 +153,9 @@ export async function extractWebmapLayerObjects(esriMap?: __esri.Map): Promise<L
       if (legendInfo?.error) {
         legendInfo = undefined;
       } else if (layer.type === 'tile') {
-        legendInfo = legendInfo.layers[0].legend;
+        const layerName = legendInfo.layers[0]?.layerName;
+        legendInfo = legendInfo.layers[0]?.legend;
+        legendInfo['layerName'] = layerName;
       } else if (layer.type === 'vector-tile') {
         legendInfo = await createVectorLayerLegendInfo(layer);
         //Attempt to fetch vector tile styling info to generate legend item

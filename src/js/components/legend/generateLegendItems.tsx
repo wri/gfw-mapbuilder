@@ -290,6 +290,7 @@ const LegendItems = (props: LegendItemProps): JSX.Element => {
         });
         return (
           <div className="label-item-feature" key={i}>
+            {layer.type === 'tiled' && <div className="title">{item.name}</div>}
             {subLabels}
           </div>
         );
@@ -316,6 +317,7 @@ const LegendItems = (props: LegendItemProps): JSX.Element => {
       return (
         <div className="layer-item" key={layer.id + `${i}`}>
           <p className="layer-title">{layer.title}</p>
+          <div className="title">{layer.legendInfo.layerName}</div>
           {labelIcons}
         </div>
       );
