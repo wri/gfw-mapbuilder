@@ -41,6 +41,7 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
     MosaicRule,
     RasterFunction,
     TileLayer,
+    GeoJSONLayer,
   ] = await loadModules([
     'esri/layers/ImageryLayer',
     'esri/layers/FeatureLayer',
@@ -50,6 +51,7 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
     'esri/layers/support/MosaicRule',
     'esri/layers/support/RasterFunction',
     'esri/layers/TileLayer',
+    'esri/layers/GeoJSONLayer',
   ]);
   const { appState, mapviewState } = store.getState();
 
@@ -273,6 +275,18 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
       break;
     case 'tiled':
       esriLayer = new TileLayer({
+        id: layerConfig.id,
+        title: layerConfig.title,
+        visible: layerConfig.visible,
+        url: layerConfig.url,
+      });
+      if (layerConfig?.opacity && layerConfig.opacity?.combined) {
+        esriLayer.opacity = layerConfig.opacity.combined;
+      }
+      break;
+    case 'GeoJSON':
+      console.log('geojson layer', layerConfig);
+      esriLayer = new GeoJSONLayer({
         id: layerConfig.id,
         title: layerConfig.title,
         visible: layerConfig.visible,

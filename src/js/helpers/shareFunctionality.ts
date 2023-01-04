@@ -155,6 +155,8 @@ export function getLayerInfoFromURL(): LayerInfo[] {
     ?.split(',')
     .map((o) => Number(o));
 
+  console.log(allLayerIDS);
+
   return allLayerIDS
     ? allLayerIDS.map((id: string, i: number) => {
         const outputObject = {} as any;

@@ -57,7 +57,7 @@ import { fetchLegendInfo } from '../helpers/legendInfo';
 import { parseExtentConfig } from '../helpers/mapController/configParsing';
 import { overwriteColorTheme } from '../store/appSettings/actions';
 
-setDefaultOptions({ css: true, version: '4.19' });
+setDefaultOptions({ css: true, version: '4.22' });
 
 interface URLCoordinates {
   zoom: number;
@@ -183,6 +183,7 @@ export class MapController {
           'esri/core/watchUtils',
           'esri/layers/MapImageLayer',
         ]);
+        console.log('Mapview ready');
         store.dispatch(isMapReady(true));
         //default scale for map
         this._webmapBasemap = this._map?.basemap.clone();
@@ -277,6 +278,7 @@ export class MapController {
 
         //In case of sharing functionality, check for URL containing layer visibility and opacity information
         const layerInfosFromURL = getLayerInfoFromURL();
+        console.log(layerInfosFromURL);
 
         //@ts-ignore -- this ensures that webmap layers are ready on map before the steps get initialized
         Promise.all(this._map?.layers.items.map((l) => l.load())).then(async () => {

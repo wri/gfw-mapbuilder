@@ -93,7 +93,7 @@ export async function extractWebmapLayerObjects(esriMap?: __esri.Map): Promise<L
   for (const layer of layerArray) {
     if (layer.type === 'graphics') continue;
     //Get the legend information for each layer
-
+    console.log('geojson layer', layer);
     //Dealing with sublayers first
     if (layer.sublayers && layer.sublayers.length > 0 && layer.type !== 'tile') {
       const legendInfo = await fetchLegendInfo(layer.url);

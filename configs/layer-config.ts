@@ -11,6 +11,7 @@ export const supportedLayers = [
   'image',
   'webtiled',
   'tiled',
+  'GeoJSON',
   'imagery',
   'glad',
   'integrated-alert-layer',
