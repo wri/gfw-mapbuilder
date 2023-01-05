@@ -61,13 +61,12 @@ function getLegendInfoFromRenderer(layer: LayerProps): any {
   function generatelegendInfo(layer: any) {
     const container: any = [];
     if (layer?.renderer?.symbol) {
-      // symbols don't have a label, what should be display?
       const defaultSymbol = layer.renderer.symbol;
       const symbolDOMElement = createSymbolStyles(defaultSymbol);
       container.push(
         <div className="sublayer-item-feature">
           <div>{symbolDOMElement}</div>
-          <span>Not provided</span>
+          <span>{layer.title}</span>
         </div>
       );
     } else if (layer?.renderer?.visualVariables?.length && layer?.renderer?.type !== 'unique-value') {
