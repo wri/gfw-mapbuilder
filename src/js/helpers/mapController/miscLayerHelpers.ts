@@ -96,6 +96,7 @@ export async function extractWebmapLayerObjects(esriMap?: __esri.Map): Promise<L
 
     //Dealing with sublayers first
     if (layer.sublayers && layer.sublayers.length > 0 && layer.type !== 'tile') {
+      console.log(layer, layer.title, 'sublayers');
       const legendInfo = await fetchLegendInfo(layer.url);
       layer.sublayers.forEach((sub: any) => {
         //get sublayer legend info
@@ -126,6 +127,7 @@ export async function extractWebmapLayerObjects(esriMap?: __esri.Map): Promise<L
 
       //If layer has layerId that means it is a sublayer too, so we process it just as the ones above
     } else if (layer.hasOwnProperty('layerId')) {
+      console.log(layer, layer.title, 'layerid');
       const legendInfo = await fetchLegendInfo(layer.url);
       const subLegendInfo = legendInfo?.error
         ? undefined
@@ -146,8 +148,10 @@ export async function extractWebmapLayerObjects(esriMap?: __esri.Map): Promise<L
         minScale,
         sublayer: false,
         legendInfo: subLegendInfo?.legend,
+        portalItemID: layer.portalItem && layer.portalItem.id ? layer.portalItem.id : null,
       });
     } else {
+      console.log(layer, layer.title, 'all other layers');
       // => Handle all other layers that are not sublayers here
       let legendInfo = await fetchLegendInfo(layer.url);
       if (legendInfo?.error) {
@@ -163,6 +167,7 @@ export async function extractWebmapLayerObjects(esriMap?: __esri.Map): Promise<L
         legendInfo = layer.legendInfo ? layer.legendInfo : undefined;
       }
       const { id, title, opacity, visible, definitionExpression, url, maxScale, minScale } = layer;
+      console.log(layer.title);
       mapLayerObjects.push({
         id,
         title,
