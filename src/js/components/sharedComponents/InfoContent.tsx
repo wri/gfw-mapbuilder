@@ -38,7 +38,7 @@ const returnMetadataContent = (xmlResults: any) => {
   return content;
 };
 
-const getMetadata = async (layer: any, sharinghost: RootState['appSettings']['sharinghost']) => {
+const getMetadata = async (layer: any, sharinghost: RootState['appSettings']['sharinghost']): Promise<any> => {
   let content: any;
   const metadataURL = `${sharinghost}/sharing/rest/content/items/${layer.portalItemID}/info/metadata/metadata.xml`;
   const layerMetadataURL = `${layer.url}/info/metadata`;
