@@ -38,7 +38,7 @@ const returnMetadataContent = (xmlResults: any) => {
   return content;
 };
 
-const getMetadata = async (layer: any, sharinghost: RootState['appSettings']['sharinghost']): Promise<any> => {
+const getMetadata = async (layer: any, sharinghost: RootState['appSettings']['sharinghost']) => {
   let content: any;
   const metadataURL = `${sharinghost}/sharing/rest/content/items/${layer.portalItemID}/info/metadata/metadata.xml`;
   const layerMetadataURL = `${layer.url}/info/metadata`;
@@ -46,11 +46,10 @@ const getMetadata = async (layer: any, sharinghost: RootState['appSettings']['sh
   const layerXMLResults = await fetch(layerMetadataURL).then((res) => res.text());
   const metadataExists = !xmlResults.includes('Error');
   const layerMetadataExists = !layerXMLResults.includes('Error') && !layerXMLResults.includes('invalid request');
-
   if (metadataExists) {
-    content = returnMetadataContent(xmlResults);
+    return (content = returnMetadataContent(xmlResults));
   } else if (!metadataExists && layerMetadataExists) {
-    content = returnMetadataContent(layerXMLResults);
+    return (content = returnMetadataContent(layerXMLResults));
   } else {
     return content;
   }
@@ -146,7 +145,6 @@ const InfoContent: FunctionComponent<{}> = (): any => {
     const getWebmapContent = async (): Promise<void> => {
       const results = await getWebmapGroupContent(layer, sharinghost);
 
-      console.log('results', results);
       setContent(results);
       setDataLoading(false);
     };
