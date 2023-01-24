@@ -14,9 +14,17 @@ import BaseButton from '../../ui/BaseButton';
 import styled from 'styled-components';
 import { addToMultiPolygonLayer, clearGraphics, clearUserGraphics } from '../../../helpers/MapGraphics';
 import { handleCustomColorTheme } from '../../../../utils';
-import { handleTimestampDate } from './helpers/index';
-const attributesDateListToConvert = ['DteApplied', 'DteGranted', 'DteExpires', 'Date', 'Expires'];
+import { getLayerPopupIfAvailable, handleTimestampDate, updateContentProperties } from './helpers/index';
+import RenderPopupContent from './RenderPopupContent';
 
+export interface AttributeObject {
+  [key: string]: string;
+}
+
+interface DataTabProps {
+  key: string;
+  label: string;
+}
 //Constructs layer tile based on sublayer existence
 function generateLayerTitle(activeLayerInfo: any): string {
   let result;
@@ -30,10 +38,6 @@ function generateLayerTitle(activeLayerInfo: any): string {
   return result;
 }
 
-interface DataTabProps {
-  key: string;
-  label: string;
-}
 const DataTabView = (props: DataTabProps): JSX.Element => {
   const dispatch = useDispatch();
   const [layerTitle, setLayerTitle] = React.useState('');
@@ -47,11 +51,15 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
   const activeMultiInput = useSelector((store: RootState) => store.appState.activeMultiInput);
 
   const themeColor = handleCustomColorTheme(customColorTheme);
+  const leftPanel = useSelector((store: RootState) => store.appSettings.layerPanel);
 
   const FeatureDataView = (): JSX.Element => {
     const activeLayerInfo = activeFeatures[activeFeatureIndex[0]];
     //short circuit component in case no feature is found
     if (!activeLayerInfo) return <></>;
+
+    const getLayerPopup = getLayerPopupIfAvailable(leftPanel, activeLayerInfo.layerID);
+    const newFields = updateContentProperties(getLayerPopup);
 
     //If layer has sublayers, we are using sublayerID to compare, otherwise it is layerID
     function findLayer(f: LayerFeatureResult): boolean {
@@ -88,55 +96,32 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
         dispatch(setActiveFeatureIndex([activeLayerIndex, newPage]));
       }
 
-      interface AttributeObject {
-        [key: string]: string;
-      }
       const AttributeTable = (props: AttributeObject): JSX.Element => {
         //If we have fieldNames on activeLayerInfo we use it to map over attributes, otherwise, we use all attributes available
+        const { attributes } = props;
+        const fieldNames = activeLayerInfo?.fieldNames;
+
         return (
           <table cellPadding={0} cellSpacing={0}>
             <tbody>
-              {activeLayerInfo.fieldNames
-                ? activeLayerInfo.fieldNames.map((field, i) => {
-                    //Grab attribute value irrespective if fieldName is appropriately cased!
-
-                    const attributeKey = Object.keys(props.attributes).find(
-                      (a) => a.toLowerCase() === field.fieldName.toLowerCase()
-                    );
-                    if (attributeKey) {
-                      // Use label unless it is not set, then default to fieldName
-                      const label = field?.label || field.label !== '' ? field.label : attributeKey;
-                      let value = props.attributes[attributeKey];
-
-                      const updatedValue = handleTimestampDate({
-                        checkList: attributesDateListToConvert,
-                        label,
-                        value,
-                      });
-
-                      //Users can set the href tag on the data attribute on the service, we want to show an actual link instead of plain text
-                      if (typeof value === 'string' && value?.includes('href')) {
-                        value = <div dangerouslySetInnerHTML={{ __html: value }}></div>;
-                      }
-                      return (
-                        <tr key={i}>
-                          <td className="first-cell">{label}</td>
-                          <td className="second-cell">{updatedValue}</td>
-                        </tr>
-                      );
-                    } else {
-                      return null;
-                    }
-                  })
-                : Object.keys(props.attributes).map((attribute, i) => {
-                    const value = props.attributes[attribute];
-                    return (
-                      <tr key={i}>
-                        <td className="first-cell">{attribute}</td>
-                        <td className="second-cell">{value ? value : ''}</td>
-                      </tr>
-                    );
-                  })}
+              {/* if hosted layer has popup properties available then display labels defined in popup */}
+              {newFields !== null && <RenderPopupContent attributes={attributes} fieldNames={newFields} />}
+              {/* if hosted layer has no popup properties available then display labels defined in fieldNames */}
+              {fieldNames && newFields === null && (
+                <RenderPopupContent attributes={attributes} fieldNames={fieldNames} />
+              )}
+              {/* render deafult properties if none of the avobe is true */}
+              {!fieldNames &&
+                newFields === null &&
+                Object.keys(props.attributes).map((attribute, i) => {
+                  const value = props.attributes[attribute];
+                  return (
+                    <tr key={i}>
+                      <td className="first-cell">{attribute}</td>
+                      <td className="second-cell">{value ? value : ''}</td>
+                    </tr>
+                  );
+                })}
             </tbody>
           </table>
         );
@@ -297,6 +282,7 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
           </TopWrap>
           <div className="layer-title">{layerTitle}</div>
           <hr />
+
           <AttributeTable attributes={props.activeLayerInfo.features[page].attributes} />
         </div>
       );
