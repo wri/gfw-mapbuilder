@@ -146,6 +146,7 @@ export async function extractWebmapLayerObjects(esriMap?: __esri.Map): Promise<L
         minScale,
         sublayer: false,
         legendInfo: subLegendInfo?.legend,
+        portalItemID: layer.portalItem && layer.portalItem.id ? layer.portalItem.id : null,
       });
     } else {
       // => Handle all other layers that are not sublayers here
@@ -302,36 +303,6 @@ export async function getRemoteAndServiceLayers(): Promise<any> {
         detailedLayers.push(layer);
       }
     });
-
-  /*  newRemoteDataLayers
-    .filter(l => checkLayerFilterConfig(l))
-    .forEach((layer): void => {
-      remoteDataLayers.push({
-        order: layer.order,
-        layerGroupId: layer.groupId,
-        dataLayer: layer
-      });
-    });
-
-  defaultAPIFlagshipLayers
-    .filter(l => checkLayerFilterConfig(l))
-    .forEach((layer): void => {
-      // if (appSettings?.enabledRWLayers?.includes(layer.id)) {
-      remoteDataLayers.push({
-        order: layer.order,
-        layerGroupId: layer.groupId,
-        dataLayer: layer,
-        origin: layer.origin,
-        uuid: layer.uuid,
-        label: layer.label,
-        layerType: layer.layerType,
-        id: layer.id,
-        opacity: layer.opacity,
-        legend: layer.legend,
-        sublabel: layer.sublabel
-      });
-      // }
-    });*/
 
   function fetchRemoteApiLayer(item): Promise<any> {
     const baseURL = `https://production-api.globalforestwatch.org/v1/layer/${item?.dataLayer?.uuid}`;
