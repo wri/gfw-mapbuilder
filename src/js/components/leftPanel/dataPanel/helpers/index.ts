@@ -4,6 +4,17 @@ interface TimestampDateParams {
   label: string;
 }
 
+interface FieldParams {
+  label: string;
+  fieldExpression: string;
+}
+interface ContentParams {
+  content: {
+    en: FieldParams[];
+    title: string;
+  };
+}
+
 const convertTimestampToStringDate = (value: number) => {
   return new Date(value).toLocaleString();
 };
@@ -29,4 +40,33 @@ export const handleTimestampDate = (params: TimestampDateParams) => {
   }
 
   return value;
+};
+
+export const updateContentProperties = (content: ContentParams | null) => {
+  if (!content) return null;
+
+  const fields = content.content.en;
+
+  return fields.map((field) => {
+    const { label, fieldExpression } = field;
+    return { fieldName: fieldExpression, label, format: null };
+  });
+};
+
+/**
+ * @description if hosted layers are available, check if the layer has a popup available, if so we need to prioritaze it to display it on the popup template
+ * @param hostedLayers
+ * @param layerId
+ * @returns popup object or null
+ */
+export const getLayerPopupIfAvailable = (hostedLayers: any, layerId: string) => {
+  if (hostedLayers?.HOSTED_LAYERS) {
+    const layers = hostedLayers.HOSTED_LAYERS.layers;
+    const findById = layers.find((layer: any) => layer.id === layerId);
+    if (findById) {
+      return findById?.popup ? findById.popup : null;
+    }
+    return null;
+  }
+  return null;
 };
