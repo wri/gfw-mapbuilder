@@ -199,7 +199,7 @@ export const defaultAnalysisModules: AnalysisModule[] = [
       },
     ],
     sqlString:
-      "select sum(area__ha) from umd_tree_cover_loss where umd_tree_cover_density_2000__threshold >= {density} and is__ifl_intact_forest_landscapes = 'true' group by umd_tree_cover_loss__year",
+      'select sum(area__ha) from umd_tree_cover_loss where umd_tree_cover_density_2000__threshold >= {density} group by umd_tree_cover_loss__year',
   },
   {
     analysisId: 'LCC',
