@@ -4,7 +4,6 @@ import { RootState } from '../../../js/store/index';
 import { getShareableURL } from '../../../js/helpers/shareFunctionality';
 import '../../../css/printButton.scss';
 import { handleCustomColorTheme } from '../../../utils';
-import { mapController } from '../../controllers/mapController';
 
 const printReportTranslations = {
   fr: 'Imprimer le Rapport',
@@ -29,19 +28,11 @@ export const PrintReportButton = (): JSX.Element => {
     const baseURL = new URL(window.location.href);
     let combinedReportURL = baseURL.origin + baseURL.pathname;
     const stateUrl = await getShareableURL({ report: true });
-    // const stateUrl = '';
 
     combinedReportURL = appID
       ? combinedReportURL + '?' + 'appid=' + appID + '&' + stateUrl
       : combinedReportURL + '?' + stateUrl;
 
-    console.log('combinedReportURL', {
-      appID,
-      baseURL,
-      combinedReportURL: combinedReportURL.split('&'),
-      printUrl: combinedReportURL,
-      // stateUrl: stateUrl.split('&'),
-    });
     window.open(combinedReportURL);
   }
 
