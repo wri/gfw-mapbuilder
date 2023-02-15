@@ -14,10 +14,7 @@ interface MapContentProps {
   report: boolean;
 }
 
-function determineMapContent(
-  renderReport?: boolean,
-  hideFooter?: boolean
-): JSX.Element {
+function determineMapContent(renderReport?: boolean, hideFooter?: boolean): JSX.Element {
   if (renderReport) {
     return <Report mapview={Mapview} />;
   } else {
@@ -35,9 +32,7 @@ function determineMapContent(
 }
 
 const MapContent = (props: MapContentProps): JSX.Element => {
-  const hideFooter = useSelector(
-    (store: RootState) => store.appSettings.hideFooter
-  );
+  const hideFooter = useSelector((store: RootState) => store.appSettings.hideFooter);
   return <>{determineMapContent(props.report, hideFooter)}</>;
 };
 

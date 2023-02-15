@@ -222,6 +222,8 @@ export class MapController {
               return geometryEngine.within(clickGeo, graphic.geometry);
             });
 
+            console.log('graphicsWeClickedOn', { graphicsWeClickedOn });
+
             if (graphicsWeClickedOn.length !== 0) {
               const graphicIndex = graphicsWeClickedOn[0].attributes?.attributeIndex
                 ? graphicsWeClickedOn[0].attributes.attributeIndex

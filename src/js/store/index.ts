@@ -9,7 +9,7 @@ import { createLogger } from 'redux-logger';
 const rootReducer = combineReducers({
   appSettings: appSettingsReducer,
   appState: appStateReducer,
-  mapviewState: mapviewReducer
+  mapviewState: mapviewReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
@@ -22,9 +22,6 @@ if (process.env.NODE_ENV === 'development') {
   middlewares.push(logger);
 }
 
-const store = createStore(
-  rootReducer,
-  composeWithDevTools(applyMiddleware(...middlewares))
-);
+const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(...middlewares)));
 
 export default store;
