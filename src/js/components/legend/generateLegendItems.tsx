@@ -5,30 +5,12 @@ import { BasicItem, GradientItem, LineItem, PointItem, PolyFromMapServer } from 
 import { mapController } from '../../controllers/mapController';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
+import LegendLabel from './LegendLabel';
 
 interface LegendItemProps {
   visibleLayers: LayerProps[];
   language: string;
   gladConfirmed: boolean;
-}
-
-type LabelTypes = 'basic' | 'point' | 'line' | 'gradient' | 'group' | string | undefined;
-
-function getLegendLabel(type: LabelTypes, options: any, opacity: number): JSX.Element | null {
-  const { color, size, outlineColor, thickness, lineType, label, imageData, contentType } = options;
-  switch (type) {
-    case 'basic':
-    case 'choropleth':
-      return <BasicItem color={color} outline={outlineColor} height={16} width={16} opacity={opacity} />;
-    case 'point':
-      return <PointItem color={color} height={size} width={size} opacity={opacity} />;
-    case 'webmap':
-      return <PolyFromMapServer opacity={opacity} dataURI={imageData} title={label} contentType={contentType} />;
-    case 'line':
-      return <LineItem color={color} thickness={thickness} lineType={lineType} opacity={opacity} />;
-    default:
-      return <BasicItem color={'#c8a2c8'} outline={'#000000'} height={16} width={16} opacity={opacity} />;
-  }
 }
 
 function generateGradientItem(legendConfig: any, language: string): JSX.Element {
@@ -283,7 +265,9 @@ const LegendItems = (props: LegendItemProps): JSX.Element => {
         const subLabels = item.legend.map((subitem: any, i: number) => {
           return (
             <div key={i} className="sublayer-item-feature">
-              <div>{getLegendLabel('webmap', subitem, layer.opacity.combined)}</div>
+              <div>
+                <LegendLabel type={'webmap'} options={subitem} opacity={layer.opacity.combined} />
+              </div>
               <span>{subitem.label}</span>
             </div>
           );
@@ -307,9 +291,11 @@ const LegendItems = (props: LegendItemProps): JSX.Element => {
         const rendererExists = checkForRenderer(layer);
         return (
           <div className="label-item" key={i}>
-            {!rendererExists
-              ? getLegendLabel(layer.type, item, layer.opacity.combined)
-              : getLegendInfoFromRenderer(layer)}
+            {!rendererExists ? (
+              <LegendLabel type={layer.type} options={item} opacity={layer.opacity.combined} />
+            ) : (
+              getLegendInfoFromRenderer(layer)
+            )}
             <p>{item.label}</p>
           </div>
         );
@@ -335,7 +321,7 @@ const LegendItems = (props: LegendItemProps): JSX.Element => {
             subgroupItems = item.subgroup.items.map((subItem: any, i: number) => {
               return (
                 <div key={i} className="subgroup-item">
-                  {getLegendLabel(item.subgroup.type, subItem, layer.opacity.combined)}
+                  <LegendLabel type={item.subgroup.type} options={subItem} opacity={layer.opacity.combined} />
                   <p>{subItem.name[language]}</p>
                 </div>
               );
@@ -352,7 +338,7 @@ const LegendItems = (props: LegendItemProps): JSX.Element => {
         labelIcons = layer.metadata?.legendConfig?.items.map((item: any, i: number) => {
           return (
             <div className="label-item" key={i}>
-              {getLegendLabel(layer.metadata?.legendConfig?.type, item, layer.opacity.combined)}
+              <LegendLabel type={layer.metadata?.legendConfig?.type} options={item} opacity={layer.opacity.combined} />
               <p>{item.name[language]}</p>
             </div>
           );
