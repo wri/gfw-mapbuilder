@@ -275,8 +275,9 @@ const LegendItems = (props: LegendItemProps): JSX.Element => {
           {label}
         </div>
       );
-    } else if (layer.legendInfo && layer.origin === 'service') {
+    } else if (layer.legendInfo && layer.origin === 'service' && layer.type !== 'wms') {
       //TODO: needs testing for other types of layers, this accounts for mapimageserver
+
       const labelIcons = layer.legendInfo.map((item: any, i: number) => {
         item.label = item.label && item.label.length ? item.label : layer.title;
         const subLabels = item.legend.map((subitem: any, i: number) => {
@@ -320,7 +321,7 @@ const LegendItems = (props: LegendItemProps): JSX.Element => {
           {labelIcons}
         </div>
       );
-    } else if (layer.legendInfo && layer.origin === 'remote') {
+    } else if ((layer.legendInfo && layer.origin === 'remote') || layer.type === 'wms') {
       let labelIcons;
       if (layer.metadata?.legendConfig?.type === 'gradient') {
         //Gradient requires combining items into a single image, so we deal with it separately

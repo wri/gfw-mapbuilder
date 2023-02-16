@@ -91,6 +91,7 @@ export interface LayerProps {
   popup?: any | null;
   sublabel?: object;
   layerIds?: any[] | null;
+  layerName?: string;
   label?: any;
   technicalName?: string;
   filterField?: { [key: string]: string };

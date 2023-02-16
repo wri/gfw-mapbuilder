@@ -11,45 +11,29 @@ import '../../../css/legend.scss';
 
 const getWindowDimensions = () => {
   return {
-    width: window.innerWidth
+    width: window.innerWidth,
   };
 };
 
 const Legend = (): JSX.Element => {
-  const hideLegend = useSelector(
-    (store: RootState) => store.appSettings.hideLegend
-  );
-  const hideWidgetActive = useSelector(
-    (store: RootState) => store.appState.hideWidgetActive
-  );
-  const selectedLanguage = useSelector(
-    (store: RootState) => store.appState.selectedLanguage
-  );
-  const gladConfirmed = useSelector(
-    (store: RootState) => store.appState.leftPanel.gladConfirmed
-  );
-  const allAvailableLayers = useSelector(
-    (store: RootState) => store.mapviewState.allAvailableLayers
-  );
+  const hideLegend = useSelector((store: RootState) => store.appSettings.hideLegend);
+  const hideWidgetActive = useSelector((store: RootState) => store.appState.hideWidgetActive);
+  const selectedLanguage = useSelector((store: RootState) => store.appState.selectedLanguage);
+  const gladConfirmed = useSelector((store: RootState) => store.appState.leftPanel.gladConfirmed);
+  const allAvailableLayers = useSelector((store: RootState) => store.mapviewState.allAvailableLayers);
 
   const scale = useSelector((store: RootState) => store.mapviewState.scale);
 
-  const layersLoading = useSelector(
-    (store: RootState) => store.mapviewState.layersLoading
-  );
+  const layersLoading = useSelector((store: RootState) => store.mapviewState.layersLoading);
 
   const [legendOpen, setLegendOpen] = useState(!hideLegend);
-  const [windowDimensions, setWindowDimensions] = useState(
-    getWindowDimensions()
-  );
+  const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
 
   function handleLegendToggle(): void {
     setLegendOpen(!legendOpen);
   }
 
-  const [visibleLayersToShow, setVisibleLayersToShow] = useState<LayerProps[]>(
-    []
-  );
+  const [visibleLayersToShow, setVisibleLayersToShow] = useState<LayerProps[]>([]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -79,39 +63,26 @@ const Legend = (): JSX.Element => {
     //IDS of layers you want to specifically ignore in the legend
     const ignoredLayers = ['RECENT_IMAGERY'];
     const visibleLayers = allAvailableLayers
-      .filter(l => l.visible)
-      .filter(l => !ignoredLayers.includes(l.id))
-      .filter(l => layerIsInScale(l, scale));
+      .filter((l) => l.visible)
+      .filter((l) => !ignoredLayers.includes(l.id))
+      .filter((l) => layerIsInScale(l, scale));
+    console.log('visibleLayers', visibleLayers);
     //sync layer loading state with legend comp
     setVisibleLayersToShow(visibleLayers);
   }, [layersLoading, allAvailableLayers, scale]);
 
   const onMobileOrDesktop =
-    windowDimensions.width < 475
-      ? !hideLegend && visibleLayersToShow.length > 0
-      : visibleLayersToShow.length > 0;
+    windowDimensions.width < 475 ? !hideLegend && visibleLayersToShow.length > 0 : visibleLayersToShow.length > 0;
 
   return (
     <>
       {onMobileOrDesktop && (
         <div className="legend-container" data-cy="legend">
-          <div
-            className="legend-title"
-            onClick={handleLegendToggle}
-            role="button"
-          >
-            <p>
-              {layersPanelTranslations[selectedLanguage].legend || 'Legend'}
-            </p>
-            <button className="caret-button">
-              {legendOpen && !hideWidgetActive ? '▼' : '▲'}
-            </button>
+          <div className="legend-title" onClick={handleLegendToggle} role="button">
+            <p>{layersPanelTranslations[selectedLanguage].legend || 'Legend'}</p>
+            <button className="caret-button">{legendOpen && !hideWidgetActive ? '▼' : '▲'}</button>
           </div>
-          <div
-            className={
-              legendOpen && !hideWidgetActive ? 'legend-content' : 'hidden'
-            }
-          >
+          <div className={legendOpen && !hideWidgetActive ? 'legend-content' : 'hidden'}>
             <LegendItems
               visibleLayers={visibleLayersToShow}
               language={selectedLanguage}

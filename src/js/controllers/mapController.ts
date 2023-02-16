@@ -338,8 +338,16 @@ export class MapController {
                 remoteLayerObject.versionIndex = 0;
               }
 
-              //Attempt to fetch legend info from layer service
-              newRemoteLayerObject.legendInfo = await this.retrieveLegendInfo(remoteLayerObject);
+              if (remoteLayerObject.legendConfig) {
+                newRemoteLayerObject.legendInfo = remoteLayerObject.legendConfig;
+                newRemoteLayerObject.metadata = {
+                  legendConfig: remoteLayerObject.legendConfig,
+                };
+              } else {
+                //Attempt to fetch legend info from layer service
+                newRemoteLayerObject.legendInfo = await this.retrieveLegendInfo(remoteLayerObject);
+              }
+
               newRemoteLayerObject.id = remoteLayerObject.id;
               newRemoteLayerObject.title = remoteLayerObject.label[appState.selectedLanguage]
                 ? remoteLayerObject.label[appState.selectedLanguage]
@@ -352,6 +360,7 @@ export class MapController {
               newRemoteLayerObject.portalItemID = remoteLayerObject.portalItemID;
 
               newRemoteLayerObject.layerIds = remoteLayerObject.layerIds;
+              newRemoteLayerObject.layerName = remoteLayerObject.layerName;
               newRemoteLayerObject.label = remoteLayerObject.label;
               newRemoteLayerObject.sublabel = remoteLayerObject.sublabel;
               newRemoteLayerObject.parentID = undefined;
@@ -491,12 +500,14 @@ export class MapController {
   }
 
   async retrieveLegendInfo(layerObject: LayerProps): Promise<any[] | undefined> {
+    console.log('layerObject', layerObject);
     let legendResult;
     if (!layerObject.url) {
       return legendResult;
     }
 
     const legendInfoObject = await fetchLegendInfo(layerObject.url);
+    console.log('legendInfoObject', legendInfoObject);
     if (legendInfoObject && !legendInfoObject.error) {
       legendResult = legendInfoObject?.layers?.filter((l: any) => layerObject.layerIds?.includes(l.layerId));
     }
