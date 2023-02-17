@@ -10,7 +10,8 @@ import { MemoReportChartsComponent } from './report/ReportChartsComponent';
 import { ShareIcon } from '../../images/shareIcon';
 import { PrintIcon } from '../../images/printIcon';
 import '../../css/report.scss';
-import { URLS } from '../../../configs/urls-config';
+
+const geostoreURL = 'https://production-api.globalforestwatch.org/v1/geostore/';
 
 interface ReportProps {
   mapview: React.FunctionComponent;
@@ -40,7 +41,7 @@ const Report = (props: ReportProps): JSX.Element => {
     const geostoreID = new URL(window.location.href).searchParams.get('geostoreID');
     //On load using geostoreID coming from the URL, fetch information about the active feature
     async function fetchGeostoreInfo(): Promise<any> {
-      fetch(`${URLS.GEOSTORE}${geostoreID}`)
+      fetch(`${geostoreURL}${geostoreID}`)
         .then((response) => response.json())
         .then((data) => {
           setFeatureGeometry(data.data.attributes);
