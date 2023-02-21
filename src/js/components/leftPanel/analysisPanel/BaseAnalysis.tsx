@@ -89,6 +89,14 @@ const BaseAnalysis = (): JSX.Element => {
   const multiPolygonSelection = useSelector((store: RootState) => store.appState.multiPolygonSelectionMode);
 
   const themeColor = handleCustomColorTheme(customColorTheme);
+  // const analysisDateRange = useSelector(selectAnalysisDaterange);
+
+  useEffect(() => {
+    if (selectedAnalysis) {
+      const localStorageObj = { type: selectedAnalysis, minDate: analysisDateRange[0], maxDate: analysisDateRange[1] };
+      localStorage.setItem('report-date-picker', JSON.stringify(localStorageObj));
+    }
+  }, [selectedAnalysis, analysisDateRange[0], analysisDateRange[1]]);
 
   useEffect(() => {
     const activeLayer = activeFeatures[activeFeatureIndex[0]];

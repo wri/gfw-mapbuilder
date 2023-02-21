@@ -6,30 +6,27 @@ interface DatePickerProps {
   maxDate: string; //YYYY-MM-DD
   defaultStartDate?: string;
   defaultEndDate?: string;
-  sendDateValue: (start: string, end: string) => void;
+  sendDateValue: (start: string, end: string, id: string) => void;
   customColorTheme: string;
+  analysisId: string;
 }
 const getTodayDate = new Date().toISOString().split('T')[0];
 
 const DatePicker = (props: DatePickerProps): JSX.Element => {
-  const { multi, minDate, maxDate, defaultEndDate, defaultStartDate } = props;
+  const { multi, minDate, maxDate, defaultEndDate, defaultStartDate, analysisId } = props;
 
-  const [startDate, setStartDate] = React.useState(
-    defaultStartDate ? defaultStartDate : getTodayDate
-  );
+  const [startDate, setStartDate] = React.useState(defaultStartDate ? defaultStartDate : getTodayDate);
 
-  const [endDate, setEndDate] = React.useState(
-    defaultEndDate ? defaultEndDate : getTodayDate
-  );
+  const [endDate, setEndDate] = React.useState(defaultEndDate ? defaultEndDate : getTodayDate);
 
   function handleStartDateChange(e: any): void {
     setStartDate(e.target.value);
-    props.sendDateValue(e.target.value, endDate);
+    props.sendDateValue(e.target.value, endDate, analysisId);
   }
 
   function handleEndDateChange(e: any): void {
     setEndDate(e.target.value);
-    props.sendDateValue(startDate, e.target.value);
+    props.sendDateValue(startDate, e.target.value, analysisId);
   }
 
   return (
@@ -40,7 +37,7 @@ const DatePicker = (props: DatePickerProps): JSX.Element => {
           className="date-time-toggle input"
           style={{ border: `1px solid ${props.customColorTheme}` }}
           type="date"
-          defaultValue={startDate}
+          defaultValue={minDate ? minDate : startDate}
           min={minDate ? minDate : undefined}
           onChange={handleStartDateChange}
         />
@@ -52,7 +49,7 @@ const DatePicker = (props: DatePickerProps): JSX.Element => {
             className="date-time-toggle input"
             style={{ border: `1px solid ${props.customColorTheme}` }}
             type="date"
-            value={endDate}
+            defaultValue={maxDate ? maxDate : endDate}
             max={maxDate ? maxDate : undefined}
             onChange={handleEndDateChange}
           />
