@@ -165,7 +165,7 @@ const InfoContent: FunctionComponent<{}> = (): any => {
     };
 
     const getRemoteContent = (): void => {
-      const results = layer.metadata.metadata;
+      const results = layer.metadata?.metadata;
       setContent(results);
       setDataLoading(false);
     };
