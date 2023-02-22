@@ -339,8 +339,11 @@ export class MapController {
                 remoteLayerObject.versionIndex = 0;
               }
 
-              if (remoteLayerObject.legendConfig) {
-                newRemoteLayerObject.legendInfo = await requestWMSLayerLegendInfo(remoteLayerObject);
+              if (remoteLayerObject.type === 'wms') {
+                newRemoteLayerObject.legendInfo = await requestWMSLayerLegendInfo(
+                  remoteLayerObject.url,
+                  remoteLayerObject.layer
+                );
               } else {
                 //Attempt to fetch legend info from layer service
                 newRemoteLayerObject.legendInfo = await this.retrieveLegendInfo(remoteLayerObject);

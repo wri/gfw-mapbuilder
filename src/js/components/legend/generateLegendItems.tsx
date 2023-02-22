@@ -31,6 +31,16 @@ function checkForRenderer(layer: LayerProps): boolean {
   return false;
 }
 
+function generateWMSLegendInfo(layer: LayerProps, i: number): JSX.Element {
+  return (
+    <div className="layer-item" key={layer.id + `${i}`}>
+      <p className="layer-title">{layer.title}</p>
+      <div className="title">{layer.legendInfo.layerName}</div>
+      <img src={layer.legendInfo} alt="wms-legend-info" />
+    </div>
+  );
+}
+
 const LegendItems = (props: LegendItemProps): JSX.Element => {
   const { language } = props;
   const integratedAlertLabel = useSelector((store: RootState) => store.appState.leftPanel.gfwLayerLabel);
@@ -39,41 +49,39 @@ const LegendItems = (props: LegendItemProps): JSX.Element => {
     //@TODO this needs some refactoring to make it more readable!!
     if (!layer.legendInfo) {
       return <ManualLegend layer={layer} language={language} i={i} />;
-    } else if (layer.legendInfo && layer.origin === 'service' && layer.type !== 'wms') {
-      const labelIcons = layer.legendInfo.map((item: any, i: number) => {
-        item.label = item.label && item.label.length ? item.label : layer.title;
-        const subLabels = item.legend.map((subitem: any, i: number) => {
-          return (
-            <div key={i} className="sublayer-item-feature">
-              <div>
-                <LegendLabel type={'webmap'} options={subitem} opacity={layer.opacity.combined} />
+    } else if (layer.legendInfo && layer.origin === 'service') {
+      if (layer.type === 'wms') {
+        return generateWMSLegendInfo(layer, i);
+      } else {
+        const labelIcons = layer.legendInfo.map((item: any, i: number) => {
+          item.label = item.label && item.label.length ? item.label : layer.title;
+          const subLabels = item.legend.map((subitem: any, i: number) => {
+            return (
+              <div key={i} className="sublayer-item-feature">
+                <div>
+                  <LegendLabel type={'webmap'} options={subitem} opacity={layer.opacity.combined} />
+                </div>
+                <span>{subitem.label}</span>
               </div>
-              <span>{subitem.label}</span>
+            );
+          });
+          return (
+            <div className="label-item-feature" key={i}>
+              {layer.type === 'tiled' && <div className="title">{item.name}</div>}
+              {subLabels}
             </div>
           );
         });
         return (
-          <div className="label-item-feature" key={i}>
-            {layer.type === 'tiled' && <div className="title">{item.name}</div>}
-            {subLabels}
-          </div>
-        );
-      });
-      return (
-        <div className="layer-item" key={layer.id + `${i}`}>
-          <p className="layer-title">{layer.title}</p>
-          {labelIcons}
-        </div>
-      );
-    } else if (layer.legendInfo && layer.origin === 'webmap') {
-      if (layer.type === 'wms') {
-        return (
           <div className="layer-item" key={layer.id + `${i}`}>
             <p className="layer-title">{layer.title}</p>
-            <div className="title">{layer.legendInfo.layerName}</div>
-            <img src={layer.legendInfo} alt="wms-legend-info" />
+            {labelIcons}
           </div>
         );
+      }
+    } else if (layer.legendInfo && layer.origin === 'webmap') {
+      if (layer.type === 'wms') {
+        generateWMSLegendInfo(layer, i);
       } else {
         const labelIcons = layer.legendInfo?.map((item: any, i: number) => {
           item.label = item.label && item.label.length ? item.label : layer.title;
@@ -97,7 +105,7 @@ const LegendItems = (props: LegendItemProps): JSX.Element => {
           </div>
         );
       }
-    } else if ((layer.legendInfo && layer.origin === 'remote') || layer.type === 'wms') {
+    } else if (layer.legendInfo && layer.origin === 'remote') {
       let labelIcons;
       if (layer.metadata?.legendConfig?.type === 'gradient') {
         //Gradient requires combining items into a single image, so we deal with it separately

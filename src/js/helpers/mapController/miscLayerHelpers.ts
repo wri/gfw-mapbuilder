@@ -83,10 +83,7 @@ export function determineLayerVisibility(apiLayer: any, layerInfosFromURL: Layer
   }
 }
 
-export const requestWMSLayerLegendInfo = async (layer: any): Promise<any> => {
-  const sublayerName = layer.sublayers.items[0].name;
-  const layerOWSUrl = layer.url.replace('wms', 'ows');
-
+export const requestWMSLayerLegendInfo = async (layerOWSUrl: string, sublayerName: string): Promise<string> => {
   return `${layerOWSUrl}?service=WMS&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=${sublayerName.replace(
     ':',
     '%3A'
@@ -104,7 +101,10 @@ export async function extractWebmapLayerObjects(esriMap?: __esri.Map): Promise<L
     if (layer.sublayers && layer.sublayers.length > 0 && layer.type !== 'tile') {
       let legendInfo;
       if (layer.type === 'wms') {
-        legendInfo = await requestWMSLayerLegendInfo(layer);
+        const layerOWSUrl = layer.url.replace('wms', 'ows');
+        const sublayerName = layer.sublayers.items[0].name;
+
+        legendInfo = await requestWMSLayerLegendInfo(layerOWSUrl, sublayerName);
       } else {
         legendInfo = await legendInfoController.fetchLegendInfo(layer.url);
       }
