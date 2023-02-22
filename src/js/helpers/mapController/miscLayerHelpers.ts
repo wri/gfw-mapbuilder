@@ -93,11 +93,15 @@ export const requestWMSLayerLegendInfo = async (layerOWSUrl: string, sublayerNam
 export async function extractWebmapLayerObjects(esriMap?: __esri.Map): Promise<LayerProps[]> {
   const mapLayerObjects: LayerProps[] = [];
   if (!esriMap) return [];
-
   const layerArray = esriMap.layers.toArray() as any;
+
   let count = 0;
   for (const layer of layerArray) {
     if (layer.type === 'graphics') continue;
+
+    //@TODO this needs to be cleaned up and refactored to be more readable
+
+    // if sublayers and not tile or wms
     if (layer.sublayers && layer.sublayers.length > 0 && layer.type !== 'tile' && layer.type !== 'wms') {
       const legendInfo = await legendInfoController.fetchLegendInfo(layer.url);
       layer.sublayers.forEach((sub: any) => {
@@ -126,7 +130,8 @@ export async function extractWebmapLayerObjects(esriMap?: __esri.Map): Promise<L
           legendInfo: sublayerLegendInfo?.legend,
         });
       });
-      //If layer has layerId that means it is a sublayer too, so we process it just as the ones above
+
+      // if wms
     } else if (layer.type === 'wms') {
       const layerOWSUrl = layer.url.replace('wms', 'ows');
       const sublayerName = layer.sublayers.items[0].name;
@@ -157,6 +162,8 @@ export async function extractWebmapLayerObjects(esriMap?: __esri.Map): Promise<L
           legendInfo: legendInfo,
         });
       });
+
+      //If layer has layerId that means it is a sublayer too, so we process it just as the ones above
     } else if (layer.hasOwnProperty('layerId')) {
       const legendInfo = await legendInfoController.fetchLegendInfo(layer.url);
       const subLegendInfo = legendInfo?.error
@@ -180,9 +187,9 @@ export async function extractWebmapLayerObjects(esriMap?: __esri.Map): Promise<L
         legendInfo: subLegendInfo?.legend,
         portalItemID: layer.portalItem && layer.portalItem.id ? layer.portalItem.id : null,
       });
-    } else {
-      console.log('hit');
+
       // => Handle all other layers that are not sublayers here
+    } else {
       let legendInfo = await legendInfoController.fetchLegendInfo(layer.url);
       if (legendInfo?.error) {
         legendInfo = undefined;
