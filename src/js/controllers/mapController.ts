@@ -52,6 +52,7 @@ import {
   determineLayerVisibility,
   extractWebmapLayerObjects,
   getRemoteAndServiceLayers,
+  requestWMSLayerLegendInfo,
 } from '../helpers/mapController/miscLayerHelpers';
 import legendInfoController from '../helpers/legendInfo';
 import { parseExtentConfig } from '../helpers/mapController/configParsing';
@@ -339,10 +340,7 @@ export class MapController {
               }
 
               if (remoteLayerObject.legendConfig) {
-                newRemoteLayerObject.legendInfo = remoteLayerObject.legendConfig;
-                newRemoteLayerObject.metadata = {
-                  legendConfig: remoteLayerObject.legendConfig,
-                };
+                newRemoteLayerObject.legendInfo = await requestWMSLayerLegendInfo(remoteLayerObject);
               } else {
                 //Attempt to fetch legend info from layer service
                 newRemoteLayerObject.legendInfo = await this.retrieveLegendInfo(remoteLayerObject);

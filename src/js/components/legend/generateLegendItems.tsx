@@ -66,27 +66,37 @@ const LegendItems = (props: LegendItemProps): JSX.Element => {
         </div>
       );
     } else if (layer.legendInfo && layer.origin === 'webmap') {
-      const labelIcons = layer.legendInfo?.map((item: any, i: number) => {
-        item.label = item.label && item.label.length ? item.label : layer.title;
-        const rendererExists = checkForRenderer(layer);
+      if (layer.type === 'wms') {
         return (
-          <div className="label-item" key={i}>
-            {!rendererExists ? (
-              <LegendLabel type={layer.type} options={item} opacity={layer.opacity.combined} />
-            ) : (
-              legendInfoController.getLegendInfoFromRenderer(layer)
-            )}
-            <p>{item.label}</p>
+          <div className="layer-item" key={layer.id + `${i}`}>
+            <p className="layer-title">{layer.title}</p>
+            <div className="title">{layer.legendInfo.layerName}</div>
+            <img src={layer.legendInfo} alt="wms-legend-info" />
           </div>
         );
-      });
-      return (
-        <div className="layer-item" key={layer.id + `${i}`}>
-          <p className="layer-title">{layer.title}</p>
-          <div className="title">{layer.legendInfo.layerName}</div>
-          {labelIcons}
-        </div>
-      );
+      } else {
+        const labelIcons = layer.legendInfo?.map((item: any, i: number) => {
+          item.label = item.label && item.label.length ? item.label : layer.title;
+          const rendererExists = checkForRenderer(layer);
+          return (
+            <div className="label-item" key={i}>
+              {!rendererExists ? (
+                <LegendLabel type={layer.type} options={item} opacity={layer.opacity.combined} />
+              ) : (
+                legendInfoController.getLegendInfoFromRenderer(layer)
+              )}
+              <p>{item.label}</p>
+            </div>
+          );
+        });
+        return (
+          <div className="layer-item" key={layer.id + `${i}`}>
+            <p className="layer-title">{layer.title}</p>
+            <div className="title">{layer.legendInfo.layerName}</div>
+            {labelIcons}
+          </div>
+        );
+      }
     } else if ((layer.legendInfo && layer.origin === 'remote') || layer.type === 'wms') {
       let labelIcons;
       if (layer.metadata?.legendConfig?.type === 'gradient') {

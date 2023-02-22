@@ -83,6 +83,16 @@ export function determineLayerVisibility(apiLayer: any, layerInfosFromURL: Layer
   }
 }
 
+export const requestWMSLayerLegendInfo = async (layer: any): Promise<any> => {
+  const sublayerName = layer.sublayers.items[0].name;
+  const layerOWSUrl = layer.url.replace('wms', 'ows');
+
+  return `${layerOWSUrl}?service=WMS&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=${sublayerName.replace(
+    ':',
+    '%3A'
+  )}`;
+};
+
 export async function extractWebmapLayerObjects(esriMap?: __esri.Map): Promise<LayerProps[]> {
   const mapLayerObjects: LayerProps[] = [];
   if (!esriMap) return [];
@@ -91,11 +101,14 @@ export async function extractWebmapLayerObjects(esriMap?: __esri.Map): Promise<L
 
   for (const layer of layerArray) {
     if (layer.type === 'graphics') continue;
-    //Get the legend information for each layer
-
-    //Dealing with sublayers first
     if (layer.sublayers && layer.sublayers.length > 0 && layer.type !== 'tile') {
-      const legendInfo = await legendInfoController.fetchLegendInfo(layer.url);
+      let legendInfo;
+      if (layer.type === 'wms') {
+        legendInfo = await requestWMSLayerLegendInfo(layer);
+      } else {
+        legendInfo = await legendInfoController.fetchLegendInfo(layer.url);
+      }
+
       layer.sublayers.forEach((sub: any) => {
         //get sublayer legend info
         const sublayerLegendInfo = legendInfo?.layers?.find((l: any) => l.layerId === sub.id);
@@ -112,14 +125,14 @@ export async function extractWebmapLayerObjects(esriMap?: __esri.Map): Promise<L
           visible,
           definitionExpression,
           group: 'webmap',
-          type: 'webmap',
+          type: layer.type !== 'wms' ? 'webmap' : 'wms',
           origin: 'webmap',
           url,
           maxScale,
           minScale,
           sublayer: true,
           parentID: sub.layer.id,
-          legendInfo: sublayerLegendInfo?.legend,
+          legendInfo: layer.type !== 'wms' ? sublayerLegendInfo?.legend : legendInfo,
         });
       });
 
