@@ -81,7 +81,7 @@ const LegendItems = (props: LegendItemProps): JSX.Element => {
       }
     } else if (layer.legendInfo && layer.origin === 'webmap') {
       if (layer.type === 'wms') {
-        generateWMSLegendInfo(layer, i);
+        return generateWMSLegendInfo(layer, i);
       } else {
         const labelIcons = layer.legendInfo?.map((item: any, i: number) => {
           item.label = item.label && item.label.length ? item.label : layer.title;
