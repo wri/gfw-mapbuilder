@@ -54,7 +54,6 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
     'esri/layers/WMSLayer',
   ]);
   const { appState, mapviewState } = store.getState();
-
   let esriLayer;
   switch (layerConfig.type) {
     case 'dynamic':

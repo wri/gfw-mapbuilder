@@ -342,7 +342,7 @@ export class MapController {
               if (remoteLayerObject.type === 'wms') {
                 newRemoteLayerObject.legendInfo = await requestWMSLayerLegendInfo(
                   remoteLayerObject.url,
-                  remoteLayerObject.layer
+                  remoteLayerObject.layerName || remoteLayerObject.layer
                 );
               } else {
                 //Attempt to fetch legend info from layer service
@@ -361,7 +361,7 @@ export class MapController {
               newRemoteLayerObject.portalItemID = remoteLayerObject.portalItemID;
 
               newRemoteLayerObject.layerIds = remoteLayerObject.layerIds;
-              newRemoteLayerObject.layerName = remoteLayerObject.layerName;
+              newRemoteLayerObject.layerName = remoteLayerObject.layerName || remoteLayerObject.layer;
               newRemoteLayerObject.label = remoteLayerObject.label;
               newRemoteLayerObject.sublabel = remoteLayerObject.sublabel;
               newRemoteLayerObject.parentID = undefined;
