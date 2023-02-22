@@ -89,7 +89,6 @@ const BaseAnalysis = (): JSX.Element => {
   const multiPolygonSelection = useSelector((store: RootState) => store.appState.multiPolygonSelectionMode);
 
   const themeColor = handleCustomColorTheme(customColorTheme);
-  // const analysisDateRange = useSelector(selectAnalysisDaterange);
 
   useEffect(() => {
     if (selectedAnalysis) {
