@@ -15,6 +15,16 @@ interface ContentParams {
   };
 }
 
+interface AttributesToDisplayParams {
+  attributes: any;
+  fieldNames: any;
+  newFields: any;
+}
+
+interface SetLocalStorageAttributesParams extends AttributesToDisplayParams {
+  layerTitle: string;
+}
+
 const convertTimestampToStringDate = (value: number) => {
   return new Date(value).toLocaleString();
 };
@@ -69,4 +79,43 @@ export const getLayerPopupIfAvailable = (hostedLayers: any, layerId: string) => 
     return null;
   }
   return null;
+};
+
+export const getAttributesToDisplay = (params: AttributesToDisplayParams) => {
+  const { attributes, fieldNames, newFields } = params;
+  const attributesDateListToConvert = ['DteApplied', 'DteGranted', 'DteExpires', 'Date', 'Expires'];
+
+  let updatedFields: any = fieldNames;
+  if (newFields !== null) {
+    updatedFields = newFields;
+  }
+
+  return updatedFields?.map((field) => {
+    //Grab attribute value irrespective if fieldName is appropriately cased!
+    const attributeKey = Object.keys(attributes).find((a) => a.toLowerCase() === field.fieldName.toLowerCase());
+    if (attributeKey) {
+      // Use label unless it is not set, then default to fieldName
+      const label = field?.label || field.label !== '' ? field.label : attributeKey;
+      let value = attributes[attributeKey] as any;
+
+      const updatedValue = handleTimestampDate({
+        checkList: attributesDateListToConvert,
+        label,
+        value,
+      });
+
+      return {
+        label,
+        value: updatedValue,
+      };
+    } else {
+      return null;
+    }
+  });
+};
+
+export const setAttributesToLocalStorage = (params: SetLocalStorageAttributesParams) => {
+  const { layerTitle } = params;
+  const attributes = getAttributesToDisplay(params);
+  localStorage.setItem('shareAttributes', JSON.stringify({ layerTitle, attributes }));
 };

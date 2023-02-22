@@ -14,7 +14,7 @@ import BaseButton from '../../ui/BaseButton';
 import styled from 'styled-components';
 import { addToMultiPolygonLayer, clearGraphics, clearUserGraphics } from '../../../helpers/MapGraphics';
 import { handleCustomColorTheme } from '../../../../utils';
-import { getLayerPopupIfAvailable, handleTimestampDate, updateContentProperties } from './helpers/index';
+import { getLayerPopupIfAvailable, setAttributesToLocalStorage, updateContentProperties } from './helpers/index';
 import RenderPopupContent from './RenderPopupContent';
 
 export interface AttributeObject {
@@ -100,6 +100,8 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
         //If we have fieldNames on activeLayerInfo we use it to map over attributes, otherwise, we use all attributes available
         const { attributes } = props;
         const fieldNames = activeLayerInfo?.fieldNames;
+
+        setAttributesToLocalStorage({ layerTitle, attributes, fieldNames, newFields });
 
         return (
           <table cellPadding={0} cellSpacing={0}>
