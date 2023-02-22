@@ -53,7 +53,7 @@ import {
   extractWebmapLayerObjects,
   getRemoteAndServiceLayers,
 } from '../helpers/mapController/miscLayerHelpers';
-import { fetchLegendInfo } from '../helpers/legendInfo';
+import legendInfoController from '../helpers/legendInfo';
 import { parseExtentConfig } from '../helpers/mapController/configParsing';
 import { overwriteColorTheme } from '../store/appSettings/actions';
 
@@ -500,14 +500,12 @@ export class MapController {
   }
 
   async retrieveLegendInfo(layerObject: LayerProps): Promise<any[] | undefined> {
-    console.log('layerObject', layerObject);
     let legendResult;
     if (!layerObject.url) {
       return legendResult;
     }
 
-    const legendInfoObject = await fetchLegendInfo(layerObject.url);
-    console.log('legendInfoObject', legendInfoObject);
+    const legendInfoObject = await legendInfoController.fetchLegendInfo(layerObject.url);
     if (legendInfoObject && !legendInfoObject.error) {
       legendResult = legendInfoObject?.layers?.filter((l: any) => layerObject.layerIds?.includes(l.layerId));
     }
@@ -2184,7 +2182,7 @@ export class MapController {
     const gladLayerConfig: any = allAvailableLayers.find((layer: any) => layer.id === id);
     const gladLayerOld: any = this._map!.findLayerById(id);
     const gladIndex: number = this._map!.layers.indexOf(gladLayerOld);
-    mapController.removeMapLayer(id);
+    this.removeMapLayer(id);
 
     const gladLayerNew: any = await LayerFactory(this._mapview, { ...gladLayerConfig, visible: true });
 

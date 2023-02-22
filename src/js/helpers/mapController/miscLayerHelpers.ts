@@ -10,8 +10,7 @@ import {
   RemoteApiLayerConfig,
   RWLayerConfig,
 } from '../../types/layersTypes';
-import { fetchLegendInfo } from '../legendInfo';
-import { mapController } from '../../controllers/mapController';
+import legendInfoController from '../legendInfo';
 
 async function createVectorLayerLegendInfo(layer: any): Promise<any> {
   const layerStyleInfo = await fetch(layer.url)
@@ -96,7 +95,7 @@ export async function extractWebmapLayerObjects(esriMap?: __esri.Map): Promise<L
 
     //Dealing with sublayers first
     if (layer.sublayers && layer.sublayers.length > 0 && layer.type !== 'tile') {
-      const legendInfo = await fetchLegendInfo(layer.url);
+      const legendInfo = await legendInfoController.fetchLegendInfo(layer.url);
       layer.sublayers.forEach((sub: any) => {
         //get sublayer legend info
         const sublayerLegendInfo = legendInfo?.layers?.find((l: any) => l.layerId === sub.id);
@@ -126,7 +125,7 @@ export async function extractWebmapLayerObjects(esriMap?: __esri.Map): Promise<L
 
       //If layer has layerId that means it is a sublayer too, so we process it just as the ones above
     } else if (layer.hasOwnProperty('layerId')) {
-      const legendInfo = await fetchLegendInfo(layer.url);
+      const legendInfo = await legendInfoController.fetchLegendInfo(layer.url);
       const subLegendInfo = legendInfo?.error
         ? undefined
         : legendInfo?.layers.find((l: any) => l.layerId === layer.layerId);
@@ -150,7 +149,7 @@ export async function extractWebmapLayerObjects(esriMap?: __esri.Map): Promise<L
       });
     } else {
       // => Handle all other layers that are not sublayers here
-      let legendInfo = await fetchLegendInfo(layer.url);
+      let legendInfo = await legendInfoController.fetchLegendInfo(layer.url);
       if (legendInfo?.error) {
         legendInfo = undefined;
       } else if (layer.type === 'tile') {

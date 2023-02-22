@@ -1,5 +1,5 @@
 import React from 'react';
-import { BasicItem, GradientItem, LineItem, PointItem, PolyFromMapServer } from './LegendLabelComponents';
+import { BasicItem, LineItem, PointItem, PolyFromMapServer } from './LegendLabelComponents';
 
 type LabelTypes = 'basic' | 'point' | 'line' | 'gradient' | 'group' | string | undefined;
 

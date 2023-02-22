@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { allAvailableLayers as allAvailableLayersAction } from '../../../../js/store/mapview/actions';
-import { RootState } from '../../../../js/store';
-import { mapController } from '../../../../js/controllers/mapController';
-import { fetchLegendInfo } from '../../../../js/helpers/legendInfo';
+import { RootState } from '../../../store';
+import { mapController } from '../../../controllers/mapController';
+import legendInfoController from '../../../../js/helpers/legendInfo';
 import { loadModules } from 'esri-loader';
 import { setVersionedLayer } from '../../../store/appState/actions';
 import { handleCustomColorTheme } from '../../../../utils';
@@ -52,7 +52,8 @@ export const LayerVersionPicker = (props: LayerVersionPickerProps): JSX.Element 
 
     //TODO: Implement fetching for featureServer layers not only mapimage ones!!!
     //Generate new legend iformation
-    const legendInfoObject = await fetchLegendInfo(versionLayerURL);
+
+    const legendInfoObject = await legendInfoController.fetchLegendInfo(versionLayerURL);
     const layerLegendInfo =
       legendInfoObject &&
       !legendInfoObject.error &&
