@@ -30,7 +30,7 @@ import RangeSlider from '../../sharedComponents/RangeSlider';
 import GladControls from '../../sharedComponents/GladControls';
 import IntegratedAlertControls from '../../sharedComponents/IntegratedAlertControls';
 import { eachDayOfInterval, format, subYears } from 'date-fns';
-import { handleCustomColorTheme } from '../../../../utils/index';
+import { handleCustomColorTheme } from '../../../../utils';
 
 interface LayerInfo {
   layerInfo: any;
@@ -275,7 +275,7 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
   };
 
   const openInfoModal = (): void => {
-    let layerId = '';
+    let layerId;
     if (layer.title === 'GFW Integrated Alerts') {
       layerId = gfwLayer;
     } else {

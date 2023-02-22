@@ -95,20 +95,11 @@ export async function extractWebmapLayerObjects(esriMap?: __esri.Map): Promise<L
   if (!esriMap) return [];
 
   const layerArray = esriMap.layers.toArray() as any;
-
+  let count = 0;
   for (const layer of layerArray) {
     if (layer.type === 'graphics') continue;
-    if (layer.sublayers && layer.sublayers.length > 0 && layer.type !== 'tile') {
-      let legendInfo;
-      if (layer.type === 'wms') {
-        const layerOWSUrl = layer.url.replace('wms', 'ows');
-        const sublayerName = layer.sublayers.items[0].name;
-
-        legendInfo = await requestWMSLayerLegendInfo(layerOWSUrl, sublayerName);
-      } else {
-        legendInfo = await legendInfoController.fetchLegendInfo(layer.url);
-      }
-
+    if (layer.sublayers && layer.sublayers.length > 0 && layer.type !== 'tile' && layer.type !== 'wms') {
+      const legendInfo = await legendInfoController.fetchLegendInfo(layer.url);
       layer.sublayers.forEach((sub: any) => {
         //get sublayer legend info
         const sublayerLegendInfo = legendInfo?.layers?.find((l: any) => l.layerId === sub.id);
@@ -125,18 +116,47 @@ export async function extractWebmapLayerObjects(esriMap?: __esri.Map): Promise<L
           visible,
           definitionExpression,
           group: 'webmap',
-          type: layer.type !== 'wms' ? 'webmap' : 'wms',
+          type: 'webmap',
           origin: 'webmap',
           url,
           maxScale,
           minScale,
           sublayer: true,
           parentID: sub.layer.id,
-          legendInfo: layer.type !== 'wms' ? sublayerLegendInfo?.legend : legendInfo,
+          legendInfo: sublayerLegendInfo?.legend,
         });
       });
-
       //If layer has layerId that means it is a sublayer too, so we process it just as the ones above
+    } else if (layer.type === 'wms') {
+      const layerOWSUrl = layer.url.replace('wms', 'ows');
+      const sublayerName = layer.sublayers.items[0].name;
+      const legendInfo = await requestWMSLayerLegendInfo(layerOWSUrl, sublayerName);
+      count++;
+      layer.sublayers.forEach((sub: any) => {
+        sub.opacity = sub.opacity ? sub.opacity : 1;
+        sub.id = count.toString();
+        const { title, opacity, visible, definitionExpression, url, maxScale, minScale } = sub;
+        mapLayerObjects.push({
+          id: count.toString(),
+          title,
+          opacity: {
+            combined: opacity,
+            fill: opacity,
+            outline: opacity,
+          },
+          visible,
+          definitionExpression,
+          group: 'webmap',
+          type: 'wms',
+          origin: 'webmap',
+          url,
+          maxScale,
+          minScale,
+          sublayer: true,
+          parentID: sub.layer.id,
+          legendInfo: legendInfo,
+        });
+      });
     } else if (layer.hasOwnProperty('layerId')) {
       const legendInfo = await legendInfoController.fetchLegendInfo(layer.url);
       const subLegendInfo = legendInfo?.error
@@ -161,6 +181,7 @@ export async function extractWebmapLayerObjects(esriMap?: __esri.Map): Promise<L
         portalItemID: layer.portalItem && layer.portalItem.id ? layer.portalItem.id : null,
       });
     } else {
+      console.log('hit');
       // => Handle all other layers that are not sublayers here
       let legendInfo = await legendInfoController.fetchLegendInfo(layer.url);
       if (legendInfo?.error) {

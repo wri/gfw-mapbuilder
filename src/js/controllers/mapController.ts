@@ -906,7 +906,7 @@ export class MapController {
       layer = this._map
         ?.findLayerById(parentID)
         //@ts-ignore -- sublayers exist
-        ?.allSublayers.items.find((sub: any) => sub.id === layerID);
+        ?.allSublayers.items.find((sub: any) => sub.id == layerID);
     } else {
       layer = this._map?.findLayerById(layerID);
     }
