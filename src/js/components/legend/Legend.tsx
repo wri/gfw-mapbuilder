@@ -66,7 +66,6 @@ const Legend = (): JSX.Element => {
       .filter((l) => l.visible)
       .filter((l) => !ignoredLayers.includes(l.id))
       .filter((l) => layerIsInScale(l, scale));
-    console.log('visibleLayers', visibleLayers);
     //sync layer loading state with legend comp
     setVisibleLayersToShow(visibleLayers);
   }, [layersLoading, allAvailableLayers, scale]);
