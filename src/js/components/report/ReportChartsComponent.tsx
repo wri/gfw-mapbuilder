@@ -17,6 +17,8 @@ import fragmentationSpec from '../../../js/components/leftPanel/analysisPanel/fr
 import { fetchWCSAnalysis, generateWidgetURL } from '../../../js/components/leftPanel/analysisPanel/analysisUtils';
 import { defaultAnalysisModules } from '../../../../configs/analysis-config';
 import { handleCustomColorTheme } from '../../../utils';
+import { getLocalStorageDates, addDateByType } from './helpers';
+import { LAYER_IDS } from '../../../../configs/layer-config';
 //Dynamic custom theme override using styled-components lib
 interface CheckBoxWrapperProps {
   customColorTheme: string;
@@ -36,29 +38,8 @@ function getDefaultYearRange(uiParams: any): null | number[] {
 
 const getTodayDate = new Date().toISOString().split('T')[0];
 
-//@TODO: leave method for now
-function getDefaultStartDate(uiParams: any): string {
-  if (uiParams === 'none') return '';
-  const input = uiParams.find((param: any) => param.type === 'date-picker');
-  if (input && input.defaultStartDate) {
-    return input.defaultStartDate;
-  } else {
-    return getTodayDate;
-  }
-}
-//@TODO: leave method for now
-function getDefaultEndDate(uiParams: any): string {
-  if (uiParams === 'none') return '';
-  const input = uiParams.find((param: any) => param.inputType === 'datepicker');
-  if (input && input.defaultEndDate) {
-    return input.defaultEndDate;
-  } else {
-    return getTodayDate;
-  }
-}
-
 interface ChartModuleProps {
-  moduleInfo: AnalysisModule;
+  moduleInfo: AnalysisModule | any;
   lang: string;
   geostoreID: string;
   esriGeometry: __esri.Graphic | undefined;
@@ -92,6 +73,8 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
   const [base64ChartURL, setBase64ChartURL] = React.useState('');
   const [chartDescription, setChartDescription] = React.useState<null | string>(null);
 
+  const [viirsDate, setViirsDate] = React.useState<any>([]);
+
   const themeColor = handleCustomColorTheme(customColorTheme);
 
   //We want to re-render chart if user clicks on the 'run analysis' button, this is one way to do it, there may be better options
@@ -100,14 +83,18 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
   function updateDate(val: any): void {
     setYearRangeValue(val);
   }
-
-  function updateDatePickerValues(start: string, end: string): void {
-    setStartDate(start);
-    setEndDate(end);
+  LAYER_IDS;
+  function updateDatePickerValues(start: string, end: string, id: string): void {
+    if (id === LAYER_IDS.VIIRS_FIRES) {
+      setViirsDate([start, end]);
+    } else {
+      setStartDate(start);
+      setEndDate(end);
+    }
   }
 
   const renderInputComponent = (props: UIParams, analysisId): JSX.Element | null | undefined => {
-    const { multi, minDate, maxDate, defaultStartDate, defaultEndDate, bounds } = props;
+    const { multi, minDate, maxDate, bounds } = props;
     switch (props.type) {
       case 'range-slider':
         if (bounds)
@@ -123,8 +110,7 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
             multi={multi}
             minDate={minDate}
             maxDate={maxDate}
-            defaultStartDate={analysisId === 'VIIRS_FIRES' ? viirsStart : defaultStartDate}
-            defaultEndDate={analysisId === 'VIIRS_FIRES' ? viirsEnd : defaultEndDate}
+            analysisId={analysisId}
             sendDateValue={updateDatePickerValues}
             customColorTheme={themeColor}
           />
@@ -135,10 +121,34 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
   };
 
   React.useEffect(() => {
+    const localStorageData = getLocalStorageDates('report-date-picker');
+    if (localStorageData) {
+      if (localStorageData.type === LAYER_IDS.VIIRS_FIRES) {
+        const { minDate, maxDate } = localStorageData;
+        setViirsDate([minDate, maxDate]);
+      } else {
+        setViirsDate([viirsStart, viirsEnd]);
+      }
+    }
+  }, []);
+
+  const getDatesToUse = () => {
+    if (!viirsDate.length) {
+      if (props.moduleInfo.minDate && props.moduleInfo.maxDate) {
+        return { minDate: props.moduleInfo.minDate, maxDate: props.moduleInfo.maxDate };
+      }
+      return { minDate: viirsStart, maxDate: viirsEnd };
+    }
+    return { minDate: viirsDate[0], maxDate: viirsDate[1] };
+  };
+
+  React.useEffect(() => {
     setChartLoading(true);
     if (props.moduleInfo.widgetId) {
-      const stDate = props.moduleInfo.analysisId === 'VIIRS_FIRES' ? viirsStart : startDate;
-      const enDate = props.moduleInfo.analysisId === 'VIIRS_FIRES' ? viirsEnd : endDate;
+      const dates = getDatesToUse();
+      const stDate = props.moduleInfo.analysisId === LAYER_IDS.VIIRS_FIRES ? dates.minDate : startDate;
+      const enDate = props.moduleInfo.analysisId === LAYER_IDS.VIIRS_FIRES ? dates.maxDate : endDate;
+
       // GFW WIDGET
       const widgetURL = generateWidgetURL({
         widgetId: props.moduleInfo.widgetId,
@@ -330,9 +340,10 @@ const ReportChartsComponent = (props: ChartProps): JSX.Element => {
   const selectedLanguage = useSelector((store: RootState) => store.appState.selectedLanguage);
   const disabledAnalysisModules = useSelector((store: RootState) => store.appSettings.disabledAnalysisModules);
 
+  const updatedDefaultData = addDateByType(defaultAnalysisModules, 'report-date-picker');
   return (
     <div className="chart-area-container">
-      {defaultAnalysisModules
+      {updatedDefaultData
         .filter((m) => {
           if (disabledAnalysisModules?.length) {
             return !disabledAnalysisModules.includes(m.analysisId);

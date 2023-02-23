@@ -20,7 +20,7 @@ export function generateAndAttachVegaChart(
   function renderVega(spec: any): void {
     new vega.View(vega.parse(spec), {
       rendered: 'canvas',
-      container: domref
+      container: domref,
     })
       .renderer('canvas') // Vega needs to be rendered in an svg, not canvas!
       .hover()
@@ -29,7 +29,7 @@ export function generateAndAttachVegaChart(
       .then((url: string) => {
         callback(url);
       })
-      .catch(e => {
+      .catch((e) => {
         console.error(e);
         callback({ error: 'failed to retrieve chart analysis' });
       });
@@ -65,9 +65,10 @@ export function generateAndAttachVegaChart(
     }
     const baseUrl = spec.data[0].url.split('?')[0];
     const url = `${baseUrl}?${queryParams}`;
+
     fetch(url)
-      .then(res => res.json())
-      .then(data => {
+      .then((res) => res.json())
+      .then((data) => {
         const resizeWidthSignal = {
           name: 'width',
           update: 'containerSize()[0]*0.90',
@@ -76,11 +77,11 @@ export function generateAndAttachVegaChart(
             {
               events: {
                 source: 'window',
-                type: 'resize'
+                type: 'resize',
               },
-              update: 'containerSize()[0]*0.90'
-            }
-          ]
+              update: 'containerSize()[0]*0.90',
+            },
+          ],
         };
         data.signals.push(resizeWidthSignal);
         renderVega(data);

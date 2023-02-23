@@ -91,6 +91,13 @@ const BaseAnalysis = (): JSX.Element => {
   const themeColor = handleCustomColorTheme(customColorTheme);
 
   useEffect(() => {
+    if (selectedAnalysis) {
+      const localStorageObj = { type: selectedAnalysis, minDate: analysisDateRange[0], maxDate: analysisDateRange[1] };
+      localStorage.setItem('report-date-picker', JSON.stringify(localStorageObj));
+    }
+  }, [selectedAnalysis, analysisDateRange[0], analysisDateRange[1]]);
+
+  useEffect(() => {
     const activeLayer = activeFeatures[activeFeatureIndex[0]];
     const activeFeature = activeLayer?.features[activeFeatureIndex[1]];
     //On Base analysis tab we need to fire registration to geostore for the selected feature or the drawn/uploaded shape
