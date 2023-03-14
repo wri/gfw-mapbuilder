@@ -99,13 +99,13 @@ export default {
         },
         {
           order: 2,
-          id: 'DEV_THREAT_INDEX',
+          id: 'states',
           type: 'wms',
-          url: 'https://sedac.ciesin.columbia.edu/geoserver/wms',
-          layerName: 'lulc:lulc-development-threat-index_agriculturalexpansion',
+          url: 'https://ahocevar.com/geoserver/wms',
+          layerName: 'states',
           visible: false,
           label: {
-            en: 'Development Threat Index - Agriculture',
+            en: 'States Population',
           },
           legendConfig: {
             type: 'gradient',
