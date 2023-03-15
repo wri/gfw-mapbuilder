@@ -1080,6 +1080,7 @@ export class MapController {
           return l;
         }
       });
+      console.log(newLayersArray);
       store.dispatch(allAvailableLayers(newLayersArray));
     }
   }
@@ -2105,13 +2106,13 @@ export class MapController {
 
   disableMapInteractions(): void {
     if (!this._mapview) return;
-    this._mapview.on('mouse-wheel', function(event) {
+    this._mapview.on('mouse-wheel', function (event) {
       event.stopPropagation();
     });
-    this._mapview.on('double-click', function(event) {
+    this._mapview.on('double-click', function (event) {
       event.stopPropagation();
     });
-    this._mapview.on('drag', functionevent) {
+    this._mapview.on('drag', function (event) {
       event.stopPropagation();
     });
   }
