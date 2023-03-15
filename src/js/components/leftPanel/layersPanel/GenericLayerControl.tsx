@@ -386,7 +386,7 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
     //TODO: check if we still need modis
     if (props.id === 'MODIS_ACTIVE_FIRES') {
       mapController.updateMODISorVIIRSOpacity(props.id, eventValue);
-    } else if (layerConfig.layer.type === 'wms') {
+    } else if (layerConfig.layer.type === 'wms' && layerConfig.layer.origin === 'webmap') {
       mapController.setLayerOpacityForWMSLayer(layerConfig.id, eventValue, layerConfig.parentID);
     } else {
       mapController.setLayerOpacity(layerConfig.id, eventValue, layerConfig.sublayer, layerConfig.parentID);
