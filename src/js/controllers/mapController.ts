@@ -1047,7 +1047,6 @@ export class MapController {
           return l;
         }
       });
-      console.log(newLayersArray);
       store.dispatch(allAvailableLayers(newLayersArray));
     }
   }
