@@ -107,57 +107,6 @@ export default {
           label: {
             en: 'States Population',
           },
-          legendConfig: {
-            type: 'gradient',
-            name: {
-              en: 'Development Threat Index_Agricultural Expansion',
-              fr: '',
-              es: '',
-              pt: '',
-              id: '',
-              zh: '',
-              ka: '',
-            },
-            source: '',
-            items: [
-              {
-                name: {
-                  zh: 'Low',
-                  pt: 'Low',
-                  ka: 'Low',
-                  id: 'Low',
-                  fr: 'Low',
-                  es: 'Low',
-                  en: 'Low',
-                },
-                color: '#EFEADB',
-              },
-              {
-                name: {
-                  zh: '',
-                  pt: '',
-                  ka: '',
-                  id: '',
-                  fr: '',
-                  es: '',
-                  en: '',
-                },
-                color: '#B77B72',
-              },
-              {
-                name: {
-                  zh: 'High',
-                  pt: 'High',
-                  ka: 'High',
-                  id: 'High',
-                  fr: 'High',
-                  es: 'High',
-                  en: 'High',
-                },
-                color: '#78596E',
-              },
-            ],
-          },
         },
       ],
     },

@@ -1022,14 +1022,42 @@ export class MapController {
       store.dispatch(allAvailableLayers(newLayersArray));
     }
   }
+  setLayerOpacityForWMSLayer(layerID: string, value: string, parentID?: string) {
+    let layer: any;
+    if (parentID) {
+      layer = this._map?.findLayerById(parentID);
+    }
+    if (layer) {
+      //updating layer's esri property
+      layer.opacity = Number(value);
 
+      //updating redux arr values
+      const { mapviewState } = store.getState();
+      const newLayersArray = mapviewState.allAvailableLayers.map((l) => {
+        if (l.id === layerID) {
+          return {
+            ...l,
+            opacity: {
+              combined: Number(value),
+              fill: l.opacity.fill,
+              outline: l.opacity.outline,
+            },
+          };
+        } else {
+          return l;
+        }
+      });
+      console.log(newLayersArray);
+      store.dispatch(allAvailableLayers(newLayersArray));
+    }
+  }
   setLayerOpacity(layerID: string, value: string, sublayer?: boolean, parentID?: string): void {
     let layer: any;
     if (sublayer && parentID) {
       layer = this._map
         ?.findLayerById(parentID)
         //@ts-ignore -- sublayers exist
-        ?.allSublayers.items.find((sub: any) => sub.id === layerID);
+        ?.allSublayers.items.find((sub: any) => sub.id === Number(layerID));
     } else {
       layer = this._map?.findLayerById(layerID) as any;
     }
@@ -1053,6 +1081,7 @@ export class MapController {
           return l;
         }
       });
+      console.log(newLayersArray);
       store.dispatch(allAvailableLayers(newLayersArray));
     }
   }
