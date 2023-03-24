@@ -1,0 +1,38 @@
+export const analysisReportConfig = {
+  shareModalTitle: {
+    en: 'Copy and paste the link to share it or use the buttons below to share on social media.',
+    fr: 'Copiez et collez le lien pour le partager ou utilisez les boutons ci-dessous pour le partager sur les réseaux sociaux.',
+    es: 'Copie y pegue el enlace para compartirlo o utilice los botones siguientes para compartirlo en las redes sociales.',
+    pt: 'Copiar e colar o link para o partilhar ou utilizar os botões abaixo para o partilhar nas redes sociais.',
+    id: 'Salin dan tempel tautan untuk membagikannya atau gunakan tombol di bawah ini untuk berbagi di media sosial.',
+    zh: '复制并粘贴链接来分享，或使用下面的按钮在社交媒体上分享。',
+    ka: 'დააკოპირეთ და ჩასვით ბმული მის გასაზიარებლად ან გამოიყენეთ ქვემოთ მოცემული ღილაკები სოციალურ მედიაში გასაზიარებლად.',
+  },
+  customAnalysisTitle: {
+    en: 'Custom Analysis',
+    fr: 'Analyse personnalisée',
+    es: 'Análisis personalizado',
+    pt: 'Análise personalizada',
+    id: 'Analisis khusus',
+    zh: '定制分析',
+    ka: 'მორგებული ანალიზი',
+  },
+  areaOfAnalysisTitle: {
+    en: 'Area of analysis',
+    fr: 'Aire d`analyse',
+    es: 'Área de análisis',
+    pt: 'Área de análise',
+    id: 'Area analisis',
+    zh: '分析的领域',
+    ka: 'ანალიზის სფერო',
+  },
+  copyButtonInShareModal: {
+    en: 'Copy',
+    fr: 'Copier',
+    es: 'Copiar',
+    pt: 'Copiar',
+    id: 'Salin',
+    zh: '复制',
+    ka: 'კოპირება',
+  },
+};
