@@ -30,7 +30,7 @@ import RangeSlider from '../../sharedComponents/RangeSlider';
 import GladControls from '../../sharedComponents/GladControls';
 import IntegratedAlertControls from '../../sharedComponents/IntegratedAlertControls';
 import { eachDayOfInterval, format, subYears } from 'date-fns';
-import { handleCustomColorTheme } from '../../../../utils/index';
+import { handleCustomColorTheme } from '../../../../utils';
 
 interface LayerInfo {
   layerInfo: any;
@@ -275,7 +275,7 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
   };
 
   const openInfoModal = (): void => {
-    let layerId = '';
+    let layerId;
     if (layer.title === 'GFW Integrated Alerts') {
       layerId = gfwLayer;
     } else {
@@ -386,6 +386,8 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
     //TODO: check if we still need modis
     if (props.id === 'MODIS_ACTIVE_FIRES') {
       mapController.updateMODISorVIIRSOpacity(props.id, eventValue);
+    } else if (layerConfig.layer.type === 'wms' && layerConfig.layer.origin === 'webmap') {
+      mapController.setLayerOpacityForWMSLayer(layerConfig.id, eventValue, layerConfig.parentID);
     } else {
       mapController.setLayerOpacity(layerConfig.id, eventValue, layerConfig.sublayer, layerConfig.parentID);
     }
@@ -398,7 +400,7 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
   const returnOpacityControl = (layer: LayerProps) => {
     //determine if we have generic slider or dual (fill, outline) one.
     // fill, outline only available for those layers that have potential renderers, sublayers, featurelayers
-    if (layer.sublayer || layer.type === 'feature') {
+    if ((layer.sublayer && layer.type !== 'wms') || layer.type === 'feature') {
       return (
         <div style={{ padding: '5px 2rem' }}>
           <span style={{ fontSize: '0.7rem' }}>Fill</span>

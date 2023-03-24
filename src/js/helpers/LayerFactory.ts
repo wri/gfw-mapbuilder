@@ -41,6 +41,7 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
     MosaicRule,
     RasterFunction,
     TileLayer,
+    WMSLayer,
   ] = await loadModules([
     'esri/layers/ImageryLayer',
     'esri/layers/FeatureLayer',
@@ -50,9 +51,9 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
     'esri/layers/support/MosaicRule',
     'esri/layers/support/RasterFunction',
     'esri/layers/TileLayer',
+    'esri/layers/WMSLayer',
   ]);
   const { appState, mapviewState } = store.getState();
-
   let esriLayer;
   switch (layerConfig.type) {
     case 'dynamic':
@@ -277,6 +278,22 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
         title: layerConfig.title,
         visible: layerConfig.visible,
         url: layerConfig.url,
+      });
+      if (layerConfig?.opacity && layerConfig.opacity?.combined) {
+        esriLayer.opacity = layerConfig.opacity.combined;
+      }
+      break;
+    case 'wms':
+      esriLayer = new WMSLayer({
+        id: layerConfig.id,
+        title: layerConfig.title,
+        visible: layerConfig.visible,
+        url: layerConfig.url,
+        sublayers: [
+          {
+            name: layerConfig.layerName,
+          },
+        ],
       });
       if (layerConfig?.opacity && layerConfig.opacity?.combined) {
         esriLayer.opacity = layerConfig.opacity.combined;

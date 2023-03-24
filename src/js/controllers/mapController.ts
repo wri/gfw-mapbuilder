@@ -52,8 +52,9 @@ import {
   determineLayerVisibility,
   extractWebmapLayerObjects,
   getRemoteAndServiceLayers,
+  requestWMSLayerLegendInfo,
 } from '../helpers/mapController/miscLayerHelpers';
-import { fetchLegendInfo } from '../helpers/legendInfo';
+import legendInfoController from '../helpers/legendInfo';
 import { parseExtentConfig } from '../helpers/mapController/configParsing';
 import { overwriteColorTheme } from '../store/appSettings/actions';
 
@@ -338,8 +339,16 @@ export class MapController {
                 remoteLayerObject.versionIndex = 0;
               }
 
-              //Attempt to fetch legend info from layer service
-              newRemoteLayerObject.legendInfo = await this.retrieveLegendInfo(remoteLayerObject);
+              if (remoteLayerObject.type === 'wms') {
+                newRemoteLayerObject.legendInfo = await requestWMSLayerLegendInfo(
+                  remoteLayerObject.url,
+                  remoteLayerObject.layerName || remoteLayerObject.layer
+                );
+              } else {
+                //Attempt to fetch legend info from layer service
+                newRemoteLayerObject.legendInfo = await this.retrieveLegendInfo(remoteLayerObject);
+              }
+
               newRemoteLayerObject.id = remoteLayerObject.id;
               newRemoteLayerObject.title = remoteLayerObject.label[appState.selectedLanguage]
                 ? remoteLayerObject.label[appState.selectedLanguage]
@@ -352,6 +361,7 @@ export class MapController {
               newRemoteLayerObject.portalItemID = remoteLayerObject.portalItemID;
 
               newRemoteLayerObject.layerIds = remoteLayerObject.layerIds;
+              newRemoteLayerObject.layerName = remoteLayerObject.layerName || remoteLayerObject.layer;
               newRemoteLayerObject.label = remoteLayerObject.label;
               newRemoteLayerObject.sublabel = remoteLayerObject.sublabel;
               newRemoteLayerObject.parentID = undefined;
@@ -496,7 +506,7 @@ export class MapController {
       return legendResult;
     }
 
-    const legendInfoObject = await fetchLegendInfo(layerObject.url);
+    const legendInfoObject = await legendInfoController.fetchLegendInfo(layerObject.url);
     if (legendInfoObject && !legendInfoObject.error) {
       legendResult = legendInfoObject?.layers?.filter((l: any) => layerObject.layerIds?.includes(l.layerId));
     }
@@ -896,7 +906,7 @@ export class MapController {
       layer = this._map
         ?.findLayerById(parentID)
         //@ts-ignore -- sublayers exist
-        ?.allSublayers.items.find((sub: any) => sub.id === layerID);
+        ?.allSublayers.items.find((sub: any) => Number(sub.id) === Number(layerID));
     } else {
       layer = this._map?.findLayerById(layerID);
     }
@@ -1012,14 +1022,41 @@ export class MapController {
       store.dispatch(allAvailableLayers(newLayersArray));
     }
   }
+  setLayerOpacityForWMSLayer(layerID: string, value: string, parentID?: string) {
+    let layer: any;
+    if (parentID) {
+      layer = this._map?.findLayerById(parentID);
+    }
+    if (layer) {
+      //updating layer's esri property
+      layer.opacity = Number(value);
 
+      //updating redux arr values
+      const { mapviewState } = store.getState();
+      const newLayersArray = mapviewState.allAvailableLayers.map((l) => {
+        if (l.id === layerID) {
+          return {
+            ...l,
+            opacity: {
+              combined: Number(value),
+              fill: l.opacity.fill,
+              outline: l.opacity.outline,
+            },
+          };
+        } else {
+          return l;
+        }
+      });
+      store.dispatch(allAvailableLayers(newLayersArray));
+    }
+  }
   setLayerOpacity(layerID: string, value: string, sublayer?: boolean, parentID?: string): void {
     let layer: any;
     if (sublayer && parentID) {
       layer = this._map
         ?.findLayerById(parentID)
         //@ts-ignore -- sublayers exist
-        ?.allSublayers.items.find((sub: any) => sub.id === layerID);
+        ?.allSublayers.items.find((sub: any) => sub.id === Number(layerID));
     } else {
       layer = this._map?.findLayerById(layerID) as any;
     }
@@ -2173,7 +2210,7 @@ export class MapController {
     const gladLayerConfig: any = allAvailableLayers.find((layer: any) => layer.id === id);
     const gladLayerOld: any = this._map!.findLayerById(id);
     const gladIndex: number = this._map!.layers.indexOf(gladLayerOld);
-    mapController.removeMapLayer(id);
+    this.removeMapLayer(id);
 
     const gladLayerNew: any = await LayerFactory(this._mapview, { ...gladLayerConfig, visible: true });
 

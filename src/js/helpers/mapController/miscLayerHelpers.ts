@@ -10,8 +10,7 @@ import {
   RemoteApiLayerConfig,
   RWLayerConfig,
 } from '../../types/layersTypes';
-import { fetchLegendInfo } from '../legendInfo';
-import { mapController } from '../../controllers/mapController';
+import legendInfoController from '../legendInfo';
 
 async function createVectorLayerLegendInfo(layer: any): Promise<any> {
   const layerStyleInfo = await fetch(layer.url)
@@ -84,19 +83,27 @@ export function determineLayerVisibility(apiLayer: any, layerInfosFromURL: Layer
   }
 }
 
+export const requestWMSLayerLegendInfo = async (layerOWSUrl: string, sublayerName: string): Promise<string> => {
+  return `${layerOWSUrl}?service=WMS&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=${sublayerName.replace(
+    ':',
+    '%3A'
+  )}`;
+};
+
 export async function extractWebmapLayerObjects(esriMap?: __esri.Map): Promise<LayerProps[]> {
   const mapLayerObjects: LayerProps[] = [];
   if (!esriMap) return [];
-
   const layerArray = esriMap.layers.toArray() as any;
 
+  let count = 0;
   for (const layer of layerArray) {
     if (layer.type === 'graphics') continue;
-    //Get the legend information for each layer
 
-    //Dealing with sublayers first
-    if (layer.sublayers && layer.sublayers.length > 0 && layer.type !== 'tile') {
-      const legendInfo = await fetchLegendInfo(layer.url);
+    //@TODO this needs to be cleaned up and refactored to be more readable
+
+    // if sublayers and not tile or wms
+    if (layer.sublayers && layer.sublayers.length > 0 && layer.type !== 'tile' && layer.type !== 'wms') {
+      const legendInfo = await legendInfoController.fetchLegendInfo(layer.url);
       layer.sublayers.forEach((sub: any) => {
         //get sublayer legend info
         const sublayerLegendInfo = legendInfo?.layers?.find((l: any) => l.layerId === sub.id);
@@ -124,9 +131,41 @@ export async function extractWebmapLayerObjects(esriMap?: __esri.Map): Promise<L
         });
       });
 
+      // if wms
+    } else if (layer.type === 'wms') {
+      const layerOWSUrl = layer.url.replace('wms', 'ows');
+      const sublayerName = layer.sublayers.items[0].name;
+      const legendInfo = await requestWMSLayerLegendInfo(layerOWSUrl, sublayerName);
+      count++;
+      layer.sublayers.forEach((sub: any) => {
+        sub.opacity = sub.opacity ? sub.opacity : 1;
+        sub.id = count.toString();
+        const { title, opacity, visible, definitionExpression, url, maxScale, minScale } = sub;
+        mapLayerObjects.push({
+          id: count.toString(),
+          title,
+          opacity: {
+            combined: opacity,
+            fill: opacity,
+            outline: opacity,
+          },
+          visible,
+          definitionExpression,
+          group: 'webmap',
+          type: 'wms',
+          origin: 'webmap',
+          url,
+          maxScale,
+          minScale,
+          sublayer: true,
+          parentID: sub.layer.id,
+          legendInfo: legendInfo,
+        });
+      });
+
       //If layer has layerId that means it is a sublayer too, so we process it just as the ones above
     } else if (layer.hasOwnProperty('layerId')) {
-      const legendInfo = await fetchLegendInfo(layer.url);
+      const legendInfo = await legendInfoController.fetchLegendInfo(layer.url);
       const subLegendInfo = legendInfo?.error
         ? undefined
         : legendInfo?.layers.find((l: any) => l.layerId === layer.layerId);
@@ -148,9 +187,10 @@ export async function extractWebmapLayerObjects(esriMap?: __esri.Map): Promise<L
         legendInfo: subLegendInfo?.legend,
         portalItemID: layer.portalItem && layer.portalItem.id ? layer.portalItem.id : null,
       });
-    } else {
+
       // => Handle all other layers that are not sublayers here
-      let legendInfo = await fetchLegendInfo(layer.url);
+    } else {
+      let legendInfo = await legendInfoController.fetchLegendInfo(layer.url);
       if (legendInfo?.error) {
         legendInfo = undefined;
       } else if (layer.type === 'tile') {

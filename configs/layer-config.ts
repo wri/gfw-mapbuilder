@@ -20,6 +20,7 @@ export const supportedLayers = [
   'co2_emissions',
   'Vector.Layer',
   'base-tile-layer',
+  'wms',
 ];
 
 //Layer controls (IDS) // TODO: add layer id

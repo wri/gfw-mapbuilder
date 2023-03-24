@@ -40,19 +40,20 @@ const returnMetadataContent = (xmlResults: any) => {
 
 const getMetadata = async (layer: any, sharinghost: RootState['appSettings']['sharinghost']): Promise<any> => {
   let content: any;
-  const metadataURL = `${sharinghost}/sharing/rest/content/items/${layer.portalItemID}/info/metadata/metadata.xml`;
-  const layerMetadataURL = `${layer.url}/info/metadata`;
-  const xmlResults = await fetch(metadataURL).then((res) => res.text());
-  const layerXMLResults = await fetch(layerMetadataURL).then((res) => res.text());
-  const metadataExists = !xmlResults.includes('Error');
-  const layerMetadataExists = !layerXMLResults.includes('Error') && !layerXMLResults.includes('invalid request');
-  if (metadataExists) {
-    return (content = returnMetadataContent(xmlResults));
-  } else if (!metadataExists && layerMetadataExists) {
-    return (content = returnMetadataContent(layerXMLResults));
-  } else {
-    return content;
+  if (layer.portalItemID) {
+    const metadataURL = `${sharinghost}/sharing/rest/content/items/${layer.portalItemID}/info/metadata/metadata.xml`;
+    const layerMetadataURL = `${layer.url}/info/metadata`;
+    const xmlResults = await fetch(metadataURL).then((res) => res.text());
+    const layerXMLResults = await fetch(layerMetadataURL).then((res) => res.text());
+    const metadataExists = !xmlResults.includes('Error');
+    const layerMetadataExists = !layerXMLResults.includes('Error') && !layerXMLResults.includes('invalid request');
+    if (metadataExists) {
+      return (content = returnMetadataContent(xmlResults));
+    } else if (!metadataExists && layerMetadataExists) {
+      return (content = returnMetadataContent(layerXMLResults));
+    }
   }
+  return content;
 };
 
 //Extracting INFO from WebMaps
@@ -165,7 +166,7 @@ const InfoContent: FunctionComponent<{}> = (): any => {
     };
 
     const getRemoteContent = (): void => {
-      const results = layer.metadata.metadata;
+      const results = layer.metadata?.metadata;
       setContent(results);
       setDataLoading(false);
     };
