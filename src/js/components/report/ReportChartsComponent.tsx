@@ -123,31 +123,21 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
   React.useEffect(() => {
     const localStorageData = getLocalStorageDates('report-date-picker');
     if (localStorageData) {
+      const { minDate, maxDate } = localStorageData;
       if (localStorageData.type === LAYER_IDS.VIIRS_FIRES) {
-        const { minDate, maxDate } = localStorageData;
         setViirsDate([minDate, maxDate]);
       } else {
-        setViirsDate([viirsStart, viirsEnd]);
+        setStartDate(minDate);
+        setEndDate(maxDate);
       }
     }
   }, []);
 
-  const getDatesToUse = () => {
-    if (!viirsDate.length) {
-      if (props.moduleInfo.minDate && props.moduleInfo.maxDate) {
-        return { minDate: props.moduleInfo.minDate, maxDate: props.moduleInfo.maxDate };
-      }
-      return { minDate: viirsStart, maxDate: viirsEnd };
-    }
-    return { minDate: viirsDate[0], maxDate: viirsDate[1] };
-  };
-
   React.useEffect(() => {
     setChartLoading(true);
     if (props.moduleInfo.widgetId) {
-      const dates = getDatesToUse();
-      const stDate = props.moduleInfo.analysisId === LAYER_IDS.VIIRS_FIRES ? dates.minDate : startDate;
-      const enDate = props.moduleInfo.analysisId === LAYER_IDS.VIIRS_FIRES ? dates.maxDate : endDate;
+      const stDate = props.moduleInfo?.minDate ? props.moduleInfo?.minDate : startDate;
+      const enDate = props.moduleInfo?.maxDate ? props.moduleInfo?.maxDate : endDate;
 
       // GFW WIDGET
       const widgetURL = generateWidgetURL({
@@ -341,6 +331,7 @@ const ReportChartsComponent = (props: ChartProps): JSX.Element => {
   const disabledAnalysisModules = useSelector((store: RootState) => store.appSettings.disabledAnalysisModules);
 
   const updatedDefaultData = addDateByType(defaultAnalysisModules, 'report-date-picker');
+
   return (
     <div className="chart-area-container">
       {updatedDefaultData
