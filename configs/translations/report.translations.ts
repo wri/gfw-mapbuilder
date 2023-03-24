@@ -7,6 +7,9 @@ export const analysisReportConfig = {
     id: 'Salin dan tempel tautan untuk membagikannya atau gunakan tombol di bawah ini untuk berbagi di media sosial.',
     zh: '复制并粘贴链接来分享，或使用下面的按钮在社交媒体上分享。',
     ka: 'დააკოპირეთ და ჩასვით ბმული მის გასაზიარებლად ან გამოიყენეთ ქვემოთ მოცემული ღილაკები სოციალურ მედიაში გასაზიარებლად.',
+    hy: 'Պատճենեք և տեղադրեք հղումը՝ այն համօգտագործելու համար կամ օգտագործեք ստորև նշված կոճակները՝ սոցիալական ցանցերում կիսվելու համար:',
+    az: 'Paylaşmaq üçün linki kopyalayıb yapışdırın və ya sosial mediada paylaşmaq üçün aşağıdakı düymələrdən istifadə edin.',
+    nl: 'Kopieer en plak de link om hem te delen of gebruik de onderstaande knoppen om hem te delen op sociale media.',
   },
   customAnalysisTitle: {
     en: 'Custom Analysis',
@@ -16,6 +19,9 @@ export const analysisReportConfig = {
     id: 'Analisis khusus',
     zh: '定制分析',
     ka: 'მორგებული ანალიზი',
+    hy: 'Պատվերով վերլուծություն',
+    az: 'Fərdi analiz',
+    nl: 'Analyse op maat',
   },
   areaOfAnalysisTitle: {
     en: 'Area of analysis',
@@ -25,6 +31,9 @@ export const analysisReportConfig = {
     id: 'Area analisis',
     zh: '分析的领域',
     ka: 'ანალიზის სფერო',
+    hy: 'Վերլուծության ոլորտ',
+    az: 'Təhlil sahəsi',
+    nl: 'Analysegebied',
   },
   copyButtonInShareModal: {
     en: 'Copy',
@@ -34,5 +43,8 @@ export const analysisReportConfig = {
     id: 'Salin',
     zh: '复制',
     ka: 'კოპირება',
+    hy: 'Պատճենել',
+    az: 'Kopyalayın',
+    nl: 'Kopieer',
   },
 };
