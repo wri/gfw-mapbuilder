@@ -196,8 +196,8 @@ export class MapController {
         });
 
         //Set layer default dates
-        // this.setVIIRSDates();
-        // this.setGLADDates();
+        this.setVIIRSDates();
+        this.setGLADDates();
 
         this._mapview!.on('click', (event) => {
           //clear out map graphics
