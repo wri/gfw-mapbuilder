@@ -9,6 +9,7 @@ import { ReportTable } from './report/ReportTable';
 import { MemoReportChartsComponent } from './report/ReportChartsComponent';
 import { ShareIcon } from '../../images/shareIcon';
 import { PrintIcon } from '../../images/printIcon';
+import { analysisReportConfig } from '../../../configs/translations/report.translations';
 import '../../css/report.scss';
 
 const geostoreURL = 'https://production-api.globalforestwatch.org/v1/geostore/';
@@ -31,9 +32,11 @@ const Report = (props: ReportProps): JSX.Element => {
   const dispatch = useDispatch();
   const logoURL = useSelector((store: RootState) => store.appSettings.logoUrl);
   const layersLoading = useSelector((store: RootState) => store.mapviewState.layersLoading);
+  const selectedLanguage = useSelector((state: RootState) => state.appState.selectedLanguage);
   const [featureGeometry, setFeatureGeometry] = React.useState<any>('');
   const [esriGeometry, setEsriGeometry] = React.useState();
   const [geostoreID, setGeostoreID] = React.useState<string | null>(null);
+  const { customAnalysisTitle, areaOfAnalysisTitle } = analysisReportConfig;
 
   const isMapReady = useSelector((store: RootState) => store.mapviewState.isMapReady);
 
@@ -89,7 +92,7 @@ const Report = (props: ReportProps): JSX.Element => {
     <div className="report">
       <div className="report-header">
         {logoURL && logoURL.length && <img src={logoURL} alt="logo" className="logo" />}
-        <p className="title">{`${window.document.title} Custom Analysis`}</p>
+        <p className="title">{`${window.document.title} ${customAnalysisTitle[selectedLanguage]}`}</p>
         <button onClick={printReport}>
           <PrintIcon height={25} width={25} fill={'#fff'} />
         </button>
@@ -126,7 +129,7 @@ const Report = (props: ReportProps): JSX.Element => {
         )}
         {localStorageData?.layerTitle && (
           <>
-            <p className="analysis-title">AREA OF ANALYSIS</p>
+            <p className="analysis-title">{areaOfAnalysisTitle[selectedLanguage]}</p>
             <p className="analysis-subtitle">{localStorageData?.attributes ? localStorageData?.layerTitle : ''}</p>
             <ReportTable attributes={localStorageData?.attributes || []} />
           </>

@@ -4,16 +4,16 @@ import { RootState } from '../../../../js/store/index';
 import { TwitterIcon } from '../../../../images/twitterIcon';
 import { FacebookIcon } from '../../../../images/facebookIcon';
 import { shareContent } from '../../../../../configs/translations/modal.tanslations';
+import { analysisReportConfig } from '../../../../../configs/translations/report.translations';
 import { getShareableURL } from '../../../../js/helpers/shareFunctionality';
 
 const ShareContent: FunctionComponent = () => {
   const urlRef = useRef() as React.MutableRefObject<HTMLInputElement>;
-  const selectedLanguage = useSelector(
-    (state: RootState) => state.appState.selectedLanguage
-  );
+  const selectedLanguage = useSelector((state: RootState) => state.appState.selectedLanguage);
 
   const [urlValue, setUrlValue] = useState<any>('');
   const { title } = shareContent[selectedLanguage];
+  const { shareModalTitle, copyButtonInShareModal } = analysisReportConfig;
   const popupDimensions = 'toolbar=0,status=0,height=650,width=450';
 
   const copyURLToClipboard = (): void => {
@@ -24,29 +24,19 @@ const ShareContent: FunctionComponent = () => {
   };
 
   const shareTwitter = (): void => {
-    window.open(
-      `https://twitter.com/share?url=${window.location.href}`,
-      'Twitter',
-      popupDimensions
-    );
+    window.open(`https://twitter.com/share?url=${window.location.href}`, 'Twitter', popupDimensions);
   };
 
   const shareFacebook = (): void => {
     // https://www.facebook.com/sharer.php?u=http://bit.ly/2I6y3Te
 
-    window.open(
-      `https://www.facebook.com/sharer.php?u=${window.location.href}`,
-      'Facebook',
-      popupDimensions
-    );
+    window.open(`https://www.facebook.com/sharer.php?u=${window.location.href}`, 'Facebook', popupDimensions);
   };
 
   useEffect((): any => {
     async function returnURL(): Promise<void> {
       //Let's check if we are in the report mode or not
-      const reportParam = new URL(window.location.href).searchParams.get(
-        'report'
-      );
+      const reportParam = new URL(window.location.href).searchParams.get('report');
       let reportView;
       if (reportParam) {
         reportView = reportParam === 'true';
@@ -80,25 +70,16 @@ const ShareContent: FunctionComponent = () => {
     <div className="modal-content-container">
       <div className="directions">
         <h4 className="title">{title}</h4>
-        <p>
-          Copy and paste the link to share it or use the buttons below to share
-          on social media.
-        </p>
+        <p>{shareModalTitle[selectedLanguage]}</p>
         <div className="copy-link-wrapper">
           <input type="text" readOnly value={urlValue} ref={urlRef}></input>
-          <button onClick={(): void => copyURLToClipboard()}>COPY</button>
+          <button onClick={(): void => copyURLToClipboard()}>{copyButtonInShareModal[selectedLanguage]}</button>
         </div>
         <div className="share-button-wrapper">
-          <button
-            onClick={(): void => shareTwitter()}
-            className="share-button twitter"
-          >
+          <button onClick={(): void => shareTwitter()} className="share-button twitter">
             <TwitterIcon width={20} height={20} fill={'#fff'} />
           </button>
-          <button
-            onClick={(): void => shareFacebook()}
-            className="share-button facebook"
-          >
+          <button onClick={(): void => shareFacebook()} className="share-button facebook">
             <FacebookIcon width={20} height={20} fill={'#fff'} />
           </button>
         </div>
