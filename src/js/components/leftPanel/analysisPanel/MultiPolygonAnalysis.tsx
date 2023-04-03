@@ -21,6 +21,7 @@ import { AnalyzingIcon } from '../../../../images/analyzingIcon';
 import { ErrorIcon } from '../../../../images/errorIcon';
 import { setActiveFeatures } from '../../../store/mapview/actions';
 import { handleCustomColorTheme } from '../../../../utils';
+import { analysisContent } from '../../../../../configs/translations/leftPanel.translations';
 
 interface Props {
   initAnalyze: (val: boolean) => void;
@@ -32,10 +33,12 @@ const MultiPolygonAnalysis = ({ initAnalyze }: Props) => {
   const analysisFeatureList = useSelector((store: RootState) => store.appState.analysisFeatureList, shallowEqual);
   const customColorTheme = useSelector((store: RootState) => store.appSettings.customColorTheme);
 
-  //TODO: Add translations
   const [overlap, setOverlap] = React.useState<'intersect' | 'analyzing' | 'failed' | 'idle'>('idle');
 
   const themeColor = handleCustomColorTheme(customColorTheme);
+
+  const { overlappingShapeTitle, overlappingShapeDirections, overlappingShapeButton } =
+    analysisContent[selectedLanguage];
 
   React.useEffect(() => {
     if (analysisFeatureList[0] && analysisFeatureList[1]) {
@@ -174,7 +177,7 @@ const MultiPolygonAnalysis = ({ initAnalyze }: Props) => {
   return (
     <div>
       <MultiPolyWrap>
-        <p>Analyze overlapping area between two shapes</p>
+        <p>{overlappingShapeTitle}</p>
         {!analysisFeatureList[0] ? (
           <MethodSelection
             handleInputSelection={handleInputSelection}

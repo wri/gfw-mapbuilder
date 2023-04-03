@@ -49,6 +49,9 @@ const AnalysisTabView = (props: TabProps): JSX.Element => {
     enterCoordinatesDirections,
     coordinatesButton,
     visitTitle,
+    overlappingShapeTitle,
+    overlappingShapeDirections,
+    overlappingShapeButton,
   } = analysisContent[selectedLanguage];
 
   const activeFeaturesLength = useSelector(selectActiveFeaturesLength);
@@ -111,15 +114,15 @@ const AnalysisTabView = (props: TabProps): JSX.Element => {
       <div className="directions">
         <figure>
           <figcaption className="title">
-            <h4>{'Analyze overlapping area between two shapes'}</h4>
+            <h4>{overlappingShapeTitle}</h4>
           </figcaption>
           <ol>
-            <li>Use the layers tab to turn on data layer</li>
-            <li>Select first shape</li>
-            <li>Click on Add to Analysis under Data Tab</li>
-            <li>Select second shape</li>
-            <li>Click on Add to Analysis under Data Tab</li>
-            <li>Click on the analyze button</li>
+            <li>{overlappingShapeDirections[0]}</li>
+            <li>{overlappingShapeDirections[1]}</li>
+            <li>{overlappingShapeDirections[2]}</li>
+            <li>{overlappingShapeDirections[3]}</li>
+            <li>{overlappingShapeDirections[4]}</li>
+            <li>{overlappingShapeDirections[5]}</li>
           </ol>
         </figure>
         <BaseButton
@@ -128,7 +131,7 @@ const AnalysisTabView = (props: TabProps): JSX.Element => {
           onClick={() => dispatch(setMultiPolygonSelectionMode(true))}
         >
           <SelectionIcon height={18} width={18} fill={'#555'} />
-          {'Start Selecting'}
+          {overlappingShapeButton}
         </BaseButton>
         <Buffer />
         <figure>
