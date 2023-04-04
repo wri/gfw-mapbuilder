@@ -16,6 +16,9 @@ export const analysisContent = {
     enterCoordinatesDirections: [`Enter at least 3 coordinates`, `Add up to 10 points to make shapes`],
     coordinatesButton: 'Enter Values',
     visitTitle: ['Add additional shapes in the future by visiting the draw tool'],
+    selectShape: 'Select shape',
+    back: 'Back',
+    analyze: 'Analyze',
     overlappingShapeTitle: 'Analyze overlapping area between two shapes',
     overlappingShapeDirections: [
       'Use the layers tab to turn on data layers',
@@ -47,6 +50,9 @@ export const analysisContent = {
     ],
     coordinatesButton: 'Göstəriciləri daxil edin',
     visitTitle: ['Gələcəkdə rəsm alətinə daxil olaraq əlavə formalar əlavə edin,'],
+    selectShape: 'Formanı seçin',
+    back: 'Geri',
+    analyze: 'Təhlil edin',
     overlappingShapeTitle: 'İki formanın üst üstə gələn hissəsini təhlil edin',
     overlappingShapeDirections: [
       'Məlumat qatını aktivləşdirmək üçün qatlar nişanından istifadə edin',
@@ -76,6 +82,9 @@ export const analysisContent = {
     enterCoordinatesDirections: [`Voer minimaal 3 coördinaten in`, `Voeg maximaal 10 punten toe om vormen te maken`],
     coordinatesButton: 'Voer waarden in',
     visitTitle: ['Voeg in de toekomst extra vormen toe door naar de tekentool te gaa'],
+    selectShape: 'Selecteer vorm',
+    back: 'Terug',
+    analyze: 'Analyseren',
     overlappingShapeTitle: 'Overlappend gebied tussen twee vormen analyseren',
     overlappingShapeDirections: [
       'Gebruik het tabblad lagen om de gegevenslaag in te schakelen',
@@ -107,6 +116,9 @@ export const analysisContent = {
     enterCoordinatesDirections: [`Մուտքագրել առնվազն 3 կոորդինատ `, 'Ավելացնել մինչև 10 կետեր` պատկեր ստանալու համար '],
     coordinatesButton: 'Մուտքագրել արժեքներ ',
     visitTitle: ['Add additional shapes in the future by visiting the draw tool'],
+    selectShape: 'Ընտրեք ձևը',
+    back: 'Ետ',
+    analyze: 'Վերլուծել',
     overlappingShapeTitle: 'Վերլուծեք երկու ձևերի միջև համընկնող տարածքը',
     overlappingShapeDirections: [
       'Օգտագործեք շերտերի ներդիրը՝ տվյալների շերտը միացնելու համար',
@@ -135,6 +147,9 @@ export const analysisContent = {
     enterCoordinatesDirections: [`შეიტანეთ მინიმუმ  3 კოორდინატი`, `დაამატეთ 10 წერტილამდე პოლიგონის შესაქმნელად`],
     coordinatesButton: `მნიშვნელობების შეტანა`,
     visitTitle: ['მომავალში დაამატეთ დამატებითი ფიგურები სახაზავი ინსტრუმენტის ', ' მეშვეობით'],
+    selectShape: 'აირჩიეთ ფორმა',
+    back: 'უკან',
+    analyze: 'გააანალიზე',
     overlappingShapeTitle: 'გაანალიზეთ ორ ფიგურას შორის გადახურული არე',
     overlappingShapeDirections: [
       'გამოიყენეთ ფენების ჩანართი მონაცემთა ფენის ჩასართავად',
@@ -163,6 +178,9 @@ export const analysisContent = {
     enterCoordinatesDirections: [`Entrez au moins 3 coordonnées`, `Ajoutez jusqu’à 10 points pour définir votre zone`],
     coordinatesButton: `Entrez les valeurs`,
     visitTitle: ["Ajouter des polygones supplémentaires grâce à l'outil dessin"],
+    selectShape: 'Sélectionner une forme',
+    back: 'Retour',
+    analyze: 'Analyser',
     overlappingShapeTitle: 'Analyser la zone de chevauchement entre deux formes',
     overlappingShapeDirections: [
       "Utiliser l'onglet des couches pour activer la couche de données",
@@ -197,6 +215,9 @@ export const analysisContent = {
     ],
     coordinatesButton: `Ingresa valores`,
     visitTitle: ['Añadir polígonos adicionales en el futuro usando la herramienta de dibujo '],
+    selectShape: 'Seleccionar forma',
+    back: 'Regresar',
+    analyze: 'Analizar',
     overlappingShapeDirections: [
       'Utilice la pestaña de capas para activar la capa de datos',
       'Seleccione la primera forma',
@@ -227,6 +248,9 @@ export const analysisContent = {
     enterCoordinatesDirections: [`Insira pelo menos 3 coordenadas`, `Adicione até 10 pontos para desenhar o shape`],
     coordinatesButton: `Entre com os valores`,
     visitTitle: ['Adicionar formas adicionais no futuro, visitando a ferramenta de desenho'],
+    selectShape: 'Seleccionar forma',
+    back: 'Voltar',
+    analyze: 'Analisar',
     overlappingShapeTitle: 'Analizar el área de solapamiento entre dos formas',
     overlappingShapeDirections: [
       'Utilize o separador das camadas para ligar a camada de dados',
@@ -258,6 +282,9 @@ export const analysisContent = {
     ],
     coordinatesButton: `Masukkan Nilai`,
     visitTitle: ['Add additional shapes in the future by visiting the draw tool '],
+    selectShape: 'Pilih bentuk',
+    back: 'Kembali',
+    analyze: 'Analisis',
     overlappingShapeTitle: 'Menganalisis area yang tumpang tindih di antara dua bentuk',
     overlappingShapeDirections: [
       'Gunakan tab layer untuk mengaktifkan layer data',
@@ -282,6 +309,9 @@ export const analysisContent = {
     enterCoordinatesDirections: [`输入至少三个坐标`, `添加最多10个坐标来完成作图`],
     coordinatesButton: `输入`,
     visitTitle: ['使用绘画工具来添加更多图形'],
+    selectShape: '选择形状',
+    back: '返回首页',
+    analyze: '剖析',
     overlappingShapeTitle: '分析两个图形之间的重叠区域',
     overlappingShapeDirections: [
       '使用图层标签，打开数据层',
