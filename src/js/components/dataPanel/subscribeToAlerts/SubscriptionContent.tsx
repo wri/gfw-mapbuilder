@@ -342,7 +342,7 @@ const AOIDashboard = () => {
               </p>
             </div>
             <div className="alert-section">
-              <p className="title">{"Last week's alerts:"}</p>
+              <p className="title">{myGFWContentConfig[selectedLanguage].alertsTitle}</p>
               <p className="viirs">
                 {AOIDashboardText[selectedLanguage].viirs} {viirsAlers}
               </p>
