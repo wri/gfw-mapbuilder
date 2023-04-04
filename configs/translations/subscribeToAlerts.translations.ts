@@ -13,12 +13,11 @@ export const subscribeConfig = {
     SADLabel: 'SAD tree cover loss alerts',
     SADField: 'imazon-alerts',
     FORMALabel: 'FORMA alerts data',
-    FORMAField: 'forma-alerts'
+    FORMAField: 'forma-alerts',
   },
   az: {
     title: 'Meşə dəyişiklikləri barədə xəbərdarlıqlar',
-    subtitle:
-      'Meşə dəyişiklikləri barədə almaq istədiyiniz xəbərdarlıqları seçin ',
+    subtitle: 'Meşə dəyişiklikləri barədə almaq istədiyiniz xəbərdarlıqları seçin ',
     VIIRSLabel: 'VIIRS aktiv yanğın xəbərdarlıqları',
     VIIRSField: 'viirs-active-fires',
     GLADLabel: 'GLAD ağac örtüyünün itkisi xəbərdarlıqları',
@@ -30,12 +29,11 @@ export const subscribeConfig = {
     SADLabel: 'SAD ağac örtüyünün itkisi xəbərdarlıqları',
     SADField: 'imazon-alerts',
     FORMALabel: 'FORMA xəbərdarlıq məlumatları',
-    FORMAField: 'forma-alerts'
+    FORMAField: 'forma-alerts',
   },
   nl: {
     title: 'Meldingen voor verandering in (bos)beddeking',
-    subtitle:
-      'Kies de meldingen van verandering in bosbeddeking welke u wenst te ontvangen ',
+    subtitle: 'Kies de meldingen van verandering in bosbeddeking welke u wenst te ontvangen ',
     VIIRSLabel: 'VIIRS actieve brandmeldingen',
     VIIRSField: 'viirs-active-fires',
     GLADLabel: 'GLAD-meldingen voor afname  van boombedekking',
@@ -47,12 +45,11 @@ export const subscribeConfig = {
     SADLabel: 'SAD meldingen voor afname  van boombedekking',
     SADField: 'imazon-alerts',
     FORMALabel: 'FORMA melding gegevens ',
-    FORMAField: 'forma-alerts'
+    FORMAField: 'forma-alerts',
   },
   hy: {
     title: 'Անտառներում տեղի ունեցող փոփոխությունների մասին նախազգուշացում ',
-    subtitle:
-      'Ընտրել անտառներում տեղի ունեցող որ փոփոխությունների մասին եք ցանկանում ստանալ նախազգուշացում ',
+    subtitle: 'Ընտրել անտառներում տեղի ունեցող որ փոփոխությունների մասին եք ցանկանում ստանալ նախազգուշացում ',
     VIIRSLabel: 'VIIRS ակտիվ հրդեհների մասին ծանուցումներ ',
     VIIRSField: 'viirs-active-fires',
     GLADLabel: 'GLAD ծառածածկույթի կորստի մասին ծանուցումներ ',
@@ -64,12 +61,11 @@ export const subscribeConfig = {
     SADLabel: 'SAD ծառածածկույթի կորստի մասինծանուցումներ',
     SADField: 'imazon-alerts',
     FORMALabel: 'FORMA ծանուցումների տվյալներ ',
-    FORMAField: 'forma-alerts'
+    FORMAField: 'forma-alerts',
   },
   fr: {
     title: 'Alertes sur l’évolution des forêts',
-    subtitle:
-      'Sélectionnez les alertes de changement forestier que vous souhaitez recevoir',
+    subtitle: 'Sélectionnez les alertes de changement forestier que vous souhaitez recevoir',
     VIIRSLabel: 'Alertes incendies actifs VIIRS',
     VIIRSField: 'viirs-active-fires',
     GLADLabel: 'Alertes GLAD sur les pertes de couvert arboré',
@@ -81,7 +77,7 @@ export const subscribeConfig = {
     SADLabel: 'Alertes SAD sur les pertes de la couverture arborée',
     SADField: 'imazon-alerts',
     FORMALabel: 'Données d’alertes FORMA',
-    FORMAField: 'forma-alerts'
+    FORMAField: 'forma-alerts',
   },
   ka: {
     title: 'ტყის ცვლილების შეტყობინებები',
@@ -97,7 +93,7 @@ export const subscribeConfig = {
     SADLabel: 'SAD ხის ვარჯის კარგვის შეტყობინებები',
     SADField: 'imazon-alerts',
     FORMALabel: 'FORMA შეტყობინებების მონაცემები',
-    FORMAField: 'forma-alerts'
+    FORMAField: 'forma-alerts',
   },
   es: {
     title: 'Alertas de cambio forestal',
@@ -113,7 +109,7 @@ export const subscribeConfig = {
     SADLabel: 'Alertas SAD sobre pérdida de cobertura arbórea',
     SADField: 'imazon-alerts',
     FORMALabel: 'Datos de alertas FORMA',
-    FORMAField: 'forma-alerts'
+    FORMAField: 'forma-alerts',
   },
   pt: {
     title: 'Alertas de alterações florestais',
@@ -129,7 +125,7 @@ export const subscribeConfig = {
     SADLabel: 'Alertas de perda de cobertura arbórea SAD',
     SADField: 'imazon-alerts',
     FORMALabel: 'Dados de alertas FORMA',
-    FORMAField: 'forma-alerts'
+    FORMAField: 'forma-alerts',
   },
   id: {
     title: 'Peringatan perubahan hutan',
@@ -145,7 +141,7 @@ export const subscribeConfig = {
     SADLabel: 'Peringatan kehilangan tutupan pohon SAD',
     SADField: 'imazon-alerts',
     FORMALabel: 'Dados de alertas FORMA',
-    FORMAField: 'forma-alerts'
+    FORMAField: 'forma-alerts',
   },
   zh: {
     title: '森林变化预警',
@@ -161,57 +157,57 @@ export const subscribeConfig = {
     SADLabel: 'SAD 森林覆盖减少预警',
     SADField: 'imazon-alerts',
     FORMALabel: 'FORMA 预警数据',
-    FORMAField: 'forma-alerts'
-  }
+    FORMAField: 'forma-alerts',
+  },
 };
 
 export const nameSubscriptionConfig = {
   en: {
     title: 'Name your subscription',
     nameLabel: 'Name',
-    subscribeLabel: 'Subscribe to alerts'
+    subscribeLabel: 'Subscribe to alerts',
   },
   az: {
     title: 'Abunənizi göstərin',
     nameLabel: 'Ad',
-    subscribeLabel: 'Xəbərdarlıqlara abunə olun'
+    subscribeLabel: 'Xəbərdarlıqlara abunə olun',
   },
   nl: {
     title: 'Geef uw abonnement een naam',
     nameLabel: 'Naam',
-    subscribeLabel: 'Abonneer voor meldingen'
+    subscribeLabel: 'Abonneer voor meldingen',
   },
   hy: {
     title: 'Անվանել տվյալ բաժանորդագրությունը',
     nameLabel: 'Անվանում',
-    subscribeLabel: 'Բաժանորդագրվել ծանուցումների համար'
+    subscribeLabel: 'Բաժանորդագրվել ծանուցումների համար',
   },
   ka: {
     title: 'დაარქვით თქვენ ხელმოწერას',
     nameLabel: 'გვარი',
-    subscribeLabel: 'ხელმოწერა შეტყობინებებზე'
+    subscribeLabel: 'ხელმოწერა შეტყობინებებზე',
   },
   fr: {
     title: 'Nommer votre abonnement',
     nameLabel: 'Nom',
-    subscribeLabel: 'S’abonner aux alertes'
+    subscribeLabel: 'S’abonner aux alertes',
   },
   es: {
     title: 'Denomine su suscripción',
     nameLabel: 'Nombre',
-    subscribeLabel: 'Suscribirse a las alertas'
+    subscribeLabel: 'Suscribirse a las alertas',
   },
   pt: {
     title: 'Nomeie sua assinatura',
     nameLabel: 'Nome',
-    subscribeLabel: 'Inscreva-se para receber alertas'
+    subscribeLabel: 'Inscreva-se para receber alertas',
   },
   id: {
     title: 'Beri nama langganan Anda',
     nameLabel: 'Nama',
-    subscribeLabel: 'Berlangganan peringatan'
+    subscribeLabel: 'Berlangganan peringatan',
   },
-  zh: { title: '为您的订阅命名', nameLabel: '姓名', subscribeLabel: '订阅预警' }
+  zh: { title: '为您的订阅命名', nameLabel: '姓名', subscribeLabel: '订阅预警' },
 };
 
 export const languageOptions = [
@@ -223,59 +219,132 @@ export const languageOptions = [
   { label: 'Português (Brasil)', field: 'pt' },
   {
     label: 'Español (Mexico)',
-    field: 'es'
-  }
+    field: 'es',
+  },
 ];
 
 export const AOIDashboardText = {
   en: {
     created: 'Created',
     glad: 'GLAD alerts',
-    viirs: 'VIIRS alerts'
+    viirs: 'VIIRS alerts',
   },
   az: {
     created: 'Created',
     glad: 'GLAD xəbərdarlıqları',
-    viirs: 'VIIRS yanğınları'
+    viirs: 'VIIRS yanğınları',
   },
   fr: {
     created: 'Créé le',
     glad: 'Alertes GLAD',
-    viirs: 'Alertes VIIRS'
+    viirs: 'Alertes VIIRS',
   },
   ka: {
     created: 'Created',
     glad: 'GLAD alerts',
-    viirs: 'VIIRS alerts'
+    viirs: 'VIIRS alerts',
   },
   hy: {
     created: 'Created',
     glad: 'GLAD ծանուցումներ',
-    viirs: 'VIIRS alerts'
+    viirs: 'VIIRS alerts',
   },
   nl: {
     created: 'Created',
     glad: 'GLAD meldingen',
-    viirs: 'VIIRS branden'
+    viirs: 'VIIRS branden',
   },
   es: {
     created: 'Creado el',
     glad: 'Alertas GLAD',
-    viirs: 'Alertas VIIRS'
+    viirs: 'Alertas VIIRS',
   },
   pt: {
     created: 'Criado',
     glad: 'Alertas GLAD',
-    viirs: 'Alertas VIIRS'
+    viirs: 'Alertas VIIRS',
   },
   id: {
     created: 'Dibuat',
     glad: 'Peringatan GLAD',
-    viirs: 'Peringatan VIIRS'
+    viirs: 'Peringatan VIIRS',
   },
   zh: {
     created: '已创建',
     glad: 'GLAD 预警',
-    viirs: 'VIIRS 警报'
-  }
+    viirs: 'VIIRS 警报',
+  },
+};
+
+export const myGFWContentConfig = {
+  en: {
+    myGFWTitle: 'My GFW',
+    alertsTitle: 'Last week’s alerts:',
+    button1: 'View on map',
+    button2: 'Edit area',
+    button3: 'Print report',
+  },
+  az: {
+    myGFWTitle: 'Mənim GFW Sahələrim',
+    alertsTitle: 'Keçən həftənin xəbərdarlıqları:',
+    button1: 'Xəritədə baxin',
+    button2: 'Ərazini redaktə edin',
+    button3: 'Hesabatı çap edin',
+  },
+  nl: {
+    myGFWTitle: 'Mijn GFW-gebieden',
+    alertsTitle: 'Waarschuwingen van vorige week:',
+    button1: 'Bekijk op kaart',
+    button2: 'Gebied bewerken',
+    button3: 'Rapport afdrukken',
+  },
+  hy: {
+    myGFWTitle: 'Իմ GFW տարածքները',
+    alertsTitle: 'Անցյալ շաբաթվա ահազանգերը.',
+    button1: 'Դիտել քարտեզի վրա',
+    button2: 'Խմբագրել տարածքը',
+    button3: 'Տպել հաշվետվություն',
+  },
+  ka: {
+    myGFWTitle: 'ჩემი GFW ტერიტორიები',
+    alertsTitle: 'გაფრთხილებები გასულ კვირას:',
+    button1: 'იხილეთ რუკაზე',
+    button2: 'რედაქტირების არეალი',
+    button3: 'დაბეჭდილი ანგარიში',
+  },
+  fr: {
+    myGFWTitle: 'Mes aires GFW',
+    alertsTitle: 'Alertes de la semaine dernière:',
+    button1: 'Voir sur la carte',
+    button2: 'Modifier la zone',
+    button3: 'Imprimer le rapport',
+  },
+  es: {
+    myGFWTitle: 'Mis áreas de GFW',
+    alertsTitle: 'Alertas de la semana pasada:',
+    button1: 'Ver en el mapa',
+    button2: 'Editar área',
+    button3: 'Imprimir reporte',
+  },
+  pt: {
+    myGFWTitle: 'As minhas áreas GFW',
+    alertsTitle: 'Alertas da semana passada:',
+    button1: 'Ver no mapa',
+    button2: 'Área de edição',
+    button3: 'Imprimir relatório',
+  },
+  id: {
+    myGFWTitle: 'Area GFW saya',
+    alertsTitle: 'Peringatan minggu lalu:',
+    button1: 'Lihat di peta',
+    button2: 'Edit area',
+    button3: 'Mencetak laporan',
+  },
+  zh: {
+    myGFWTitle: '我的GFW地区',
+    alertsTitle: '上周的警报：',
+    button1: '在地图上查看',
+    button2: '编辑区域',
+    button3: '打印报告',
+  },
 };
