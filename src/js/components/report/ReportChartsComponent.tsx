@@ -18,7 +18,6 @@ import { fetchWCSAnalysis, generateWidgetURL } from '../../../js/components/left
 import { defaultAnalysisModules } from '../../../../configs/analysis-config';
 import { handleCustomColorTheme } from '../../../utils';
 import { getLocalStorageDates, addDateByType } from './helpers';
-import { LAYER_IDS } from '../../../../configs/layer-config';
 //Dynamic custom theme override using styled-components lib
 interface CheckBoxWrapperProps {
   customColorTheme: string;
@@ -35,8 +34,6 @@ function getDefaultYearRange(uiParams: any): null | number[] {
   if (input) return input.bounds;
   return null;
 }
-
-const getTodayDate = new Date().toISOString().split('T')[0];
 
 interface ChartModuleProps {
   moduleInfo: AnalysisModule | any;
@@ -55,15 +52,11 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
   const gladStart = useSelector((store: RootState) => store.appState.leftPanel.gladStart);
   const gladEnd = useSelector((store: RootState) => store.appState.leftPanel.gladEnd);
   const customColorTheme = useSelector((store: RootState) => store.appSettings.customColorTheme);
-  const viirsStart = useSelector((store: RootState) => store.appState.leftPanel.viirsStart);
-  const viirsEnd = useSelector((store: RootState) => store.appState.leftPanel.viirsEnd);
   const currentAnalysis = props.moduleInfo;
   const [submoduleIsHidden, setSubmoduleIsHidden] = React.useState(false);
   const [baseConfig, setBaseConfig] = React.useState<AnalysisModule>();
   const [inputsAreHidden, setInputsAreHidden] = React.useState(true);
   const [yearRangeValue, setYearRangeValue] = React.useState<null | number[]>(getDefaultYearRange(analysisParams));
-  const [startDate, setStartDate] = React.useState(gladStart);
-  const [endDate, setEndDate] = React.useState(gladEnd);
   const [chartLoading, setChartLoading] = React.useState(true);
   const [chartError, setChartError] = React.useState(false);
   const [vegaSpec, setVegaSpec] = React.useState(null);
@@ -73,7 +66,7 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
   const [base64ChartURL, setBase64ChartURL] = React.useState('');
   const [chartDescription, setChartDescription] = React.useState<null | string>(null);
 
-  const [viirsDate, setViirsDate] = React.useState<any>([]);
+  const [moduleInfoData, setModuleInfoData] = React.useState<any>(props.moduleInfo);
 
   const themeColor = handleCustomColorTheme(customColorTheme);
 
@@ -83,13 +76,10 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
   function updateDate(val: any): void {
     setYearRangeValue(val);
   }
-  LAYER_IDS;
   function updateDatePickerValues(start: string, end: string, id: string): void {
-    if (id === LAYER_IDS.VIIRS_FIRES) {
-      setViirsDate([start, end]);
-    } else {
-      setStartDate(start);
-      setEndDate(end);
+    if (moduleInfoData && moduleInfoData?.analysisId === id) {
+      const newModuleInfo = { ...moduleInfoData, minDate: start, maxDate: end };
+      setModuleInfoData(newModuleInfo);
     }
   }
 
@@ -123,50 +113,38 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
   React.useEffect(() => {
     const localStorageData = getLocalStorageDates('report-date-picker');
     if (localStorageData) {
-      if (localStorageData.type === LAYER_IDS.VIIRS_FIRES) {
-        const { minDate, maxDate } = localStorageData;
-        setViirsDate([minDate, maxDate]);
-      } else {
-        setViirsDate([viirsStart, viirsEnd]);
+      const { minDate, maxDate } = localStorageData;
+      if (localStorageData.type === moduleInfoData?.analysisId) {
+        const newModuleInfo = { ...moduleInfoData, minDate, maxDate };
+        setModuleInfoData(newModuleInfo);
       }
     }
   }, []);
 
-  const getDatesToUse = () => {
-    if (!viirsDate.length) {
-      if (props.moduleInfo.minDate && props.moduleInfo.maxDate) {
-        return { minDate: props.moduleInfo.minDate, maxDate: props.moduleInfo.maxDate };
-      }
-      return { minDate: viirsStart, maxDate: viirsEnd };
-    }
-    return { minDate: viirsDate[0], maxDate: viirsDate[1] };
-  };
-
   React.useEffect(() => {
     setChartLoading(true);
-    if (props.moduleInfo.widgetId) {
-      const dates = getDatesToUse();
-      const stDate = props.moduleInfo.analysisId === LAYER_IDS.VIIRS_FIRES ? dates.minDate : startDate;
-      const enDate = props.moduleInfo.analysisId === LAYER_IDS.VIIRS_FIRES ? dates.maxDate : endDate;
+    if (moduleInfoData?.widgetId) {
+      const stDate = moduleInfoData?.minDate ? moduleInfoData?.minDate : gladStart;
+      const enDate = moduleInfoData?.maxDate ? moduleInfoData?.maxDate : gladEnd;
 
       // GFW WIDGET
       const widgetURL = generateWidgetURL({
-        widgetId: props.moduleInfo.widgetId,
+        widgetId: moduleInfoData.widgetId,
         geostoreId: props.geostoreID,
         startDate: stDate,
         endDate: enDate,
         density: density,
-        analysisId: props.moduleInfo.analysisId,
-        sqlString: props.moduleInfo.sqlString,
+        analysisId: moduleInfoData.analysisId,
+        sqlString: moduleInfoData.sqlString,
       });
 
       fetch(widgetURL)
         .then((response: any) => response.json())
         .then((analysisMod: any) => {
           setChartLoading(false);
-          setBaseConfig(props.moduleInfo);
+          setBaseConfig(moduleInfoData);
 
-          const descriptionURL = `https://production-api.globalforestwatch.org/v1/dataset/${analysisMod.data.attributes.dataset}/widget/${props.moduleInfo.widgetId}/metadata?language=${language}`;
+          const descriptionURL = `https://production-api.globalforestwatch.org/v1/dataset/${analysisMod.data.attributes.dataset}/widget/${moduleInfoData.widgetId}/metadata?language=${language}`;
 
           fetch(descriptionURL)
             .then((response: any) => response.json())
@@ -341,6 +319,7 @@ const ReportChartsComponent = (props: ChartProps): JSX.Element => {
   const disabledAnalysisModules = useSelector((store: RootState) => store.appSettings.disabledAnalysisModules);
 
   const updatedDefaultData = addDateByType(defaultAnalysisModules, 'report-date-picker');
+
   return (
     <div className="chart-area-container">
       {updatedDefaultData

@@ -38,7 +38,6 @@ const DatePicker = (props: DatePickerProps): JSX.Element => {
           style={{ border: `1px solid ${props.customColorTheme}` }}
           type="date"
           defaultValue={minDate ? minDate : startDate}
-          min={minDate ? minDate : undefined}
           onChange={handleStartDateChange}
         />
       </div>
