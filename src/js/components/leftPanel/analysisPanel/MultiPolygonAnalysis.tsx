@@ -21,6 +21,7 @@ import { AnalyzingIcon } from '../../../../images/analyzingIcon';
 import { ErrorIcon } from '../../../../images/errorIcon';
 import { setActiveFeatures } from '../../../store/mapview/actions';
 import { handleCustomColorTheme } from '../../../../utils';
+import { analysisContent } from '../../../../../configs/translations/leftPanel.translations';
 
 interface Props {
   initAnalyze: (val: boolean) => void;
@@ -32,10 +33,12 @@ const MultiPolygonAnalysis = ({ initAnalyze }: Props) => {
   const analysisFeatureList = useSelector((store: RootState) => store.appState.analysisFeatureList, shallowEqual);
   const customColorTheme = useSelector((store: RootState) => store.appSettings.customColorTheme);
 
-  //TODO: Add translations
   const [overlap, setOverlap] = React.useState<'intersect' | 'analyzing' | 'failed' | 'idle'>('idle');
 
   const themeColor = handleCustomColorTheme(customColorTheme);
+
+  const { overlappingShapeTitle, overlappingShapeDirections, overlappingShapeButton, selectShape, back, analyze } =
+    analysisContent[selectedLanguage];
 
   React.useEffect(() => {
     if (analysisFeatureList[0] && analysisFeatureList[1]) {
@@ -174,28 +177,28 @@ const MultiPolygonAnalysis = ({ initAnalyze }: Props) => {
   return (
     <div>
       <MultiPolyWrap>
-        <p>Analyze overlapping area between two shapes</p>
+        <p>{overlappingShapeTitle}</p>
         {!analysisFeatureList[0] ? (
           <MethodSelection
             handleInputSelection={handleInputSelection}
             customColorTheme={themeColor}
             selectedLanguage={selectedLanguage}
-            placeholder="Select shape 1 ..."
+            placeholder={`${selectShape} 1 ...`}
             inputIndex={0}
           />
         ) : (
-          <SelectedShapeContainer inputIndex={0} label="Selected shape 1" />
+          <SelectedShapeContainer inputIndex={0} label={`${selectShape} 1 ...`} />
         )}
         {!analysisFeatureList[1] ? (
           <MethodSelection
             handleInputSelection={handleInputSelection}
             customColorTheme={themeColor}
             selectedLanguage={selectedLanguage}
-            placeholder="Select shape 2 ..."
+            placeholder={`${selectShape} 2 ...`}
             inputIndex={1}
           />
         ) : (
-          <SelectedShapeContainer inputIndex={1} label="Selected shape 2" />
+          <SelectedShapeContainer inputIndex={1} label={`${selectShape} 2 ...`} />
         )}
         {overlap === 'analyzing' && (
           <AnalyzingStatus>
@@ -222,7 +225,7 @@ const MultiPolygonAnalysis = ({ initAnalyze }: Props) => {
           }}
         >
           <BackIcon height={12} width={12} fill={themeColor} />
-          {'Back'}
+          {back}
         </BackButton>
         <BaseButton
           customColorTheme={themeColor}
@@ -231,7 +234,7 @@ const MultiPolygonAnalysis = ({ initAnalyze }: Props) => {
             initAnalyze(true);
           }}
         >
-          {'ANALYZE'}
+          {analyze}
         </BaseButton>
       </BottomBtnWrap>
     </div>

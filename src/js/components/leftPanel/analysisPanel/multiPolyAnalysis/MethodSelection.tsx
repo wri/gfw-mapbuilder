@@ -89,6 +89,8 @@ const MethodSelection = ({ placeholder, inputIndex, selectedLanguage, customColo
     enterCoordinatesDirections,
     coordinatesButton,
     visitTitle,
+    uploadShapefileTitle,
+    enterCoordsTitle,
   } = analysisContent[selectedLanguage];
 
   const themeColor = handleCustomColorTheme(customColorTheme);
@@ -197,10 +199,10 @@ const MethodSelection = ({ placeholder, inputIndex, selectedLanguage, customColo
         <option value="none" disabled selected hidden>
           {placeholder}
         </option>
-        <option value="select">Analyze a shape on the map</option>
-        <option value="draw">Analyze your own shape</option>
-        <option value="upload">Upload Shape file</option>
-        <option value="coordinates">Enter Coordinates for your shape</option>
+        <option value="select">{analyzeExistingShapeTitle}</option>
+        <option value="draw">{analyzeYourShapeTitle}</option>
+        <option value="upload">{uploadShapefileTitle}</option>
+        <option value="coordinates">{enterCoordinatesTitle}</option>
       </StyledSelect>
       {activeInput === 'select' && <ExistingShapeInstruction />}
       {activeInput === 'draw' && <DrawMethod />}
