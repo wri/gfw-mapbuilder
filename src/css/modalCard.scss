@@ -202,11 +202,13 @@
   &.pen-widget {
     height: 30rem;
     top: 30%;
+    overflow: scroll;
   }
 
   &.pen-widget-coordform {
     height: 500px;
     top: 40%;
+    overflow: scroll;
   }
 
   &.measure-widget {
@@ -236,6 +238,7 @@
     padding-top: 2rem;
     color: $dark-grey;
     overflow: visible;
+    height: 13rem;
     .search-widget-wrapper {
       position: relative;
       top: 16px;
