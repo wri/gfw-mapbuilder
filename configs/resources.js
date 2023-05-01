@@ -79,7 +79,7 @@ export default {
       groupType: 'default',
       order: 4,
       label: {
-        en: 'Climate',
+        en: 'TEST WMS Layer',
         fr: 'Climat',
         es: 'Clima',
         pt: 'Clima',
