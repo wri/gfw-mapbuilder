@@ -92,13 +92,31 @@ export default {
       },
       layers: [
         {
-          id: 'WMS_LAYER',
+          id: 'CARBON_SEQ',
+          order: 1,
+          type: 'remoteDataLayer',
+          uuid: 'e7208398-0acd-4f73-a824-c4fe1e356e0c',
+        },
+        {
+          id: 'WMS_LAYER1',
+          order: 2,
           type: 'wms',
           label: {
             en: 'Web Map Service (wms)',
           },
           url: 'https://firms.modaps.eosdis.nasa.gov/mapserver/wms/time_since_detection_4/9857d7a4d88d77f583e6417ac7183e99/?request=getcapabilities&service=WMS',
           layerName: 'tsd_4_viirs_00_06',
+          visible: false,
+        },
+        {
+          id: 'WMS_LAYER2',
+          order: 3,
+          type: 'wms',
+          label: {
+            en: 'Web Map Service (wms) - no image',
+          },
+          url: 'https://firms.modaps.eosdis.nasa.gov/mapserver/wms/fires/9857d7a4d88d77f583e6417ac7183e99/?request=getcapabilities&service=WMS',
+          layerName: 'fires_viirs_48',
           visible: false,
         },
       ],
