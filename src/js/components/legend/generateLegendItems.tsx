@@ -8,6 +8,7 @@ import { RootState } from '../../store';
 import LegendLabel from './LegendLabel';
 import legendInfoController from '../../helpers/legendInfo';
 import ManualLegend from './ManualLegend';
+import WMSImageWithPlaceholder from './generateWMSLegendGraphic';
 
 interface LegendItemProps {
   visibleLayers: LayerProps[];
@@ -36,7 +37,7 @@ function generateWMSLegendInfo(layer: LayerProps, i: number): JSX.Element {
     <div className="layer-item" key={layer.id + `${i}`}>
       <p className="layer-title">{layer.title}</p>
       <div className="title">{layer.legendInfo.layerName}</div>
-      <img src={layer.legendInfo} alt="wms-legend-info" />
+      <WMSImageWithPlaceholder alt={'wms-legend'} src={layer.legendInfo} errorMessage={'Legend graphic not found'} />
     </div>
   );
 }
