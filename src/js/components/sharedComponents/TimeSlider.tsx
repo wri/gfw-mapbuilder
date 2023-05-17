@@ -22,7 +22,6 @@ import { LAYER_IDS } from '../../../../configs/layer-config';
 
 const SliderWithTooltip = createSliderWithTooltip(Range);
 import { format } from 'date-fns';
-import caLocale from 'date-fns/locale/ca';
 import { handleCustomColorTheme } from '../../../utils';
 interface TimeSliderProps {
   layer?: any;
