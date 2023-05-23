@@ -173,6 +173,7 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
         if (gfwLayer === LAYER_IDS.GFW_INTEGRATED_ALERTS) {
           const startKey = findObjectKeys(props.defaultMarks, formatDateString(gfwIntegratedStart));
           const endKey = findObjectKeys(props.defaultMarks, formatDateString(gfwIntegratedEnd));
+
           minValue = startKey !== null ? startKey : props.min;
           maxValue = endKey !== null ? endKey : props.max;
         } else if (gfwLayer === LAYER_IDS.GLAD_S2_ALERTS) {
