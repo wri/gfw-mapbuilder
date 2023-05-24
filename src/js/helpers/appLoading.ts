@@ -9,11 +9,13 @@ export function checkForReportView(): boolean {
 }
 
 export function loadGoogleAnalytics(analyticsCode): void {
-  if (analyticsCode === '') analyticsCode = 'UA-62288390-15';
+  // defaults to GFW's GA4 code
+  if (analyticsCode === '') analyticsCode = 'GTM-TJFZWSB';
 
   const head = document.getElementsByTagName('head')[0];
   const script = document.createElement('script');
 
+  // fallback for old analytics code format (ga:UA-123456-1)
   if (analyticsCode.includes('UA-')) {
     script.innerHTML =
       "(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){\n" +
@@ -25,6 +27,7 @@ export function loadGoogleAnalytics(analyticsCode): void {
       "  ga('send', 'pageview');";
     head.appendChild(script);
   } else {
+    // new Google Analytics 4 code format (GTM-XXXXXXX)
     script.innerHTML =
       '(function (w, d, s, l, i) {\n' +
       '    w[l] = w[l] || [];\n' +
