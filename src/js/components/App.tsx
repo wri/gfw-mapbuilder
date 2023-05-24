@@ -29,7 +29,7 @@ const App = (props: AppSettings | any): JSX.Element => {
   const hideHeader = useSelector((store: RootState) => store.appSettings.hideHeader);
   const sharinghost = useSelector((store: RootState) => store.appSettings.sharinghost);
   const analyticsCode = useSelector((store: RootState) => store.appSettings.analyticsCode);
-
+  console.log(analyticsCode);
   loadGoogleAnalytics(analyticsCode);
 
   const fetchPortalInfo = async (appID: string) => {
