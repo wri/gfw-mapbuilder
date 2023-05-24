@@ -7,7 +7,7 @@ const initialState: AppSettings = {
   logoUrl: 'https://my.gfw-mapbuilder.org/img/gfw-logo.png',
   logoLinkUrl: 'https://developers.globalforestwatch.org/map-builder/',
   useAlternativeLanguage: false,
-  analyticsCode: 'UA-62288390-15',
+  analyticsCode: '',
   alternativeWebmap: '',
   alternativeLanguage: 'fr',
   includeMyGFWLogin: true,
