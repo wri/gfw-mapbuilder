@@ -4,12 +4,12 @@ import { loadModules } from 'esri-loader';
 import MapContent from './MapContent';
 import Header from './header/Header';
 import ModalCard from './modal/modalCard';
-import { RootState } from '../../js/store/index';
+import { RootState } from '../store';
 import { useSelector, useDispatch } from 'react-redux';
 import Loader from '../../js/components/sharedComponents/Loader';
-import { overwriteSettings } from '../../js/store/appSettings/actions';
-import { setIsProfileComplete, setLoggedIn } from '../../js/store/appState/actions';
-import { AppSettings } from '../../js/store/appSettings/types';
+import { overwriteSettings } from '../store/appSettings/actions';
+import { setIsProfileComplete, setLoggedIn } from '../store/appState/actions';
+import { AppSettings } from '../store/appSettings/types';
 import {
   checkForReportView,
   loadGoogleAnalytics,
@@ -28,8 +28,10 @@ const App = (props: AppSettings | any): JSX.Element => {
   //Listen to map loading state that comes from mapController via redux store change
   const hideHeader = useSelector((store: RootState) => store.appSettings.hideHeader);
   const sharinghost = useSelector((store: RootState) => store.appSettings.sharinghost);
-  const analyticsCode = useSelector((store: RootState) => store.appSettings.analyticsCode);
-  console.log(analyticsCode);
+  let analyticsCode = useSelector((store: RootState) => store.appSettings.analyticsCode);
+  if (resources.analyticsCode) {
+    analyticsCode = resources.analyticsCode;
+  }
   loadGoogleAnalytics(analyticsCode);
 
   const fetchPortalInfo = async (appID: string) => {
