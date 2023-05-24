@@ -10,6 +10,7 @@ export function checkForReportView(): boolean {
 
 export function loadGoogleAnalytics(analyticsCode): void {
   if (analyticsCode === '') analyticsCode = 'UA-62288390-15';
+
   const head = document.getElementsByTagName('head')[0];
   const script = document.createElement('script');
 
