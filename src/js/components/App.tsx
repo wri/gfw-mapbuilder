@@ -31,7 +31,7 @@ const App = (props: AppSettings | any): JSX.Element => {
 
   // always load WRI default analytics code
   loadDefaultGoogleAnalytics('GTM-TJFZWSB');
-  // if analytics code is set in the appSettings, load it
+  // if analyticsCode property is used in config file, load it as well as the default above
   if (resources.analyticsCode) loadDefaultGoogleAnalytics(resources.analyticsCode);
 
   const fetchPortalInfo = async (appID: string) => {
