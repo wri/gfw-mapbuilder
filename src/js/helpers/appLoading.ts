@@ -8,10 +8,7 @@ export function checkForReportView(): boolean {
   return reportURLParam ? reportURLParam === 'true' : false;
 }
 
-export function loadGoogleAnalytics(analyticsCode): void {
-  // defaults to GFW's GA4 code
-  if (analyticsCode === '') analyticsCode = 'GTM-TJFZWSB';
-
+export function loadDefaultGoogleAnalytics(analyticsCode): void {
   const head = document.getElementsByTagName('head')[0];
   const script = document.createElement('script');
 
