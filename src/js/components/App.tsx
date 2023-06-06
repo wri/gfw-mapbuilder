@@ -4,15 +4,15 @@ import { loadModules } from 'esri-loader';
 import MapContent from './MapContent';
 import Header from './header/Header';
 import ModalCard from './modal/modalCard';
-import { RootState } from '../../js/store/index';
+import { RootState } from '../store';
 import { useSelector, useDispatch } from 'react-redux';
 import Loader from '../../js/components/sharedComponents/Loader';
-import { overwriteSettings } from '../../js/store/appSettings/actions';
-import { setIsProfileComplete, setLoggedIn } from '../../js/store/appState/actions';
-import { AppSettings } from '../../js/store/appSettings/types';
+import { overwriteSettings } from '../store/appSettings/actions';
+import { setIsProfileComplete, setLoggedIn } from '../store/appState/actions';
+import { AppSettings } from '../store/appSettings/types';
 import {
   checkForReportView,
-  loadGoogleAnalytics,
+  loadDefaultGoogleAnalytics,
   changeDefaultLanguage,
   attachCMSEventHandlers,
 } from '../helpers/appLoading';
@@ -28,9 +28,11 @@ const App = (props: AppSettings | any): JSX.Element => {
   //Listen to map loading state that comes from mapController via redux store change
   const hideHeader = useSelector((store: RootState) => store.appSettings.hideHeader);
   const sharinghost = useSelector((store: RootState) => store.appSettings.sharinghost);
-  const analyticsCode = useSelector((store: RootState) => store.appSettings.analyticsCode);
 
-  loadGoogleAnalytics(analyticsCode);
+  // always load WRI default analytics code
+  loadDefaultGoogleAnalytics('GTM-TJFZWSB');
+  // if analyticsCode property is used in config file, load it as well as the default above
+  if (resources.analyticsCode) loadDefaultGoogleAnalytics(resources.analyticsCode);
 
   const fetchPortalInfo = async (appID: string) => {
     const [Portal, PortalItem] = await loadModules(['esri/portal/Portal', 'esri/portal/PortalItem']);

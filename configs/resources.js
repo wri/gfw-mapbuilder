@@ -59,7 +59,7 @@ export default {
   windSpeed: true,
   webmapMenuName: 'Custom Layers',
   sharinghost: 'https://www.arcgis.com',
-  analyticsCode: '',
+  analyticsCode: 'G-JR250CKBW8',
   includeCartoTemplateLayers: false,
   cartoUser: 'wri-01',
   cartoTemplateId: 'tpl_07c315f8_c13e_11e4_b457_0e8dde98a187',

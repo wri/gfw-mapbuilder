@@ -1,7 +1,7 @@
 module.exports = {
   root: true,
   env: {
-    node: true
+    node: true,
   },
   parser: '@typescript-eslint/parser',
   plugins: ['@typescript-eslint', 'react-hooks', 'jsx-a11y'],
@@ -10,7 +10,7 @@ module.exports = {
     'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/recommended',
     'prettier/@typescript-eslint',
-    'plugin:react/recommended'
+    'plugin:react/recommended',
   ],
   rules: {
     semi: 'warn',
@@ -24,7 +24,7 @@ module.exports = {
     'no-prototype-builtins': 0,
     '@typescript-eslint/explicit-function-return-type': 0,
     '@typescript-eslint/camelcase': 0,
-    quotes: ['error', 'single'],
-    'no-console': 'warn'
-  }
+    quotes: ['warning', 'single'],
+    'no-console': 'warn',
+  },
 };

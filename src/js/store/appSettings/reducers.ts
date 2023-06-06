@@ -7,7 +7,7 @@ const initialState: AppSettings = {
   logoUrl: 'https://my.gfw-mapbuilder.org/img/gfw-logo.png',
   logoLinkUrl: 'https://developers.globalforestwatch.org/map-builder/',
   useAlternativeLanguage: false,
-  analyticsCode: 'UA-62288390-15',
+  analyticsCode: '',
   alternativeWebmap: '',
   alternativeLanguage: 'fr',
   includeMyGFWLogin: true,
@@ -27,7 +27,7 @@ const initialState: AppSettings = {
     GROUP_LC: {},
     GROUP_LCD: {},
     GROUP_IMAGERY: {},
-    extraLayers: {}
+    extraLayers: {},
   },
   narrative: '',
   alternativeNarrative: '',
@@ -38,7 +38,7 @@ const initialState: AppSettings = {
   alternativeMapThemes: '',
   customColorTheme: '#f0ab00', // #f0ab00 - is the default, it will be overwritten if configed
   footerLinks: [],
-  disabledAnalysisModules: []
+  disabledAnalysisModules: [],
 };
 
 export function appSettingsReducer(state = initialState, action: AppSettingsTypes): AppSettings {
