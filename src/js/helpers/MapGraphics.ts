@@ -35,7 +35,7 @@ export async function addPointGraphic(map: __esri.Map, feature: any): Promise<vo
   const [GraphicsLayer, Graphic, Point] = await loadModules([
     'esri/layers/GraphicsLayer',
     'esri/Graphic',
-    'esri/geometry/Point'
+    'esri/geometry/Point',
   ]);
   let graphicsLayer: any = map.findLayerById('active-feature-layer');
   let graphicsLayerExists = graphicsLayer;
@@ -44,18 +44,18 @@ export async function addPointGraphic(map: __esri.Map, feature: any): Promise<vo
     graphicsLayerExists = true;
   } else {
     graphicsLayer = new GraphicsLayer({
-      id: 'active-feature-layer'
+      id: 'active-feature-layer',
     });
     graphicsLayerExists = false;
   }
   const symbol = await setSymbol('point');
   const geometry = new Point({
     x: feature.geometry.x,
-    y: feature.geometry.y
+    y: feature.geometry.y,
   });
   const pointGraphic = new Graphic({
     symbol: symbol,
-    geometry: geometry
+    geometry: geometry,
   });
   graphicsLayer.add(pointGraphic);
   if (!graphicsLayerExists) {
@@ -124,7 +124,7 @@ export async function addToMultiPolygonLayer(activeFeature: any) {
   clearMultiPolygonGraphic();
 
   const graphicsLayer = new GraphicsLayer({
-    id: `multi_poly_graphics-${activeFeature.objectid}`
+    id: `multi_poly_graphics-${activeFeature.objectid}`,
   });
 
   if (!mapController._map) return;
@@ -137,9 +137,9 @@ export async function addToMultiPolygonLayer(activeFeature: any) {
       color: [0, 0, 0, 0],
       outline: {
         color: 'red',
-        width: 2
-      }
-    }
+        width: 2,
+      },
+    },
   });
   graphicsLayer.add(graphic);
 }
@@ -152,7 +152,7 @@ export async function drawIntersectingGraphic(geometry: __esri.Geometry | __esri
     graphicsLayer.removeAll();
   } else {
     graphicsLayer = new GraphicsLayer({
-      id: 'overlap-feature-layer'
+      id: 'overlap-feature-layer',
     });
   }
 
@@ -163,9 +163,9 @@ export async function drawIntersectingGraphic(geometry: __esri.Geometry | __esri
       color: [255, 0, 0, 0.5], // red
       outline: {
         color: [255, 0, 0, 0.5], // red
-        width: 1
-      }
-    }
+        width: 1,
+      },
+    },
   });
 
   graphicsLayer.add(overlapGraphic);
@@ -178,7 +178,7 @@ export async function setNewGraphic({ map, mapview, allFeatures, isUploadFile }:
   const [GraphicsLayer, Graphic, projection] = await loadModules([
     'esri/layers/GraphicsLayer',
     'esri/Graphic',
-    'esri/geometry/projection'
+    'esri/geometry/projection',
   ]);
   //TODO: this needs a refactor, we are handling file uploads and featues on the map with a single
   //function, we likely need to either reuse multiple functions or split this up
@@ -188,7 +188,7 @@ export async function setNewGraphic({ map, mapview, allFeatures, isUploadFile }:
     graphicsLayer.removeAll(); //TODO: We may need to support multiple selected features in future
   } else {
     graphicsLayer = new GraphicsLayer({
-      id: 'active-feature-layer'
+      id: 'active-feature-layer',
     });
   }
 
@@ -206,7 +206,7 @@ export async function setNewGraphic({ map, mapview, allFeatures, isUploadFile }:
     const featureGraphic = new Graphic({
       geometry: geometry,
       attributes: allFeatures[0].attributes,
-      symbol: symbol
+      symbol: symbol,
     });
 
     graphicsLayer.graphics.add(featureGraphic);
@@ -215,8 +215,10 @@ export async function setNewGraphic({ map, mapview, allFeatures, isUploadFile }:
   }
 
   if (isUploadFile) {
-    projection.load().then(() => {
-      const allGraphics = allFeatures.map(async (feature: FeatureResult, index: number) => {
+    projection.load().then(async () => {
+      let graphics: __esri.Graphic[] = [];
+      for (let i = 0; i < allFeatures.length; i++) {
+        const feature = allFeatures[i];
         const isPolygon = (feature.geometry as any).rings || feature.geometry.type === 'polygon';
 
         /**
@@ -227,7 +229,7 @@ export async function setNewGraphic({ map, mapview, allFeatures, isUploadFile }:
 
         const symbol = isPolygon ? await setSymbol('polygon') : await setSymbol(feature.geometry.type);
 
-        if (index === 0) {
+        if (i === 0) {
           //First feature is "active" by default > change it to appropriate color
           //@ts-ignore TODO: test this
           symbol.outline.color = [115, 252, 253];
@@ -239,7 +241,7 @@ export async function setNewGraphic({ map, mapview, allFeatures, isUploadFile }:
         const featureGraphic = new Graphic({
           geometry: geometry,
           attributes: feature.attributes,
-          symbol: symbol
+          symbol: symbol,
         });
 
         if (!mapController._mapview) return;
@@ -254,13 +256,12 @@ export async function setNewGraphic({ map, mapview, allFeatures, isUploadFile }:
           transformation
         ) as __esri.Geometry;
 
-        return featureGraphic;
-      });
-
-      graphicsLayer.graphics.push(...allGraphics);
+        graphics.push(featureGraphic);
+      }
+      graphicsLayer.graphics.push(...graphics);
       mapController.initializeAndSetSketch(graphicsLayer.graphics);
 
-      mapview.goTo(allGraphics);
+      mapview.goTo(graphics);
     });
     return;
   }

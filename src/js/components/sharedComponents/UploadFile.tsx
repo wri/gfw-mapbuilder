@@ -2,17 +2,10 @@ import React, { DragEvent, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../../js/store';
 
-import {
-  renderModal,
-  toggleTabviewPanel,
-  selectActiveTab
-} from '../../../js/store/appState/actions';
+import { renderModal, toggleTabviewPanel, selectActiveTab } from '../../../js/store/appState/actions';
 import { FeatureResult } from '../../../js/store/mapview/types';
 import { LayerFeatureResult } from '../../../js/store/mapview/types';
-import {
-  setActiveFeatures,
-  setActiveFeatureIndex
-} from '../../../js/store/mapview/actions';
+import { setActiveFeatures, setActiveFeatureIndex } from '../../../js/store/mapview/actions';
 
 import { geojsonToArcGIS } from '../../../js/helpers/spatialDataTransformation';
 import { registerGeometry } from '../../../js/helpers/geometryRegistration';
@@ -23,26 +16,18 @@ import '../../../css/uploadFile.scss';
 
 const UploadFile = (): JSX.Element => {
   const dispatch = useDispatch();
-  const selectedLanguage = useSelector(
-    (state: any) => state.appState.selectedLanguage
-  );
-  const { activeFeatures } = useSelector(
-    (store: RootState) => store.mapviewState
-  );
+  const selectedLanguage = useSelector((state: any) => state.appState.selectedLanguage);
+  const { activeFeatures } = useSelector((store: RootState) => store.mapviewState);
   const [wrongFileType, setWrongFileType] = useState(false);
 
-  const { shapefileButton, shapefileInstructions } = uploadContent[
-    selectedLanguage
-  ];
+  const { shapefileButton, shapefileInstructions } = uploadContent[selectedLanguage];
 
   const onDragFile = (event: DragEvent<HTMLDivElement>): void => {
     event.preventDefault();
     event.stopPropagation();
   };
 
-  const onDropFile = async (
-    event: DragEvent<HTMLDivElement>
-  ): Promise<void> => {
+  const onDropFile = async (event: DragEvent<HTMLDivElement>): Promise<void> => {
     setWrongFileType(false);
     const url = 'https://production-api.globalforestwatch.org/v1/ogr/convert';
     event.preventDefault();
@@ -63,25 +48,20 @@ const UploadFile = (): JSX.Element => {
 
       const featureCollection = await fetch(url, {
         method: 'POST',
-        body: formData
+        body: formData,
       })
-        .then(response => response.json())
-        .catch(e => console.log('fetching error in onDropFile()', e));
+        .then((response) => response.json())
+        .catch((e) => console.log('fetching error in onDropFile()', e));
 
       const arcGISResults = geojsonToArcGIS(featureCollection.data.attributes);
 
       Promise.all(
         arcGISResults.map(async (feature: any) => {
           const registeredGeometry: any = await registerGeometry(feature)
-            .then((response: Response) =>
-              response.status === 200 ? response.json() : null
-            )
+            .then((response: Response) => (response.status === 200 ? response.json() : null))
             .catch((e: Error) => {
               // TODO [ ] - error handling logic (to account for when one geometry produces an error)
-              console.log(
-                'error using registerGeometry() in UploadFile.tsx',
-                e
-              );
+              console.log('error using registerGeometry() in UploadFile.tsx', e);
             });
 
           feature.attributes.geostoreId = registeredGeometry.data.id;
@@ -94,14 +74,12 @@ const UploadFile = (): JSX.Element => {
             const shapeFileFeatures: LayerFeatureResult = {
               layerID: 'user_features',
               layerTitle: 'Upload File Features',
-              features: arcGISResults.map(
-                (g: __esri.Graphic, index: number) => {
-                  const attr = g.attributes;
-                  attr['attributeIndex'] = index;
-                  return { attributes: attr, geometry: g.geometry };
-                }
-              ),
-              fieldNames: null
+              features: arcGISResults.map((g: __esri.Graphic, index: number) => {
+                const attr = g.attributes;
+                attr['attributeIndex'] = index;
+                return { attributes: attr, geometry: g.geometry };
+              }),
+              fieldNames: null,
             };
 
             dispatch(setActiveFeatureIndex([0, 0]));
@@ -110,9 +88,7 @@ const UploadFile = (): JSX.Element => {
             // TODO [ ] - error handling logic if array is empty
           }
         })
-        .catch((e: Error) =>
-          console.log('error in registerGeometry() in onDropFile()', e)
-        );
+        .catch((e: Error) => console.log('error in registerGeometry() in onDropFile()', e));
 
       mapController.processGeojson(arcGISResults);
 
@@ -135,9 +111,7 @@ const UploadFile = (): JSX.Element => {
       >
         <span>{shapefileButton}</span>
       </div>
-      <p className={`shapefile-instructions ${wrongFileType ? 'red' : ''}`}>
-        * {shapefileInstructions}
-      </p>
+      <p className={`shapefile-instructions ${wrongFileType ? 'red' : ''}`}>* {shapefileInstructions}</p>
     </div>
   );
 };
