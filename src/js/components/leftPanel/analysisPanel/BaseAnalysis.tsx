@@ -405,9 +405,10 @@ const BaseAnalysis = (): JSX.Element => {
                 alignContent: 'center',
                 alignItems: 'center',
                 color: 'red',
+                textAlign: 'center',
               }}
             >
-              Error loading chart analysis.
+              No data exists for this area, please select another area.
             </div>
           )}
           {chartLoading && (
