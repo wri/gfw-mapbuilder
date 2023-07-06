@@ -216,10 +216,10 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
         return (
           <TimeSlider
             layerID={id}
-            defaultMarks={generateDefaultMarks({ start: 2000, end: 2021 })}
+            defaultMarks={generateDefaultMarks({ start: 2000, end: 2022 })}
             min={2001}
-            max={2021}
-            defaultValue={[2001, 2021]}
+            max={2022}
+            defaultValue={[2001, 2022]}
             steps={1}
             included={true}
           />
