@@ -176,9 +176,9 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
     const yearsAvailable = end - start;
 
     while (index <= end) {
-      const display = index % 5 === 0 ? 'block' : 'none';
+      const display = index % 6 === 0 ? 'block' : 'none';
       newMarks[index] = {
-        style: { display: yearsAvailable < 5 ? 'block' : display },
+        style: { display: yearsAvailable < 6 ? 'block' : display },
         label: index,
       };
 
