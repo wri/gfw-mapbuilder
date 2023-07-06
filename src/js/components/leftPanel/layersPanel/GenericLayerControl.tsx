@@ -15,7 +15,7 @@ import { renderModal, setInfoModalLayerID } from '../../../store/appState/action
 import { RootState } from '../../../store';
 import { LayerProps } from '../../../store/mapview/types';
 import { mapController } from '../../../controllers/mapController';
-import { densityEnabledLayers, landCoverMarks } from '../../../../../configs/layer-config';
+import { densityEnabledLayers, drySpellMarks, landCoverMarks } from '../../../../../configs/layer-config';
 import { InfoIcon } from '../../../../images/infoIcon';
 import { DashboardIcon } from '../../../../images/dashboardIcon';
 import { LayerVersionPicker } from './LayerVersionPicker';
@@ -229,7 +229,7 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
         return (
           <TimeSlider
             layerID={id}
-            defaultMarks={generateDefaultMarks({ start: 2030, end: 2080 })}
+            defaultMarks={drySpellMarks}
             min={2030}
             max={2080}
             defaultValue={[2030]}
