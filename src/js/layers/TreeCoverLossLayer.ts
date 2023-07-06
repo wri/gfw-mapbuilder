@@ -33,19 +33,16 @@ for (let z = 1; z < 21; z++) {
 }
 
 export const createTCL = async () => {
-  const [esriRequest, BaseTileLayer] = await loadModules([
-    'esri/request',
-    'esri/layers/BaseTileLayer'
-  ]);
+  const [esriRequest, BaseTileLayer] = await loadModules(['esri/request', 'esri/layers/BaseTileLayer']);
 
   const TreeCoverLossLayer: any = BaseTileLayer.createSubclass({
     properties: {
       threshold: 30,
       minYear: 2001,
-      maxYear: 2018 //config.latestTreeCoverLossYearFC
+      maxYear: 2022, //config.latestTreeCoverLossYearFC
     },
 
-    getTileUrl: function(level: number, row: number, column: number) {
+    getTileUrl: function (level: number, row: number, column: number) {
       return this.urlTemplate
         .replace('{z}', level)
         .replace('{x}', column)
@@ -53,7 +50,7 @@ export const createTCL = async () => {
         .replace('{thresh}', this.threshold);
     },
 
-    fetchTile: function(level: number, row: number, column: number) {
+    fetchTile: function (level: number, row: number, column: number) {
       // call getTileUrl() method to construct the URL to tiles
       // for a given level, row and col provided by the LayerView
       const url = this.getTileUrl(level, row, column);
@@ -62,11 +59,11 @@ export const createTCL = async () => {
       // cross-domain access to create WebGL textures for 3D.
       return esriRequest(url, {
         responseType: 'image',
-        allowImageDataAccess: true
+        allowImageDataAccess: true,
       }).then(
-        function(response) {
+        function (response) {
           // We use a promise because we can't return an empty canvas before the image data has loaded, been filtered, and properly colored
-          const promise = new Promise(resolve => {
+          const promise = new Promise((resolve) => {
             // when esri request resolves successfully
             // get the image from the response
             const image = response.data;
@@ -100,7 +97,7 @@ export const createTCL = async () => {
     },
 
     // Filter Data Method
-    filter: function(data: []) {
+    filter: function (data: []) {
       const z = this.view.zoom;
 
       for (let i = 0; i < data.length; i += 4) {
@@ -111,33 +108,22 @@ export const createTCL = async () => {
         if (!values.intensity) {
           values.intensity = 0;
         }
-        if (
-          values.year >= this.minYear - 2000 &&
-          values.year <= this.maxYear - 2000
-        ) {
+        if (values.year >= this.minYear - 2000 && values.year <= this.maxYear - 2000) {
           if (intensityBank[z] && intensityBank[z][values.intensity]) {
             data[i] =
-              intensityBank[z] &&
-              intensityBank[z][values.intensity] &&
-              intensityBank[z][values.intensity][2]
+              intensityBank[z] && intensityBank[z][values.intensity] && intensityBank[z][values.intensity][2]
                 ? intensityBank[z][values.intensity][2]
                 : 0;
             data[i + 1] =
-              intensityBank[z] &&
-              intensityBank[z][values.intensity] &&
-              intensityBank[z][values.intensity][3]
+              intensityBank[z] && intensityBank[z][values.intensity] && intensityBank[z][values.intensity][3]
                 ? intensityBank[z][values.intensity][3]
                 : 0;
             data[i + 2] =
-              intensityBank[z] &&
-              intensityBank[z][values.intensity] &&
-              intensityBank[z][values.intensity][0]
+              intensityBank[z] && intensityBank[z][values.intensity] && intensityBank[z][values.intensity][0]
                 ? intensityBank[z][values.intensity][0]
                 : 0;
             data[i + 3] =
-              intensityBank[z] &&
-              intensityBank[z][values.intensity] &&
-              intensityBank[z][values.intensity][1]
+              intensityBank[z] && intensityBank[z][values.intensity] && intensityBank[z][values.intensity][1]
                 ? intensityBank[z][values.intensity][1]
                 : 0;
           }
@@ -152,11 +138,11 @@ export const createTCL = async () => {
       return data;
     },
 
-    decodeDate: function(pixel: []) {
+    decodeDate: function (pixel: []) {
       const year = pixel[2];
       const intensity = pixel[0];
       return { intensity, year };
-    }
+    },
   });
   return TreeCoverLossLayer;
 };
