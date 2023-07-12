@@ -15,7 +15,7 @@ import { renderModal, setInfoModalLayerID } from '../../../store/appState/action
 import { RootState } from '../../../store';
 import { LayerProps } from '../../../store/mapview/types';
 import { mapController } from '../../../controllers/mapController';
-import { densityEnabledLayers, landCoverMarks } from '../../../../../configs/layer-config';
+import { densityEnabledLayers, drySpellMarks, landCoverMarks } from '../../../../../configs/layer-config';
 import { InfoIcon } from '../../../../images/infoIcon';
 import { DashboardIcon } from '../../../../images/dashboardIcon';
 import { LayerVersionPicker } from './LayerVersionPicker';
@@ -176,9 +176,9 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
     const yearsAvailable = end - start;
 
     while (index <= end) {
-      const display = index % 5 === 0 ? 'block' : 'none';
+      const display = index % 6 === 0 ? 'block' : 'none';
       newMarks[index] = {
-        style: { display: yearsAvailable < 5 ? 'block' : display },
+        style: { display: yearsAvailable < 6 ? 'block' : display },
         label: index,
       };
 
@@ -216,10 +216,10 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
         return (
           <TimeSlider
             layerID={id}
-            defaultMarks={generateDefaultMarks({ start: 2000, end: 2021 })}
+            defaultMarks={generateDefaultMarks({ start: 2000, end: 2022 })}
             min={2001}
-            max={2021}
-            defaultValue={[2001, 2021]}
+            max={2022}
+            defaultValue={[2001, 2022]}
             steps={1}
             included={true}
           />
@@ -229,7 +229,7 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
         return (
           <TimeSlider
             layerID={id}
-            defaultMarks={generateDefaultMarks({ start: 2030, end: 2080 })}
+            defaultMarks={drySpellMarks}
             min={2030}
             max={2080}
             defaultValue={[2030]}
