@@ -42,8 +42,10 @@
       border: none;
       cursor: copy;
     }
-
-    .upload-file-input::file-selector-button {
+    #upload-file-input {
+      display: none;
+    }
+    #upload-file-input::file-selector-button {
       width: 100%;
       height: 100%;
       z-index: 999;

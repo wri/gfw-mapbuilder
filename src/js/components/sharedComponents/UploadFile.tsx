@@ -121,13 +121,7 @@ const UploadFile = (): JSX.Element => {
           Click or drop a custom shapefile here
         </button>
 
-        <input
-          type="file"
-          id="upload-file-input"
-          className="upload-file-input"
-          style={{ display: 'none' }}
-          onChange={(e: any) => onDropFile(e)}
-        />
+        <input type="file" id="upload-file-input" onChange={(e: any) => onDropFile(e)} />
 
         <span>{shapefileButton}</span>
       </div>
