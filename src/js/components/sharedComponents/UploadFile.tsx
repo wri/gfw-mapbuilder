@@ -39,7 +39,6 @@ const UploadFile = (): JSX.Element => {
       file = event.target.files[0];
     }
 
-    console.log(file.type);
     const isZipfile = file.type === 'application/zip' || file.type === 'application/x-zip-compressed';
     const isGeoJSON = file.name.includes('geojson'); // * NOTE: geoJSON files don't have a set type
 
