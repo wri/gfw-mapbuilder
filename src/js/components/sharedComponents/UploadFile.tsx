@@ -106,10 +106,6 @@ const UploadFile = (): JSX.Element => {
     }
   };
 
-  const uploadFile = () => {
-    document.getElementById('upload-file-input')?.click();
-  };
-
   return (
     <div className="upload-container">
       <div
@@ -117,12 +113,10 @@ const UploadFile = (): JSX.Element => {
         onDragOver={(e: DragEvent<HTMLDivElement>): void => onDragFile(e)}
         onDrop={(e: DragEvent<HTMLDivElement>): Promise<void> => onDropFile(e)}
       >
-        <button className="btn" onClick={uploadFile}>
+        <button className="btn" onClick={() => document.getElementById('upload-file-input')?.click()}>
           Click or drop a custom shapefile here
         </button>
-
         <input type="file" id="upload-file-input" onChange={(e: any) => onDropFile(e)} />
-
         <span>{shapefileButton}</span>
       </div>
       <p className={`shapefile-instructions ${wrongFileType ? 'red' : ''}`}>* {shapefileInstructions}</p>
