@@ -40,7 +40,7 @@ const UploadFile = (): JSX.Element => {
     }
 
     // const file = event.dataTransfer.files[0] || event.target.files[0];
-    const isZipfile = file.type === 'application/zip';
+    const isZipfile = file.type === 'application/zip' || file.type === 'application/x-zip-compressed';
     const isGeoJSON = file.name.includes('geojson'); // * NOTE: geoJSON files don't have a set type
 
     if (file && (isZipfile || isGeoJSON)) {
