@@ -1,15 +1,13 @@
 import React, { DragEvent, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../../../js/store';
 
-import { renderModal, toggleTabviewPanel, selectActiveTab } from '../../../js/store/appState/actions';
-import { FeatureResult } from '../../../js/store/mapview/types';
-import { LayerFeatureResult } from '../../../js/store/mapview/types';
-import { setActiveFeatures, setActiveFeatureIndex } from '../../../js/store/mapview/actions';
+import { renderModal, toggleTabviewPanel, selectActiveTab } from '../../store/appState/actions';
+import { LayerFeatureResult } from '../../store/mapview/types';
+import { setActiveFeatures, setActiveFeatureIndex } from '../../store/mapview/actions';
 
-import { geojsonToArcGIS } from '../../../js/helpers/spatialDataTransformation';
-import { registerGeometry } from '../../../js/helpers/geometryRegistration';
-import { mapController } from '../../../js/controllers/mapController';
+import { geojsonToArcGIS } from '../../helpers/spatialDataTransformation';
+import { registerGeometry } from '../../helpers/geometryRegistration';
+import { mapController } from '../../controllers/mapController';
 import { uploadContent } from '../../../../configs/translations/upload.translations';
 
 import '../../../css/uploadFile.scss';
@@ -17,7 +15,6 @@ import '../../../css/uploadFile.scss';
 const UploadFile = (): JSX.Element => {
   const dispatch = useDispatch();
   const selectedLanguage = useSelector((state: any) => state.appState.selectedLanguage);
-  const { activeFeatures } = useSelector((store: RootState) => store.mapviewState);
   const [wrongFileType, setWrongFileType] = useState(false);
 
   const { shapefileButton, shapefileInstructions } = uploadContent[selectedLanguage];
@@ -27,15 +24,22 @@ const UploadFile = (): JSX.Element => {
     event.stopPropagation();
   };
 
-  const onDropFile = async (event: DragEvent<HTMLDivElement>): Promise<void> => {
+  const onDropFile = async (event: any): Promise<void> => {
     setWrongFileType(false);
     const url = 'https://production-api.globalforestwatch.org/v1/ogr/convert';
     event.preventDefault();
     event.stopPropagation();
     event.persist();
 
-    const file = event.dataTransfer.files[0];
-    const isZipfile = file.type === 'application/zip';
+    let file;
+
+    if (event.dataTransfer) {
+      file = event.dataTransfer.files[0];
+    } else {
+      file = event.target.files[0];
+    }
+
+    const isZipfile = file.type === 'application/zip' || file.type === 'application/x-zip-compressed';
     const isGeoJSON = file.name.includes('geojson'); // * NOTE: geoJSON files don't have a set type
 
     if (file && (isZipfile || isGeoJSON)) {
@@ -109,6 +113,10 @@ const UploadFile = (): JSX.Element => {
         onDragOver={(e: DragEvent<HTMLDivElement>): void => onDragFile(e)}
         onDrop={(e: DragEvent<HTMLDivElement>): Promise<void> => onDropFile(e)}
       >
+        <button className="btn" onClick={() => document.getElementById('upload-file-input')?.click()}>
+          Click or drop a custom shapefile here
+        </button>
+        <input type="file" id="upload-file-input" onChange={(e: any) => onDropFile(e)} />
         <span>{shapefileButton}</span>
       </div>
       <p className={`shapefile-instructions ${wrongFileType ? 'red' : ''}`}>* {shapefileInstructions}</p>
