@@ -30,7 +30,7 @@ export function generateAndAttachVegaChart(
         callback(url);
       })
       .catch((e) => {
-        console.error(e);
+        console.log('ERROR', { error: e, analysisId: baseConfig.analysisId });
         callback({ error: 'failed to retrieve chart analysis' });
       });
   }
@@ -69,6 +69,7 @@ export function generateAndAttachVegaChart(
     fetch(url)
       .then((res) => res.json())
       .then((data) => {
+        console.log('data from vega chart function', data);
         const resizeWidthSignal = {
           name: 'width',
           update: 'containerSize()[0]*0.90',

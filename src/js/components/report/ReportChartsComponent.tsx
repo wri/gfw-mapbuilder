@@ -207,6 +207,12 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
     setDownloadOptionsVisible(false);
   }
 
+  function handleChartError() {
+    setChartError(true);
+    setDownloadOptionsVisible(false);
+    setVegaSpec(null);
+  }
+
   return (
     <div className={submoduleIsHidden ? 'print-hidden' : 'chart-module'}>
       <div className="report-top-toolbar">
@@ -277,16 +283,23 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
         </div>
         <div className="vega-chart-wrapper">
           <>
-            {!chartLoading && vegaSpec ? (
-              <VegaChart
-                spec={vegaSpec}
-                baseConfig={baseConfig}
-                language={language}
-                report={true}
-                chartType={currentAnalysis?.chartType}
-                sendBackURL={handlePNGURL}
-              />
-            ) : (
+            {chartError && (
+              <div
+                style={{
+                  height: 368,
+                  justifyContent: 'center',
+                  display: 'flex',
+                  alignContent: 'center',
+                  alignItems: 'center',
+                  color: 'red',
+                  textAlign: 'center',
+                }}
+              >
+                No data exists for this area, please select another area.
+              </div>
+            )}
+
+            {chartLoading && (
               <div style={{ width: 900, height: 344, background: '#8080801f' }}>
                 <Loader
                   containerPositionStyling={{
@@ -299,6 +312,17 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
                   size={100}
                 />
               </div>
+            )}
+            {!chartLoading && vegaSpec && (
+              <VegaChart
+                spec={vegaSpec}
+                baseConfig={baseConfig}
+                language={language}
+                report={true}
+                chartType={currentAnalysis?.chartType}
+                sendBackURL={handlePNGURL}
+                sendError={handleChartError}
+              />
             )}
           </>
         </div>
