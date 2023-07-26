@@ -69,7 +69,6 @@ export function generateAndAttachVegaChart(
     fetch(url)
       .then((res) => res.json())
       .then((data) => {
-        console.log('data from vega chart function', data);
         const resizeWidthSignal = {
           name: 'width',
           update: 'containerSize()[0]*0.90',
