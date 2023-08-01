@@ -151,7 +151,7 @@ const BaseAnalysis = (): JSX.Element => {
         //grab download urls if they exist
         const widgetConfigData = res.data;
         const downloadUrl = widgetConfigData.find((e: any) => e.name === 'table');
-        if (!downloadUrl) return;
+        if (!downloadUrl || !downloadUrl?.url) return;
         fetchDownloadInfo(downloadUrl.url).then((res: any) => {
           setChartDownTitle(res?.chartTitle ? res.chartTitle : '');
           setChartDownloadURL(res?.downloadUrl ? res.downloadUrl : '');
