@@ -30,7 +30,7 @@ export function generateAndAttachVegaChart(
         callback(url);
       })
       .catch((e) => {
-        console.error(e);
+        console.log('ERROR', { error: e, analysisId: baseConfig.analysisId });
         callback({ error: 'failed to retrieve chart analysis' });
       });
   }
