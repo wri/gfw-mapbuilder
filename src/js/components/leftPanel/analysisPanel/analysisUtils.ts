@@ -17,6 +17,7 @@ type DownloadResponse = {
   downloadUrl: string | undefined;
 };
 export async function fetchDownloadInfo(url: string): Promise<any> {
+  console.log('url', url);
   return await fetch(url)
     .then((response: any) => response.json())
     .then((data: any) => {
