@@ -110,8 +110,6 @@ const getServiceGroupContent = async (technicalName: string): Promise<any> => {
   const baseURL = 'https://production-api.globalforestwatch.org/v1/gfw-metadata';
   const metaURL = `${baseURL}/${technicalName}`;
 
-  console.log('metaURL', { metaURL });
-
   return await fetch(metaURL)
     .then((res) => res.json())
     .then((results) => {

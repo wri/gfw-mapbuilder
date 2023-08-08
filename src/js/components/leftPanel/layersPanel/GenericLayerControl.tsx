@@ -438,19 +438,6 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
     layerTitle = gfwLayerLabel;
   }
 
-  const t = () => {
-    if (layer.visible && layer.id === 'TREES_MOSAIC_LANDSCAPES') {
-      console.log('layer', layer);
-      return (
-        <select>
-          <option value="volvo">Volvo</option>
-          <option value="saab">Saab</option>
-          <option value="mercedes">Mercedes</option>
-          <option value="audi">Audi</option>
-        </select>
-      );
-    }
-  };
   return (
     <div
       ref={props!.dndProvided!.innerRef}
@@ -514,7 +501,6 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
 
         {layer?.visible && densityPicker && <CanopyDensityPicker type={layer.id} />}
         {layer?.visible && layer.id === 'TREE_COVER_HEIGHT' && <TreeHeightPicker />}
-        {/* {t()} */}
 
         {/*@TODO make this active when windspeed potential urls are available*/}
         {/*{layer?.visible && layer.id === 'WIND_SPEED' && <WindSpeedPicker />}*/}
