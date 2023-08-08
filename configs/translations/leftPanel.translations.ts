@@ -591,34 +591,106 @@ export const dataTabConfig = {
 };
 export const treesMosaicConfig = {
   en: {
-    displayLabel: ['Displaying Trees in Mosaic Landscapes with', 'tree cover.'],
+    displayLabel: ['', 'Displaying >40% tree extent probability at 10 meter resolution'],
   },
   az: {
-    displayLabel: ['Göstərir', 'örtük sıxlığı.'],
+    displayLabel: ['', 'Displaying >40% tree extent probability at 10 meter resolution'],
   },
   nl: {
-    displayLabel: ['Weergeven', 'luifeldichtheid.'],
+    displayLabel: ['', 'Displaying >40% tree extent probability at 10 meter resolution'],
   },
   hy: {
-    displayLabel: ['Ցուցադրվում է ', 'Սաղարթի խտություն '],
+    displayLabel: ['', 'Displaying >40% tree extent probability at 10 meter resolution'],
   },
   ka: {
-    displayLabel: ['წარმოდგენილია', 'ვარჯის სიმჭიდროვე.'],
+    displayLabel: ['', 'Displaying >40% tree extent probability at 10 meter resolution'],
   },
   fr: {
-    displayLabel: ['Affichage', 'Densité de la canopée.'],
+    displayLabel: ['', `Affichage de >40% de probabilité d'étendue des arbres à une résolution de 10 mètres`],
   },
   es: {
-    displayLabel: ['Mostrando', 'densidad de follaje.'],
+    displayLabel: ['', 'Mostrando >40% de probabilidad de extensión arbórea a resolución de 10 metros'],
   },
   pt: {
-    displayLabel: ['Exibindo', 'densidade de dossel'],
+    displayLabel: ['', 'Exibindo uma probabilidade de >40% de extensão de árvores a uma resolução de 10 metros'],
   },
   id: {
-    displayLabel: ['Displaying Trees in Mosaic Landscapes with', 'tree cover.'],
+    displayLabel: ['', 'Displaying >40% tree extent probability at 10 meter resolution'],
   },
   zh: {
-    displayLabel: ['显示中', '林冠覆盖密度'],
+    displayLabel: ['', 'Displaying >40% tree extent probability at 10 meter resolution'],
+  },
+};
+
+export const treesMosaicHectareConfig = {
+  en: {
+    // displayLabel: ['Displaying Trees in Mosaic Landscapes with', 'tree cover.'],
+    // displayLabel: ['Displaying tree cover at 0.5 hectare resolution and at', 'tree cover.'],
+    displayLabel: ['Displaying tree cover at 0.5 hectare resolution and at', 'tree cover'],
+  },
+  az: {
+    // displayLabel: ['Göstərir', 'örtük sıxlığı.'],
+    displayLabel: ['Displaying tree cover at 0.5 hectare resolution and at', 'tree cover'],
+  },
+  nl: {
+    // displayLabel: ['Weergeven', 'luifeldichtheid.'],
+    displayLabel: ['Displaying tree cover at 0.5 hectare resolution and at', 'tree cover'],
+  },
+  hy: {
+    // displayLabel: ['Ցուցադրվում է ', 'Սաղարթի խտություն '],
+    displayLabel: ['Displaying tree cover at 0.5 hectare resolution and at', 'tree cover'],
+  },
+  ka: {
+    // displayLabel: ['წარმოდგენილია', 'ვარჯის სიმჭიდროვე.'],
+    displayLabel: ['Displaying tree cover at 0.5 hectare resolution and at', 'tree cover'],
+  },
+  fr: {
+    displayLabel: ['Affichage du couvert arboré à une résolution de 0,5 hectare et à', 'couvert arboré'],
+  },
+  es: {
+    displayLabel: ['Visualización de la cubierta arbórea con una resolución de 0,5 hectáreas y en', 'cubierta arbórea'],
+  },
+  pt: {
+    displayLabel: ['Exibindo a cobertura de árvores em resolução de 0,5 hectare e em', 'cobertura de árvores'],
+  },
+  id: {
+    displayLabel: ['Displaying tree cover at 0.5 hectare resolution and at', 'tree cover'],
+  },
+  zh: {
+    displayLabel: ['Displaying tree cover at 0.5 hectare resolution and at', 'tree cover'],
+  },
+};
+
+export const tropicalTreeHectareBtnCongif = {
+  en: {
+    displayLabel: ['0.5 hectare', '10x10 meter'],
+  },
+  az: {
+    displayLabel: ['0.5 hectare', '10x10 meter'],
+  },
+  nl: {
+    displayLabel: ['0.5 hectare', '10x10 meter'],
+  },
+  hy: {
+    displayLabel: ['0.5 hectare', '10x10 meter'],
+  },
+  ka: {
+    displayLabel: ['0.5 hectare', '10x10 meter'],
+  },
+  fr: {
+    displayLabel: ['0.5 hectare', '10×10 mètres'],
+  },
+  es: {
+    displayLabel: ['0.5 hectáreas', '10x10 metros'],
+  },
+  pt: {
+    displayLabel: ['0.5 hectare', '10x10 metros'],
+  },
+  id: {
+    displayLabel: ['0.5 hectare', '10x10 meter'],
+  },
+  zh: {
+    displayLabel: ['0.5 hectare', '10x10 meter'],
   },
 };
 

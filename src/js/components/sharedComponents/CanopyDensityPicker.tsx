@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store';
-import { renderModal } from '../../store/appState/actions';
+import { renderModal, setActiveTreeMosaicLayer, setTreeMosaicHectaresValue } from '../../store/appState/actions';
 import { markValueMap } from '../mapWidgets/widgetContent/CanopyDensityContent';
 import { treeMosaicDensityValue } from '../mapWidgets/widgetContent/TreeMosaicContent';
 import {
@@ -10,20 +10,30 @@ import {
   forestCarbonGrossRemovalConfig,
   forestCarbonNetFluxConfig,
   treesMosaicConfig,
+  treesMosaicHectareConfig,
+  tropicalTreeHectareBtnCongif,
 } from '../../../../configs/translations/leftPanel.translations';
 import { forestCarbonRemovalValue } from '../mapWidgets/widgetContent/ForestGrossRemovalContent';
 import { forestCarbonGrossEmisionValue } from '../mapWidgets/widgetContent/ForestCarbonGrossEmissionContent';
 import { forestCarbonNetFluxValue } from '../mapWidgets/widgetContent/ForesCarbonNetFlux';
 import { handleCustomColorTheme } from '../../../utils';
+import { mapController } from '../../controllers/mapController';
+import { LayerFactory } from '../../helpers/LayerFactory';
+import './canopyDensityPicker.scss';
 
 interface CanopyDensityProps {
   type?: string;
 }
 const CanopyDensityPicker = (props: CanopyDensityProps): JSX.Element => {
+  const allAvailableLayers = useSelector((store: RootState) => store.mapviewState.allAvailableLayers);
+
   const dispatch = useDispatch();
+  const [selected, setSelected] = React.useState<'hectare' | 'meter'>('meter');
 
   const customColorTheme = useSelector((store: RootState) => store.appSettings.customColorTheme);
   const density = useSelector((store: RootState) => store.appState.leftPanel.density);
+  const hectareValue = useSelector((store: RootState) => store.appState.leftPanel.treeMosaicHectaresValue);
+
   const selectedLanguage = useSelector((store: RootState) => store.appState.selectedLanguage);
   let config = canopyDensityPickerConfig[selectedLanguage];
   let densityValueMap = markValueMap[density];
@@ -59,15 +69,76 @@ const CanopyDensityPicker = (props: CanopyDensityProps): JSX.Element => {
     }
   }
 
+  const handleClick = async (type: 'meter' | 'hectare') => {
+    const layerConfig = allAvailableLayers.find((layer: any) => layer.id === 'TREES_MOSAIC_LANDSCAPES') as any;
+
+    if (type === selected) return;
+    setSelected(type);
+    dispatch(setActiveTreeMosaicLayer(type));
+
+    const mapview = mapController.getMapView();
+    mapController.removeMapLayer('TREES_MOSAIC_LANDSCAPES');
+    const updatedUMDLayer = await LayerFactory(mapview, layerConfig);
+    mapController._map?.add(updatedUMDLayer);
+  };
+
+  const handleSelect = async (event: any) => {
+    const layerConfig = allAvailableLayers.find((layer: any) => layer.id === 'TREES_MOSAIC_LANDSCAPES') as any;
+
+    const value = Number(event.target.value);
+    dispatch(setTreeMosaicHectaresValue(value));
+    const mapview = mapController.getMapView();
+    mapController.removeMapLayer('TREES_MOSAIC_LANDSCAPES');
+    const updatedUMDLayer = await LayerFactory(mapview, layerConfig);
+    mapController._map?.add(updatedUMDLayer);
+  };
+
   return (
     <div className="canopy-density-picker-wrapper">
-      <span>{displayLabel[0]} </span>
-      <button
-        className="canopy-density-picker"
-        style={{ backgroundColor: `${themeColor}` }}
-        onClick={handleDensityButtonClick}
-      >{`> ${densityValueMap}%`}</button>
-      <span> {displayLabel[1]}</span>
+      {props.type !== 'TREES_MOSAIC_LANDSCAPES' && <span> {displayLabel[0]}</span>}
+
+      {props.type === 'TREES_MOSAIC_LANDSCAPES' && (
+        <div className="tropical-tree-cover-toggle-wrapper">
+          <div className="toggle-btn">
+            <button onClick={() => handleClick('hectare')} className={selected === 'hectare' ? 'active' : ''}>
+              {tropicalTreeHectareBtnCongif[selectedLanguage]?.displayLabel[0]}
+            </button>
+            <button onClick={() => handleClick('meter')} className={selected === 'meter' ? 'active' : ''}>
+              {tropicalTreeHectareBtnCongif[selectedLanguage]?.displayLabel[1]}
+            </button>
+          </div>
+          {selected === 'hectare' && (
+            <>
+              <span>{treesMosaicHectareConfig[selectedLanguage]?.displayLabel[0]}</span>
+
+              <select onChange={handleSelect} value={hectareValue}>
+                <option value={10}>10</option>
+                <option value={20}>20</option>
+                <option value={30}>30</option>
+                <option value={40}>40</option>
+                <option value={50}>50</option>
+                <option value={60}>60</option>
+                <option value={70}>70</option>
+                <option value={80}>80</option>
+                <option value={90}>90</option>
+              </select>
+              <span className="tree-cover-text">{treesMosaicHectareConfig[selectedLanguage]?.displayLabel[1]}</span>
+            </>
+          )}
+          {selected === 'meter' && <span> {displayLabel[1]}</span>}
+        </div>
+      )}
+
+      {props.type !== 'TREES_MOSAIC_LANDSCAPES' && (
+        <>
+          <button
+            className="canopy-density-picker"
+            style={{ backgroundColor: `${themeColor}` }}
+            onClick={handleDensityButtonClick}
+          >{`> ${densityValueMap}%`}</button>
+          <span> {displayLabel[1]}</span>
+        </>
+      )}
     </div>
   );
 };

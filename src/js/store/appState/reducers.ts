@@ -43,10 +43,12 @@ import {
   SET_VIIRS_END,
   SET_VIIRS_START,
   SET_WIND_SPEED_POTENTIAL,
+  SET_TREE_MOSAIC_HECTARES_VALUE,
   TOGGLE_TABVIEW_PANEL,
   SET_LAND_COVER_YEAR_VALUE,
   SET_RADD_ALERT_START,
   SET_RADD_ALERT_END,
+  SET_ACTIVE_TREE_MOSAIC_LAYER,
 } from './types';
 
 const initialState: AppState = {
@@ -89,6 +91,9 @@ const initialState: AppState = {
     gfwLayerLabel: 'Integrated Deforestation Alerts',
     gfwLayerSubtitle: '(daily, 10m, tropics, UMD/GLAD and WUR)',
     windSpeedPotential: 50,
+
+    treeMosaicHectaresValue: 10,
+    activeTreeMosaicLayer: 'meter',
   },
   measureContent: {
     activeButton: '',
@@ -359,6 +364,22 @@ export function appStateReducer(state = initialState, action: AppStateTypes): Ap
         leftPanel: {
           ...state.leftPanel,
           windSpeedPotential: action.payload,
+        },
+      };
+    case SET_TREE_MOSAIC_HECTARES_VALUE:
+      return {
+        ...state,
+        leftPanel: {
+          ...state.leftPanel,
+          treeMosaicHectaresValue: action.payload,
+        },
+      };
+    case SET_ACTIVE_TREE_MOSAIC_LAYER:
+      return {
+        ...state,
+        leftPanel: {
+          ...state.leftPanel,
+          activeTreeMosaicLayer: action.payload,
         },
       };
     case SET_VERSIONED_LAYER: {

@@ -20,6 +20,7 @@ import { forestCarbonNetFluxValue } from '../components/mapWidgets/widgetContent
 import { createForestCarbonNetFlux } from '../layers/ForestCarbonNetFlux';
 import { umdCoverLand } from '../layers/UmdCoverLand';
 import { createBaseTileLayer } from '../layers/BaseTileLayer';
+import { getUrl } from './layerFactoryHelpers';
 
 interface LayerOptions {
   id: string;
@@ -137,8 +138,10 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
       esriLayer.refresh();
       break;
     case 'tree-mosaic':
-      const treeDensityValue = treeMosaicDensityValue[appState.leftPanel.density];
-      layerConfig.url = layerConfig.url.replace(/(tcd_)(?:[^/]+)/, `tcd_${treeDensityValue}`);
+      const activeLayerType = appState.leftPanel.activeTreeMosaicLayer;
+      const hectareValue = appState.leftPanel.treeMosaicHectaresValue;
+      layerConfig.url = getUrl({ type: activeLayerType, hectareValue });
+
       const constructor = await createTreeMosaicCover();
       const treeMosaicLayer = new constructor({
         id: layerConfig.id,

@@ -1,5 +1,7 @@
 import { LayerFeatureResult } from '../mapview/types';
 
+export type TreeMosaicLayerTypes = 'meter' | 'hectare';
+
 export interface LeftPanel {
   tabViewVisible: boolean;
   activeTab: string;
@@ -30,6 +32,9 @@ export interface LeftPanel {
   versionedLayer: {
     [key: string]: string;
   };
+
+  treeMosaicHectaresValue: number;
+  activeTreeMosaicLayer: TreeMosaicLayerTypes;
 }
 
 interface SpecificAreaResults {
@@ -117,6 +122,8 @@ export const SET_GFW_LAYER_SUBTITLE = 'SET_GFW_LAYER_SUBTITLE';
 export const SET_IMAGE_OBJECT = 'SET_IMAGE_OBJECT';
 export const SET_WIND_SPEED_POTENTIAL = 'SET_WIND_SPEED_POTENTIAL';
 export const SET_MULTI_POLYGON_SELECTION_MODE = 'SET_MULTI_POLYGON_SELECTION_MODE';
+export const SET_TREE_MOSAIC_HECTARES_VALUE = 'SET_TREE_MOSAIC_HECTARES_VALUE';
+export const SET_ACTIVE_TREE_MOSAIC_LAYER = 'SET_ACTIVE_TREE_MOSAIC_LAYER';
 export const SET_ACTIVE_MULTI_INPUT = 'SET_ACTIVE_MULTI_INPUT';
 export const SET_ANALYSIS_FEATURE_LIST = 'SET_ANALYSIS_FEATURE_LIST';
 
@@ -338,6 +345,16 @@ interface SetLandCoverYearValue {
   payload: number[];
 }
 
+interface SetTreeMosaicHectaresValue {
+  type: typeof SET_TREE_MOSAIC_HECTARES_VALUE;
+  payload: number;
+}
+
+interface SetActiveTreeMosaicLayer {
+  type: typeof SET_ACTIVE_TREE_MOSAIC_LAYER;
+  payload: TreeMosaicLayerTypes;
+}
+
 export type AppStateTypes =
   | ToggleTabviewPanelAction
   | RenderModalAction
@@ -382,4 +399,6 @@ export type AppStateTypes =
   | SetMultiPolygonSelectionMode
   | SetActiveMultiInput
   | SetAnalysisFeatureList
-  | SetLandCoverYearValue;
+  | SetLandCoverYearValue
+  | SetTreeMosaicHectaresValue
+  | SetActiveTreeMosaicLayer;
