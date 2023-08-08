@@ -1,0 +1,39 @@
+.tropical-tree-cover-toggle-wrapper {
+  .toggle-btn {
+    border: 1px solid #f0ab00;
+    margin: 0.7rem auto;
+    width: 70%;
+    border-radius: 30px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+
+    button {
+      font-size: 12px;
+      border: 1px solid transparent;
+      width: 50%;
+      border-radius: 30px;
+      background: transparent;
+      height: 100%;
+      color: black;
+
+      &.active {
+        background: #f0ab00;
+        border: 1px solid #f0ab00;
+        color: white;
+      }
+    }
+  }
+
+  select {
+    border: 1px solid #f0ab00;
+    border-radius: 30px;
+    font-size: 12px;
+    display: inline-block;
+    margin-left: 0.3rem;
+  }
+  .tree-cover-text {
+    display: inline-block;
+    margin-left: 0.5rem;
+  }
+}

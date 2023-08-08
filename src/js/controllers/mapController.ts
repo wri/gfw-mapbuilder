@@ -1723,6 +1723,7 @@ export class MapController {
     const { mapviewState } = store.getState();
     const treeCoverLayerInfo: any = mapviewState.allAvailableLayers.find((l) => l.id === 'TREE_COVER');
     const treeLayer: any = this._map?.findLayerById('TREE_COVER');
+
     if (treeLayer && treeCoverLayerInfo) {
       const oldLayer = treeLayer;
       oldLayer.urlTemplate = treeCoverLayerInfo.url.replace('30', value);

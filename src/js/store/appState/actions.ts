@@ -45,6 +45,9 @@ import {
   SET_GLAD_2_END,
   SET_RADD_ALERT_START,
   SET_RADD_ALERT_END,
+  SET_TREE_MOSAIC_HECTARES_VALUE,
+  TreeMosaicLayerTypes,
+  SET_ACTIVE_TREE_MOSAIC_LAYER,
 } from './types';
 
 export function setSelectedSearchWidgetLayer(payload: AppState['selectedSearchWidgetLayer']) {
@@ -350,6 +353,20 @@ export function setAnalysisFeatureList(payload: any) {
 export function setLandCoverYearValue(payload: number[]) {
   return {
     type: SET_LAND_COVER_YEAR_VALUE,
+    payload,
+  };
+}
+
+export function setTreeMosaicHectaresValue(payload: number) {
+  return {
+    type: SET_TREE_MOSAIC_HECTARES_VALUE,
+    payload,
+  };
+}
+
+export function setActiveTreeMosaicLayer(payload: TreeMosaicLayerTypes) {
+  return {
+    type: SET_ACTIVE_TREE_MOSAIC_LAYER,
     payload,
   };
 }
