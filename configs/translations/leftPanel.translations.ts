@@ -624,24 +624,18 @@ export const treesMosaicConfig = {
 
 export const treesMosaicHectareConfig = {
   en: {
-    // displayLabel: ['Displaying Trees in Mosaic Landscapes with', 'tree cover.'],
-    // displayLabel: ['Displaying tree cover at 0.5 hectare resolution and at', 'tree cover.'],
     displayLabel: ['Displaying tree cover at 0.5 hectare resolution and at', 'tree cover'],
   },
   az: {
-    // displayLabel: ['Göstərir', 'örtük sıxlığı.'],
     displayLabel: ['Displaying tree cover at 0.5 hectare resolution and at', 'tree cover'],
   },
   nl: {
-    // displayLabel: ['Weergeven', 'luifeldichtheid.'],
     displayLabel: ['Displaying tree cover at 0.5 hectare resolution and at', 'tree cover'],
   },
   hy: {
-    // displayLabel: ['Ցուցադրվում է ', 'Սաղարթի խտություն '],
     displayLabel: ['Displaying tree cover at 0.5 hectare resolution and at', 'tree cover'],
   },
   ka: {
-    // displayLabel: ['წარმოდგენილია', 'ვარჯის სიმჭიდროვე.'],
     displayLabel: ['Displaying tree cover at 0.5 hectare resolution and at', 'tree cover'],
   },
   fr: {
