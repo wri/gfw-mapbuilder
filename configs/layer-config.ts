@@ -49,6 +49,7 @@ export const WRIBasemapConfig = {
 export const customBasemapIcon = 'https://my.gfw-mapbuilder.org/img/custom_basemap.png';
 
 //Timeslider objects for tree cover loss, dry spells and gfw
+// TODO: replace defaultMarks with generateRangeDate method from utils
 export const defaultMarks: any = {
   '2001': {
     label: '2001',
