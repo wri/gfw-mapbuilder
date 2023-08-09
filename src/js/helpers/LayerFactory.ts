@@ -138,9 +138,8 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
       esriLayer.refresh();
       break;
     case 'tree-mosaic':
-      const activeLayerType = appState.leftPanel.activeTreeMosaicLayer;
-      const hectareValue = appState.leftPanel.treeMosaicHectaresValue;
-      layerConfig.url = getUrl({ type: activeLayerType, hectareValue });
+      const treeDensityValue = treeMosaicDensityValue[appState.leftPanel.density];
+      layerConfig.url = layerConfig.url.replace(/(tcd_)(?:[^/]+)/, `tcd_${treeDensityValue}`);
 
       const constructor = await createTreeMosaicCover();
       const treeMosaicLayer = new constructor({
@@ -151,6 +150,21 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
         view: mapView,
       });
       esriLayer = treeMosaicLayer;
+      break;
+    case 'tropical-tree-cover':
+      const activeLayerType = appState.leftPanel.activeTreeMosaicLayer;
+      const hectareValue = appState.leftPanel.treeMosaicHectaresValue;
+      layerConfig.url = getUrl({ type: activeLayerType, hectareValue });
+
+      const tropicalTreeConstructor = await createTreeMosaicCover();
+      const tropicalTreeLayer = new tropicalTreeConstructor({
+        id: layerConfig.id,
+        title: layerConfig.title,
+        visible: layerConfig.visible,
+        urlTemplate: layerConfig.url,
+        view: mapView,
+      });
+      esriLayer = tropicalTreeLayer;
       break;
     case 'forest-carbon-gross-removals':
       const forestCarbonRemoval = forestCarbonRemovalValue[appState.leftPanel.density] || forestCarbonRemovalValue[2];
