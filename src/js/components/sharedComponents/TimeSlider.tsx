@@ -346,7 +346,6 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
     return label;
   };
 
-  console.log('this one is defnintely running', props);
   return (
     <div className="time-slider-container">
       {playButton ? (

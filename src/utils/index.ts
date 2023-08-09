@@ -6,7 +6,7 @@ export const handleCustomColorTheme = (theme: string | null | undefined) => {
 };
 
 /**
- * @description Generate a range of dates labels based on the start and end date for the slider
+ * @description Generate range of dates labels based on the start and end date for the slider
  * @param start Date
  * @param end Date
  * @returns {
