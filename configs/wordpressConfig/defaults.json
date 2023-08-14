@@ -51,6 +51,7 @@
     "treeCover": false,
     "treeCoverGain": false,
     "treeCoverLoss": false,
+    "tropicalTreeCover": false,
     "treeMosaicLandscapes": false,
     "forestCarbonGrossRemovals": false,
     "forestCarbonGrossEmissions": false,
@@ -275,6 +276,12 @@
             "order": 8,
             "type": "remoteDataLayer",
             "uuid": "9e0c1e1e-a0a3-457f-a373-4104820f7a50"
+          },
+          {
+            "id": "TROPICAL_TREE_COVER",
+            "order": 9,
+            "type": "remoteDataLayer",
+            "uuid": "b9183eca-84ed-48ed-83d5-a146a6e2a079"
           }
         ]
       },
