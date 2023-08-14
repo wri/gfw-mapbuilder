@@ -28,6 +28,7 @@ import { defaultAnalysisModules } from '../../../../../configs/analysis-config';
 import '../../../../css/leftpanel.scss';
 import 'react-datepicker/dist/react-datepicker.css';
 import { handleCustomColorTheme } from '../../../../utils';
+import { DATES } from '../../../../../configs/dates-config';
 
 type InputTypes = 'range-slider' | 'tcd' | 'date-picker';
 
@@ -314,9 +315,9 @@ const BaseAnalysis = (): JSX.Element => {
           }}
         >
           <span style={{ fontWeight: 600 }}>From: </span>
-          <span>{2001}</span>
+          <span>{DATES.TREE_COVER_LOSS.min}</span>
           <span style={{ fontWeight: 600 }}> to: </span>
-          <span>{2021}</span>
+          <span>{DATES.TREE_COVER_LOSS.max}</span>
         </div>
       );
     }

@@ -29,8 +29,10 @@ import SelectIntegratedAlertLayer from '../../sharedComponents/SelectIntegratedA
 import RangeSlider from '../../sharedComponents/RangeSlider';
 import GladControls from '../../sharedComponents/GladControls';
 import IntegratedAlertControls from '../../sharedComponents/IntegratedAlertControls';
-import { eachDayOfInterval, format, subYears } from 'date-fns';
-import { handleCustomColorTheme } from '../../../../utils';
+import { subYears } from 'date-fns';
+import { generateRangeDate, handleCustomColorTheme } from '../../../../utils';
+import { DATES } from '../../../../../configs/dates-config';
+const { TREE_COVER_LOSS } = DATES;
 
 interface LayerInfo {
   layerInfo: any;
@@ -187,39 +189,18 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
     return newMarks;
   };
 
-  const generateRangeDate = (start: Date, end: Date) => {
-    const datesList = eachDayOfInterval({ start, end });
-
-    const data = {};
-    let max = 0;
-    const middleIndex = Math.floor(datesList.length / 2);
-    const lastIndex = datesList.length - 1;
-
-    datesList.forEach((date, index) => {
-      max = index;
-      data[index] = {
-        label: format(date, 'P'),
-        style: { display: index === 0 || middleIndex === index || lastIndex === index ? 'block' : 'none' },
-        value: index,
-      };
-    });
-
-    return { min: 0, max, marks: data };
-  };
-
   const returnTimeSlider = (id: string): any => {
     const currentDateMinusTwoYears = subYears(new Date(), 2);
     const dateRangeResult = generateRangeDate(currentDateMinusTwoYears, new Date());
-
     switch (id) {
       case 'TREE_COVER_LOSS':
         return (
           <TimeSlider
             layerID={id}
-            defaultMarks={generateDefaultMarks({ start: 2000, end: 2022 })}
-            min={2001}
-            max={2022}
-            defaultValue={[2001, 2022]}
+            defaultMarks={generateDefaultMarks({ start: 2000, end: TREE_COVER_LOSS.max })}
+            min={TREE_COVER_LOSS.min}
+            max={TREE_COVER_LOSS.max}
+            defaultValue={[TREE_COVER_LOSS.min, TREE_COVER_LOSS.max]}
             steps={1}
             included={true}
           />
