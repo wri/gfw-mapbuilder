@@ -591,6 +591,39 @@ export const dataTabConfig = {
 };
 export const treesMosaicConfig = {
   en: {
+    displayLabel: ['Displaying Trees in Mosaic Landscapes with', 'tree cover.'],
+  },
+  az: {
+    displayLabel: ['Göstərir', 'örtük sıxlığı.'],
+  },
+  nl: {
+    displayLabel: ['Weergeven', 'luifeldichtheid.'],
+  },
+  hy: {
+    displayLabel: ['Ցուցադրվում է ', 'Սաղարթի խտություն '],
+  },
+  ka: {
+    displayLabel: ['წარმოდგენილია', 'ვარჯის სიმჭიდროვე.'],
+  },
+  fr: {
+    displayLabel: ['Affichage', 'Densité de la canopée.'],
+  },
+  es: {
+    displayLabel: ['Mostrando', 'densidad de follaje.'],
+  },
+  pt: {
+    displayLabel: ['Exibindo', 'densidade de dossel'],
+  },
+  id: {
+    displayLabel: ['Displaying Trees in Mosaic Landscapes with', 'tree cover.'],
+  },
+  zh: {
+    displayLabel: ['显示中', '林冠覆盖密度'],
+  },
+};
+
+export const tropicalTreeConfig = {
+  en: {
     displayLabel: ['', 'Displaying >40% tree extent probability at 10 meter resolution'],
   },
   az: {
