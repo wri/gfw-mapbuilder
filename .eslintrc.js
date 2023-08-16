@@ -24,7 +24,7 @@ module.exports = {
     'no-prototype-builtins': 0,
     '@typescript-eslint/explicit-function-return-type': 0,
     '@typescript-eslint/camelcase': 0,
-    quotes: ['warning', 'single'],
+    quotes: ['warn', 'single'],
     'no-console': 'warn',
   },
 };
