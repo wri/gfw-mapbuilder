@@ -6,7 +6,9 @@ const Banner = () => {
       <h1 className="banner__text__title">
         The Trees in Mosaic Landscapes dataset will be deprecated as of February 2024. Please use our new Tropical Tree
         Cover dataset instead. Find out more at{' '}
-        <a href="http://mapbuilder.wri.org/tutorials/tml-to-tcc">Replacing Trees in Mosaic Landscapes - MapBuilder </a>
+        <a href="http://mapbuilder.wri.org/tutorials/tml-to-tcc" target="_blank">
+          Replacing Trees in Mosaic Landscapes - MapBuilder{' '}
+        </a>
       </h1>
     </div>
   );
