@@ -2,6 +2,7 @@
 
 .header-container {
   display: flex;
+  flex-direction: column;
   position: absolute;
   justify-content: space-between;
   width: 100%;
@@ -11,6 +12,17 @@
   z-index: 2;
   font-family: $fira-sans;
   color: $dark-grey;
+  .header-spacer {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    top: 0;
+    height: $header-height;
+    background-color: $header-color;
+    z-index: 2;
+    font-family: $fira-sans;
+    color: $dark-grey;
+  }
 
   .title-container {
     display: flex;
@@ -265,8 +277,6 @@
 
 @media screen and (max-width: $mobile-device) {
   .header-container {
-    justify-content: flex-end;
-
     .title-container {
       width: 100%;
 
