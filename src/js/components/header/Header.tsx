@@ -54,13 +54,13 @@ const Header: FunctionComponent = () => {
 
   const isLoggedIn = useSelector((store: RootState) => store.appState.isLoggedIn);
 
-  const renderGFWDropdown = useSelector((store: RootState) => store.appState.renderGFWDropdown);
-
   const navLinksInNewTab = useSelector((store: RootState) => store.appSettings.navLinksInNewTab);
 
   const downloadLinkUrl = useSelector((store: RootState) => store.appSettings.downloadLinkUrl);
 
   const aboutLinkUrl = useSelector((store: RootState) => store.appSettings.aboutLinkUrl);
+
+  const appSettings = useSelector((state: any) => state.appSettings);
 
   const target = navLinksInNewTab ? '_blank' : '_self';
   const appTitle = selectedLanguage === language ? title : alternativeLanguageTitle;
@@ -70,10 +70,11 @@ const Header: FunctionComponent = () => {
   const mapThemeIDArray = mapThemeIds?.split(';');
   const alternativeMapThemeArray = alternativeMapThemes?.split(';');
   const renderThemeDropdown = Boolean(mapThemes.length) && mapThemeIDArray.length === mapThemeArray.length;
+
   return (
     <>
       <div className="header-container" data-cy="header">
-        <Banner />
+        {appSettings.treeMosaicLandscapes && <Banner />}
         <div className="header-spacer">
           <div className="title-container">
             {logoUrl && logoLinkUrl && (
