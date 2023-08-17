@@ -182,7 +182,7 @@ export const bannerContent = {
     linkUrlText: 'Replacing Trees in Mosaic Landscapes - MapBuilder',
   },
   az: {
-    text: 'Mozaika Mənzərələrindəki Ağaclar verilənlər bazası 2024-cü ilin fevral ayından etibarən köhnələcək. Əvəzində yeni Tropik Ağac Örtüsü məlumat dəstimizdən istifadə edin. Daha çox məlumatı Mozaika mənzərələrində ağacların dəyişdirilməsi - MapBuilder-də tapın',
+    text: 'Mozaika Mənzərələrindəki Ağaclar dataset1 2024-cü ilin fevral ayından etibarən köhnələcək. Əvəzində yeni Tropik Ağac Örtüsü məlumat dəstimizdən istifadə edin. Ətraflı buradan öyrənin',
     linkUrlText: 'Mozaika mənzərələrində ağacların dəyişdirilməsi - MapBuilder',
   },
   nl: {
@@ -194,27 +194,27 @@ export const bannerContent = {
     linkUrlText: 'Ծառերի փոխարինում խճանկարային լանդշաֆտներում - MapBuilder',
   },
   ka: {
-    text: 'ხეები მოზაიკის პეიზაჟებში მოძველებული იქნება 2024 წლის თებერვლიდან. ამის ნაცვლად, გთხოვთ, გამოიყენოთ ჩვენი ახალი ტროპიკული ხეების საფარის მონაცემთა ნაკრები. შეიტყვეთ მეტი ხეების ჩანაცვლება მოზაიკურ პეიზაჟებში - MapBuilder',
+    text: 'ხეები მოზაიკის პეიზაჟებში მონაცემთა ნაკრები1 მოძველდება 2024 წლის თებერვლიდან. ამის ნაცვლად, გთხოვთ, გამოიყენოთ ჩვენი ახალი ტროპიკული ხეების საფარის მონაცემთა ნაკრები. შეიტყვეთ მეტი აქ',
     linkUrlText: 'ხეების ჩანაცვლება მოზაიკურ პეიზაჟებში - MapBuilder',
   },
   fr: {
-    text: 'Le jeu de données Trees in Mosaic Landscapes sera obsolète à partir de février 2024. Veuillez utiliser notre nouveau jeu de données Tropical Tree Cover à la place. En savoir plus sur Remplacer les arbres dans les paysages en mosaïque - MapBuilder',
+    text: 'Le jeu de données Trees in Mosaic Landscapes1 sera obsolète à partir de février 2024. Veuillez utiliser notre nouveau jeu de données Tropical Tree Cover à la place. En savoir plus sur',
     linkUrlText: 'Remplacer les arbres dans les paysages en mosaïque - MapBuilder',
   },
   es: {
-    text: 'El conjunto de datos Trees in Mosaic Landscapes quedará obsoleto a partir de febrero de 2024. En su lugar, utilice nuestro nuevo conjunto de datos Cobertura de árboles tropicales. Obtenga más información en Sustitución de árboles en paisajes de mosaico - MapBuilder',
+    text: 'El conjunto de datos Trees in Mosaic Landscapes1 quedará obsoleto a partir de febrero de 2024. En su lugar, utilice nuestro nuevo conjunto de datos Cobertura de árboles tropicales. Obtenga más información en',
     linkUrlText: 'Sustitución de árboles en paisajes de mosaico - MapBuilder',
   },
   pt: {
-    text: 'O conjunto de dados Trees in Mosaic Landscapes será descontinuado a partir de fevereiro de 2024. Em vez disso, use nosso novo conjunto de dados Tropical Tree Cover. Saiba mais em Substituição de árvores em paisagens de mosaico - MapBuilder',
+    text: 'O conjunto de dados Trees in Mosaic Landscapes1 será descontinuado a partir de fevereiro de 2024. Em vez disso, use nosso novo conjunto de dados Tropical Tree Cover. Saiba mais em',
     linkUrlText: 'Substituindo Árvores em Paisagens em Mosaico - MapBuilder',
   },
   id: {
-    text: 'Set data Pepohonan dalam Lanskap Mosaik tidak akan digunakan lagi mulai Februari 2024. Sebagai gantinya, gunakan set data Tutupan Pohon Tropis kami yang baru. Cari tahu lebih lanjut di Mengganti Pohon di Lanskap Mosaik - MapBuilder',
+    text: 'Kumpulan data Trees in Mosaic Landscapes1 tidak akan digunakan lagi mulai Februari 2024. Sebagai gantinya, gunakan kumpulan data Tutupan Pohon Tropis kami yang baru. Cari tahu lebih lanjut di',
     linkUrlText: 'Mengganti Pohon di Lanskap Mosaik - MapBuilder',
   },
   zh: {
-    text: '自 2024 年 2 月起，马赛克景观中的树木数据集将被弃用。请改用我们新的热带树木覆盖数据集。了解更多信息，请参阅替换马赛克景观中的树木 - MapBuilder',
+    text: '自 2024 年 2 月起，马赛克景观中的树木数据集 1 将被弃用。请改用我们新的热带树木覆盖数据集。欲了解更多信息，请访问',
     linkUrlText: '替换马赛克景观中的树木 - MapBuilder',
   },
 };
