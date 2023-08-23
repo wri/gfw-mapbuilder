@@ -6,14 +6,11 @@ import { RootState } from '../../store';
 
 const Banner = () => {
   const selectedLanguage = useSelector((store: RootState) => store.appState.selectedLanguage);
-  console.log(bannerContent);
-  console.log(selectedLanguage);
-  console.log(bannerContent[selectedLanguage].text);
   return (
     <div className="banner">
       <h1 className="banner__text__title">
         {bannerContent[selectedLanguage].text}{' '}
-        <a href={'http://mapbuilder.wri.org/tutorials/tml-to-tcc'} className="banner__text__link">
+        <a href={'http://mapbuilder.wri.org/tutorials/tml-to-tcc'} className="banner__text__link" target="_blank">
           {bannerContent[selectedLanguage].linkUrlText}
         </a>
       </h1>
