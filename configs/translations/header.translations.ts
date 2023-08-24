@@ -15,7 +15,7 @@ export const headerContent = {
     stories: 'My Stories',
     profile: 'My GFW Profile',
     logout: 'Log Out',
-    language: 'Select Language'
+    language: 'Select Language',
   },
   az: {
     about: 'About',
@@ -33,7 +33,7 @@ export const headerContent = {
     stories: 'Mənim Hekayələrim',
     profile: 'Mənim GFW profilim',
     logout: 'Çıxış',
-    language: 'Dili seçin'
+    language: 'Dili seçin',
   },
   nl: {
     about: 'Over ons',
@@ -51,7 +51,7 @@ export const headerContent = {
     stories: 'Mijn verhalen ',
     profile: 'Mijn GFW Profiel',
     logout: 'Log Uit',
-    language: 'Kies taal'
+    language: 'Kies taal',
   },
   hy: {
     about: 'Մեր մասին',
@@ -69,7 +69,7 @@ export const headerContent = {
     stories: 'Իմ պատմությունները ',
     profile: 'Իմ ԱԳՀ հաշիվը/էջը ',
     logout: 'Դուրս գալ ',
-    language: 'Ընտրել լեզուն '
+    language: 'Ընտրել լեզուն ',
   },
   ka: {
     about: 'პროექტის შესახებ',
@@ -87,7 +87,7 @@ export const headerContent = {
     stories: 'My Stories',
     profile: 'ჩემი "GFW" პროფილი',
     logout: 'გამოსვლა',
-    language: 'ენის არჩევა'
+    language: 'ენის არჩევა',
   },
   fr: {
     about: 'A Propos',
@@ -95,8 +95,7 @@ export const headerContent = {
     mapThemes: 'Thèmes',
     myGFWLogin: 'Se connecter à GFW',
     myGFW: 'GFW',
-    loginReq:
-      'Vous devez être connecté pour afficher, gérer et supprimer vos abonnements. Des questions? ',
+    loginReq: 'Vous devez être connecté pour afficher, gérer et supprimer vos abonnements. Des questions? ',
     contactUs: 'Contactez-nous',
     twitter: 'Connectez-vous avec Twitter',
     facebook: 'Connectez-vous avec Facebook',
@@ -105,7 +104,7 @@ export const headerContent = {
     stories: 'Mes histoires',
     profile: 'Mon profil',
     logout: 'Déconnecter',
-    language: 'Choisir Langue'
+    language: 'Choisir Langue',
   },
   es: {
     about: 'Acerca de',
@@ -113,8 +112,7 @@ export const headerContent = {
     mapThemes: 'Temas',
     myGFWLogin: 'Entrar a mi GFW',
     myGFW: 'MI GFW',
-    loginReq:
-      'Es necesario iniciar sesión para ver, administrar y eliminar tus suscripciones. ¿Alguna pregunta? ',
+    loginReq: 'Es necesario iniciar sesión para ver, administrar y eliminar tus suscripciones. ¿Alguna pregunta? ',
     contactUs: 'Contáctanos',
     twitter: 'Ingresar con Twitter',
     facebook: 'Iniciar sesión con Facebook',
@@ -123,7 +121,7 @@ export const headerContent = {
     stories: 'Mis historias',
     profile: 'Mon profil',
     logout: 'Cerrar sesión',
-    language: 'Seleccionar idioma'
+    language: 'Seleccionar idioma',
   },
   pt: {
     about: 'Sobre',
@@ -131,8 +129,7 @@ export const headerContent = {
     mapThemes: 'Temas do Mapa',
     myGFWLogin: 'Fazer Login no MEU GFW',
     myGFW: 'MEU GFW',
-    loginReq:
-      'É necessário iniciar uma sessão para visualizar, gerenciar e deletar suas assinaturas. Dúvidas? ',
+    loginReq: 'É necessário iniciar uma sessão para visualizar, gerenciar e deletar suas assinaturas. Dúvidas? ',
     contactUs: 'Entre em contato',
     twitter: 'Entrar com Twitter',
     facebook: 'Entrar Com Facebook',
@@ -141,7 +138,7 @@ export const headerContent = {
     stories: 'My Stories',
     profile: 'Mon profil',
     logout: 'Sair',
-    language: 'Selecionar Idioma'
+    language: 'Selecionar Idioma',
   },
   id: {
     about: 'About',
@@ -149,8 +146,7 @@ export const headerContent = {
     mapThemes: 'Map Themes',
     myGFWLogin: 'Log in to my GFW',
     myGFW: 'MY GFW',
-    loginReq:
-      'Anda harus masuk untuk dapat melihat, mengelola, serta menghapus langganan Anda. Ada pertanyaan? ',
+    loginReq: 'Anda harus masuk untuk dapat melihat, mengelola, serta menghapus langganan Anda. Ada pertanyaan? ',
     contactUs: 'Hubungi kami',
     twitter: 'Masuk dengan Twitter',
     facebook: 'Masuk dengan Facebook',
@@ -159,7 +155,7 @@ export const headerContent = {
     stories: 'Cerita Saya',
     profile: 'Mon profil',
     logout: 'Keluar',
-    language: 'Select Language'
+    language: 'Select Language',
   },
   zh: {
     about: '关于',
@@ -176,6 +172,49 @@ export const headerContent = {
     stories: '我的故事',
     profile: '我的概述',
     logout: '注销',
-    language: '选择语言'
-  }
+    language: '选择语言',
+  },
+};
+
+export const bannerContent = {
+  en: {
+    text: 'The Trees in Mosaic Landscapes dataset will be deprecated as of February 2024. Please use our new Tropical Tree Cover dataset instead. Find out more at',
+    linkUrlText: 'Replacing Trees in Mosaic Landscapes - MapBuilder',
+  },
+  az: {
+    text: 'Mozaika Mənzərələrindəki Ağaclar verilənlər bazası 2024-cü ilin fevral ayından etibarən köhnələcək. Əvəzində yeni Tropik Ağac Örtüsü məlumat dəstimizdən istifadə edin. Ətraflı buradan öyrənin',
+    linkUrlText: 'Mozaika mənzərələrində ağacların dəyişdirilməsi - MapBuilder',
+  },
+  nl: {
+    text: 'De dataset Trees in Mosaic Landscapes wordt vanaf februari 2024 beëindigd. Gebruik in plaats daarvan onze nieuwe Tropical Tree Cover-dataset. Lees meer op',
+    linkUrlText: 'Bomen vervangen in mozaïeklandschappen - MapBuilder',
+  },
+  hy: {
+    text: '«Ծառերը մոզաիկ լանդշաֆտներում» տվյալների բազան կհնացվի 2024 թվականի փետրվարից: Փոխարենը, խնդրում ենք օգտագործել մեր նոր «Արևադարձային ծառերի ծածկույթի» տվյալները: Իմացեք ավելին այստեղ',
+    linkUrlText: 'Ծառերի փոխարինում խճանկարային լանդշաֆտներում - MapBuilder',
+  },
+  ka: {
+    text: 'ხეები მოზაიკის პეიზაჟებში მოძველებული იქნება 2024 წლის თებერვლიდან. ამის ნაცვლად, გთხოვთ, გამოიყენოთ ჩვენი ახალი ტროპიკული ხეების საფარის მონაცემთა ნაკრები. შეიტყვეთ მეტი აქ',
+    linkUrlText: 'ხეების ჩანაცვლება მოზაიკურ პეიზაჟებში - MapBuilder',
+  },
+  fr: {
+    text: 'Le jeu de données Trees in Mosaic Landscapes sera obsolète à partir de février 2024. Veuillez utiliser notre nouveau jeu de données Tropical Tree Cover à la place. En savoir plus sur',
+    linkUrlText: 'Remplacer les arbres dans les paysages en mosaïque - MapBuilder',
+  },
+  es: {
+    text: 'El conjunto de datos Trees in Mosaic Landscapes quedará obsoleto a partir de febrero de 2024. En su lugar, utilice nuestro nuevo conjunto de datos Cobertura de árboles tropicales. Obtenga más información en',
+    linkUrlText: 'Sustitución de árboles en paisajes de mosaico - MapBuilder',
+  },
+  pt: {
+    text: 'O conjunto de dados Trees in Mosaic Landscapes será descontinuado a partir de fevereiro de 2024. Em vez disso, use nosso novo conjunto de dados Tropical Tree Cover. Saiba mais em',
+    linkUrlText: 'Substituindo Árvores em Paisagens em Mosaico - MapBuilder',
+  },
+  id: {
+    text: 'Set data Pepohonan dalam Lanskap Mosaik tidak akan digunakan lagi mulai Februari 2024. Sebagai gantinya, gunakan set data Tutupan Pohon Tropis kami yang baru. Cari tahu lebih lanjut di',
+    linkUrlText: 'Mengganti Pohon di Lanskap Mosaik - MapBuilder',
+  },
+  zh: {
+    text: '自 2024 年 2 月起，马赛克景观中的树木数据集将被弃用。请改用我们新的热带树木覆盖数据集。欲了解更多信息，请访问',
+    linkUrlText: '替换马赛克景观中的树木 - MapBuilder',
+  },
 };

@@ -1,0 +1,17 @@
+.banner {
+  height: auto;
+  z-index: 1;
+  width: 100%;
+  color: #1a1919;
+  border-color: #f3b229;
+  background-color: #f3b229;
+  line-height: 17px;
+  text-align: center;
+  h1 {
+    font-size: 0.875rem;
+    font-family: 'Fira Sans', sans-serif;
+    font-weight: bold;
+    padding: 3px;
+    margin: 6px;
+  }
+}
