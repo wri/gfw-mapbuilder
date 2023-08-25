@@ -115,15 +115,15 @@ const CanopyDensityPicker = (props: CanopyDensityProps): JSX.Element => {
               <span>{treesMosaicHectareConfig[selectedLanguage]?.displayLabel[0]}</span>
 
               <select onChange={handleSelect} value={hectareValue}>
-                <option value={10}>10</option>
-                <option value={20}>20</option>
-                <option value={30}>30</option>
-                <option value={40}>40</option>
-                <option value={50}>50</option>
-                <option value={60}>60</option>
-                <option value={70}>70</option>
-                <option value={80}>80</option>
-                <option value={90}>90</option>
+                <option value={10}>{'>10%'}</option>
+                <option value={20}>{'>20%'}</option>
+                <option value={30}>{'>30%'}</option>
+                <option value={40}>{'>40%'}</option>
+                <option value={50}>{'>50%'}</option>
+                <option value={60}>{'>60%'}</option>
+                <option value={70}>{'>70%'}</option>
+                <option value={80}>{'>80%'}</option>
+                <option value={90}>{'>90%'}</option>
               </select>
               <span className="tree-cover-text">{treesMosaicHectareConfig[selectedLanguage]?.displayLabel[1]}</span>
             </>
