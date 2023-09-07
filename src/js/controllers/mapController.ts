@@ -692,24 +692,27 @@ export class MapController {
 
   // All Extra Layers are ignored in query, legend and left panel, layer with MASK ID uses GFW mask endpoint with ISO def expression (if no ISO code is present, we do not add mask layer)
   // Adding MASK Layer, which dims the area that is not the country ISO code based on Config ,separate from the flow as it comes in the config as 'extraLayers' array element, not following previous layer object specs
-  addExtraLayers(): void {
+  async addExtraLayers() {
     const appSettings = store.getState().appSettings;
     const { layerPanel } = appSettings;
     const extraLayers = layerPanel['extraLayers'];
-    extraLayers.forEach((exLayer: any) => {
+
+    for (let i = 0; i < extraLayers.length; i++) {
+      const exLayer = extraLayers[i];
+
       let extraEsriLayer;
       if (exLayer.id === 'MASK' && appSettings.iso && appSettings.iso.length !== 0) {
         exLayer.type = 'MASK';
-        extraEsriLayer = LayerFactory(this._mapview, exLayer);
+        extraEsriLayer = await LayerFactory(this._mapview, exLayer);
       } else if (exLayer.id === 'MASK' && (!appSettings.iso || appSettings.iso.length === 0)) {
         extraEsriLayer = null;
       } else {
-        extraEsriLayer = LayerFactory(this._mapview, exLayer);
+        extraEsriLayer = await LayerFactory(this._mapview, exLayer);
       }
       if (extraEsriLayer) {
         this._map!.add(extraEsriLayer);
       }
-    });
+    }
   }
 
   async addLandsatLayer(layerConfig: LayerProps, year: string): Promise<void> {
@@ -1551,6 +1554,7 @@ export class MapController {
         customTextElements: [{ title: 'GFW Mapbuilder' }, { subtitle: 'Make maps that matter' }],
       },
     });
+    this.toggleMaskLayer(false);
 
     const params = new PrintParameters({
       view: this._mapview,
@@ -1558,7 +1562,30 @@ export class MapController {
     });
 
     if (!this._printTask) return;
-    return await this._printTask.execute(params).catch((e) => console.log('error in generateMapPDF()', e));
+
+    try {
+      const res = await this._printTask.execute(params);
+
+      if (res?.url) {
+        this.toggleMaskLayer(true);
+        return res;
+      }
+    } catch (error) {
+      console.error('error in generateMapPDF()', error);
+      return { url: null };
+    }
+  };
+
+  toggleMaskLayer = (visible: boolean) => {
+    const allLayers = this._mapview?.map.allLayers;
+
+    // set visibility of mask layer to false when printing the map, trying to print map with mask layer visible causes the print service to fail
+    // after printing is complete, set visibility of mask layer back to true
+    allLayers?.items.forEach((layer: any) => {
+      if (layer.id === 'MASK') {
+        layer.visible = visible;
+      }
+    });
   };
 
   setPolygon = async (points: Array<__esri.Point>): Promise<void> => {

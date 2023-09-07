@@ -23,7 +23,11 @@ export const PrintModal: FunctionComponent = () => {
 
     const { url } = await mapController.generateMapPDF(printType);
 
-    setURL(url);
+    if (url) {
+      setURL(url);
+    } else {
+      // TODO: display error message that PDF could not be generated?
+    }
     setPDFLoading(false);
   };
 
