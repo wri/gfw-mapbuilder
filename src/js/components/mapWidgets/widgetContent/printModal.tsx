@@ -26,7 +26,7 @@ export const PrintModal: FunctionComponent = () => {
     if (url) {
       setURL(url);
     } else {
-      // TODO: display error message that PDF could not be generated?
+      alert('PDF could not be generated');
     }
     setPDFLoading(false);
   };
