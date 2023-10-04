@@ -16,7 +16,11 @@ import {
   setRaddAlertEnd,
   setRaddAlertStart,
 } from '../../store/appState/actions';
-import { layerControlsTranslations } from '../../../../configs/translations/leftPanel.translations';
+import {
+  geoCoverageConfig,
+  layerControlsTranslations,
+  showConfidenceAlertsConfig,
+} from '../../../../configs/translations/leftPanel.translations';
 import DatePicker from 'react-datepicker';
 import styled from 'styled-components';
 
@@ -188,6 +192,8 @@ const IntegratedAlertControls = (props: GladControlsProps): JSX.Element => {
     return { start: startDate, end: endDate };
   };
 
+  const confidenceAlertLabel = showConfidenceAlertsConfig[props.selectedLanguage];
+  const geoCoverageLabel = geoCoverageConfig[props.selectedLanguage];
   return (
     <div className="glad-control-wrapper">
       <>
@@ -205,7 +211,7 @@ const IntegratedAlertControls = (props: GladControlsProps): JSX.Element => {
               <label className="styled-checkboxlabel" htmlFor="layer-checkbox-glad"></label>
             </CheckboxWrapper>
           </div>
-          <p>Show only high and highest confidence alerts</p>
+          <p>{confidenceAlertLabel?.label}</p>
         </div>
         <div className="gfw-control-container" style={{ marginTop: 5 }}>
           <div className="layer-checkbox">
@@ -221,7 +227,7 @@ const IntegratedAlertControls = (props: GladControlsProps): JSX.Element => {
               <label className="styled-checkboxlabel" htmlFor="layer-checkbox-gfw"></label>
             </CheckboxWrapper>
           </div>
-          <p>Geographic Coverage</p>
+          <p>{geoCoverageLabel?.label}</p>
         </div>
       </>
 
