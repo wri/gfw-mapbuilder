@@ -2,7 +2,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import * as React from 'react';
 import { DATE_PICKER_START_DATES, LAYER_IDS } from '../../../../configs/layer-config';
-import { format } from 'date-fns';
 import { mapController } from '../../controllers/mapController';
 import { LayerFactory } from '../../helpers/LayerFactory';
 import {
@@ -15,6 +14,7 @@ import {
   setGlad2End,
   setRaddAlertEnd,
   setRaddAlertStart,
+  setGeographicCoverage,
 } from '../../store/appState/actions';
 import { layerControlsTranslations } from '../../../../configs/translations/leftPanel.translations';
 import DatePicker from 'react-datepicker';
@@ -151,25 +151,9 @@ const IntegratedAlertControls = (props: GladControlsProps): JSX.Element => {
   }
 
   async function showGeographicCoverage() {
-    if (integratedAlertLayer === LAYER_IDS.GFW_INTEGRATED_ALERTS) {
-      const selectedLayer = mapController._map!.findLayerById(LAYER_IDS.GFW_INTEGRATED_ALERTS);
-      selectedLayer.visible = true;
-    }
-
-    if (integratedAlertLayer === LAYER_IDS.GLAD_ALERTS) {
-      const selectedLayer = mapController._map!.findLayerById(LAYER_IDS.GLAD_ALERTS);
-      selectedLayer.visible = true;
-    }
-
-    if (integratedAlertLayer === LAYER_IDS.GLAD_S2_ALERTS) {
-      const selectedLayer = mapController._map!.findLayerById(LAYER_IDS.GLAD_S2_ALERTS);
-      selectedLayer.visible = true;
-    }
-
-    if (integratedAlertLayer === LAYER_IDS.RADD_ALERTS) {
-      const selectedLayer = mapController._map!.findLayerById(LAYER_IDS.RADD_ALERTS);
-      selectedLayer.visible = true;
-    }
+    dispatch(setGeographicCoverage(!geographicCoverage));
+    mapController.displayLayerByIntegratedAlertLayer(integratedAlertLayer);
+    mapController.displayGeographicCoverageLayer(integratedAlertLayer, geographicCoverage);
   }
 
   const handleDateToggle = () => {
