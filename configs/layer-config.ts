@@ -194,10 +194,19 @@ export const LAYER_IDS = {
   UMD_LAND_COVER: 'UMD_LAND_COVER',
   GFW_INTEGRATED_ALERTS: 'GFW_INTEGRATED_ALERTS',
   VIIRS_FIRES: 'VIIRS_FIRES',
+  GEOGRAPHIC_COVERAGE_LAYER: 'GEOGRAPHIC_COVERAGE_LAYER',
 };
 
 export const LAYER_TITLES = {
   AIR_QUALITY: 'Latest Months Average Tropospheric Nitrogen Dioxide (NO₂) (mol/m², millionths)',
+};
+
+export const GEOGRAPHIC_COVER_LAYER_URL = {
+  UMD_GLAD_LANDSAT_ALERTS:
+    'https://tiles.globalforestwatch.org/umd_glad_landsat_alerts_coverage/v2014/default/root.json',
+  UMD_GLAD_SENTINEL_ALERTS:
+    'https://tiles.globalforestwatch.org/umd_glad_sentinel2_alerts_coverage/v20210413/default/{z}/{x}/{y}.png',
+  WUR_RADD_COVERAGE: 'https://tiles.globalforestwatch.org/wur_radd_coverage/v20211016/default/{z}/{x}/{y}.png',
 };
 
 export const DATE_PICKER_START_DATES = {
