@@ -16,7 +16,20 @@ import {
   setRaddAlertStart,
 } from '../../../store/appState/actions';
 
-export const onStartDateChange = async (dFormat: any, endDate: any) => {
+const integratedAlertLayer = store.getState().appState.leftPanel.integratedAlertLayer;
+const gfwIntegratedStart = store.getState().appState.leftPanel.gfwIntegratedStart;
+const gfwIntegratedEnd = store.getState().appState.leftPanel.gfwIntegratedEnd;
+const glad2Start = store.getState().appState.leftPanel.glad2Start;
+const glad2End = store.getState().appState.leftPanel.glad2End;
+const gladStart = store.getState().appState.leftPanel.gladStart;
+const gladEnd = store.getState().appState.leftPanel.gladEnd;
+const raddAlertStart = store.getState().appState.leftPanel.raddAlertStart;
+const raddAlertEnd = store.getState().appState.leftPanel.raddAlertEnd;
+const geographicCoverage = store.getState().appState.leftPanel.geographicCoverage;
+const highConfidenceConfirmed = store.getState().appState.leftPanel.highConfidenceConfirmed;
+const allAvailableLayers = store.getState().mapviewState.allAvailableLayers;
+
+export const onStartDateChange = async (dFormat: string, endDate: string) => {
   const integratedAlertLayer = store.getState().appState.leftPanel.integratedAlertLayer;
 
   //@ts-ignore
@@ -45,7 +58,7 @@ export const onStartDateChange = async (dFormat: any, endDate: any) => {
   }
 };
 
-export const onEndDateChange = async (date) => {
+export const onEndDateChange = async (date: string, dFormat: string) => {
   let start;
   const end = new Date(dFormat).getJulian();
   const integratedAlertLayer = store.getState().appState.leftPanel.integratedAlertLayer;
@@ -82,8 +95,6 @@ export const onEndDateChange = async (date) => {
 
 export const showGeographicCoverage = async () => {
   const [VectorTileLayer] = await loadModules(['esri/layers/VectorTileLayer']);
-  const geographicCoverage = store.getState().appState.leftPanel.geographicCoverage;
-  const integratedAlertLayer = store.getState().appState.leftPanel.integratedAlertLayer;
 
   let geographicCoverageLayer;
   if (integratedAlertLayer === 'GFW_INTEGRATED_ALERTS' || integratedAlertLayer === 'GLAD_ALERTS') {
@@ -121,17 +132,7 @@ export const showGeographicCoverage = async () => {
   }
 };
 
-export const handleDateToggle = (startDate, endDate) => {
-  const integratedAlertLayer = store.getState().appState.leftPanel.integratedAlertLayer;
-  const gfwIntegratedStart = store.getState().appState.leftPanel.gfwIntegratedStart;
-  const gfwIntegratedEnd = store.getState().appState.leftPanel.gfwIntegratedEnd;
-  const glad2Start = store.getState().appState.leftPanel.glad2Start;
-  const glad2End = store.getState().appState.leftPanel.glad2End;
-  const gladStart = store.getState().appState.leftPanel.gladStart;
-  const gladEnd = store.getState().appState.leftPanel.gladEnd;
-  const raddAlertStart = store.getState().appState.leftPanel.raddAlertStart;
-  const raddAlertEnd = store.getState().appState.leftPanel.raddAlertEnd;
-
+export const handleDateToggle = (startDate: string, endDate: string) => {
   if (integratedAlertLayer === LAYER_IDS.GFW_INTEGRATED_ALERTS) {
     return { start: gfwIntegratedStart, end: gfwIntegratedEnd };
   }

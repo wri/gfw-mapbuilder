@@ -36,6 +36,8 @@ const IntegratedAlertControls = (props: GladControlsProps): JSX.Element => {
   const highConfidenceConfirmed = useSelector((store: RootState) => store.appState.leftPanel.highConfidenceConfirmed);
   const geographicCoverage = useSelector((store: RootState) => store.appState.leftPanel.geographicCoverage);
   const gfwIntegratedEnd = useSelector((store: RootState) => store.appState.leftPanel.gfwIntegratedEnd);
+  const integratedAlertLayer = useSelector((store: RootState) => store.appState.leftPanel.integratedAlertLayer);
+  const allAvailableLayers = useSelector((store: RootState) => store.mapviewState.allAvailableLayers);
 
   const [startDate, setStartDate] = React.useState(String(DATE_PICKER_START_DATES.GFW_INTEGRATED_ALERTS));
   const [startDateUnformatted, setStartDateUnformatted] = React.useState(
@@ -65,16 +67,27 @@ const IntegratedAlertControls = (props: GladControlsProps): JSX.Element => {
 
     setEndDate(dFormat);
 
-    onEndDateChange(date);
+    onEndDateChange(date, dFormat);
   }
 
   async function showOnlyHighConfidenceToggle() {
     dispatch(setHighConfidenceConfirmed(!highConfidenceConfirmed));
-    const gfwIntegratedLayerOld: any = mapController._map!.findLayerById(LAYER_IDS.GFW_INTEGRATED_ALERTS);
-    mapController._map?.remove(gfwIntegratedLayerOld);
-    const gfwIntegratedLayerNew: any = LayerFactory(mapController._mapview, props.layerConfig);
-    gfwIntegratedLayerNew.highConfidenceConfirmed = !highConfidenceConfirmed;
-    mapController._map?.add(gfwIntegratedLayerNew);
+    if (integratedAlertLayer === 'GFW_INTEGRATED_ALERTS') {
+      const gfwIntegratedLayerOld: any = mapController._map!.findLayerById(LAYER_IDS.GFW_INTEGRATED_ALERTS);
+      mapController._map?.remove(gfwIntegratedLayerOld);
+      const gfwIntegratedLayerNew: any = LayerFactory(mapController._mapview, props.layerConfig);
+      gfwIntegratedLayerNew.highConfidenceConfirmed = !highConfidenceConfirmed;
+      mapController._map?.add(gfwIntegratedLayerNew);
+    } else {
+      const gladLayerOld: any = mapController._map!.findLayerById(integratedAlertLayer);
+      mapController._map?.remove(gladLayerOld);
+      const gladLayerConfig: any = allAvailableLayers.filter((layer: any) => layer.id === integratedAlertLayer);
+      const gladLayerNew: any = await LayerFactory(mapController._mapview, gladLayerConfig[0]);
+      gladLayerNew.confirmed = !highConfidenceConfirmed;
+      mapController._map?.add(gladLayerNew);
+      const selectedLayer = mapController._map!.findLayerById(integratedAlertLayer);
+      selectedLayer.visible = true;
+    }
   }
 
   return (
