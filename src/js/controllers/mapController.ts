@@ -4,6 +4,7 @@ import { debounce } from 'lodash-es';
 import { getMaxDateForViirsTiles } from '../helpers/viirsLayerUtil';
 import {
   densityEnabledLayers,
+  GEOGRAPHIC_COVER_LAYER_URL,
   landsatBaselayerURL,
   LAYER_IDS,
   supportedLayers,
@@ -57,6 +58,8 @@ import {
 import legendInfoController from '../helpers/legendInfo';
 import { parseExtentConfig } from '../helpers/mapController/configParsing';
 import { overwriteColorTheme } from '../store/appSettings/actions';
+import { createGladS2Layer } from '../layers/GladS2Layer';
+import { createRadd } from '../layers/RaddLayer';
 
 setDefaultOptions({ css: true, version: '4.19' });
 
@@ -2247,6 +2250,67 @@ export class MapController {
     gladLayerNew.gfwjulianFrom = start;
     gladLayerNew.gfwjulianTo = end;
     this._map?.add(gladLayerNew, gladIndex);
+  };
+
+  displayLayerByIntegratedAlertLayer = (integratedAlertLayer: string) => {
+    if (integratedAlertLayer === LAYER_IDS.GFW_INTEGRATED_ALERTS) {
+      const selectedLayer = this._map!.findLayerById(LAYER_IDS.GFW_INTEGRATED_ALERTS);
+      selectedLayer.visible = true;
+    }
+
+    if (integratedAlertLayer === LAYER_IDS.GLAD_ALERTS) {
+      const selectedLayer = this._map!.findLayerById(LAYER_IDS.GLAD_ALERTS);
+      selectedLayer.visible = true;
+    }
+
+    if (integratedAlertLayer === LAYER_IDS.GLAD_S2_ALERTS) {
+      const selectedLayer = this._map!.findLayerById(LAYER_IDS.GLAD_S2_ALERTS);
+      selectedLayer.visible = true;
+    }
+
+    if (integratedAlertLayer === LAYER_IDS.RADD_ALERTS) {
+      const selectedLayer = this._map!.findLayerById(LAYER_IDS.RADD_ALERTS);
+      selectedLayer.visible = true;
+    }
+  };
+
+  displayGeographicCoverageLayer = async (layerId: string, isVisible: boolean) => {
+    const [VectorTileLayer] = await loadModules(['esri/layers/VectorTileLayer']);
+
+    let layer;
+
+    if (layerId === LAYER_IDS.GFW_INTEGRATED_ALERTS || layerId === LAYER_IDS.GLAD_ALERTS) {
+      layer = new VectorTileLayer({
+        url: GEOGRAPHIC_COVER_LAYER_URL.UMD_GLAD_LANDSAT_ALERTS,
+        id: LAYER_IDS.GEOGRAPHIC_COVERAGE_LAYER,
+      });
+    }
+    if (layerId === LAYER_IDS.GLAD_S2_ALERTS) {
+      const gladS2Layer = await createGladS2Layer();
+      layer = new gladS2Layer({
+        urlTemplate: GEOGRAPHIC_COVER_LAYER_URL.UMD_GLAD_SENTINEL_ALERTS,
+        opacity: '.5',
+        view: this._mapview,
+        id: LAYER_IDS.GEOGRAPHIC_COVERAGE_LAYER,
+      });
+    }
+
+    if (layerId === LAYER_IDS.RADD_ALERTS) {
+      const raddLayer = await createRadd();
+      layer = new raddLayer({
+        urlTemplate: GEOGRAPHIC_COVER_LAYER_URL.WUR_RADD_COVERAGE,
+        opacity: '.5',
+        view: this._mapview,
+        id: LAYER_IDS.GEOGRAPHIC_COVERAGE_LAYER,
+      });
+    }
+
+    if (isVisible) {
+      const geographicCoverageLayerOld: any = mapController._map!.findLayerById(LAYER_IDS.GEOGRAPHIC_COVERAGE_LAYER);
+      this._map?.remove(geographicCoverageLayerOld);
+    } else {
+      this._map?.add(layer);
+    }
   };
 }
 

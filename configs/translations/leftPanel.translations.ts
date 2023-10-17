@@ -917,3 +917,102 @@ export const windSpeedConfig = {
     displayLabel: ['Displaying wind speed potential at', 'meters'],
   },
 };
+
+export const selectLayerConfig = {
+  en: {
+    label: 'Select layer',
+  },
+  az: {
+    label: 'Qatı seçin',
+  },
+  nl: {
+    label: 'Vælg lag',
+  },
+  hy: {
+    label: 'Ընտրեք շերտ',
+  },
+  ka: {
+    label: 'აირჩიეთ ფენა',
+  },
+  fr: {
+    label: 'Sélectionner une couche',
+  },
+  es: {
+    label: 'Seleccionar capa',
+  },
+  pt: {
+    label: 'Selecionar camada',
+  },
+  id: {
+    label: 'Pilih layer',
+  },
+  zh: {
+    label: '选择层',
+  },
+};
+
+export const showConfidenceAlertsConfig = {
+  en: {
+    label: 'Show only high and highest confidence alerts',
+  },
+  az: {
+    label: 'Yalnız yüksək və ən yüksək etibarlılıq siqnallarını göstərin',
+  },
+  nl: {
+    label: 'Vis kun advarsler med høj og højeste tillid',
+  },
+  hy: {
+    label: 'Ցույց տալ միայն բարձր և ամենաբարձր վստահության ազդանշանները',
+  },
+  ka: {
+    label: 'აჩვენეთ მხოლოდ მაღალი და მაღალი ნდობის გაფრთხილებები',
+  },
+  fr: {
+    label: 'Afficher uniquement les alertes de niveau de confiance élevé et le niveau de confiance le plus élevé',
+  },
+  es: {
+    label: 'Mostrar únicamente las alertas de alta y muy alta confianza',
+  },
+  pt: {
+    label: 'Mostrar apenas alertas de confiança alta e mais alta',
+  },
+  id: {
+    label: 'Menampilkan hanya peringatan dengan tingkat kepercayaan tinggi dan tertinggi',
+  },
+  zh: {
+    label: '仅显示高置信度和最高置信度警报',
+  },
+};
+
+export const geoCoverageConfig = {
+  en: {
+    label: 'Geographic coverage',
+  },
+  az: {
+    label: 'Coğrafi əhatə',
+  },
+  nl: {
+    label: 'Geografisk dækning',
+  },
+  hy: {
+    label: 'Աշխարհագրական ծածկույթ',
+  },
+  ka: {
+    label: 'გეოგრაფიული გაშუქება',
+  },
+  fr: {
+    label: 'Couverture géographique',
+  },
+  es: {
+    label: 'Cobertura geográfica',
+  },
+  pt: {
+    label: 'Cobertura geográfica',
+  },
+  id: {
+    label: 'Cakupan geografis',
+  },
+  zh: {
+    label: '地理覆盖范围',
+  },
+};

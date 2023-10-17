@@ -10,10 +10,12 @@ import {
   setGeographicCoverage,
 } from '../../store/appState/actions';
 import { mapController } from '../../controllers/mapController';
+import { selectLayerConfig } from '../../../../configs/translations/leftPanel.translations';
 
 const SelectIntegratedAlertLayer = (): JSX.Element => {
   const dispatch = useDispatch();
   const gfwLayer = useSelector((store: RootState) => store.appState.leftPanel.integratedAlertLayer);
+  const { selectedLanguage } = useSelector((store: RootState) => store.appState);
 
   function handleDensityButtonClick(e): void {
     dispatch(setHighConfidenceConfirmed(false));
@@ -26,6 +28,7 @@ const SelectIntegratedAlertLayer = (): JSX.Element => {
     const geographicCoverageLayerOld: any = mapController._map!.findLayerById('GEOGRAPHIC_COVERAGE_LAYER');
     mapController._map?.remove(geographicCoverageLayerOld);
   }
+  const displayLabel = selectLayerConfig[selectedLanguage];
 
   return (
     <div
@@ -38,7 +41,7 @@ const SelectIntegratedAlertLayer = (): JSX.Element => {
         display: 'flex',
       }}
     >
-      <span>Select Layer: </span>
+      <span>{`${displayLabel?.label}:`}</span>
       <select
         className="toggle"
         onChange={(e): void => handleDensityButtonClick(e)}
