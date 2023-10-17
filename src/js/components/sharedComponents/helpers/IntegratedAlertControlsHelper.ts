@@ -1,4 +1,4 @@
-import { LAYER_IDS } from '../../../../../configs/layer-config';
+import { GEOGRAPHIC_COVER_LAYER_URL, LAYER_IDS } from '../../../../../configs/layer-config';
 import { loadModules } from 'esri-loader';
 import { mapController } from '../../../controllers/mapController';
 import { createGladS2Layer } from '../../../layers/GladS2Layer';
@@ -93,42 +93,42 @@ export const onEndDateChange = async (date: string, dFormat: string) => {
   }
 };
 
-export const showGeographicCoverage = async () => {
+export const displayGeographicCoverageLayer = async (layerId: string, isVisible: boolean) => {
   const [VectorTileLayer] = await loadModules(['esri/layers/VectorTileLayer']);
 
-  let geographicCoverageLayer;
-  if (integratedAlertLayer === 'GFW_INTEGRATED_ALERTS' || integratedAlertLayer === 'GLAD_ALERTS') {
-    geographicCoverageLayer = new VectorTileLayer({
-      url: 'https://tiles.globalforestwatch.org/umd_glad_landsat_alerts_coverage/v2014/default/root.json',
-      id: 'GEOGRAPHIC_COVERAGE_LAYER',
+  let layer;
+
+  if (layerId === LAYER_IDS.GFW_INTEGRATED_ALERTS || layerId === LAYER_IDS.GLAD_ALERTS) {
+    layer = new VectorTileLayer({
+      url: GEOGRAPHIC_COVER_LAYER_URL.UMD_GLAD_LANDSAT_ALERTS,
+      id: LAYER_IDS.GEOGRAPHIC_COVERAGE_LAYER,
     });
   }
-  if (integratedAlertLayer === 'GLAD_S2_ALERTS') {
+  if (layerId === LAYER_IDS.GLAD_S2_ALERTS) {
     const gladS2Layer = await createGladS2Layer();
-    geographicCoverageLayer = new gladS2Layer({
-      urlTemplate:
-        'https://tiles.globalforestwatch.org/umd_glad_sentinel2_alerts_coverage/v20210413/default/{z}/{x}/{y}.png',
+    layer = new gladS2Layer({
+      urlTemplate: GEOGRAPHIC_COVER_LAYER_URL.UMD_GLAD_SENTINEL_ALERTS,
       opacity: '.5',
       view: mapController._mapview,
-      id: 'GEOGRAPHIC_COVERAGE_LAYER',
-    });
-  }
-  if (integratedAlertLayer === 'RADD_ALERTS') {
-    const raddLayer = await createRadd();
-    geographicCoverageLayer = new raddLayer({
-      urlTemplate: 'https://tiles.globalforestwatch.org/wur_radd_coverage/v20211016/default/{z}/{x}/{y}.png',
-      opacity: '.5',
-      view: mapController._mapview,
-      id: 'GEOGRAPHIC_COVERAGE_LAYER',
+      id: LAYER_IDS.GEOGRAPHIC_COVERAGE_LAYER,
     });
   }
 
-  store.dispatch(setGeographicCoverage(!geographicCoverage));
-  if (geographicCoverage) {
-    const geographicCoverageLayerOld: any = mapController._map!.findLayerById('GEOGRAPHIC_COVERAGE_LAYER');
+  if (layerId === LAYER_IDS.RADD_ALERTS) {
+    const raddLayer = await createRadd();
+    layer = new raddLayer({
+      urlTemplate: GEOGRAPHIC_COVER_LAYER_URL.WUR_RADD_COVERAGE,
+      opacity: '.5',
+      view: mapController._mapview,
+      id: LAYER_IDS.GEOGRAPHIC_COVERAGE_LAYER,
+    });
+  }
+
+  if (isVisible) {
+    const geographicCoverageLayerOld: any = mapController._map!.findLayerById(LAYER_IDS.GEOGRAPHIC_COVERAGE_LAYER);
     mapController._map?.remove(geographicCoverageLayerOld);
   } else {
-    mapController._map?.add(geographicCoverageLayer);
+    mapController._map?.add(layer);
   }
 };
 

@@ -4,17 +4,7 @@ import * as React from 'react';
 import { DATE_PICKER_START_DATES, LAYER_IDS } from '../../../../configs/layer-config';
 import { mapController } from '../../controllers/mapController';
 import { LayerFactory } from '../../helpers/LayerFactory';
-import {
-  setIntegratedAlertLayerEnd,
-  setIntegratedAlertLayerStart,
-  setHighConfidenceConfirmed,
-  setGladStart,
-  setGladEnd,
-  setGlad2Start,
-  setGlad2End,
-  setRaddAlertEnd,
-  setRaddAlertStart,
-} from '../../store/appState/actions';
+import { setHighConfidenceConfirmed, setGeographicCoverage } from '../../store/appState/actions';
 import {
   geoCoverageConfig,
   layerControlsTranslations,
@@ -23,8 +13,8 @@ import {
 import {
   onEndDateChange,
   onStartDateChange,
-  showGeographicCoverage,
   handleDateToggle,
+  displayGeographicCoverageLayer,
 } from './helpers/IntegratedAlertControlsHelper';
 import DatePicker from 'react-datepicker';
 import styled from 'styled-components';
@@ -45,6 +35,7 @@ interface GladControlsProps {
   selectedLanguage: string;
   type?: string;
 }
+
 const IntegratedAlertControls = (props: GladControlsProps): JSX.Element => {
   const dispatch = useDispatch();
   const highConfidenceConfirmed = useSelector((store: RootState) => store.appState.leftPanel.highConfidenceConfirmed);
@@ -106,12 +97,12 @@ const IntegratedAlertControls = (props: GladControlsProps): JSX.Element => {
 
   async function showGeographicCoverage() {
     dispatch(setGeographicCoverage(!geographicCoverage));
-    mapController.displayLayerByIntegratedAlertLayer(integratedAlertLayer);
-    mapController.displayGeographicCoverageLayer(integratedAlertLayer, geographicCoverage);
+    displayGeographicCoverageLayer(integratedAlertLayer, geographicCoverage);
   }
 
   const confidenceAlertLabel = showConfidenceAlertsConfig[props.selectedLanguage];
   const geoCoverageLabel = geoCoverageConfig[props.selectedLanguage];
+
   return (
     <div className="glad-control-wrapper">
       <>
