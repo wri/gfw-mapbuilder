@@ -144,9 +144,13 @@ const LegendItems = (props: LegendItemProps): JSX.Element => {
         });
       }
 
+      console.log(layer.title);
+
       return (
         <div className="layer-item" key={layer.id + `${i}`}>
-          <p className="layer-title">{layer.title === 'GFW Integrated Alerts' ? integratedAlertLabel : layer.title}</p>
+          <p className="layer-title">
+            {layer.title === 'Integrated Deforestation Alerts' ? integratedAlertLabel : layer.title}
+          </p>
           {labelIcons}
         </div>
       );
