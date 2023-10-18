@@ -144,8 +144,6 @@ const LegendItems = (props: LegendItemProps): JSX.Element => {
         });
       }
 
-      console.log(layer.title);
-
       return (
         <div className="layer-item" key={layer.id + `${i}`}>
           <p className="layer-title">
