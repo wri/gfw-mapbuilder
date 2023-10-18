@@ -20,7 +20,7 @@ const SelectIntegratedAlertLayer = (): JSX.Element => {
   function handleDensityButtonClick(e): void {
     dispatch(setHighConfidenceConfirmed(false));
     dispatch(setGeographicCoverage(false));
-    const integratedAlertLayers = [e.target[0].value, e.target[1].value, e.target[2].value];
+    const integratedAlertLayers = [e.target[0].value, e.target[1].value, e.target[2].value, e.target[3].value];
     mapController.updateGFWLayer(e.target.value, integratedAlertLayers);
     dispatch(setIntegratedAlertLayer(e.target.value));
     dispatch(setIntegratedAlertLayerLabel(e.target.selectedOptions[0].text));

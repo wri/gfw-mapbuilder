@@ -363,7 +363,7 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
         min={props.min}
         max={props.max}
         defaultValue={props.defaultValue}
-        value={[0, 730]}
+        value={range}
         allowCross={false}
         tipFormatter={(val) => handleTipFormatter(val)}
         tipProps={{
