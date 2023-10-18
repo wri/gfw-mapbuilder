@@ -5,7 +5,6 @@ import { createGladS2Layer } from '../../../layers/GladS2Layer';
 import { createRadd } from '../../../layers/RaddLayer';
 import store from '../../../../../src/js/store';
 import {
-  setGeographicCoverage,
   setGlad2End,
   setGlad2Start,
   setGladEnd,
@@ -16,18 +15,10 @@ import {
   setRaddAlertStart,
 } from '../../../store/appState/actions';
 
-const integratedAlertLayer = store.getState().appState.leftPanel.integratedAlertLayer;
 const gfwIntegratedStart = store.getState().appState.leftPanel.gfwIntegratedStart;
-const gfwIntegratedEnd = store.getState().appState.leftPanel.gfwIntegratedEnd;
 const glad2Start = store.getState().appState.leftPanel.glad2Start;
-const glad2End = store.getState().appState.leftPanel.glad2End;
 const gladStart = store.getState().appState.leftPanel.gladStart;
-const gladEnd = store.getState().appState.leftPanel.gladEnd;
 const raddAlertStart = store.getState().appState.leftPanel.raddAlertStart;
-const raddAlertEnd = store.getState().appState.leftPanel.raddAlertEnd;
-const geographicCoverage = store.getState().appState.leftPanel.geographicCoverage;
-const highConfidenceConfirmed = store.getState().appState.leftPanel.highConfidenceConfirmed;
-const allAvailableLayers = store.getState().mapviewState.allAvailableLayers;
 
 export const onStartDateChange = async (dFormat: string, endDate: string) => {
   const integratedAlertLayer = store.getState().appState.leftPanel.integratedAlertLayer;
@@ -130,20 +121,4 @@ export const displayGeographicCoverageLayer = async (layerId: string, isVisible:
   } else {
     mapController._map?.add(layer);
   }
-};
-
-export const handleDateToggle = (startDate: string, endDate: string) => {
-  if (integratedAlertLayer === LAYER_IDS.GFW_INTEGRATED_ALERTS) {
-    return { start: gfwIntegratedStart, end: gfwIntegratedEnd };
-  }
-  if (integratedAlertLayer === LAYER_IDS.GLAD_S2_ALERTS) {
-    return { start: glad2Start, end: glad2End };
-  }
-  if (integratedAlertLayer === LAYER_IDS.GLAD_ALERTS) {
-    return { start: gladStart, end: gladEnd };
-  }
-  if (integratedAlertLayer === LAYER_IDS.RADD_ALERTS) {
-    return { start: raddAlertStart, end: raddAlertEnd };
-  }
-  return { start: startDate, end: endDate };
 };

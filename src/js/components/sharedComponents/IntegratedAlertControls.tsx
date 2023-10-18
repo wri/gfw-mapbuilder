@@ -43,6 +43,13 @@ const IntegratedAlertControls = (props: GladControlsProps): JSX.Element => {
   const gfwIntegratedEnd = useSelector((store: RootState) => store.appState.leftPanel.gfwIntegratedEnd);
   const integratedAlertLayer = useSelector((store: RootState) => store.appState.leftPanel.integratedAlertLayer);
   const allAvailableLayers = useSelector((store: RootState) => store.mapviewState.allAvailableLayers);
+  const glad2Start = useSelector((store: RootState) => store.appState.leftPanel.glad2Start);
+  const glad2End = useSelector((store: RootState) => store.appState.leftPanel.glad2End);
+  const gladStart = useSelector((store: RootState) => store.appState.leftPanel.gladStart);
+  const gladEnd = useSelector((store: RootState) => store.appState.leftPanel.gladEnd);
+  const raddAlertStart = useSelector((store: RootState) => store.appState.leftPanel.raddAlertStart);
+  const raddAlertEnd = useSelector((store: RootState) => store.appState.leftPanel.raddAlertEnd);
+  const gfwIntegratedStart = useSelector((store: RootState) => store.appState.leftPanel.gfwIntegratedStart);
 
   const [startDate, setStartDate] = React.useState(String(DATE_PICKER_START_DATES.GFW_INTEGRATED_ALERTS));
   const [startDateUnformatted, setStartDateUnformatted] = React.useState(
@@ -71,7 +78,6 @@ const IntegratedAlertControls = (props: GladControlsProps): JSX.Element => {
     const dFormat = date;
 
     setEndDate(dFormat);
-
     onEndDateChange(date, dFormat);
   }
 
@@ -94,6 +100,22 @@ const IntegratedAlertControls = (props: GladControlsProps): JSX.Element => {
       selectedLayer.visible = true;
     }
   }
+
+  const handleDateToggle = () => {
+    if (integratedAlertLayer === LAYER_IDS.GFW_INTEGRATED_ALERTS) {
+      return { start: gfwIntegratedStart, end: gfwIntegratedEnd };
+    }
+    if (integratedAlertLayer === LAYER_IDS.GLAD_S2_ALERTS) {
+      return { start: glad2Start, end: glad2End };
+    }
+    if (integratedAlertLayer === LAYER_IDS.GLAD_ALERTS) {
+      return { start: gladStart, end: gladEnd };
+    }
+    if (integratedAlertLayer === LAYER_IDS.RADD_ALERTS) {
+      return { start: raddAlertStart, end: raddAlertEnd };
+    }
+    return { start: startDate, end: endDate };
+  };
 
   async function showGeographicCoverage() {
     dispatch(setGeographicCoverage(!geographicCoverage));
@@ -151,7 +173,7 @@ const IntegratedAlertControls = (props: GladControlsProps): JSX.Element => {
             dropdownMode="select"
             placeholderText="select a day"
             onChange={(date) => handleStartDateChange(date)}
-            selected={new Date(handleDateToggle(startDate, endDate)?.start)}
+            selected={new Date(handleDateToggle()?.start)}
             minDate={new Date(DATE_PICKER_START_DATES.GFW_INTEGRATED_ALERTS)}
             maxDate={new Date(endDate)}
           />
@@ -164,7 +186,7 @@ const IntegratedAlertControls = (props: GladControlsProps): JSX.Element => {
             dropdownMode="select"
             placeholderText="select a day"
             onChange={(date) => handleEndDateChange(date)}
-            selected={new Date(handleDateToggle(startDate, endDate).end)}
+            selected={new Date(handleDateToggle().end)}
             minDate={new Date(startDateUnformatted)}
             maxDate={new Date()}
           />
