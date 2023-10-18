@@ -13,7 +13,6 @@ import {
 import {
   onEndDateChange,
   onStartDateChange,
-  handleDateToggle,
   displayGeographicCoverageLayer,
 } from './helpers/IntegratedAlertControlsHelper';
 import DatePicker from 'react-datepicker';
