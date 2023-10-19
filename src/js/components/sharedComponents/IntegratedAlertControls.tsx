@@ -4,23 +4,17 @@ import * as React from 'react';
 import { DATE_PICKER_START_DATES, LAYER_IDS } from '../../../../configs/layer-config';
 import { mapController } from '../../controllers/mapController';
 import { LayerFactory } from '../../helpers/LayerFactory';
-import {
-  setIntegratedAlertLayerEnd,
-  setIntegratedAlertLayerStart,
-  setHighConfidenceConfirmed,
-  setGladStart,
-  setGladEnd,
-  setGlad2Start,
-  setGlad2End,
-  setRaddAlertEnd,
-  setRaddAlertStart,
-  setGeographicCoverage,
-} from '../../store/appState/actions';
+import { setHighConfidenceConfirmed, setGeographicCoverage } from '../../store/appState/actions';
 import {
   geoCoverageConfig,
   layerControlsTranslations,
   showConfidenceAlertsConfig,
 } from '../../../../configs/translations/leftPanel.translations';
+import {
+  onEndDateChange,
+  onStartDateChange,
+  displayGeographicCoverageLayer,
+} from './helpers/IntegratedAlertControlsHelper';
 import DatePicker from 'react-datepicker';
 import styled from 'styled-components';
 
@@ -40,30 +34,26 @@ interface GladControlsProps {
   selectedLanguage: string;
   type?: string;
 }
+
 const IntegratedAlertControls = (props: GladControlsProps): JSX.Element => {
   const dispatch = useDispatch();
   const highConfidenceConfirmed = useSelector((store: RootState) => store.appState.leftPanel.highConfidenceConfirmed);
   const geographicCoverage = useSelector((store: RootState) => store.appState.leftPanel.geographicCoverage);
-
-  const gfwIntegratedStart = useSelector((store: RootState) => store.appState.leftPanel.gfwIntegratedStart);
-
   const gfwIntegratedEnd = useSelector((store: RootState) => store.appState.leftPanel.gfwIntegratedEnd);
   const integratedAlertLayer = useSelector((store: RootState) => store.appState.leftPanel.integratedAlertLayer);
-
-  const gladStart = useSelector((store: RootState) => store.appState.leftPanel.gladStart);
-  const gladEnd = useSelector((store: RootState) => store.appState.leftPanel.gladEnd);
-
+  const allAvailableLayers = useSelector((store: RootState) => store.mapviewState.allAvailableLayers);
   const glad2Start = useSelector((store: RootState) => store.appState.leftPanel.glad2Start);
   const glad2End = useSelector((store: RootState) => store.appState.leftPanel.glad2End);
-
+  const gladStart = useSelector((store: RootState) => store.appState.leftPanel.gladStart);
+  const gladEnd = useSelector((store: RootState) => store.appState.leftPanel.gladEnd);
   const raddAlertStart = useSelector((store: RootState) => store.appState.leftPanel.raddAlertStart);
   const raddAlertEnd = useSelector((store: RootState) => store.appState.leftPanel.raddAlertEnd);
+  const gfwIntegratedStart = useSelector((store: RootState) => store.appState.leftPanel.gfwIntegratedStart);
 
   const [startDate, setStartDate] = React.useState(String(DATE_PICKER_START_DATES.GFW_INTEGRATED_ALERTS));
   const [startDateUnformatted, setStartDateUnformatted] = React.useState(
     String(DATE_PICKER_START_DATES.GFW_INTEGRATED_ALERTS)
   );
-  const [endDateUnformatted, setEndDateUnformatted] = React.useState(gfwIntegratedEnd);
   const [endDate, setEndDate] = React.useState(gfwIntegratedEnd);
 
   async function handleStartDateChange(day: any) {
@@ -76,30 +66,7 @@ const IntegratedAlertControls = (props: GladControlsProps): JSX.Element => {
     setStartDate(dFormat);
     setStartDateUnformatted(day);
 
-    //@ts-ignore
-    const start = new Date(dFormat).getJulian();
-    //@ts-ignore
-    const end = new Date(endDate).getJulian();
-
-    if (integratedAlertLayer === LAYER_IDS.GFW_INTEGRATED_ALERTS) {
-      await mapController.toggleGladLayer({ id: LAYER_IDS.GFW_INTEGRATED_ALERTS, start, end });
-
-      dispatch(setIntegratedAlertLayerStart(dFormat));
-    } else if (integratedAlertLayer === LAYER_IDS.GLAD_ALERTS) {
-      await mapController.toggleGladLayer({ id: LAYER_IDS.GLAD_ALERTS, start, end });
-
-      const selectedLayer = mapController._map!.findLayerById(LAYER_IDS.GLAD_ALERTS);
-      selectedLayer.visible = true;
-      dispatch(setGladStart(dFormat));
-    } else if (integratedAlertLayer === LAYER_IDS.GLAD_S2_ALERTS) {
-      dispatch(setGlad2Start(dFormat));
-
-      await mapController.toggleGladLayer({ id: LAYER_IDS.GLAD_S2_ALERTS, start, end });
-    } else if (integratedAlertLayer === LAYER_IDS.RADD_ALERTS) {
-      dispatch(setRaddAlertStart(dFormat));
-
-      await mapController.toggleGladLayer({ id: LAYER_IDS.RADD_ALERTS, start, end });
-    }
+    onStartDateChange(dFormat, endDate);
   }
 
   async function handleEndDateChange(day: any) {
@@ -110,54 +77,27 @@ const IntegratedAlertControls = (props: GladControlsProps): JSX.Element => {
     const dFormat = date;
 
     setEndDate(dFormat);
-    setEndDateUnformatted(day);
-    //@ts-ignore
-    const end = new Date(dFormat).getJulian();
-    let start;
-
-    if (integratedAlertLayer === LAYER_IDS.GFW_INTEGRATED_ALERTS) {
-      //@ts-ignore
-      start = new Date(gfwIntegratedStart).getJulian();
-      await mapController.toggleGladLayer({ id: LAYER_IDS.GFW_INTEGRATED_ALERTS, start, end });
-
-      dispatch(setIntegratedAlertLayerEnd(date));
-    } else if (integratedAlertLayer === LAYER_IDS.GLAD_ALERTS) {
-      //@ts-ignore
-
-      start = new Date(gladStart).getJulian();
-      await mapController.toggleGladLayer({ id: LAYER_IDS.GLAD_ALERTS, start, end });
-
-      const selectedLayer = mapController._map!.findLayerById(LAYER_IDS.GLAD_ALERTS);
-      selectedLayer.visible = true;
-      dispatch(setGladEnd(date));
-    } else if (integratedAlertLayer === LAYER_IDS.GLAD_S2_ALERTS) {
-      dispatch(setGlad2End(date));
-
-      //@ts-ignore
-      start = new Date(glad2Start).getJulian();
-      await mapController.toggleGladLayer({ id: LAYER_IDS.GLAD_S2_ALERTS, start, end });
-    } else if (integratedAlertLayer === LAYER_IDS.RADD_ALERTS) {
-      dispatch(setRaddAlertEnd(date));
-      //@ts-ignore
-
-      start = new Date(raddAlertStart).getJulian();
-      await mapController.toggleGladLayer({ id: LAYER_IDS.RADD_ALERTS, start, end });
-    }
+    onEndDateChange(date, dFormat);
   }
 
   async function showOnlyHighConfidenceToggle() {
     dispatch(setHighConfidenceConfirmed(!highConfidenceConfirmed));
-    const gfwIntegratedLayerOld: any = mapController._map!.findLayerById(LAYER_IDS.GFW_INTEGRATED_ALERTS);
-    mapController._map?.remove(gfwIntegratedLayerOld);
-    const gfwIntegratedLayerNew: any = LayerFactory(mapController._mapview, props.layerConfig);
-    gfwIntegratedLayerNew.highConfidenceConfirmed = !highConfidenceConfirmed;
-    mapController._map?.add(gfwIntegratedLayerNew);
-  }
-
-  async function showGeographicCoverage() {
-    dispatch(setGeographicCoverage(!geographicCoverage));
-    mapController.displayLayerByIntegratedAlertLayer(integratedAlertLayer);
-    mapController.displayGeographicCoverageLayer(integratedAlertLayer, geographicCoverage);
+    if (integratedAlertLayer === 'GFW_INTEGRATED_ALERTS') {
+      const gfwIntegratedLayerOld: any = mapController._map!.findLayerById(LAYER_IDS.GFW_INTEGRATED_ALERTS);
+      mapController._map?.remove(gfwIntegratedLayerOld);
+      const gfwIntegratedLayerNew: any = LayerFactory(mapController._mapview, props.layerConfig);
+      gfwIntegratedLayerNew.highConfidenceConfirmed = !highConfidenceConfirmed;
+      mapController._map?.add(gfwIntegratedLayerNew);
+    } else {
+      const gladLayerOld: any = mapController._map!.findLayerById(integratedAlertLayer);
+      mapController._map?.remove(gladLayerOld);
+      const gladLayerConfig: any = allAvailableLayers.filter((layer: any) => layer.id === integratedAlertLayer);
+      const gladLayerNew: any = await LayerFactory(mapController._mapview, gladLayerConfig[0]);
+      gladLayerNew.confirmed = !highConfidenceConfirmed;
+      mapController._map?.add(gladLayerNew);
+      const selectedLayer = mapController._map!.findLayerById(integratedAlertLayer);
+      selectedLayer.visible = true;
+    }
   }
 
   const handleDateToggle = () => {
@@ -176,8 +116,14 @@ const IntegratedAlertControls = (props: GladControlsProps): JSX.Element => {
     return { start: startDate, end: endDate };
   };
 
+  async function showGeographicCoverage() {
+    dispatch(setGeographicCoverage(!geographicCoverage));
+    displayGeographicCoverageLayer(integratedAlertLayer, geographicCoverage);
+  }
+
   const confidenceAlertLabel = showConfidenceAlertsConfig[props.selectedLanguage];
   const geoCoverageLabel = geoCoverageConfig[props.selectedLanguage];
+
   return (
     <div className="glad-control-wrapper">
       <>
@@ -185,6 +131,7 @@ const IntegratedAlertControls = (props: GladControlsProps): JSX.Element => {
           <div className="layer-checkbox">
             <CheckboxWrapper customColorTheme={props.customColorTheme}>
               <input
+                title="High and Highest Confidence Alerts"
                 type="checkbox"
                 name="styled-checkbox"
                 className="styled-checkbox"
@@ -201,6 +148,7 @@ const IntegratedAlertControls = (props: GladControlsProps): JSX.Element => {
           <div className="layer-checkbox">
             <CheckboxWrapper customColorTheme={props.customColorTheme}>
               <input
+                title="Geographic Coverage"
                 type="checkbox"
                 name="styled-checkbox"
                 className="styled-checkbox"
