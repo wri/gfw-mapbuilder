@@ -34,6 +34,7 @@ export default {
   iso: '',
   viirsFires: true,
   intactForests: true,
+  inpeCerradoProdes: true,
   primaryForests: true,
   forma: false,
   aboveGroundBiomass: true,

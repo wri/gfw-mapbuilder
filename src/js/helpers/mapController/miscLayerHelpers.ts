@@ -273,6 +273,7 @@ export async function getRemoteAndServiceLayers(): Promise<any> {
     FOREST_CARBON_NET_FLUX: 'forestCarbonNetFlux',
     AG_BIOMASS: 'aboveGroundBiomass',
     IFL: 'intactForests',
+    INPE_CERRADO_PRODES: 'inpeCerradoProdes',
     PRIMARY_FORESTS: 'primaryForests',
     FORMA_ALERTS: 'forma',
     GLOB_MANGROVE: 'mangroves',
