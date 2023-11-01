@@ -30,5 +30,5 @@
     "types": ["arcgis-js-api", "node", "cypress"]
   },
   "exclude": ["node_modules"],
-  "include": ["custom.d.ts", "src/**/*.ts", "src/**/*.d.ts"]
+  "include": ["custom.d.ts"]
 }

@@ -395,7 +395,7 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
           opacity: layerConfig.opacity,
         });
       }
-      if (layerConfig.id === 'IFL') {
+      if (layerConfig.id === 'IFL' || layerConfig.id === 'INPE_CERRADO_PRODES') {
         esriLayer.opacity = layerConfig.opacity.combined;
       }
       break;

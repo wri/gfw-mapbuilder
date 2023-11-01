@@ -212,6 +212,12 @@ export default {
           uuid: '440e53d0-36b3-47ad-993a-1c2018c3942c',
           groupId: 'GROUP_LCD',
         },
+        {
+          id: 'INPE_CERRADO_PRODES',
+          order: 10,
+          type: 'remoteDataLayer',
+          uuid: 'a2d9e60f-b4f6-4e56-8100-00fb3da2cf8e',
+        },
       ],
     },
     GROUP_LC: {

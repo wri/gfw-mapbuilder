@@ -1,0 +1,110 @@
+{
+  "header": {
+    "Content-Type": "application/json"
+  },
+  "datasetBody": {
+    "dataset": {
+      "name": "PRODES Cerrado Biome",
+      "application": ["forest-atlas"],
+      "connectorType": "wms",
+      "provider": "wms",
+      "connectorUrl": "https://tiles.globalforestwatch.org/inpe_cerrado_prodes/latest/dynamic/{z}/{x}/{y}.png"
+    }
+  },
+  "layerBody": {
+    "name": "PRODES Cerrado Biome",
+    "dataset": "efdc1e33-87c9-44f5-aba2-ef71ae3c2e79",
+    "application": ["forest-atlas"],
+    "layerConfig": {
+      "sublabel": {
+        "ka": "",
+        "zh": "",
+        "id": "",
+        "pt": "",
+        "es": "",
+        "fr": "",
+        "en": "PRODES Cerrado Biome"
+      },
+      "label": {
+        "ka": "",
+        "zh": "",
+        "id": "",
+        "pt": "",
+        "es": "",
+        "fr": "",
+        "en": "PRODES Cerrado Biome"
+      },
+      "technicalName": "inpe_cerrado_prodes",
+      "url": "https://tiles.globalforestwatch.org/inpe_cerrado_prodes/v2021/default/root.json",
+      "type": "Vector.Layer",
+      "id": "INPE_CERRADO_PRODES",
+      "metadata": "https://production-api.globalforestwatch.org/v1/gfw-metadata/inpe_cerrado_prodes",
+      "style": "https://tiles.globalforestwatch.org/inpe_cerrado_prodes/v2021/default/root.json"
+    },
+    "legendConfig": {
+      "items": [
+        {
+          "color": "#C92A6D",
+          "name": {
+            "en": "High concentration",
+            "es": "High concentration",
+            "fr": "High concentration",
+            "id": "High concentration",
+            "ka": "High concentration",
+            "pt": "High concentration"
+          }
+        },
+        {
+          "color": "#DC6699",
+          "name": {
+            "en": "",
+            "es": "",
+            "fr": "",
+            "id": "",
+            "ka": "",
+            "pt": ""
+          }
+        },
+        {
+          "color": "#DC6699",
+          "name": {
+            "en": "",
+            "es": "",
+            "fr": "",
+            "id": "",
+            "ka": "",
+            "pt": ""
+          }
+        },
+        {
+          "color": "#EDA4C3",
+          "name": {
+            "en": "Low concentration",
+            "es": "Low concentration",
+            "fr": "Low concentration",
+            "id": "Low concentration",
+            "ka": "Low concentration",
+            "pt": "Low concentration"
+          }
+        }
+      ],
+      "source": "",
+      "notes": [""],
+      "name": {
+        "ka": "",
+        "zh": "",
+        "id": "",
+        "pt": "",
+        "es": "",
+        "fr": "",
+        "en": "PRODES Cerrado Biome"
+      },
+      "type": "gradient"
+    },
+    "interactionConfig": {},
+    "applicationConfig": {},
+    "staticImageConfig": {},
+    "createdAt": "2022-12-22T20:04:51.710Z",
+    "updatedAt": "2022-12-22T20:04:51.710Z"
+  }
+}
