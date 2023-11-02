@@ -215,9 +215,15 @@ export default {
         },
         {
           id: 'INPE_CERRADO_PRODES',
-          order: 10,
+          order: 11,
           type: 'remoteDataLayer',
           uuid: 'a2d9e60f-b4f6-4e56-8100-00fb3da2cf8e',
+        },
+        {
+          id: 'INPE_AMAZON_PRODES',
+          order: 12,
+          type: 'remoteDataLayer',
+          uuid: 'ac72942c-d508-4929-b5fb-104e5c948d09',
         },
       ],
     },

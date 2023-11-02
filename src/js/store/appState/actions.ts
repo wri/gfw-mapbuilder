@@ -48,6 +48,7 @@ import {
   SET_TREE_MOSAIC_HECTARES_VALUE,
   TreeMosaicLayerTypes,
   SET_ACTIVE_TREE_MOSAIC_LAYER,
+  SET_PRODES_LAYER,
 } from './types';
 
 export function setSelectedSearchWidgetLayer(payload: AppState['selectedSearchWidgetLayer']) {
@@ -367,6 +368,13 @@ export function setTreeMosaicHectaresValue(payload: number) {
 export function setActiveTreeMosaicLayer(payload: TreeMosaicLayerTypes) {
   return {
     type: SET_ACTIVE_TREE_MOSAIC_LAYER,
+    payload,
+  };
+}
+
+export function setProdesLayer(payload: any) {
+  return {
+    type: SET_PRODES_LAYER,
     payload,
   };
 }

@@ -4,7 +4,7 @@
   },
   "datasetBody": {
     "dataset": {
-      "name": "PRODES Cerrado Biome",
+      "name": "PRODES Layers",
       "application": ["forest-atlas"],
       "connectorType": "wms",
       "provider": "wms",
@@ -12,8 +12,7 @@
     }
   },
   "layerBody": {
-    "name": "PRODES Cerrado Biome",
-    "dataset": "efdc1e33-87c9-44f5-aba2-ef71ae3c2e79",
+    "name": "PRODES Amazon Biome",
     "application": ["forest-atlas"],
     "layerConfig": {
       "sublabel": {
@@ -23,7 +22,7 @@
         "pt": "",
         "es": "",
         "fr": "",
-        "en": "PRODES Cerrado Biome"
+        "en": "PRODES Amazon Biome"
       },
       "label": {
         "ka": "",
@@ -32,14 +31,14 @@
         "pt": "",
         "es": "",
         "fr": "",
-        "en": "PRODES Cerrado Biome"
+        "en": "PRODES Amazon Biome"
       },
-      "technicalName": "inpe_cerrado_prodes",
-      "url": "https://tiles.globalforestwatch.org/inpe_cerrado_prodes/v2021/default/root.json",
+      "technicalName": "inpe_amazon_prodes",
+      "url": "https://tiles.globalforestwatch.org/inpe_cerrado_prodes/latest/default/root.json",
       "type": "Vector.Layer",
-      "id": "INPE_CERRADO_PRODES",
-      "metadata": "https://production-api.globalforestwatch.org/v1/gfw-metadata/inpe_cerrado_prodes",
-      "style": "https://tiles.globalforestwatch.org/inpe_cerrado_prodes/v2021/default/root.json"
+      "id": "INPE_AMAZON_PRODES",
+      "metadata": "https://production-api.globalforestwatch.org/v1/gfw-metadata/inpe_amazon_prodes",
+      "style": "https://tiles.globalforestwatch.org/inpe_cerrado_prodes/latest/default/root.json"
     },
     "legendConfig": {
       "items": [
@@ -97,7 +96,7 @@
         "pt": "",
         "es": "",
         "fr": "",
-        "en": "PRODES Cerrado Biome"
+        "en": "PRODES Amazon Biome"
       },
       "type": "gradient"
     },

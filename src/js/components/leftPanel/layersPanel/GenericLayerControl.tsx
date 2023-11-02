@@ -32,6 +32,8 @@ import IntegratedAlertControls from '../../sharedComponents/IntegratedAlertContr
 import { subYears } from 'date-fns';
 import { generateRangeDate, handleCustomColorTheme } from '../../../../utils';
 import { DATES } from '../../../../../configs/dates-config';
+import SelectProdesLayer from '../../sharedComponents/selectProdesLayer';
+
 const { TREE_COVER_LOSS } = DATES;
 
 interface LayerInfo {
@@ -164,6 +166,7 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
   const allAvailableLayers = useSelector((store: RootState) => store.mapviewState.allAvailableLayers);
   const rangeSliderYearValue = useSelector((store: RootState) => store.appState.landCoverYearValue);
   const rangeSliderYearDefaultValue = useSelector((store: RootState) => store.appState.landCoverYearRange);
+  const selectedProdesLayer = useSelector((store: RootState) => store.appState.leftPanel.prodesLayer);
   const gladLayerConfig: any = allAvailableLayers.filter((layer: any) => layer.id === gfwLayer);
   //Determine if we need density control on this layer
   const densityPicker = layer && densityEnabledLayers.includes(layer.id);
@@ -286,9 +289,14 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
     if (layer?.sublabel) {
       if (layer.title === 'GFW Integrated Alerts') {
         subTitle = gfwLayerSubtitle;
+      } else if ((selectedProdesLayer && layer.id === 'INPE_CERRADO_PRODES') || layer.id === 'INPE_AMAZON_PRODES') {
+        const selectedLayer: any = allAvailableLayers.find((layer: any) => layer.id === selectedProdesLayer);
+        console.log(selectedLayer);
+        subTitle = selectedLayer?.sublabel[selectedLanguage];
       } else {
-        subTitle = layer.sublabel[selectedLanguage];
+        subTitle = layer?.sublabel[selectedLanguage];
       }
+
       return (
         <>
           <span className="layer-subtitle">{subTitle}</span>
@@ -428,7 +436,7 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
     >
       <div
         style={
-          layer.title !== 'RADD Alerts' && layer.title !== 'GLAD S2 Alerts'
+          layer.title !== 'RADD Alerts' && layer.title !== 'GLAD S2 Alerts' && layer.title !== 'PRODES Amazon Biome'
             ? { visibility: 'visible', borderBottom: '1px solid #8983834a', paddingBottom: 10 }
             : { display: 'none' }
         }
@@ -443,7 +451,7 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
                 {returnLayerControl()}
                 <div className="title-wrapper">
                   <span className="layer-label" style={{ textTransform: 'capitalize' }}>
-                    {layerTitle}
+                    {layerTitle === 'PRODES Cerrado Biome' ? 'PRODES Layer' : layerTitle}
                   </span>
                 </div>
               </div>
@@ -477,6 +485,7 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
           </div>
         </div>
         {layer?.visible && layer.id === 'GFW_INTEGRATED_ALERTS' && <SelectIntegratedAlertLayer />}
+        {layer?.visible && layer.id === 'INPE_CERRADO_PRODES' && <SelectProdesLayer />}
         {layer?.visible && returnTimeSlider(props.id)}
         {layer?.visible && returnRangeSlider(props.id)}
 

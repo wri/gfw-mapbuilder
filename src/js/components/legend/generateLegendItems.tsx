@@ -44,7 +44,22 @@ function generateWMSLegendInfo(layer: LayerProps, i: number): JSX.Element {
 
 const LegendItems = (props: LegendItemProps): JSX.Element => {
   const { language } = props;
-  const integratedAlertLabel = useSelector((store: RootState) => store.appState.leftPanel.gfwLayerLabel);
+
+  const getLayerTitle = (layer: LayerProps): any => {
+    const selectedProdesLayer = useSelector((store: RootState) => store.appState.leftPanel.prodesLayer);
+    const integratedAlertLabel = useSelector((store: RootState) => store.appState.leftPanel.gfwLayerLabel);
+    const selectedLanguage = useSelector((store: RootState) => store.appState.selectedLanguage);
+    const allAvailableLayers = useSelector((store: RootState) => store.mapviewState.allAvailableLayers);
+
+    if (selectedProdesLayer) {
+      const selectedLayer: any = allAvailableLayers.find((layer: any) => layer.id === selectedProdesLayer);
+      return selectedLayer?.sublabel[selectedLanguage];
+    } else if (layer.title === 'Integrated Deforestation Alerts') {
+      return integratedAlertLabel;
+    } else {
+      return layer.title;
+    }
+  };
 
   const items = props.visibleLayers.map((layer, i) => {
     //@TODO this needs some refactoring to make it more readable!!
@@ -146,9 +161,7 @@ const LegendItems = (props: LegendItemProps): JSX.Element => {
 
       return (
         <div className="layer-item" key={layer.id + `${i}`}>
-          <p className="layer-title">
-            {layer.title === 'Integrated Deforestation Alerts' ? integratedAlertLabel : layer.title}
-          </p>
+          <p className="layer-title">{getLayerTitle(layer)}</p>
           {labelIcons}
         </div>
       );

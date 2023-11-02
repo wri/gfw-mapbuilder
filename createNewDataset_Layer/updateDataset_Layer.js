@@ -10,7 +10,7 @@ const env = require('dotenv').config();
 
 const DATA_API_TOKEN = process.env.DATA_API_TOKEN;
 const DATASET_ID = 'efdc1e33-87c9-44f5-aba2-ef71ae3c2e79';
-const LAYER_ID = 'a2d9e60f-b4f6-4e56-8100-00fb3da2cf8e';
+const LAYER_ID = 'ac72942c-d508-4929-b5fb-104e5c948d09';
 
 async function updateDataset() {
   const url = `https://api.resourcewatch.org/v1/dataset/${DATASET_ID}`;
@@ -32,6 +32,7 @@ async function updateLayer() {
   const body = config.layerBody;
   const headers = config.header;
 
+  body.dataset = DATASET_ID;
   headers.Authorization = `Bearer ${DATA_API_TOKEN}`;
 
   try {

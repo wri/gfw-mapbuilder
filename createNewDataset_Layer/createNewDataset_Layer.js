@@ -31,6 +31,7 @@ async function createNewLayer() {
   const body = config.layerBody;
   const headers = config.header;
 
+  body.dataset = DATASET_ID;
   headers.Authorization = `Bearer ${DATA_API_TOKEN}`;
 
   try {
