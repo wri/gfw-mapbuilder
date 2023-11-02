@@ -17,7 +17,7 @@
     "declaration": false,
     "noLib": false,
     "preserveConstEnums": true,
-    "ignoreDeprecations": "5.0",
+    "suppressImplicitAnyIndexErrors": true,
     "strictNullChecks": true,
     "outDir": "./dist/",
     "sourceMap": true,
