@@ -3,7 +3,7 @@
  * It requires an authorization token to access the API and the authorization token must be stored in an .env file.
  * update the config.js file with the dataset and layer details.
  */
-
+// const ddd = require('../configs/envVariables');
 const axios = require('axios');
 const config = require('./config');
 const env = require('dotenv').config();

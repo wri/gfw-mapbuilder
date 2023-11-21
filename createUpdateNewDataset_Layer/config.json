@@ -16,22 +16,22 @@
     "application": ["forest-atlas"],
     "layerConfig": {
       "sublabel": {
-        "ka": "",
-        "zh": "",
-        "id": "",
-        "pt": "",
-        "es": "",
-        "fr": "",
-        "en": "PRODES Cerrado Biome"
+        "ka": "annual, 6.25ha, Legal Amazon / Cerrado, INPE",
+        "zh": "每年, 6.25ha, Legal Amazon / Cerrado, INPE",
+        "id": "tahunan, 6.25ha, Legal Amazon / Cerrado, INPE",
+        "pt": "წლიური, 6.25ha, Legal Amazon / Cerrado, INPE",
+        "es": "anual, 6.25ha, Legal Amazon / Cerrado, INPE",
+        "fr": "annuelle, 6.25ha, Legal Amazon / Cerrado, INPE",
+        "en": "annual, 6.25ha, Legal Amazon / Cerrado, INPE"
       },
       "label": {
-        "ka": "",
-        "zh": "",
-        "id": "",
-        "pt": "",
-        "es": "",
-        "fr": "",
-        "en": "PRODES Cerrado Biome"
+        "ka": "PRODES ტყის გაჩეხვის",
+        "zh": "PRODES 滥伐",
+        "id": "PRODES Deforestasi",
+        "pt": "PRODES Desmatamento",
+        "es": "PRODES Deforestación",
+        "fr": "PRODES Déforestation",
+        "en": "PRODES Deforestation"
       },
       "technicalName": "inpe_cerrado_prodes",
       "url": "https://tiles.globalforestwatch.org/inpe_cerrado_prodes/v2021/default/root.json",
@@ -44,13 +44,13 @@
       "items": [
         {
           "name": {
-            "en": "PRODES Cerrado Biome",
-            "fr": "",
-            "es": "",
-            "pt": "",
-            "id": "",
-            "zh": "",
-            "ka": ""
+            "en": "PRODES Deforestation",
+            "fr": "PRODES Déforestation",
+            "es": "PRODES Deforestación",
+            "pt": "PRODES Desmatamento",
+            "id": "PRODES Deforestasi",
+            "zh": "PRODES 滥伐",
+            "ka": "PRODES ტყის გაჩეხვის"
           },
           "color": "#C92A6D",
           "outlineColor": "#C92A6D"
@@ -59,13 +59,13 @@
       "source": "",
       "notes": [""],
       "name": {
-        "ka": "",
-        "zh": "",
-        "id": "",
-        "pt": "",
-        "es": "",
-        "fr": "",
-        "en": "PRODES Cerrado Biome"
+        "en": "PRODES Deforestation",
+        "fr": "PRODES Déforestation",
+        "es": "PRODES Deforestación",
+        "pt": "PRODES Desmatamento",
+        "id": "PRODES Deforestasi",
+        "zh": "PRODES 滥伐",
+        "ka": "PRODES ტყის გაჩეხვის"
       },
       "type": "basic"
     },
