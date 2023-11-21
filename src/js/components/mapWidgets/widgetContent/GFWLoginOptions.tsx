@@ -16,9 +16,8 @@ const GFWLoginOptions = (props: any) => {
 
   const selectedLanguage = useSelector((state: RootState) => state.appState.selectedLanguage);
 
-  const { subscriptions, profile, logout, twitter, facebook, google, loginReq, contactUs } = headerContent[
-    selectedLanguage
-  ];
+  const { subscriptions, profile, logout, twitter, facebook, google, loginReq, contactUs } =
+    headerContent[selectedLanguage];
 
   //Check if we are clicking outside the dropwdown and close dropdown if so
   function handleOutsideClick(e: any): void {
@@ -33,7 +32,7 @@ const GFWLoginOptions = (props: any) => {
 
   function logOut(): void {
     fetch('https://api.resourcewatch.org/auth/logout', {
-      credentials: 'include'
+      credentials: 'include',
     })
       .then(() => {
         //clear user credentials from local storage
@@ -44,9 +43,9 @@ const GFWLoginOptions = (props: any) => {
         const url = new URL(window.location.href);
         const searchParams = new URLSearchParams(url.search);
         searchParams.has('token') && searchParams.delete('token');
-        window.location.href = url.origin + url.pathname + searchParams.toString();
+        window.location.href = url.href;
       })
-      .catch(e => console.log('Logout failed', e));
+      .catch((e) => console.log('Logout failed', e));
   }
 
   function getSubscriptions(): void {
