@@ -15,7 +15,7 @@ import { renderModal, setInfoModalLayerID } from '../../../store/appState/action
 import { RootState } from '../../../store';
 import { LayerProps } from '../../../store/mapview/types';
 import { mapController } from '../../../controllers/mapController';
-import { densityEnabledLayers, drySpellMarks, landCoverMarks } from '../../../../../configs/layer-config';
+import { LAYER_IDS, densityEnabledLayers, drySpellMarks, landCoverMarks } from '../../../../../configs/layer-config';
 import { InfoIcon } from '../../../../images/infoIcon';
 import { DashboardIcon } from '../../../../images/dashboardIcon';
 import { LayerVersionPicker } from './LayerVersionPicker';
@@ -289,9 +289,11 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
     if (layer?.sublabel) {
       if (layer.title === 'GFW Integrated Alerts') {
         subTitle = gfwLayerSubtitle;
-      } else if ((selectedProdesLayer && layer.id === 'INPE_CERRADO_PRODES') || layer.id === 'INPE_AMAZON_PRODES') {
+      } else if (
+        (selectedProdesLayer && layer.id === LAYER_IDS.INPE_CERRADO_PRODES) ||
+        layer.id === LAYER_IDS.INPE_AMAZON_PRODES
+      ) {
         const selectedLayer: any = allAvailableLayers.find((layer: any) => layer.id === selectedProdesLayer);
-        console.log(selectedLayer);
         subTitle = selectedLayer?.sublabel[selectedLanguage];
       } else {
         subTitle = layer?.sublabel[selectedLanguage];

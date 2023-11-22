@@ -21,6 +21,7 @@ import { createForestCarbonNetFlux } from '../layers/ForestCarbonNetFlux';
 import { umdCoverLand } from '../layers/UmdCoverLand';
 import { createBaseTileLayer } from '../layers/BaseTileLayer';
 import { getUrl } from './layerFactoryHelpers';
+import { LAYER_IDS } from '../../../configs/layer-config';
 
 interface LayerOptions {
   id: string;
@@ -397,8 +398,8 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
       }
       if (
         layerConfig.id === 'IFL' ||
-        layerConfig.id === 'INPE_CERRADO_PRODES' ||
-        layerConfig.id === 'INPE_AMAZON_PRODES'
+        layerConfig.id === LAYER_IDS.INPE_CERRADO_PRODES ||
+        layerConfig.id === LAYER_IDS.INPE_AMAZON_PRODES
       ) {
         esriLayer.opacity = layerConfig.opacity.combined;
       }
