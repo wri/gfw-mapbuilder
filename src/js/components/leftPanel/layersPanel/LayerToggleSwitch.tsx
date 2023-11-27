@@ -1,10 +1,12 @@
 import * as React from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store';
 import { mapController } from '../../../controllers/mapController';
 import styled from 'styled-components';
 import '../../../../css/layer-toggle-checkbox.scss';
 import { handleCustomColorTheme } from '../../../../utils';
+import { LAYER_IDS } from '../../../../../configs/layer-config';
+import { setProdesLayer } from '../../../store/appState/actions';
 
 //Dynamic custom theme override using styled-components lib
 interface CheckBoxWrapperProps {
@@ -27,15 +29,33 @@ interface LayerToggleProps {
 const LayerToggleSwitch = (props: LayerToggleProps): React.ReactElement => {
   const customColorTheme = useSelector((store: RootState) => store.appSettings.customColorTheme);
   const { layerIsVisible, layerID, sublayer, parentID } = props;
+  const [isChecked, setIsChecked] = React.useState(layerIsVisible);
 
   const themeColor = handleCustomColorTheme(customColorTheme);
+  const dispatch = useDispatch();
 
-  const toggleVisibility = (): void => {
+  const toggleVisibility = (e): void => {
     if (layerID === 'MODIS_ACTIVE_FIRES') {
       mapController.toggleVIIRSorMODIS(layerID);
     } else {
-      mapController.toggleLayerVisibility(layerID, sublayer, parentID);
+      if (layerID === LAYER_IDS.INPE_CERRADO_PRODES || layerID === LAYER_IDS.INPE_AMAZON_PRODES) {
+        mapController.toggleProdLayers(e.target.checked, layerID);
+      } else {
+        mapController.toggleLayerVisibility(layerID, sublayer, parentID);
+      }
     }
+
+    if (layerID === LAYER_IDS.INPE_CERRADO_PRODES || layerID === LAYER_IDS.INPE_AMAZON_PRODES) {
+      if (e.target.checked === false) {
+        const cerradoProdLayer = mapController._map?.findLayerById(LAYER_IDS.INPE_CERRADO_PRODES);
+        const amazonProdLayer = mapController._map?.findLayerById(LAYER_IDS.INPE_AMAZON_PRODES);
+        cerradoProdLayer!.visible = false;
+        amazonProdLayer!.visible = false;
+        // reset prode layer to cerrado when unchecked
+        dispatch(setProdesLayer(cerradoProdLayer?.id));
+      }
+    }
+    setIsChecked(e.target.checked);
   };
 
   return (
@@ -46,8 +66,8 @@ const LayerToggleSwitch = (props: LayerToggleProps): React.ReactElement => {
           name="styled-checkbox"
           className="styled-checkbox"
           id={`layer-checkbox-${layerID}`}
-          checked={layerIsVisible}
-          onChange={(): void => toggleVisibility()}
+          checked={isChecked}
+          onChange={(e): void => toggleVisibility(e)}
         />
         <label className="styled-checkboxlabel" htmlFor={`layer-checkbox-${layerID}`}>
           {layerID}

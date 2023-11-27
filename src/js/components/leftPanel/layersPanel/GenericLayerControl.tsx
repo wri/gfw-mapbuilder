@@ -488,6 +488,7 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
         </div>
         {layer?.visible && layer.id === 'GFW_INTEGRATED_ALERTS' && <SelectIntegratedAlertLayer />}
         {layer?.visible && layer.id === 'INPE_CERRADO_PRODES' && <SelectProdesLayer />}
+
         {layer?.visible && returnTimeSlider(props.id)}
         {layer?.visible && returnRangeSlider(props.id)}
 

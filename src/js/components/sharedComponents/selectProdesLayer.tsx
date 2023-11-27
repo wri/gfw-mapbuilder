@@ -17,6 +17,8 @@ const SelectProdesLayer = (): JSX.Element | any => {
       const layer = mapController._map?.findLayerById(layerId);
       if (layer) {
         layer.visible = layerId === selectedLayerId;
+      } else {
+        layer!.visible = false;
       }
     });
     dispatch(setProdesLayer(selectedLayerId));
