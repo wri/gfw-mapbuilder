@@ -35,7 +35,7 @@ const App = (props: AppSettings | any): JSX.Element => {
   // if analyticsCode property is used in config file, load it as well as the default above
   if (resources.analyticsCode) loadDefaultGoogleAnalytics(resources.analyticsCode);
 
-  const fetchPortalInfo = async (appID: string): Promise<void> => {
+  const fetchPortalInfo = async (appID: string) => {
     const [Portal, PortalItem] = await loadModules(['esri/portal/Portal', 'esri/portal/PortalItem']);
 
     // APPID existing on the URL indicates that mapbuilder is loaded using arcgis template, and we need to fetch settings using that app id to overwrite our default settings
@@ -44,14 +44,13 @@ const App = (props: AppSettings | any): JSX.Element => {
     const portItem = new PortalItem({ id: appID, portal: portalA });
     portItem
       .fetchData('json')
-      .then((res: any) => {
-        console.log(res);
+      .then((res) => {
         const { values } = res;
         dispatch(overwriteSettings({ ...resources, ...props, ...values }));
         changeDefaultLanguage(values?.language);
         setShowGlobalSpinner(false);
       })
-      .catch((e: any) => {
+      .catch((e) => {
         console.error(e);
         dispatch(overwriteSettings({ ...resources, ...props }));
         changeDefaultLanguage(resources.language);
