@@ -12,13 +12,15 @@ const SelectProdesLayer = (): JSX.Element | any => {
   const selectLayer = (e: any) => {
     const selectedLayerId =
       e.target.innerText === 'Cerrado' ? LAYER_IDS.INPE_CERRADO_PRODES : LAYER_IDS.INPE_AMAZON_PRODES;
-
+    mapController.resetProdLayerOpacity(selectedLayerId);
     [LAYER_IDS.INPE_CERRADO_PRODES, LAYER_IDS.INPE_AMAZON_PRODES].forEach((layerId) => {
       const layer = mapController._map?.findLayerById(layerId);
       if (layer) {
         layer.visible = layerId === selectedLayerId;
+        layer!.opacity = 1;
       } else {
         layer!.visible = false;
+        layer!.opacity = 1;
       }
     });
     dispatch(setProdesLayer(selectedLayerId));

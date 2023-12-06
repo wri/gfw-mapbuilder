@@ -5,16 +5,25 @@ import { RootState } from '../../../../js/store/index';
 import { handleCustomColorTheme } from '../../../../utils';
 
 interface LayerTransparencyProps {
-  layerOpacity: number | undefined;
-  handleOpacityChange: (val: number) => void;
+  layerOpacity: number;
+  handleOpacityChange: (val: number) => number;
 }
 
 const SliderWithTooltip = createSliderWithTooltip(Slider);
 
 const LayerTransparencySlider = ({ layerOpacity, handleOpacityChange }: LayerTransparencyProps): React.ReactElement => {
   const customColorTheme = useSelector((store: RootState) => store.appSettings.customColorTheme);
-
+  const [value, setValue] = React.useState(layerOpacity);
   const themeColor = handleCustomColorTheme(customColorTheme);
+
+  React.useEffect(() => {
+    setValue(layerOpacity);
+  }, [layerOpacity]);
+
+  const handleChange = (event: number) => {
+    const sliderValue = handleOpacityChange(event);
+    setValue(sliderValue);
+  };
 
   return (
     <div className="transparency-slider">
@@ -22,9 +31,9 @@ const LayerTransparencySlider = ({ layerOpacity, handleOpacityChange }: LayerTra
         min={0}
         max={1}
         step={0.05}
-        defaultValue={layerOpacity}
+        value={value}
         tipFormatter={(val: number): string => `${(val * 100).toFixed(0)}%`}
-        onAfterChange={handleOpacityChange}
+        onChange={handleChange}
         railStyle={{ height: 5, backgroundColor: '#e9e9e9' }}
         trackStyle={{ backgroundColor: `${themeColor}`, height: 5 }}
         dotStyle={{

@@ -1097,6 +1097,43 @@ export class MapController {
       store.dispatch(allAvailableLayers(newLayersArray));
     }
   }
+
+  resetProdLayerOpacity = (selectedLayerId: string) => {
+    const { mapviewState } = store.getState();
+    const newLayersArray: any = mapviewState.allAvailableLayers.map((l) => {
+      if (selectedLayerId === LAYER_IDS.INPE_AMAZON_PRODES) {
+        if (l.id === LAYER_IDS.INPE_CERRADO_PRODES) {
+          return {
+            ...l,
+            opacity: {
+              combined: 1,
+              fill: l.opacity.fill,
+              outline: l.opacity.outline,
+            },
+          };
+        } else {
+          return l;
+        }
+      } else if (selectedLayerId === LAYER_IDS.INPE_CERRADO_PRODES) {
+        if (l.id === LAYER_IDS.INPE_AMAZON_PRODES) {
+          return {
+            ...l,
+            opacity: {
+              combined: 1,
+              fill: l.opacity.fill,
+              outline: l.opacity.outline,
+            },
+          };
+        } else {
+          return l;
+        }
+      } else {
+        return l;
+      }
+    });
+
+    store.dispatch(allAvailableLayers(newLayersArray));
+  };
   setLayerOpacity(layerID: string, value: string, sublayer?: boolean, parentID?: string): void {
     let layer: any;
     if (sublayer && parentID) {
@@ -2188,6 +2225,25 @@ export class MapController {
     if (layer) {
       this._map?.remove(layer);
     }
+  };
+
+  updateLayerOpacity = (id: string, opacity: number) => {
+    const { mapviewState } = store.getState();
+    const newLayersArray = mapviewState.allAvailableLayers.map((l: any) => {
+      if (l.id === id) {
+        return {
+          ...l,
+          opacity: {
+            combined: opacity,
+            fill: l.fill,
+            outline: l.outline,
+          },
+        };
+      } else {
+        return l;
+      }
+    }) as any;
+    store.dispatch(allAvailableLayers(newLayersArray));
   };
 
   toggleGladLayer = async (params: { id: string; start: Date; end: Date }) => {
