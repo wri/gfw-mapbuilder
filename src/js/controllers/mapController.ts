@@ -903,6 +903,48 @@ export class MapController {
     }
   }
 
+  toggleProdLayers = (visible: boolean, layerId: string) => {
+    const { mapviewState } = store.getState();
+
+    let newLayersArray: any = [];
+    // turn off both of prode layers if toggle is off;
+    if (visible === false) {
+      const cerradoProdLayer = mapController._map?.findLayerById(LAYER_IDS.INPE_CERRADO_PRODES);
+      const amazonProdLayer = mapController._map?.findLayerById(LAYER_IDS.INPE_AMAZON_PRODES);
+
+      cerradoProdLayer!.visible = false;
+      amazonProdLayer!.visible = false;
+
+      newLayersArray = mapviewState.allAvailableLayers.map((layer) => {
+        if (layer.id === cerradoProdLayer?.id || layer.id === amazonProdLayer?.id) {
+          return {
+            ...layer,
+            visible: false,
+          };
+        } else {
+          return layer;
+        }
+      });
+    } else {
+      const findLayerById = this._map?.findLayerById(layerId);
+      if (findLayerById) {
+        findLayerById.visible = visible;
+
+        newLayersArray = mapviewState.allAvailableLayers.map((layer) => {
+          if (layer.id === layerId) {
+            return {
+              ...layer,
+              visible: findLayerById.visible,
+            };
+          } else {
+            return layer;
+          }
+        });
+      }
+    }
+    store.dispatch(allAvailableLayers(newLayersArray));
+  };
+
   toggleLayerVisibility(layerID: string, sublayer?: boolean, parentID?: string): void {
     let layer = null as any;
     if (sublayer && parentID) {
@@ -915,6 +957,7 @@ export class MapController {
     }
     if (layer) {
       const visibility = !layer.visible;
+
       if (visibility) {
         //sync parent layer with sublayer
         if (layer.parent && layer.parent.type === 'map-image') {
@@ -927,6 +970,7 @@ export class MapController {
 
       //2. Update redux
       const { mapviewState } = store.getState();
+
       const newLayersArray = mapviewState.allAvailableLayers.map((l) => {
         if (l.id === layerID) {
           return {
@@ -1053,6 +1097,43 @@ export class MapController {
       store.dispatch(allAvailableLayers(newLayersArray));
     }
   }
+
+  resetProdLayerOpacity = (selectedLayerId: string) => {
+    const { mapviewState } = store.getState();
+    const newLayersArray: any = mapviewState.allAvailableLayers.map((l) => {
+      if (selectedLayerId === LAYER_IDS.INPE_AMAZON_PRODES) {
+        if (l.id === LAYER_IDS.INPE_CERRADO_PRODES) {
+          return {
+            ...l,
+            opacity: {
+              combined: 1,
+              fill: l.opacity.fill,
+              outline: l.opacity.outline,
+            },
+          };
+        } else {
+          return l;
+        }
+      } else if (selectedLayerId === LAYER_IDS.INPE_CERRADO_PRODES) {
+        if (l.id === LAYER_IDS.INPE_AMAZON_PRODES) {
+          return {
+            ...l,
+            opacity: {
+              combined: 1,
+              fill: l.opacity.fill,
+              outline: l.opacity.outline,
+            },
+          };
+        } else {
+          return l;
+        }
+      } else {
+        return l;
+      }
+    });
+
+    store.dispatch(allAvailableLayers(newLayersArray));
+  };
   setLayerOpacity(layerID: string, value: string, sublayer?: boolean, parentID?: string): void {
     let layer: any;
     if (sublayer && parentID) {
@@ -2144,6 +2225,25 @@ export class MapController {
     if (layer) {
       this._map?.remove(layer);
     }
+  };
+
+  updateLayerOpacity = (id: string, opacity: number) => {
+    const { mapviewState } = store.getState();
+    const newLayersArray = mapviewState.allAvailableLayers.map((l: any) => {
+      if (l.id === id) {
+        return {
+          ...l,
+          opacity: {
+            combined: opacity,
+            fill: l.fill,
+            outline: l.outline,
+          },
+        };
+      } else {
+        return l;
+      }
+    }) as any;
+    store.dispatch(allAvailableLayers(newLayersArray));
   };
 
   toggleGladLayer = async (params: { id: string; start: Date; end: Date }) => {

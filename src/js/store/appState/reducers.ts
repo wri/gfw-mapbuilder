@@ -49,6 +49,7 @@ import {
   SET_RADD_ALERT_START,
   SET_RADD_ALERT_END,
   SET_ACTIVE_TREE_MOSAIC_LAYER,
+  SET_PRODES_LAYER,
 } from './types';
 
 const initialState: AppState = {
@@ -91,9 +92,9 @@ const initialState: AppState = {
     gfwLayerLabel: 'Integrated Deforestation Alerts',
     gfwLayerSubtitle: '(daily, 10m, tropics, UMD/GLAD and WUR)',
     windSpeedPotential: 50,
-
     treeMosaicHectaresValue: 10,
     activeTreeMosaicLayer: 'meter',
+    prodesLayer: 'INPE_CERRADO_PRODES',
   },
   measureContent: {
     activeButton: '',
@@ -380,6 +381,14 @@ export function appStateReducer(state = initialState, action: AppStateTypes): Ap
         leftPanel: {
           ...state.leftPanel,
           activeTreeMosaicLayer: action.payload,
+        },
+      };
+    case SET_PRODES_LAYER:
+      return {
+        ...state,
+        leftPanel: {
+          ...state.leftPanel,
+          prodesLayer: action.payload,
         },
       };
     case SET_VERSIONED_LAYER: {

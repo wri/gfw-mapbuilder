@@ -35,6 +35,7 @@ export interface LeftPanel {
 
   treeMosaicHectaresValue: number;
   activeTreeMosaicLayer: TreeMosaicLayerTypes;
+  prodesLayer: 'Cerrado' | 'Amazon' | string;
 }
 
 interface SpecificAreaResults {
@@ -129,6 +130,7 @@ export const SET_ANALYSIS_FEATURE_LIST = 'SET_ANALYSIS_FEATURE_LIST';
 
 export const SET_LAND_COVER_YEAR_RANGE = 'SET_LAND_COVER_YEAR_RANGE';
 export const SET_LAND_COVER_YEAR_VALUE = 'SET_LAND_COVER_YEAR_VALUE';
+export const SET_PRODES_LAYER = 'SET_PRODES_LAYER';
 
 interface SetSelectedSearchWidgetLayer {
   type: typeof SET_SELECTED_SEARCH_WIDGET_LAYER;
@@ -305,6 +307,11 @@ interface SetWindSpeedPotential {
   payload: AppState['leftPanel']['windSpeedPotential'];
 }
 
+interface SetProdesLayer {
+  type: typeof SET_PRODES_LAYER;
+  payload: AppState['leftPanel']['prodesLayer'];
+}
+
 interface SetRenderPopup {
   type: typeof SET_RENDER_POPUP;
   payload: AppState['renderPopup'];
@@ -401,4 +408,5 @@ export type AppStateTypes =
   | SetAnalysisFeatureList
   | SetLandCoverYearValue
   | SetTreeMosaicHectaresValue
-  | SetActiveTreeMosaicLayer;
+  | SetActiveTreeMosaicLayer
+  | SetProdesLayer;

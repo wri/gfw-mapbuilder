@@ -15,7 +15,7 @@ import { renderModal, setInfoModalLayerID } from '../../../store/appState/action
 import { RootState } from '../../../store';
 import { LayerProps } from '../../../store/mapview/types';
 import { mapController } from '../../../controllers/mapController';
-import { densityEnabledLayers, drySpellMarks, landCoverMarks } from '../../../../../configs/layer-config';
+import { LAYER_IDS, densityEnabledLayers, drySpellMarks, landCoverMarks } from '../../../../../configs/layer-config';
 import { InfoIcon } from '../../../../images/infoIcon';
 import { DashboardIcon } from '../../../../images/dashboardIcon';
 import { LayerVersionPicker } from './LayerVersionPicker';
@@ -32,6 +32,8 @@ import IntegratedAlertControls from '../../sharedComponents/IntegratedAlertContr
 import { subYears } from 'date-fns';
 import { generateRangeDate, handleCustomColorTheme } from '../../../../utils';
 import { DATES } from '../../../../../configs/dates-config';
+import SelectProdesLayer from '../../sharedComponents/selectProdesLayer';
+
 const { TREE_COVER_LOSS } = DATES;
 
 interface LayerInfo {
@@ -164,10 +166,12 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
   const allAvailableLayers = useSelector((store: RootState) => store.mapviewState.allAvailableLayers);
   const rangeSliderYearValue = useSelector((store: RootState) => store.appState.landCoverYearValue);
   const rangeSliderYearDefaultValue = useSelector((store: RootState) => store.appState.landCoverYearRange);
+  const selectedProdesLayer = useSelector((store: RootState) => store.appState.leftPanel.prodesLayer);
   const gladLayerConfig: any = allAvailableLayers.filter((layer: any) => layer.id === gfwLayer);
   //Determine if we need density control on this layer
   const densityPicker = layer && densityEnabledLayers.includes(layer.id);
   const altLayerName = layer.label && layer.label[selectedLanguage];
+  const prodesLayer = useSelector((store: RootState) => store.appState.leftPanel.prodesLayer);
 
   const themeColor = handleCustomColorTheme(customColorTheme);
 
@@ -262,6 +266,10 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
     } else {
       layerId = layer.id;
     }
+
+    if (layer.id === LAYER_IDS.INPE_CERRADO_PRODES && prodesLayer === LAYER_IDS.INPE_AMAZON_PRODES) {
+      layerId = LAYER_IDS.INPE_AMAZON_PRODES;
+    }
     if (layer) {
       dispatch(renderModal('InfoContent'));
       dispatch(setInfoModalLayerID(layerId));
@@ -286,9 +294,16 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
     if (layer?.sublabel) {
       if (layer.title === 'GFW Integrated Alerts') {
         subTitle = gfwLayerSubtitle;
+      } else if (
+        (selectedProdesLayer && layer.id === LAYER_IDS.INPE_CERRADO_PRODES) ||
+        layer.id === LAYER_IDS.INPE_AMAZON_PRODES
+      ) {
+        const selectedLayer: any = allAvailableLayers.find((layer: any) => layer.id === selectedProdesLayer);
+        subTitle = selectedLayer?.sublabel[selectedLanguage];
       } else {
-        subTitle = layer.sublabel[selectedLanguage];
+        subTitle = layer?.sublabel[selectedLanguage];
       }
+
       return (
         <>
           <span className="layer-subtitle">{subTitle}</span>
@@ -357,25 +372,54 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
     }
   };
 
-  const handleFullOpacityChange = (eventValue: any): void => {
+  const handleFullOpacityChange = (eventValue: any) => {
     let layerConfig: any;
+
     if (layer.title === 'GFW Integrated Alerts') {
       layerConfig = gladLayerConfig[0];
     } else {
       layerConfig = props;
     }
-    //TODO: check if we still need modis
+
     if (props.id === 'MODIS_ACTIVE_FIRES') {
       mapController.updateMODISorVIIRSOpacity(props.id, eventValue);
     } else if (layerConfig.layer.type === 'wms' && layerConfig.layer.origin === 'webmap') {
       mapController.setLayerOpacityForWMSLayer(layerConfig.id, eventValue, layerConfig.parentID);
+    } else if (layerConfig.id === LAYER_IDS.INPE_CERRADO_PRODES && prodesLayer === LAYER_IDS.INPE_AMAZON_PRODES) {
+      mapController.resetProdLayerOpacity(LAYER_IDS.INPE_CERRADO_PRODES);
+
+      mapController.setLayerOpacity(
+        LAYER_IDS.INPE_AMAZON_PRODES,
+        eventValue,
+        layerConfig.sublayer,
+        layerConfig.parentID
+      );
     } else {
       mapController.setLayerOpacity(layerConfig.id, eventValue, layerConfig.sublayer, layerConfig.parentID);
     }
+
+    return eventValue;
   };
 
-  const handleRendererOpacityChange = (fill: boolean, val: number): void => {
+  const handleRendererOpacityChange = (fill: boolean, val: number) => {
     mapController.setLayerOpacityFillOutline(fill, props.id, val, props.sublayer, props.parentID);
+    return val;
+  };
+
+  const isAmazonProdSelected = (configLayer: any) => {
+    return configLayer.id === LAYER_IDS.INPE_CERRADO_PRODES && prodesLayer === LAYER_IDS.INPE_AMAZON_PRODES;
+  };
+
+  const handleLayerOpacity = (configLayer: any) => {
+    if (isAmazonProdSelected(configLayer)) {
+      const prodesLayerConfig: any = allAvailableLayers.find((layer: any) => layer.id === LAYER_IDS.INPE_AMAZON_PRODES);
+
+      if (prodesLayerConfig) {
+        return prodesLayerConfig.opacity.combined;
+      }
+    } else {
+      return configLayer.opacity.combined;
+    }
   };
 
   const returnOpacityControl = (layer: LayerProps) => {
@@ -406,7 +450,7 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
       return (
         <div style={{ padding: '5px 2rem' }}>
           <LayerTransparencySlider
-            layerOpacity={layerConfig.opacity.combined}
+            layerOpacity={handleLayerOpacity(layerConfig)}
             handleOpacityChange={handleFullOpacityChange}
           />
         </div>
@@ -428,7 +472,7 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
     >
       <div
         style={
-          layer.title !== 'RADD Alerts' && layer.title !== 'GLAD S2 Alerts'
+          layer.title !== 'RADD Alerts' && layer.title !== 'GLAD S2 Alerts' && layer.title !== 'PRODES Amazon Biome'
             ? { visibility: 'visible', borderBottom: '1px solid #8983834a', paddingBottom: 10 }
             : { display: 'none' }
         }
@@ -443,7 +487,7 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
                 {returnLayerControl()}
                 <div className="title-wrapper">
                   <span className="layer-label" style={{ textTransform: 'capitalize' }}>
-                    {layerTitle}
+                    {layerTitle === 'PRODES Cerrado Biome' ? 'PRODES Layer' : layerTitle}
                   </span>
                 </div>
               </div>
@@ -477,6 +521,8 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
           </div>
         </div>
         {layer?.visible && layer.id === 'GFW_INTEGRATED_ALERTS' && <SelectIntegratedAlertLayer />}
+        {layer?.visible && layer.id === 'INPE_CERRADO_PRODES' && <SelectProdesLayer />}
+
         {layer?.visible && returnTimeSlider(props.id)}
         {layer?.visible && returnRangeSlider(props.id)}
 

@@ -23,6 +23,7 @@ import '../../css/index.scss';
 const App = (props: AppSettings | any): JSX.Element => {
   //Check for Report param in the URL (if that exists, we render a report view instead of our full scale application
   const reportView = checkForReportView();
+  // what is the error for this?
   const [showGlobalSpinner, setShowGlobalSpinner] = useState(true);
   const dispatch = useDispatch();
   //Listen to map loading state that comes from mapController via redux store change
@@ -37,14 +38,13 @@ const App = (props: AppSettings | any): JSX.Element => {
   const fetchPortalInfo = async (appID: string) => {
     const [Portal, PortalItem] = await loadModules(['esri/portal/Portal', 'esri/portal/PortalItem']);
 
-    // APPID existing on the URL indicates that mapbuilder is loaded using arcgis template and we need to fetch settings using that app id to overwrite our default settings
+    // APPID existing on the URL indicates that mapbuilder is loaded using arcgis template, and we need to fetch settings using that app id to overwrite our default settings
     const portalURL = sharinghost || 'https://www.arcgis.com';
     const portalA = new Portal({ url: portalURL });
     const portItem = new PortalItem({ id: appID, portal: portalA });
     portItem
       .fetchData('json')
       .then((res) => {
-        console.log(res);
         const { values } = res;
         dispatch(overwriteSettings({ ...resources, ...props, ...values }));
         changeDefaultLanguage(values?.language);
@@ -124,7 +124,7 @@ const App = (props: AppSettings | any): JSX.Element => {
       }
     }
 
-    //We dont care about login state for the report view as it does not have any info behind gfw login
+    //We don't care about login state for the report view as it does not have any info behind gfw login
     if (!reportView) {
       checkForLoginState();
     }

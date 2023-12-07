@@ -21,6 +21,7 @@ import { handleCustomColorTheme } from '../../../utils';
 import { mapController } from '../../controllers/mapController';
 import { LayerFactory } from '../../helpers/LayerFactory';
 import './canopyDensityPicker.scss';
+import { LAYER_IDS } from '../../../../configs/layer-config';
 
 interface CanopyDensityProps {
   type?: string;
@@ -71,26 +72,27 @@ const CanopyDensityPicker = (props: CanopyDensityProps): JSX.Element => {
   }
 
   const handleClick = async (type: 'meter' | 'hectare') => {
-    const layerConfig = allAvailableLayers.find((layer: any) => layer.id === 'TROPICAL_TREE_COVER') as any;
+    const layerConfig = allAvailableLayers.find((layer: any) => layer.id === LAYER_IDS.TROPICAL_TREE_COVER) as any;
 
     if (type === selected) return;
     setSelected(type);
     dispatch(setActiveTreeMosaicLayer(type));
 
     const mapview = mapController.getMapView();
-    mapController.removeMapLayer('TROPICAL_TREE_COVER');
-
+    mapController.removeMapLayer(LAYER_IDS.TROPICAL_TREE_COVER);
+    mapController.updateLayerOpacity(LAYER_IDS.TROPICAL_TREE_COVER, 1);
     const updatedUMDLayer = await LayerFactory(mapview, layerConfig);
+
     mapController._map?.add(updatedUMDLayer);
   };
 
   const handleSelect = async (event: any) => {
-    const layerConfig = allAvailableLayers.find((layer: any) => layer.id === 'TROPICAL_TREE_COVER') as any;
+    const layerConfig = allAvailableLayers.find((layer: any) => layer.id === LAYER_IDS.TROPICAL_TREE_COVER) as any;
 
     const value = Number(event.target.value);
     dispatch(setTreeMosaicHectaresValue(value));
     const mapview = mapController.getMapView();
-    mapController.removeMapLayer('TROPICAL_TREE_COVER');
+    mapController.removeMapLayer(LAYER_IDS.TROPICAL_TREE_COVER);
 
     const updatedUMDLayer = await LayerFactory(mapview, layerConfig);
     mapController._map?.add(updatedUMDLayer);
@@ -98,9 +100,9 @@ const CanopyDensityPicker = (props: CanopyDensityProps): JSX.Element => {
 
   return (
     <div className="canopy-density-picker-wrapper">
-      {props.type !== 'TROPICAL_TREE_COVER' && <span> {displayLabel[0]}</span>}
+      {props.type !== LAYER_IDS.TROPICAL_TREE_COVER && <span> {displayLabel[0]}</span>}
 
-      {props.type === 'TROPICAL_TREE_COVER' && (
+      {props.type === LAYER_IDS.TROPICAL_TREE_COVER && (
         <div className="tropical-tree-cover-toggle-wrapper">
           <div className="toggle-btn">
             <button onClick={() => handleClick('hectare')} className={selected === 'hectare' ? 'active' : ''}>
@@ -132,7 +134,7 @@ const CanopyDensityPicker = (props: CanopyDensityProps): JSX.Element => {
         </div>
       )}
 
-      {props.type !== 'TROPICAL_TREE_COVER' && (
+      {props.type !== LAYER_IDS.TROPICAL_TREE_COVER && (
         <>
           <button
             className="canopy-density-picker"
