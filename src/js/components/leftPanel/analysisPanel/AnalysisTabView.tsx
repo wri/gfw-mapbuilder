@@ -112,82 +112,94 @@ const AnalysisTabView = (props: TabProps): JSX.Element => {
   const DefaultAnalysisContent = (): JSX.Element => (
     <div className="analysis-tab-container">
       <div className="directions">
-        <figure>
-          <figcaption className="title">
-            <h4>{overlappingShapeTitle}</h4>
-          </figcaption>
-          <ol>
-            <li>{overlappingShapeDirections[0]}</li>
-            <li>{overlappingShapeDirections[1]}</li>
-            <li>{overlappingShapeDirections[2]}</li>
-            <li>{overlappingShapeDirections[3]}</li>
-            <li>{overlappingShapeDirections[4]}</li>
-            <li>{overlappingShapeDirections[5]}</li>
-          </ol>
-        </figure>
-        <BaseButton
-          customColorTheme={themeColor}
-          style={{ width: '15rem' }}
-          onClick={() => dispatch(setMultiPolygonSelectionMode(true))}
-        >
-          <SelectionIcon height={18} width={18} fill={'#555'} />
-          {overlappingShapeButton}
-        </BaseButton>
+        <div className="analyze-existing-shape">
+          <figure>
+            <figcaption className="title">
+              <h4>{analyzeExistingShapeTitle}</h4>
+            </figcaption>
+            <ol>
+              {analyzeExistingShapeDirections.map((direction: string, index: number) => (
+                <li key={index}>{direction}</li>
+              ))}
+            </ol>
+          </figure>
+          <PolygonIcon width={100} height={100} customColorTheme={themeColor} />
+        </div>
+
         <Buffer />
-        <figure>
-          <figcaption className="title">
-            <h4>{analyzeExistingShapeTitle}</h4>
-          </figcaption>
-          <ol>
-            {analyzeExistingShapeDirections.map((direction: string, index: number) => (
-              <li key={index}>{direction}</li>
-            ))}
-          </ol>
-        </figure>
-        <PolygonIcon width={100} height={100} customColorTheme={themeColor} />
+        <div className="analyze-your-shape">
+          <figure>
+            <figcaption className="title">
+              <h4>{analyzeYourShapeTitle}</h4>
+            </figcaption>
+            <ol>
+              <li>{returnFirstInstruction()}</li>
+              {analyzeYourShapeDirections.map((direction: string, index: number) => (
+                <li key={index}>{direction}</li>
+              ))}
+            </ol>
+          </figure>
+          <button
+            style={{ backgroundColor: themeColor }}
+            className="orange-button"
+            onClick={(): void => mapController.createPolygonSketch()}
+          >
+            <PenIcon height={25} width={25} fill={'#555'} />
+            {drawButton}
+          </button>
+        </div>
+
         <Buffer />
-        <figure>
-          <figcaption className="title">
-            <h4>{analyzeYourShapeTitle}</h4>
-          </figcaption>
-          <ol>
-            <li>{returnFirstInstruction()}</li>
-            {analyzeYourShapeDirections.map((direction: string, index: number) => (
-              <li key={index}>{direction}</li>
-            ))}
-          </ol>
-        </figure>
-        <button
-          style={{ backgroundColor: themeColor }}
-          className="orange-button"
-          onClick={(): void => mapController.createPolygonSketch()}
-        >
-          <PenIcon height={25} width={25} fill={'#555'} />
-          {drawButton}
-        </button>
-        <Buffer />
-        <figure>
-          <figcaption className="title">
-            <h4>{enterCoordinatesTitle}</h4>
-          </figcaption>
-          <ol>
-            {enterCoordinatesDirections.map((direction: string, index: number) => (
-              <li key={index}>{direction}</li>
-            ))}
-          </ol>
-        </figure>
-        <button
-          style={{ backgroundColor: themeColor }}
-          className="orange-button"
-          onClick={() => dispatch(renderModal('PenWidget-CoordinatesForm'))}
-        >
-          <PlusIcon height={25} width={25} fill={'#000'} />
-          {coordinatesButton}
-        </button>
+
+        <div className="enter-coordinates">
+          <figure>
+            <figcaption className="title">
+              <h4>{enterCoordinatesTitle}</h4>
+            </figcaption>
+            <ol>
+              {enterCoordinatesDirections.map((direction: string, index: number) => (
+                <li key={index}>{direction}</li>
+              ))}
+            </ol>
+          </figure>
+          <button
+            style={{ backgroundColor: themeColor }}
+            className="orange-button"
+            onClick={() => dispatch(renderModal('PenWidget-CoordinatesForm'))}
+          >
+            <PlusIcon height={25} width={25} fill={'#000'} />
+            {coordinatesButton}
+          </button>
+        </div>
+
         <Buffer />
         <div className="drop-shapefile-container">
           <h4>{returnVisitTitle()}</h4>
           <UploadFile />
+        </div>
+        <Buffer />
+        <div className="analyze-overlapping-shapes">
+          <figure>
+            <figcaption className="title">
+              <h4>{overlappingShapeTitle}</h4>
+            </figcaption>
+            <ol>
+              <li>{overlappingShapeDirections[0]}</li>
+              <li>{overlappingShapeDirections[1]}</li>
+              <li>{overlappingShapeDirections[2]}</li>
+              <li>{overlappingShapeDirections[3]}</li>
+              <li>{overlappingShapeDirections[4]}</li>
+              <li>{overlappingShapeDirections[5]}</li>
+            </ol>
+          </figure>
+          <BaseButton
+            customColorTheme={themeColor}
+            style={{ width: '15rem' }}
+            onClick={() => dispatch(setMultiPolygonSelectionMode(true))}
+          >
+            <SelectionIcon height={18} width={18} fill={'#555'} />
+            {overlappingShapeButton}
+          </BaseButton>
         </div>
       </div>
     </div>
