@@ -287,6 +287,7 @@ export async function getRemoteAndServiceLayers(): Promise<any> {
     TREE_COVER_GAIN: 'treeCoverGain',
     TREE_COVER_LOSS: 'treeCoverLoss',
     TREE_COVER_HEIGHT: 'treeCoverHeight',
+    TROPICAL_TREE_COVER: 'tropicalTreeCover',
     GFW_INTEGRATED_ALERTS: 'gfwIntegratedAlertLayer',
     DRY_SPELLS: 'drySpells',
     AIR_QUALITY: 'airQuality',
