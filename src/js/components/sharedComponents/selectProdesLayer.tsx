@@ -41,5 +41,3 @@ const SelectProdesLayer = (): JSX.Element | any => {
 };
 
 export default SelectProdesLayer;
-
-// ?appid=4859e5ef2aba4ababe8e3cc378806a44
