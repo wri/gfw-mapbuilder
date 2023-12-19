@@ -1,6 +1,6 @@
 import React from 'react';
 import { AttributeObject } from './DataTabView';
-import { handleTimestampDate } from './helpers';
+import { checkForPopupImage, handleTimestampDate } from './helpers';
 const attributesDateListToConvert = ['DteApplied', 'DteGranted', 'DteExpires', 'Date', 'Expires'];
 
 interface PopupContentTypes {
@@ -28,10 +28,16 @@ const RenderPopupContent = ({ attributes, fieldNames }: PopupContentTypes) => {
       if (typeof value === 'string' && value?.includes('href')) {
         value = <div dangerouslySetInnerHTML={{ __html: value }}></div>;
       }
+
+      const isImage = checkForPopupImage(value);
       return (
         <tr key={i}>
-          <td className="first-cell">{label}</td>
-          <td className="second-cell">{updatedValue}</td>
+          <div className="label-value-wrapper">
+            <td className={isImage ? 'max-width first-cell' : 'first-cell'}>{label}</td>
+            <td className="second-cell">{isImage ? '' : updatedValue}</td>
+          </div>
+
+          {isImage && <img alt={label} className="image-popup" src={value} />}
         </tr>
       );
     } else {

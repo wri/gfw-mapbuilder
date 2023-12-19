@@ -14,7 +14,12 @@ import BaseButton from '../../ui/BaseButton';
 import styled from 'styled-components';
 import { addToMultiPolygonLayer, clearGraphics, clearUserGraphics } from '../../../helpers/MapGraphics';
 import { handleCustomColorTheme } from '../../../../utils';
-import { getLayerPopupIfAvailable, setAttributesToLocalStorage, updateContentProperties } from './helpers/index';
+import {
+  checkForPopupImage,
+  getLayerPopupIfAvailable,
+  setAttributesToLocalStorage,
+  updateContentProperties,
+} from './helpers/index';
 import RenderPopupContent from './RenderPopupContent';
 
 export interface AttributeObject {
@@ -117,10 +122,17 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
                 newFields === null &&
                 Object.keys(props.attributes).map((attribute, i) => {
                   const value = props.attributes[attribute];
+
+                  const isImage = checkForPopupImage(value);
+
+                  const updatedValue = value ? value : '';
                   return (
                     <tr key={i}>
-                      <td className="first-cell">{attribute}</td>
-                      <td className="second-cell">{value ? value : ''}</td>
+                      <div className="label-value-wrapper">
+                        <td className={isImage ? 'max-width first-cell' : 'first-cell'}>{attribute}</td>
+                        <td className="second-cell">{isImage ? '' : updatedValue}</td>
+                      </div>
+                      {isImage && <img alt={attribute} className="image-popup" src={value} />}
                     </tr>
                   );
                 })}

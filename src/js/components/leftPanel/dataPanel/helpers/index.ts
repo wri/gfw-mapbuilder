@@ -25,6 +25,8 @@ interface SetLocalStorageAttributesParams extends AttributesToDisplayParams {
   layerTitle: string;
 }
 
+const IMAGE_TYPES = ['jpg', 'png', 'jpeg', 'webp'];
+
 const convertTimestampToStringDate = (value: number) => {
   return new Date(value).toLocaleString();
 };
@@ -118,4 +120,17 @@ export const setAttributesToLocalStorage = (params: SetLocalStorageAttributesPar
   const { layerTitle } = params;
   const attributes = getAttributesToDisplay(params);
   localStorage.setItem('shareAttributes', JSON.stringify({ layerTitle, attributes }));
+};
+
+export const checkForPopupImage = (value: string | number | null) => {
+  if (value && typeof value === 'string') {
+    const splitStr = value?.split('.');
+    if (splitStr.length <= 1) return false;
+
+    const getLastItem = splitStr[splitStr.length - 1];
+    if (IMAGE_TYPES.includes(getLastItem)) {
+      return true;
+    }
+  }
+  return false;
 };
