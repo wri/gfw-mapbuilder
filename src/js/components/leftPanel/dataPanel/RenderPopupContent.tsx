@@ -1,6 +1,6 @@
 import React from 'react';
 import { AttributeObject } from './DataTabView';
-import { checkForPopupImage, handleTimestampDate } from './helpers';
+import { checkForPopupImage, checkForPopupVideos, handleTimestampDate } from './helpers';
 const attributesDateListToConvert = ['DteApplied', 'DteGranted', 'DteExpires', 'Date', 'Expires'];
 
 interface PopupContentTypes {
@@ -8,7 +8,32 @@ interface PopupContentTypes {
   fieldNames: any;
 }
 
-const RenderPopupContent = ({ attributes, fieldNames }: PopupContentTypes) => {
+const RenderAttachements = ({ attributes, fieldNames }: PopupContentTypes) => {
+  return fieldNames?.map((field, i) => {
+    //Grab attribute value irrespective if fieldName is appropriately cased!
+
+    const attributeKey = Object.keys(attributes).find((a) => a.toLowerCase() === field.fieldName.toLowerCase());
+    if (attributeKey) {
+      // Use label unless it is not set, then default to fieldName
+      const label = field?.label || field.label !== '' ? field.label : attributeKey;
+      let value = attributes[attributeKey] as any;
+
+      const isImage = checkForPopupImage(value);
+      const isVideo = checkForPopupVideos(value);
+
+      return (
+        <div>
+          {isImage ? <img alt={label} className="image-popup" src={value} /> : null}
+          {isVideo ? <video loop={true} autoPlay={true} className="image-popup" src={value} /> : null}
+        </div>
+      );
+    } else {
+      return null;
+    }
+  });
+};
+
+const RenderPopup = ({ attributes, fieldNames }: PopupContentTypes) => {
   return fieldNames?.map((field, i) => {
     //Grab attribute value irrespective if fieldName is appropriately cased!
 
@@ -30,20 +55,39 @@ const RenderPopupContent = ({ attributes, fieldNames }: PopupContentTypes) => {
       }
 
       const isImage = checkForPopupImage(value);
-      return (
-        <tr key={i}>
-          <div className="label-value-wrapper">
-            <td className={isImage ? 'max-width first-cell' : 'first-cell'}>{label}</td>
-            <td className="second-cell">{isImage ? '' : updatedValue}</td>
-          </div>
+      const isVideo = checkForPopupVideos(value);
 
-          {isImage && <img alt={label} className="image-popup" src={value} />}
-        </tr>
+      // use module operator to determine if odd or even and apply classname based on that
+      const className = i % 2 === 1 ? 'odd' : '';
+      return (
+        <div className="table-container">
+          <tr className={className} key={i}>
+            <td className={'first-cell'}>{label}</td>
+            <td className="second-cell">
+              {isImage || isVideo ? (
+                <a target="_blank" href={updatedValue as string}>
+                  {label}
+                </a>
+              ) : (
+                updatedValue
+              )}
+            </td>
+          </tr>
+        </div>
       );
     } else {
       return null;
     }
   });
+};
+
+const RenderPopupContent = ({ attributes, fieldNames }: PopupContentTypes) => {
+  return (
+    <>
+      <RenderAttachements attributes={attributes} fieldNames={fieldNames} />
+      <RenderPopup attributes={attributes} fieldNames={fieldNames} />
+    </>
+  );
 };
 
 export default RenderPopupContent;

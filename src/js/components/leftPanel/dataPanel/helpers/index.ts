@@ -26,6 +26,7 @@ interface SetLocalStorageAttributesParams extends AttributesToDisplayParams {
 }
 
 const IMAGE_TYPES = ['jpg', 'png', 'jpeg', 'webp'];
+const VIDEO_TYPES = ['mp4', 'mov'];
 
 const convertTimestampToStringDate = (value: number) => {
   return new Date(value).toLocaleString();
@@ -129,6 +130,22 @@ export const checkForPopupImage = (value: string | number | null) => {
 
     const getLastItem = splitStr[splitStr.length - 1];
     if (IMAGE_TYPES.includes(getLastItem)) {
+      return true;
+    }
+  }
+  return false;
+};
+
+export const checkForPopupVideos = (value: string | null) => {
+  if (value && typeof value === 'string') {
+    const splitStr = value?.split('.');
+    if (splitStr.length <= 1) return false;
+
+    const getLastItem = splitStr[splitStr.length - 1];
+    console.log('getLastItem', getLastItem);
+    console.log('splitStr', splitStr);
+    console.log('value', { value });
+    if (VIDEO_TYPES.includes(getLastItem)) {
       return true;
     }
   }
