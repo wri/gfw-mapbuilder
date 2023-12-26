@@ -64,7 +64,6 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
     if (!activeLayerInfo) return <></>;
 
     const getLayerPopup = getLayerPopupIfAvailable(leftPanel, activeLayerInfo.layerID);
-    console.log('leftPanel', leftPanel);
     const newFields = updateContentProperties(getLayerPopup);
 
     //If layer has sublayers, we are using sublayerID to compare, otherwise it is layerID

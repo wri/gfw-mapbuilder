@@ -142,9 +142,6 @@ export const checkForPopupVideos = (value: string | null) => {
     if (splitStr.length <= 1) return false;
 
     const getLastItem = splitStr[splitStr.length - 1];
-    console.log('getLastItem', getLastItem);
-    console.log('splitStr', splitStr);
-    console.log('value', { value });
     if (VIDEO_TYPES.includes(getLastItem)) {
       return true;
     }
