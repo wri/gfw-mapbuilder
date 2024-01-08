@@ -86,6 +86,12 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
       }
     }
 
+    const generateDefaultFieldNames = (attributes: any) => {
+      const fieldNames = Object.keys(attributes).map((attribute) => {
+        return { fieldName: attribute, label: attribute, format: null };
+      });
+      return fieldNames;
+    };
     const LayerAttributesElement = (props: { activeLayerInfo: any; activeLayerIndex: number }): JSX.Element => {
       const page = activeFeatureIndex[1];
 
@@ -107,7 +113,9 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
         const fieldNames = activeLayerInfo?.fieldNames;
 
         setAttributesToLocalStorage({ layerTitle, attributes, fieldNames, newFields });
+        const t = generateDefaultFieldNames(attributes);
 
+        console.log('check hereee', { attributes, fieldNames, newFields, activeLayerInfo });
         return (
           <table cellPadding={0} cellSpacing={0}>
             <tbody>
@@ -118,24 +126,8 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
                 <RenderPopupContent attributes={attributes} fieldNames={fieldNames} />
               )}
               {/* render deafult properties if none of the avobe is true */}
-              {!fieldNames &&
-                newFields === null &&
-                Object.keys(props.attributes).map((attribute, i) => {
-                  const value = props.attributes[attribute];
 
-                  const isImage = checkForPopupImage(value);
-
-                  const updatedValue = value ? value : '';
-                  return (
-                    <tr key={i}>
-                      <div className="label-value-wrapper">
-                        <td className={isImage ? 'max-width first-cell' : 'first-cell'}>{attribute}</td>
-                        <td className="second-cell">{isImage ? '' : updatedValue}</td>
-                      </div>
-                      {isImage && <img alt={attribute} className="image-popup" src={value} />}
-                    </tr>
-                  );
-                })}
+              {!fieldNames && newFields === null && <RenderPopupContent attributes={attributes} fieldNames={t} />}
             </tbody>
           </table>
         );
@@ -296,7 +288,7 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
           </TopWrap>
           <div className="layer-title">{layerTitle}</div>
           <hr />
-
+          {console.log('props 300', props)}
           <AttributeTable attributes={props.activeLayerInfo.features[page].attributes} />
         </div>
       );
