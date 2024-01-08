@@ -213,8 +213,6 @@ export class MapController {
           const clickGeo = event.mapPoint;
           const userFeatLayer = this._map?.findLayerById('user_features') as any;
 
-          console.log('what are user features?', userFeatLayer);
-
           if (userFeatLayer && userFeatLayer?.graphics?.items.length) {
             const activeOutlineColor = [115, 252, 253];
             const inactiveOutlineColor = [3, 188, 255];
@@ -310,12 +308,10 @@ export class MapController {
             };
 
             newRemoteLayerObject['visible'] = determineLayerVisibility(remoteLayerObject, layerInfosFromURL);
-            console.log('what is reamore layer object? 354', remoteLayerObject);
 
             //dealing with GFW API layers
             //TODO: This needs a major rethink/rework
             if (remoteLayerObject.dataLayer) {
-              console.log('is this runinggg, line 318 ', remoteLayerObject);
               newRemoteLayerObject.popup = remoteLayerObject.layer.popup;
               newRemoteLayerObject.sublabel = remoteLayerObject.layer.sublabel;
               newRemoteLayerObject.id = remoteLayerObject.dataLayer.id;
@@ -353,7 +349,6 @@ export class MapController {
                 newRemoteLayerObject.legendInfo = await this.retrieveLegendInfo(remoteLayerObject);
               }
 
-              // console.log('what is reamore layer object? 354', remoteLayerObject);
               newRemoteLayerObject.id = remoteLayerObject.id;
               newRemoteLayerObject.title = remoteLayerObject.label[appState.selectedLanguage]
                 ? remoteLayerObject.label[appState.selectedLanguage]
@@ -377,8 +372,6 @@ export class MapController {
               newRemoteLayerObject.versionHeaderText = remoteLayerObject.versionHeaderText;
               newRemoteLayerObject.dashboardURL = remoteLayerObject?.dashboardURL;
               newRemoteLayerObject.popup = remoteLayerObject.popup;
-
-              console.log('remoteLayerObject 381', remoteLayerObject);
             }
 
             remoteLayerObjects.push(newRemoteLayerObject);

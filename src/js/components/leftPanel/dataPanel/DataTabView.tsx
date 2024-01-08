@@ -113,9 +113,8 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
         const fieldNames = activeLayerInfo?.fieldNames;
 
         setAttributesToLocalStorage({ layerTitle, attributes, fieldNames, newFields });
-        const t = generateDefaultFieldNames(attributes);
+        const defaultFieldNames = generateDefaultFieldNames(attributes);
 
-        console.log('check hereee', { attributes, fieldNames, newFields, activeLayerInfo });
         return (
           <table cellPadding={0} cellSpacing={0}>
             <tbody>
@@ -127,7 +126,9 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
               )}
               {/* render deafult properties if none of the avobe is true */}
 
-              {!fieldNames && newFields === null && <RenderPopupContent attributes={attributes} fieldNames={t} />}
+              {!fieldNames && newFields === null && (
+                <RenderPopupContent attributes={attributes} fieldNames={defaultFieldNames} />
+              )}
             </tbody>
           </table>
         );
@@ -288,7 +289,6 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
           </TopWrap>
           <div className="layer-title">{layerTitle}</div>
           <hr />
-          {console.log('props 300', props)}
           <AttributeTable attributes={props.activeLayerInfo.features[page].attributes} />
         </div>
       );

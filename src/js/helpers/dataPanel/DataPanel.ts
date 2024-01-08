@@ -138,7 +138,6 @@ async function fetchQueryFeatures(
     distance: 0.02 * view.resolution,
   };
 
-  console.log('layer form line 141', layer);
   const attributesToFetch = getAttributesToFetch(layer);
   fieldNames = attributesToFetch;
   const { layerFields: allLayerFields, displayField } = await getAllLayerFields(layer);
@@ -156,7 +155,6 @@ async function fetchQueryFeatures(
   queryParams.outFields = ['*'];
   try {
     const featureResults = await layer.queryFeatures(queryParams);
-    console.log('featureResults', featureResults);
     //Ignore empty results
     if (featureResults.features.length > 0) {
       featureResult = featureResults.features.map((f: any) => {
@@ -198,7 +196,6 @@ export async function queryLayersForFeatures(
     )
     .toArray();
 
-  console.log('All layers visible layers', allLayersVisibleLayers);
   if (allLayersVisibleLayers) {
     for await (const layer of allLayersVisibleLayers) {
       //for each layer we check if it has subs or not
@@ -224,7 +221,6 @@ export async function queryLayersForFeatures(
         if (layer.type === 'feature' || layer.type === 'csv' || layer.type === 'geojson' || layer.type === 'scene') {
           //deal with queryFeatures() approach
           const { features, fieldNames, displayField } = await fetchQueryFeatures(layer, event, mapview);
-          console.log('response heehehehehe', { features, fieldNames, displayField });
           if (features.length > 0) {
             layerFeatureResults.push({
               layerID: layer.id,
@@ -283,7 +279,7 @@ export async function queryLayersForFeatures(
       }
     }
   }
-  console.log('layerFeatureResults', layerFeatureResults);
+
   //Save all features to the redux store
   store.dispatch(setActiveFeatures(layerFeatureResults));
 
