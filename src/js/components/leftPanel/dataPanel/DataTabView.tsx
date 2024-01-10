@@ -86,12 +86,6 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
       }
     }
 
-    const generateDefaultFieldNames = (attributes: any) => {
-      const fieldNames = Object.keys(attributes).map((attribute) => {
-        return { fieldName: attribute, label: attribute, format: null };
-      });
-      return fieldNames;
-    };
     const LayerAttributesElement = (props: { activeLayerInfo: any; activeLayerIndex: number }): JSX.Element => {
       const page = activeFeatureIndex[1];
 
