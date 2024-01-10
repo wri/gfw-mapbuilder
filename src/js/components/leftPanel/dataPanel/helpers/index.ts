@@ -25,6 +25,10 @@ interface SetLocalStorageAttributesParams extends AttributesToDisplayParams {
   layerTitle: string;
 }
 
+interface IAttributes {
+  [key: string]: number | string | null;
+}
+
 const IMAGE_TYPES = ['jpg', 'png', 'jpeg', 'webp'];
 const VIDEO_TYPES = ['mp4', 'mov'];
 
@@ -147,4 +151,11 @@ export const checkForPopupVideos = (value: string | null) => {
     }
   }
   return false;
+};
+
+export const generateDefaultFieldNames = (attributes: IAttributes) => {
+  const fieldNames = Object.keys(attributes).map((attribute) => {
+    return { fieldName: attribute, label: attribute, format: null };
+  });
+  return fieldNames;
 };
