@@ -15,7 +15,6 @@ import styled from 'styled-components';
 import { addToMultiPolygonLayer, clearGraphics, clearUserGraphics } from '../../../helpers/MapGraphics';
 import { handleCustomColorTheme } from '../../../../utils';
 import {
-  checkForPopupImage,
   generateDefaultFieldNames,
   getLayerPopupIfAvailable,
   setAttributesToLocalStorage,
