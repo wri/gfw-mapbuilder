@@ -16,6 +16,7 @@ import { addToMultiPolygonLayer, clearGraphics, clearUserGraphics } from '../../
 import { handleCustomColorTheme } from '../../../../utils';
 import {
   checkForPopupImage,
+  generateDefaultFieldNames,
   getLayerPopupIfAvailable,
   setAttributesToLocalStorage,
   updateContentProperties,
