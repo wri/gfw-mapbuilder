@@ -114,6 +114,7 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
 
         setAttributesToLocalStorage({ layerTitle, attributes, fieldNames, newFields });
         const defaultFieldNames = generateDefaultFieldNames(attributes);
+        console.log('props', props);
 
         return (
           <table cellPadding={0} cellSpacing={0}>
@@ -288,6 +289,7 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
             </div>
           </TopWrap>
           <div className="layer-title">{layerTitle}</div>
+          {console.log('props from 292', props)}
           <hr />
           <AttributeTable attributes={props.activeLayerInfo.features[page].attributes} />
         </div>
