@@ -900,14 +900,15 @@
         background-color: #f2f2f2;
       }
       td.first-cell {
-        max-width: 1px; //this is to make break word work inside a table cell
         font-weight: bold;
         padding: 10px;
+        max-width: 60%;
       }
       td.second-cell {
         max-width: 1px; //this is to make break word work inside a table cell
         text-align: right;
         padding: 10px;
+        max-width: 35%;
       }
     }
     .layer-control-container {
@@ -1456,4 +1457,35 @@
       height: 450px;
     }
   }
+}
+
+.table-container {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  width: 100%;
+
+  tr {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+
+    td {
+      a {
+        color: blue;
+      }
+    }
+
+    &.odd {
+      background: #f2f2f2;
+    }
+  }
+}
+
+.image-popup {
+  display: block;
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  margin-bottom: 0.5rem;
 }

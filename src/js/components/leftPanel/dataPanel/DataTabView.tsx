@@ -14,7 +14,12 @@ import BaseButton from '../../ui/BaseButton';
 import styled from 'styled-components';
 import { addToMultiPolygonLayer, clearGraphics, clearUserGraphics } from '../../../helpers/MapGraphics';
 import { handleCustomColorTheme } from '../../../../utils';
-import { getLayerPopupIfAvailable, setAttributesToLocalStorage, updateContentProperties } from './helpers/index';
+import {
+  generateDefaultFieldNames,
+  getLayerPopupIfAvailable,
+  setAttributesToLocalStorage,
+  updateContentProperties,
+} from './helpers/index';
 import RenderPopupContent from './RenderPopupContent';
 
 export interface AttributeObject {
@@ -102,6 +107,7 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
         const fieldNames = activeLayerInfo?.fieldNames;
 
         setAttributesToLocalStorage({ layerTitle, attributes, fieldNames, newFields });
+        const defaultFieldNames = generateDefaultFieldNames(attributes);
 
         return (
           <table cellPadding={0} cellSpacing={0}>
@@ -113,17 +119,10 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
                 <RenderPopupContent attributes={attributes} fieldNames={fieldNames} />
               )}
               {/* render deafult properties if none of the avobe is true */}
-              {!fieldNames &&
-                newFields === null &&
-                Object.keys(props.attributes).map((attribute, i) => {
-                  const value = props.attributes[attribute];
-                  return (
-                    <tr key={i}>
-                      <td className="first-cell">{attribute}</td>
-                      <td className="second-cell">{value ? value : ''}</td>
-                    </tr>
-                  );
-                })}
+
+              {!fieldNames && newFields === null && (
+                <RenderPopupContent attributes={attributes} fieldNames={defaultFieldNames} />
+              )}
             </tbody>
           </table>
         );
@@ -284,7 +283,6 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
           </TopWrap>
           <div className="layer-title">{layerTitle}</div>
           <hr />
-
           <AttributeTable attributes={props.activeLayerInfo.features[page].attributes} />
         </div>
       );

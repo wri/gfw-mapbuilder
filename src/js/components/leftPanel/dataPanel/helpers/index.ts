@@ -25,6 +25,9 @@ interface SetLocalStorageAttributesParams extends AttributesToDisplayParams {
   layerTitle: string;
 }
 
+const IMAGE_TYPES = ['jpg', 'png', 'jpeg', 'webp'];
+const VIDEO_TYPES = ['mp4', 'mov'];
+
 const convertTimestampToStringDate = (value: number) => {
   return new Date(value).toLocaleString();
 };
@@ -118,4 +121,37 @@ export const setAttributesToLocalStorage = (params: SetLocalStorageAttributesPar
   const { layerTitle } = params;
   const attributes = getAttributesToDisplay(params);
   localStorage.setItem('shareAttributes', JSON.stringify({ layerTitle, attributes }));
+};
+
+export const checkForPopupImage = (value: string | number | null) => {
+  if (value && typeof value === 'string') {
+    const splitStr = value?.split('.');
+    if (splitStr.length <= 1) return false;
+
+    const getLastItem = splitStr[splitStr.length - 1];
+    if (IMAGE_TYPES.includes(getLastItem)) {
+      return true;
+    }
+  }
+  return false;
+};
+
+export const checkForPopupVideos = (value: string | null) => {
+  if (value && typeof value === 'string') {
+    const splitStr = value?.split('.');
+    if (splitStr.length <= 1) return false;
+
+    const getLastItem = splitStr[splitStr.length - 1];
+    if (VIDEO_TYPES.includes(getLastItem)) {
+      return true;
+    }
+  }
+  return false;
+};
+
+export const generateDefaultFieldNames = (attributes: any) => {
+  const fieldNames = Object.keys(attributes).map((attribute) => {
+    return { fieldName: attribute, label: attribute, format: null };
+  });
+  return fieldNames;
 };

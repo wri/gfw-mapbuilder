@@ -279,6 +279,7 @@ export async function queryLayersForFeatures(
       }
     }
   }
+
   //Save all features to the redux store
   store.dispatch(setActiveFeatures(layerFeatureResults));
 
