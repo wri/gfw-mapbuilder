@@ -20,6 +20,7 @@ export async function fetchDownloadInfo(url: string): Promise<any> {
   return await fetch(url)
     .then((response: any) => response.json())
     .then((data: any) => {
+      console.log('response from fetchDownloadInfo', data);
       const response: DownloadResponse = {
         chartTitle: undefined,
         downloadUrl: undefined,
