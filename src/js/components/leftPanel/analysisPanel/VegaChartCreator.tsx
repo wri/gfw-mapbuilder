@@ -27,7 +27,6 @@ export function generateAndAttachVegaChart(
       .run()
       .toImageURL('png')
       .then((url: string) => {
-        console.log('then this is what runs??', { url });
         callback(url);
       })
       .catch((e) => {
@@ -70,13 +69,6 @@ export function generateAndAttachVegaChart(
     fetch(url)
       .then((res) => res.json())
       .then((data) => {
-        console.log('check from VegaChart', {
-          data,
-          url,
-          spec,
-          queryParams,
-          analysisSuffix,
-        });
         const resizeWidthSignal = {
           name: 'width',
           update: 'containerSize()[0]*0.90',

@@ -128,6 +128,3 @@ export function generateWidgetURL({
   }
   return baseURL;
 }
-
-// c8f936656fcc66ae5a58878178984709
-// 0e5a6c728a633116642b0b8a687f73dd

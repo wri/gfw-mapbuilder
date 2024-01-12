@@ -130,7 +130,7 @@ const BaseAnalysis = (): JSX.Element => {
     setChartLoading(true);
     setVegaSpec(null);
     const mod = defaultAnalysisModules.find((module) => module.analysisId === selectedAnalysis) as AnalysisModule;
-    console.log('mod', mod);
+
     if (!mod) return;
     setBaseConfig(mod);
     const activeLayer = activeFeatures[activeFeatureIndex[0]];
@@ -147,17 +147,16 @@ const BaseAnalysis = (): JSX.Element => {
         endDate: analysisDateRange[1],
         density: density,
       });
-      console.log('widgetURL', { widgetURL, activeFeature, analysisDateRange, density });
+
       fetchGFWWidgetConfig(widgetURL).then((res) => {
         //Send attributes over for processing
         setVegaSpec(res);
-        console.log('response,', res);
+
         //grab download urls if they exist
         const widgetConfigData = res.data;
         const downloadUrl = widgetConfigData.find((e: any) => e.name === 'table');
         if (!downloadUrl || !downloadUrl?.url) return;
         fetchDownloadInfo(downloadUrl.url).then((res: any) => {
-          console.log('returned response?', res);
           setChartDownTitle(res?.chartTitle ? res.chartTitle : '');
           setChartDownloadURL(res?.downloadUrl ? res.downloadUrl : '');
         });
