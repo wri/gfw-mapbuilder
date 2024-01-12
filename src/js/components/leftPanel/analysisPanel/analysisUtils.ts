@@ -20,14 +20,13 @@ export async function fetchDownloadInfo(url: string): Promise<any> {
   return await fetch(url)
     .then((response: any) => response.json())
     .then((data: any) => {
-      console.log('response from fetchDownloadInfo', data);
       const response: DownloadResponse = {
         chartTitle: undefined,
         downloadUrl: undefined,
       };
-      response.chartTitle = data.data && data.data.type ? data.data.type + '-analysis.png' : 'analysis.png';
+      response.chartTitle = data.data && data.data?.type ? data.data?.type + '-analysis.png' : 'analysis.png';
       //unclear why are we matching 'month' here but that's how it was done in 3x
-      if (data.data.attributes.downloadUrls?.csv?.includes('month')) {
+      if (data.data.attributes?.downloadUrls?.csv?.includes('month')) {
         response.downloadUrl = 'https://production-api.globalforestwatch.org' + data.data.attributes.downloadUrls.csv;
       }
       return response;
@@ -129,3 +128,6 @@ export function generateWidgetURL({
   }
   return baseURL;
 }
+
+// c8f936656fcc66ae5a58878178984709
+// 0e5a6c728a633116642b0b8a687f73dd

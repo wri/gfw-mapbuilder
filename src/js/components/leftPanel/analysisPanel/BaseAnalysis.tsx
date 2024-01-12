@@ -147,7 +147,7 @@ const BaseAnalysis = (): JSX.Element => {
         endDate: analysisDateRange[1],
         density: density,
       });
-      console.log('widgetURL', { widgetURL });
+      console.log('widgetURL', { widgetURL, activeFeature, analysisDateRange, density });
       fetchGFWWidgetConfig(widgetURL).then((res) => {
         //Send attributes over for processing
         setVegaSpec(res);
