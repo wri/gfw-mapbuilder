@@ -24,9 +24,9 @@ export async function fetchDownloadInfo(url: string): Promise<any> {
         chartTitle: undefined,
         downloadUrl: undefined,
       };
-      response.chartTitle = data.data && data.data.type ? data.data.type + '-analysis.png' : 'analysis.png';
+      response.chartTitle = data.data && data.data?.type ? data.data?.type + '-analysis.png' : 'analysis.png';
       //unclear why are we matching 'month' here but that's how it was done in 3x
-      if (data.data.attributes.downloadUrls?.csv?.includes('month')) {
+      if (data.data.attributes?.downloadUrls?.csv?.includes('month')) {
         response.downloadUrl = 'https://production-api.globalforestwatch.org' + data.data.attributes.downloadUrls.csv;
       }
       return response;

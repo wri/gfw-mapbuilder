@@ -130,6 +130,7 @@ const BaseAnalysis = (): JSX.Element => {
     setChartLoading(true);
     setVegaSpec(null);
     const mod = defaultAnalysisModules.find((module) => module.analysisId === selectedAnalysis) as AnalysisModule;
+
     if (!mod) return;
     setBaseConfig(mod);
     const activeLayer = activeFeatures[activeFeatureIndex[0]];
@@ -146,9 +147,11 @@ const BaseAnalysis = (): JSX.Element => {
         endDate: analysisDateRange[1],
         density: density,
       });
+
       fetchGFWWidgetConfig(widgetURL).then((res) => {
         //Send attributes over for processing
         setVegaSpec(res);
+
         //grab download urls if they exist
         const widgetConfigData = res.data;
         const downloadUrl = widgetConfigData.find((e: any) => e.name === 'table');
