@@ -287,7 +287,6 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
         </div>
       );
     };
-    console.log('what are props outside 296', props);
 
     //TODO: needs to be active language aware!
     return (
