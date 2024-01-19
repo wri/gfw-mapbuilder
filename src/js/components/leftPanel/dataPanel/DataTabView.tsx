@@ -110,7 +110,7 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
         const defaultFieldNames = generateDefaultFieldNames(attributes);
 
         return (
-          <table cellPadding={0} cellSpacing={0}>
+          <table className="table-container" cellPadding={0} cellSpacing={0}>
             <tbody>
               {/* if hosted layer has popup properties available then display labels defined in popup */}
               {newFields !== null && <RenderPopupContent attributes={attributes} fieldNames={newFields} />}
@@ -287,6 +287,7 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
         </div>
       );
     };
+    console.log('what are props outside 296', props);
 
     //TODO: needs to be active language aware!
     return (

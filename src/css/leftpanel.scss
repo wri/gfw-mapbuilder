@@ -110,7 +110,9 @@
     }
 
     table {
-      width: 15rem;
+      // width: 15rem;
+      // border: 1px solid green;
+      // width: 100%;
 
       .file-name {
         max-width: 1rem;
@@ -902,13 +904,14 @@
       td.first-cell {
         font-weight: bold;
         padding: 10px;
-        max-width: 60%;
+        width: 40%;
+        word-break: break-all;
       }
       td.second-cell {
-        max-width: 1px; //this is to make break word work inside a table cell
         text-align: right;
         padding: 10px;
-        max-width: 35%;
+        width: 60%;
+        word-break: break-all;
       }
     }
     .layer-control-container {
@@ -1460,10 +1463,8 @@
 }
 
 .table-container {
-  display: flex;
-  justify-content: space-between;
   font-size: 13px;
-  width: 100%;
+  max-width: 100%;
 
   tr {
     width: 100%;
