@@ -73,10 +73,18 @@ export const handleTimestampDate = (params: TimestampDateParams) => {
   return value;
 };
 
-export const updateContentProperties = (content: ContentParams | null) => {
+export const updateContentProperties = (content: ContentParams | null, lang: string) => {
   if (!content) return null;
 
-  const fields = content.content.en;
+  let defaultLang = 'en';
+
+  let fields;
+  if (content.content[lang]) {
+    fields = content.content[lang];
+  } else {
+    // if lang is not available, default to english
+    fields = content.content[defaultLang];
+  }
 
   return fields.map((field) => {
     const { label, fieldExpression } = field;

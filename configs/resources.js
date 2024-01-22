@@ -548,14 +548,14 @@ export default {
                   label: 'Photo One',
                   fieldExpression: 'Photo_1',
                 },
-                {
-                  label: 'Photo Two',
-                  fieldExpression: 'Photo_2',
-                },
-                {
-                  label: 'Video One',
-                  fieldExpression: 'Video_1',
-                },
+                // {
+                //   label: 'Photo Two',
+                //   fieldExpression: 'Photo_2',
+                // },
+                // {
+                //   label: 'Video One',
+                //   fieldExpression: 'Video_1',
+                // },
               ],
             },
           },
