@@ -54,6 +54,7 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
   const multiPolygonSelection = useSelector((store: RootState) => store.appState.multiPolygonSelectionMode);
   const analysisFeatureList = useSelector((store: RootState) => store.appState.analysisFeatureList);
   const activeMultiInput = useSelector((store: RootState) => store.appState.activeMultiInput);
+  const selectedLanguage = useSelector((state: RootState) => state.appState.selectedLanguage);
 
   const themeColor = handleCustomColorTheme(customColorTheme);
   const leftPanel = useSelector((store: RootState) => store.appSettings.layerPanel);
@@ -64,7 +65,7 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
     if (!activeLayerInfo) return <></>;
 
     const getLayerPopup = getLayerPopupIfAvailable(leftPanel, activeLayerInfo.layerID);
-    const newFields = updateContentProperties(getLayerPopup);
+    const newFields = updateContentProperties(getLayerPopup, selectedLanguage);
 
     //If layer has sublayers, we are using sublayerID to compare, otherwise it is layerID
     function findLayer(f: LayerFeatureResult): boolean {
@@ -110,7 +111,7 @@ const DataTabView = (props: DataTabProps): JSX.Element => {
         const defaultFieldNames = generateDefaultFieldNames(attributes);
 
         return (
-          <table cellPadding={0} cellSpacing={0}>
+          <table className="table-container" cellPadding={0} cellSpacing={0}>
             <tbody>
               {/* if hosted layer has popup properties available then display labels defined in popup */}
               {newFields !== null && <RenderPopupContent attributes={attributes} fieldNames={newFields} />}

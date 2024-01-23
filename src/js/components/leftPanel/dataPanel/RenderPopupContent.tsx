@@ -60,7 +60,7 @@ const RenderPopup = ({ attributes, fieldNames }: PopupContentTypes) => {
       // use module operator to determine if odd or even and apply classname based on that
       const className = i % 2 === 1 ? 'odd' : '';
       return (
-        <div className="table-container">
+        <div>
           <tr className={className} key={i}>
             <td className={'first-cell'}>{label}</td>
             <td className="second-cell">

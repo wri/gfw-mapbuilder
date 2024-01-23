@@ -21,6 +21,24 @@ interface AttributesToDisplayParams {
   newFields: any;
 }
 
+export interface IContent {
+  label: string;
+  fieldExpression: string;
+}
+
+export interface IPopup {
+  title: { en: string };
+  content: { en: IContent[] };
+}
+
+export interface ILayer {
+  id: string;
+  label?: { en: string };
+  popup?: IPopup;
+  type: string;
+  url: string;
+}
+
 interface SetLocalStorageAttributesParams extends AttributesToDisplayParams {
   layerTitle: string;
 }
@@ -55,10 +73,18 @@ export const handleTimestampDate = (params: TimestampDateParams) => {
   return value;
 };
 
-export const updateContentProperties = (content: ContentParams | null) => {
+export const updateContentProperties = (content: ContentParams | null, lang: string) => {
   if (!content) return null;
 
-  const fields = content.content.en;
+  let defaultLang = 'en';
+
+  let fields;
+  if (content.content[lang]) {
+    fields = content.content[lang];
+  } else {
+    // if lang is not available, default to english
+    fields = content.content[defaultLang];
+  }
 
   return fields.map((field) => {
     const { label, fieldExpression } = field;
@@ -73,15 +99,21 @@ export const updateContentProperties = (content: ContentParams | null) => {
  * @returns popup object or null
  */
 export const getLayerPopupIfAvailable = (hostedLayers: any, layerId: string) => {
-  if (hostedLayers?.HOSTED_LAYERS) {
-    const layers = hostedLayers.HOSTED_LAYERS.layers;
-    const findById = layers.find((layer: any) => layer.id === layerId);
-    if (findById) {
-      return findById?.popup ? findById.popup : null;
+  let popup: IPopup | null = null;
+
+  for (const property in hostedLayers) {
+    if (hostedLayers[property]?.layers) {
+      const layers = hostedLayers[property].layers as ILayer[];
+
+      layers.forEach((layer) => {
+        if (layer.id === layerId) {
+          popup = layer?.popup ? layer.popup : null;
+          return popup;
+        }
+      });
     }
-    return null;
   }
-  return null;
+  return popup;
 };
 
 export const getAttributesToDisplay = (params: AttributesToDisplayParams) => {
