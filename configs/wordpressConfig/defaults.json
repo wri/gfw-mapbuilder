@@ -36,6 +36,7 @@
     "iso": "",
     "viirsFires": false,
     "intactForests": false,
+    "inpeProdes": false,
     "primaryForests": false,
     "forma": false,
     "aboveGroundBiomass": false,
@@ -51,6 +52,7 @@
     "treeCover": false,
     "treeCoverGain": false,
     "treeCoverLoss": false,
+    "tropicalTreeCover": false,
     "treeMosaicLandscapes": false,
     "forestCarbonGrossRemovals": false,
     "forestCarbonGrossEmissions": false,
@@ -212,6 +214,18 @@
             "type": "remoteDataLayer",
             "uuid": "440e53d0-36b3-47ad-993a-1c2018c3942c",
             "groupId": "GROUP_LCD"
+          },
+          {
+            "id": "INPE_CERRADO_PRODES",
+            "order": 11,
+            "type": "remoteDataLayer",
+            "uuid": "a2d9e60f-b4f6-4e56-8100-00fb3da2cf8e"
+          },
+          {
+            "id": "INPE_AMAZON_PRODES",
+            "order": 12,
+            "type": "remoteDataLayer",
+            "uuid": "ac72942c-d508-4929-b5fb-104e5c948d09"
           }
         ]
       },
@@ -275,6 +289,12 @@
             "order": 8,
             "type": "remoteDataLayer",
             "uuid": "9e0c1e1e-a0a3-457f-a373-4104820f7a50"
+          },
+          {
+            "id": "TROPICAL_TREE_COVER",
+            "order": 9,
+            "type": "remoteDataLayer",
+            "uuid": "b9183eca-84ed-48ed-83d5-a146a6e2a079"
           }
         ]
       },
