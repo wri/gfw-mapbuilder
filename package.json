@@ -5,7 +5,7 @@
   "main": "index.html",
   "scripts": {
     "start": "webpack-dev-server --config webpack.development.js",
-    "build": "webpack --config webpack.production.js --display-origins --display-provided-exports --display-reasons",
+    "build": "NODE_OPTIONS=--openssl-legacy-provider webpack --config webpack.production.js --display-origins --display-provided-exports --display-reasons",
     "lib-cms": "webpack --config webpack.lib-production.js --display-origins --display-provided-exports --display-reasons",
     "clean": "rm -rf node_modules; rm package-lock.json",
     "log": "echo \"\\033[32mFired Script!\"",
@@ -74,7 +74,7 @@
     "@typescript-eslint/eslint-plugin": "^2.15.0",
     "@typescript-eslint/parser": "^2.15.0",
     "clean-webpack-plugin": "^3.0.0",
-    "compression-webpack-plugin": "^3.0.1",
+    "compression-webpack-plugin": "^6.1.2",
     "copy-webpack-plugin": "^6.4.1",
     "css-loader": "^5.2.7",
     "cypress": "^13.4.0",
