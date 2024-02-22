@@ -110,6 +110,10 @@
     "webpack-hasjs-plugin": "^1.0.3",
     "webpack-merge": "^4.2.2"
   },
+  "overrides": {
+    "node-forge": ">1.2.1",
+    "glob-parent": "^5.1.2"
+  },
   "husky": {
     "hooks": {
       "pre-commit": "pretty-quick --staged"
