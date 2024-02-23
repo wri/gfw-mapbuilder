@@ -5,7 +5,7 @@
   "main": "index.html",
   "scripts": {
     "start": "webpack-dev-server --config webpack.development.js",
-    "build": "NODE_OPTIONS=--openssl-legacy-provider webpack --config webpack.production.js --display-origins --display-provided-exports --display-reasons",
+    "build": "webpack --config webpack.production.js --display-origins --display-provided-exports --display-reasons",
     "lib-cms": "webpack --config webpack.lib-production.js --display-origins --display-provided-exports --display-reasons",
     "clean": "rm -rf node_modules; rm package-lock.json",
     "log": "echo \"\\033[32mFired Script!\"",
