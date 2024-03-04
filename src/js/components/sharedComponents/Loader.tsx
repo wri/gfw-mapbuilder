@@ -1,19 +1,17 @@
 import * as React from 'react';
-import { Ring } from 'react-spinners-css';
 
-interface LoaderProps {
+import LoaderSpinnerRing from '../LoaderSpinnerRing/LoaderSpinnerRing';
+
+interface LoaderTypes {
   containerPositionStyling: any;
   color?: string;
   size?: number;
 }
 
-const Loader = (props: LoaderProps) => {
+const Loader = (props: LoaderTypes) => {
   return (
     <div style={props.containerPositionStyling}>
-      <Ring
-        color={props.color ? props.color : 'green'}
-        size={props.size ? props.size : 100}
-      />
+      <LoaderSpinnerRing color={props.color} size={props.size} />
     </div>
   );
 };

@@ -5,8 +5,6 @@ declare module '*.svg' {
   export default src;
 }
 
-declare module 'react-spinners-css';
-
 interface Date {
   getJulian: any;
 }
