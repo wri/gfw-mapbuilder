@@ -7,6 +7,8 @@
   background-color: #f3b229;
   line-height: 17px;
   text-align: center;
+  // display none so that the banner is hidden by default
+  display: none;
   h1 {
     font-size: 0.875rem;
     font-family: 'Fira Sans', sans-serif;
