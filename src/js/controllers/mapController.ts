@@ -138,6 +138,8 @@ export class MapController {
     this._mapview = new MapView({
       map: this._map,
       container: domRef.current,
+      center: [-80.759096, 25.334433],
+      zoom: 16,
     });
 
     //if we have init extent, use it.
