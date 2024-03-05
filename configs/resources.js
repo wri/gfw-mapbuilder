@@ -94,6 +94,19 @@ export default {
       },
       layers: [
         {
+          id: 'Test polygons',
+          type: 'feature',
+          url: 'https://services.arcgis.com/EDxZDh4HqQ1a9KvA/arcgis/rest/services/Test_Polys/FeatureServer/0',
+          label: { en: 'Test polygons' },
+          visible: true,
+          filterField: {
+            en: 'Category',
+          },
+          filterLabel: {
+            en: 'Filter by Category',
+          },
+        },
+        {
           id: 'CARBON_SEQ',
           order: 1,
           type: 'remoteDataLayer',
