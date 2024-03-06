@@ -51,7 +51,7 @@ export default {
   treeCoverGain: true,
   treeCoverLoss: true,
   tropicalTreeCover: true,
-  treeMosaicLandscapes: true,
+  treeMosaicLandscapes: false,
   forestCarbonGrossRemovals: true,
   forestCarbonGrossEmissions: true,
   forestCarbonNetFlux: true,
