@@ -448,6 +448,7 @@ export async function getRemoteAndServiceLayers(): Promise<any> {
         console.error(error);
         return {
           dataLayer: item,
+          isError: true,
           layer: {
             id: item?.id,
             opacity: item?.opacity,
@@ -528,7 +529,33 @@ export async function getRemoteAndServiceLayers(): Promise<any> {
             return newItem;
           });
       })
-      .catch((error) => console.error(error));
+      .catch((error) => {
+        console.error('Error fetching RW layer', error);
+        const newItem = {
+          dataLayer: item,
+          isError: true,
+          layer: {
+            id: item?.id,
+            opacity: item?.opacity,
+            order: item?.order,
+            url: null,
+            type: 'webtiled',
+            label: { en: item?.label },
+            sublabel: item?.dataLayer.sublabel,
+            layerGroupId: item?.layerGroupId,
+            group: item.layerGroupId,
+            metadata: {
+              metadata: null,
+              legendConfig: null,
+            },
+          },
+          dashboardURL: null,
+          group: item?.layerGroupId,
+          order: item?.order,
+          layerGroupId: item?.layerGroupId,
+        };
+        return newItem;
+      });
   }
 
   const remoteDataLayerRequests = remoteDataLayers.map((item: any) => {
