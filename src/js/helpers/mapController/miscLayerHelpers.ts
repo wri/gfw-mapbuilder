@@ -444,7 +444,30 @@ export async function getRemoteAndServiceLayers(): Promise<any> {
             };
           });
       })
-      .catch((error) => console.error(error));
+      .catch((error) => {
+        console.error(error);
+        return {
+          dataLayer: item,
+          layer: {
+            id: item?.id,
+            opacity: item?.opacity,
+            order: item?.order,
+            url: null,
+            type: item?.layerType,
+            label: item?.label,
+            sublabel: item?.sublabel,
+            metadata: {
+              metadata: null,
+              legendConfig: item?.legend,
+              interactionConfig: null,
+            },
+          },
+          dashboardURL: null,
+          group: item?.layerGroupId,
+          order: item?.order,
+          layerGroupId: item.layerGroupId,
+        };
+      });
     //
   }
 
