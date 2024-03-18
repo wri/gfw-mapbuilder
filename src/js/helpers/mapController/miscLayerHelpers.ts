@@ -377,6 +377,7 @@ export async function getRemoteAndServiceLayers(): Promise<any> {
             .then((metadata) => {
               item.layer = layer.attributes.layerConfig;
               item.dashboardURL = item.dataLayer?.dashboardURL?.length !== 0 ? item.dataLayer.dashboardURL : null;
+              item.isMetadataError = false;
               item.group = itemGroup;
               item.layer.metadata = {
                 metadata,
@@ -388,13 +389,17 @@ export async function getRemoteAndServiceLayers(): Promise<any> {
             })
             .catch((err) => {
               console.error('Error fetching metadata', err);
-
-              const itemWithError = {
-                ...item,
-                isError: true,
-                errorMessage: err?.message,
+              item.layer = layer.attributes.layerConfig;
+              item.dashboardURL = item.dataLayer?.dashboardURL?.length !== 0 ? item.dataLayer.dashboardURL : null;
+              item.group = itemGroup;
+              item.isMetadataError = true;
+              item.layer.metadata = {
+                metadata: null,
+                legendConfig: attributes.legendConfig,
+                interactionConfig: intConfig,
               };
-              return itemWithError;
+              item.isError = false;
+              return item;
             });
         }
       })

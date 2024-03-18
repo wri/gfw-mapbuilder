@@ -77,6 +77,7 @@ export interface LayerProps {
   type: string;
   origin: LayerOrigin;
   url: string;
+  isMetadataError?: boolean;
   metadata?: any | { legendConfig?: LegendConfig };
   legendInfo?: any;
   maxScale?: number;

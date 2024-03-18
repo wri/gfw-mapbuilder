@@ -311,7 +311,7 @@ export class MapController {
             };
 
             newRemoteLayerObject['visible'] = determineLayerVisibility(remoteLayerObject, layerInfosFromURL);
-
+            newRemoteLayerObject.isMetadataError = remoteLayerObject?.isMetadataError;
             //dealing with GFW API layers
             //TODO: This needs a major rethink/rework
             if (remoteLayerObject?.dataLayer) {

@@ -465,6 +465,13 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
     layerTitle = gfwLayerLabel;
   }
 
+  const handleLayerError = () => {
+    // layer error is higher priority than metadata error
+    if (layer?.isError) return true;
+
+    if (layer?.isMetadataError) return true;
+    return false;
+  };
   return (
     <div
       ref={props!.dndProvided!.innerRef}
@@ -506,7 +513,7 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
               <OpacityIcon width={10} height={10} fill={'#fff'} />
             </div>
             <div
-              className={`info-icon-container ${layer?.isError ? 'disabled' : ''}  `}
+              className={`info-icon-container ${handleLayerError() ? 'disabled' : ''}  `}
               style={{ backgroundColor: `${themeColor}` }}
               onClick={(): void => openInfoModal()}
             >
