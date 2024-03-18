@@ -23,83 +23,16 @@ $switch-bubble-box-shadow: 0 0 2px rgba(0, 0, 0, 0.45);
 $switch-bubble-checked-left: $switch-bubble-width;
 
 .layer-checkbox {
-  // position: relative;
-  //display: inline-table;
-  // display: inline-block;
   display: flex;
   align-items: center;
-
-  // border: 1px solid blue;
-  //width: 80%;
   margin-bottom: 2px;
 }
 
 .styled-checkbox {
   display: none;
 }
-/* .react-switch {
-  border: 1px solid red;
-  width: 26px;
-  height: 12px;
-} */
 
-/* .react-switch-handle {
-  border: 1px solid blue;
-  height: 14px;
-  width: 14px;
-} */
 .styled-checkboxlabel {
-  /* display: block;
-  width: $switch-label-width;
-  height: $switch-label-height;
-  text-indent: -150%;
-  clip: rect(0 0 0 0);
-  color: transparent;
-  user-select: none; */
   width: 0%;
   display: none;
-
-  /* Switch Rail & bubble */
-  /* &:before,
-  &:after {
-    content: '';
-    display: block;
-    position: absolute;
-    cursor: pointer;
-  } */
-
-  /* Switch Rail */
-  /* &:before {
-    width: $switch-rail-width;
-    height: $switch-rail-height;
-    background-color: $switch-rail-background-color;
-    border-radius: $switch-rail-border-radius;
-    transition: background-color $switch-transition-duration $switch-transition-timing-function;
-  } */
-
-  /* Switch bubble */
-  /* &:after {
-    top: 0;
-    left: 0;
-    width: $switch-bubble-width;
-    height: $switch-bubble-height;
-    border-radius: $switch-bubble-border-radius;
-    background-color: $switch-bubble-background-color;
-    box-shadow: $switch-bubble-box-shadow;
-    transition: left $switch-transition-duration $switch-transition-timing-function;
-  } */
 }
-
-/* When input is checked */
-/* .styled-checkbox:checked + .styled-checkboxlabel {
-  &:before {
-    background-color: $switch-rail-checked-background-color;
-  }
-
-  &:after {
-    left: $switch-bubble-checked-left;
-  }
-  &:disabled {
-    opacity: 0.5;
-  }
-} */
