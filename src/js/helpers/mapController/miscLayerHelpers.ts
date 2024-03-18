@@ -387,7 +387,7 @@ export async function getRemoteAndServiceLayers(): Promise<any> {
               return item;
             })
             .catch((err) => {
-              console.error('Error fetching metadata 392', err);
+              console.error('Error fetching metadata', err);
 
               const itemWithError = {
                 ...item,
