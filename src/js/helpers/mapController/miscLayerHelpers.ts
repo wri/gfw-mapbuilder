@@ -346,7 +346,7 @@ export async function getRemoteAndServiceLayers(): Promise<any> {
       }
     });
 
-  function fetchRemoteApiLayer(item): Promise<any> {
+  async function fetchRemoteApiLayer(item): Promise<any> {
     const baseURL = `https://production-api.globalforestwatch.org/v1/layer/${item?.dataLayer?.uuid}`;
 
     return fetch(baseURL)
@@ -369,6 +369,7 @@ export async function getRemoteAndServiceLayers(): Promise<any> {
             interactionConfig: intConfig,
             outputRange: null,
           };
+          item.isError = false;
           return item;
         } else {
           return fetch(layer.attributes.layerConfig.metadata)
@@ -382,11 +383,30 @@ export async function getRemoteAndServiceLayers(): Promise<any> {
                 legendConfig: attributes.legendConfig,
                 interactionConfig: intConfig,
               };
+              item.isError = false;
               return item;
+            })
+            .catch((err) => {
+              console.error('Error fetching metadata 392', err);
+
+              const itemWithError = {
+                ...item,
+                isError: true,
+                errorMessage: err?.message,
+              };
+              return itemWithError;
             });
         }
       })
-      .catch((error) => console.error(error));
+      .catch((error) => {
+        console.error('Error ', error);
+        const itemWithError = {
+          ...item,
+          isError: true,
+          errorMessage: error?.message,
+        };
+        return itemWithError;
+      });
   }
 
   function fetchFlagshipLayer(item): Promise<any> {

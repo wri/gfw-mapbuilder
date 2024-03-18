@@ -152,6 +152,7 @@ interface LayerControlProps {
   layer: LayerProps;
   dndProvided: DraggableProvided;
   dndSnapshot: DraggableStateSnapshot;
+  isError?: boolean;
 }
 
 const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
@@ -367,6 +368,7 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
           layerID={props.id}
           sublayer={props.sublayer}
           parentID={props.parentID}
+          isError={layer?.isError}
         />
       );
     }
@@ -485,7 +487,7 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
                   <DragIcon titleId="drag-icon" />
                 </div>
                 {returnLayerControl()}
-                <div className="title-wrapper">
+                <div className="title-wrapper" style={{ color: `${layer?.isError ? 'red' : 'normal'}` }}>
                   <span className="layer-label" style={{ textTransform: 'capitalize' }}>
                     {layerTitle === 'PRODES Cerrado Biome' ? 'PRODES Layer' : layerTitle}
                   </span>
@@ -496,14 +498,15 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
           </div>
           <div style={{ display: 'flex', gap: 5, flexDirection: 'row' }}>
             <div
-              className="info-icon-container"
+              aria-disabled={layer?.isError}
+              className={`info-icon-container ${layer?.isError ? 'disabled' : ''}  `}
               style={{ backgroundColor: `${themeColor}` }}
               onClick={(): void => toggleOpacitySlider()}
             >
-              <OpacityIcon width={12} height={12} fill={'#fff'} />
+              <OpacityIcon width={10} height={10} fill={'#fff'} />
             </div>
             <div
-              className="info-icon-container"
+              className={`info-icon-container ${layer?.isError ? 'disabled' : ''}  `}
               style={{ backgroundColor: `${themeColor}` }}
               onClick={(): void => openInfoModal()}
             >
@@ -511,7 +514,7 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
             </div>
             {layer.dashboardURL && (
               <div
-                className="info-icon-container"
+                className={`info-icon-container ${layer?.isError ? 'disabled' : ''}  `}
                 style={{ backgroundColor: `${themeColor}` }}
                 onClick={(): void => openDashModal()}
               >

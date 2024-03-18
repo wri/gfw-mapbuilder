@@ -100,6 +100,7 @@ export interface LayerProps {
   apiKey?: string;
   dashboardURL?: string | null;
   searchField?: string;
+  isError?: boolean;
 }
 
 interface Attributes {

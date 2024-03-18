@@ -736,9 +736,15 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  border: none;
 
   &:hover {
     cursor: pointer;
+  }
+  &.disabled {
+    cursor: not-allowed;
+    pointer-events: none;
+    opacity: 0.5;
   }
 }
 
