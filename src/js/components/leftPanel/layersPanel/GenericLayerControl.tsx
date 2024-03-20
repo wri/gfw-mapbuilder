@@ -546,7 +546,7 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
               onClick={handleInfoModalClick}
             >
               <InfoIcon width={10} height={10} fill={'#fff'} />
-              <ReactTooltip effect="solid" className="tab-tooltip" />
+              <ReactTooltip arrowColor="#fffce2" effect="solid" className="tab-tooltip" />
             </div>
             {layer?.dashboardURL && (
               <div
