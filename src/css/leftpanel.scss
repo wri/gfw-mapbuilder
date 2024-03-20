@@ -435,6 +435,7 @@
   text-transform: uppercase;
   font-weight: 400;
   font-size: 12px;
+  max-width: 300px;
   &.place-top {
     &:after {
       border-top-color: #fffee2 !important;
@@ -743,7 +744,8 @@
   }
   &.disabled {
     cursor: not-allowed;
-    pointer-events: none;
+    //    pointer-events: none;
+    pointer-events: hover;
     opacity: 0.5;
   }
 }

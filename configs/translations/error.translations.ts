@@ -30,3 +30,68 @@ export const errorTranslations = {
     text: '无法加载图层',
   },
 };
+
+export const errorLayerTranslationTooltip = {
+  en: {
+    text: 'This Layer is currently unavailable, please try again later or contact the administrator of this map.',
+  },
+  az: {
+    text: 'This Layer is currently unavailable, please try again later or contact the administrator of this map.',
+  },
+  nl: {
+    text: 'This Layer is currently unavailable, please try again later or contact the administrator of this map.',
+  },
+  hy: {
+    text: 'This Layer is currently unavailable, please try again later or contact the administrator of this map.',
+  },
+  ka: {
+    text: 'This Layer is currently unavailable, please try again later or contact the administrator of this map.',
+  },
+  fr: {
+    text: 'This Layer is currently unavailable, please try again later or contact the administrator of this map.',
+  },
+  es: {
+    text: 'This Layer is currently unavailable, please try again later or contact the administrator of this map.',
+  },
+  pt: {
+    text: 'This Layer is currently unavailable, please try again later or contact the administrator of this map.',
+  },
+  id: {
+    text: 'This Layer is currently unavailable, please try again later or contact the administrator of this map.',
+  },
+  zh: {
+    text: 'This Layer is currently unavailable, please try again later or contact the administrator of this map.',
+  },
+};
+export const errorMetadataTranslationTooltip = {
+  en: {
+    text: 'Information for Layer is currently unavailable, please try again later or contact the administrator of this map.',
+  },
+  az: {
+    text: 'Information for Layer is currently unavailable, please try again later or contact the administrator of this map.',
+  },
+  nl: {
+    text: 'Information for Layer is currently unavailable, please try again later or contact the administrator of this map.',
+  },
+  hy: {
+    text: 'Information for Layer is currently unavailable, please try again later or contact the administrator of this map.',
+  },
+  ka: {
+    text: 'Information for Layer is currently unavailable, please try again later or contact the administrator of this map.',
+  },
+  fr: {
+    text: 'Information for Layer is currently unavailable, please try again later or contact the administrator of this map.',
+  },
+  es: {
+    text: 'Information for Layer is currently unavailable, please try again later or contact the administrator of this map.',
+  },
+  pt: {
+    text: 'Information for Layer is currently unavailable, please try again later or contact the administrator of this map.',
+  },
+  id: {
+    text: 'Information for Layer is currently unavailable, please try again later or contact the administrator of this map.',
+  },
+  zh: {
+    text: 'Information for Layer is currently unavailable, please try again later or contact the administrator of this map.',
+  },
+};
