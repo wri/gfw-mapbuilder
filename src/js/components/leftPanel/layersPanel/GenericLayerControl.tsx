@@ -534,7 +534,7 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
               aria-disabled={layer?.isError}
               className={`info-icon-container ${layer?.isError ? 'disabled' : ''}  `}
               style={{ backgroundColor: `${themeColor}` }}
-              data-tip={layer?.isError ? errorMetadataTranslationTooltip[selectedLanguage].text : ''}
+              data-tip={layer?.isError ? errorLayerTranslationTooltip[selectedLanguage].text : ''}
               onClick={handleToggleLayerOpacityClick}
             >
               <OpacityIcon width={10} height={10} fill={'#fff'} />
