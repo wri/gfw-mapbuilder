@@ -57,6 +57,7 @@ import {
 import legendInfoController from '../helpers/legendInfo';
 import { parseExtentConfig } from '../helpers/mapController/configParsing';
 import { overwriteColorTheme } from '../store/appSettings/actions';
+import { errorTranslations } from '../../../configs/translations/error.translations';
 
 setDefaultOptions({ css: true, version: '4.19' });
 
@@ -288,10 +289,12 @@ export class MapController {
           //Fetching all other (non webmap) layer information from resources file AND GFW Api for those that are deemed as 'remoteDataLayer' in the config
           const remoteAndServiceLayersObjects = await getRemoteAndServiceLayers();
 
+          const getErrorLayers = remoteAndServiceLayersObjects.filter((layer) => layer?.isError);
+
           //TODO: move this elsewhere
           //Remove those layers that we do not support,
           const allowedRemoteLayersObjects = remoteAndServiceLayersObjects.filter((layerObject: any) => {
-            const layerType = layerObject?.dataLayer ? layerObject.layer.type : layerObject.type;
+            const layerType = layerObject?.dataLayer ? layerObject?.layer?.type : layerObject?.type;
             return supportedLayers.includes(layerType);
           });
 
@@ -308,10 +311,10 @@ export class MapController {
             };
 
             newRemoteLayerObject['visible'] = determineLayerVisibility(remoteLayerObject, layerInfosFromURL);
-
+            newRemoteLayerObject.isMetadataError = remoteLayerObject?.isMetadataError;
             //dealing with GFW API layers
             //TODO: This needs a major rethink/rework
-            if (remoteLayerObject.dataLayer) {
+            if (remoteLayerObject?.dataLayer) {
               newRemoteLayerObject.popup = remoteLayerObject.layer.popup;
               newRemoteLayerObject.sublabel = remoteLayerObject.layer.sublabel;
               newRemoteLayerObject.id = remoteLayerObject.dataLayer.id;
@@ -377,7 +380,6 @@ export class MapController {
             remoteLayerObjects.push(newRemoteLayerObject);
           }
           const allLayerObjects = [...mapLayerObjects, ...remoteLayerObjects];
-
           parseURLandApplyChanges();
 
           //Sync the incoming state from URL hash with webmap layers that have been just loaded in the map
@@ -395,6 +397,41 @@ export class MapController {
             this.syncWebmapLayersWithURL(layerInfosFromURL);
           }
 
+          // if layers fail to load, we add them to the layer list with error message
+          if (getErrorLayers?.length) {
+            const appendMissingProps = getErrorLayers.map((layer) => {
+              return {
+                ...layer,
+                visible: false,
+                opcity: { combined: 1, fill: 1, outline: 1 },
+                legendInfo: null,
+                id: layer.dataLayer.id,
+                label: null,
+                sublabel: {
+                  en: `Layer ID "${layer.dataLayer?.id}"`,
+                  az: `Layer ID "${layer.dataLayer?.id}"`,
+                  nl: `Layer ID "${layer.dataLayer?.id}"`,
+                  hy: `Layer ID "${layer.dataLayer?.id}"`,
+                  ka: `Layer ID "${layer.dataLayer?.id}"`,
+                  fr: `Layer ID "${layer.dataLayer?.id}"`,
+                  es: `Layer ID "${layer.dataLayer?.id}"`,
+                  pt: `Layer ID "${layer.dataLayer?.id}"`,
+                  id: `Layer ID "${layer.dataLayer?.id}"`,
+                  zh: `Layer ID "${layer.dataLayer?.id}"`,
+                },
+                layerName: null,
+                title: errorTranslations[appState.selectedLanguage].text,
+                parentID: null,
+                origin: 'remote',
+                portalItemID: null,
+                technicalName: null,
+                type: layer.type,
+                url: null,
+                group: layer.dataLayer.groupId,
+              };
+            });
+            allLayerObjects.push(...appendMissingProps);
+          }
           store.dispatch(allAvailableLayers(allLayerObjects));
           const esriRemoteLayersPromises: any = remoteLayerObjects.map((layerObject) => {
             return LayerFactory(this._mapview, layerObject);
@@ -666,13 +703,17 @@ export class MapController {
 
       //Update the layer objects with new titles based on current language
       const updatedLayerObjects = nonWebmapLayers.map((layerObject) => {
-        layerObject.title = layerObject.label[lang] ? layerObject.label[lang] : 'Untitled Layer';
+        if (layerObject?.isError) {
+          layerObject.title = errorTranslations[lang].text;
+        } else {
+          layerObject.title = layerObject?.label[lang] ? layerObject?.label[lang] : 'Untitled Layer';
+        }
         return layerObject;
       });
-      //
       //Add non webmap layers to the map
+      // layers that failed to load will contained isError property and layer will be undefined, filter them out
       //@ts-ignore
-      this._map?.addMany(esriNonWebmapLayers);
+      this._map?.addMany(esriNonWebmapLayers.filter((l) => l));
       const allLayerObjects = [...updatedLayerObjects, ...mapLayerObjects];
       store.dispatch(allAvailableLayers(allLayerObjects));
       const mapLayerIDs = getSortedLayers(appSettings.layerPanel, allLayerObjects, this._map);

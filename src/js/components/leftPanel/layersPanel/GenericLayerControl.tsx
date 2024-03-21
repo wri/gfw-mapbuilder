@@ -33,6 +33,11 @@ import { subYears } from 'date-fns';
 import { generateRangeDate, handleCustomColorTheme } from '../../../../utils';
 import { DATES } from '../../../../../configs/dates-config';
 import SelectProdesLayer from '../../sharedComponents/selectProdesLayer';
+import ReactTooltip from 'react-tooltip';
+import {
+  errorLayerTranslationTooltip,
+  errorMetadataTranslationTooltip,
+} from '../../../../../configs/translations/error.translations';
 
 const { TREE_COVER_LOSS } = DATES;
 
@@ -152,6 +157,7 @@ interface LayerControlProps {
   layer: LayerProps;
   dndProvided: DraggableProvided;
   dndSnapshot: DraggableStateSnapshot;
+  isError?: boolean;
 }
 
 const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
@@ -367,6 +373,7 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
           layerID={props.id}
           sublayer={props.sublayer}
           parentID={props.parentID}
+          isError={layer?.isError}
         />
       );
     }
@@ -463,6 +470,30 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
     layerTitle = gfwLayerLabel;
   }
 
+  const handleLayerError = () => {
+    // layer error is higher priority than metadata error
+    if (layer?.isError) return true;
+
+    if (layer?.isMetadataError) return true;
+    return false;
+  };
+
+  const handleInfoModalClick = () => {
+    if (layer?.isError || layer?.isMetadataError) {
+      return;
+    } else {
+      openInfoModal();
+    }
+  };
+
+  const handleToggleLayerOpacityClick = () => {
+    if (layer?.isError) {
+      return;
+    } else {
+      toggleOpacitySlider();
+    }
+  };
+
   return (
     <div
       ref={props!.dndProvided!.innerRef}
@@ -485,8 +516,12 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
                   <DragIcon titleId="drag-icon" />
                 </div>
                 {returnLayerControl()}
-                <div className="title-wrapper">
-                  <span className="layer-label" style={{ textTransform: 'capitalize' }}>
+                <div className="title-wrapper" style={{ color: `${layer?.isError ? 'red' : 'normal'}` }}>
+                  <span
+                    data-tip={layer?.isError ? errorLayerTranslationTooltip[selectedLanguage].text : ''}
+                    className="layer-label"
+                    style={{ textTransform: 'capitalize' }}
+                  >
                     {layerTitle === 'PRODES Cerrado Biome' ? 'PRODES Layer' : layerTitle}
                   </span>
                 </div>
@@ -496,22 +531,26 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
           </div>
           <div style={{ display: 'flex', gap: 5, flexDirection: 'row' }}>
             <div
-              className="info-icon-container"
+              aria-disabled={layer?.isError}
+              className={`info-icon-container ${layer?.isError ? 'disabled' : ''}  `}
               style={{ backgroundColor: `${themeColor}` }}
-              onClick={(): void => toggleOpacitySlider()}
+              data-tip={layer?.isError ? errorLayerTranslationTooltip[selectedLanguage].text : ''}
+              onClick={handleToggleLayerOpacityClick}
             >
-              <OpacityIcon width={12} height={12} fill={'#fff'} />
+              <OpacityIcon width={10} height={10} fill={'#fff'} />
             </div>
             <div
-              className="info-icon-container"
+              className={`info-icon-container ${handleLayerError() ? 'disabled' : ''}  `}
+              data-tip={handleLayerError() ? errorMetadataTranslationTooltip[selectedLanguage].text : ''}
               style={{ backgroundColor: `${themeColor}` }}
-              onClick={(): void => openInfoModal()}
+              onClick={handleInfoModalClick}
             >
               <InfoIcon width={10} height={10} fill={'#fff'} />
+              <ReactTooltip arrowColor="#fffce2" effect="solid" className="tab-tooltip" />
             </div>
-            {layer.dashboardURL && (
+            {layer?.dashboardURL && (
               <div
-                className="info-icon-container"
+                className={`info-icon-container ${layer?.isError ? 'disabled' : ''}  `}
                 style={{ backgroundColor: `${themeColor}` }}
                 onClick={(): void => openDashModal()}
               >

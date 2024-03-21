@@ -99,7 +99,13 @@ const NestedLayerGroup = (props: NestedLayerGroupProps): JSX.Element => {
       .filter((layer: any) => nestedLayerIDs.includes(layer.id))
       .map((layer: any, index: number) => {
         return (
-          <Draggable key={index} index={index} draggableId={index.toString()}>
+          <Draggable
+            isDragDisabled={true}
+            disableInteractiveElementBlocking={true}
+            key={index}
+            index={index}
+            draggableId={index.toString()}
+          >
             {(providedDraggable, snapshotDraggable) => {
               return (
                 <GenericLayerControl

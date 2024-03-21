@@ -346,7 +346,7 @@ export async function getRemoteAndServiceLayers(): Promise<any> {
       }
     });
 
-  function fetchRemoteApiLayer(item): Promise<any> {
+  async function fetchRemoteApiLayer(item): Promise<any> {
     const baseURL = `https://production-api.globalforestwatch.org/v1/layer/${item?.dataLayer?.uuid}`;
 
     return fetch(baseURL)
@@ -369,6 +369,7 @@ export async function getRemoteAndServiceLayers(): Promise<any> {
             interactionConfig: intConfig,
             outputRange: null,
           };
+          item.isError = false;
           return item;
         } else {
           return fetch(layer.attributes.layerConfig.metadata)
@@ -376,17 +377,41 @@ export async function getRemoteAndServiceLayers(): Promise<any> {
             .then((metadata) => {
               item.layer = layer.attributes.layerConfig;
               item.dashboardURL = item.dataLayer?.dashboardURL?.length !== 0 ? item.dataLayer.dashboardURL : null;
+              item.isMetadataError = false;
               item.group = itemGroup;
               item.layer.metadata = {
                 metadata,
                 legendConfig: attributes.legendConfig,
                 interactionConfig: intConfig,
               };
+              item.isError = false;
+              return item;
+            })
+            .catch((err) => {
+              console.error('Error fetching metadata', err);
+              item.layer = layer.attributes.layerConfig;
+              item.dashboardURL = item.dataLayer?.dashboardURL?.length !== 0 ? item.dataLayer.dashboardURL : null;
+              item.group = itemGroup;
+              item.isMetadataError = true;
+              item.layer.metadata = {
+                metadata: null,
+                legendConfig: attributes.legendConfig,
+                interactionConfig: intConfig,
+              };
+              item.isError = false;
               return item;
             });
         }
       })
-      .catch((error) => console.error(error));
+      .catch((error) => {
+        console.error('Error ', error);
+        const itemWithError = {
+          ...item,
+          isError: true,
+          errorMessage: error?.message,
+        };
+        return itemWithError;
+      });
   }
 
   function fetchFlagshipLayer(item): Promise<any> {
@@ -424,7 +449,31 @@ export async function getRemoteAndServiceLayers(): Promise<any> {
             };
           });
       })
-      .catch((error) => console.error(error));
+      .catch((error) => {
+        console.error(error);
+        return {
+          dataLayer: item,
+          isError: true,
+          layer: {
+            id: item?.id,
+            opacity: item?.opacity,
+            order: item?.order,
+            url: null,
+            type: item?.layerType,
+            label: item?.label,
+            sublabel: item?.sublabel,
+            metadata: {
+              metadata: null,
+              legendConfig: item?.legend,
+              interactionConfig: null,
+            },
+          },
+          dashboardURL: null,
+          group: item?.layerGroupId,
+          order: item?.order,
+          layerGroupId: item.layerGroupId,
+        };
+      });
     //
   }
 
@@ -485,7 +534,33 @@ export async function getRemoteAndServiceLayers(): Promise<any> {
             return newItem;
           });
       })
-      .catch((error) => console.error(error));
+      .catch((error) => {
+        console.error('Error fetching RW layer', error);
+        const newItem = {
+          dataLayer: item,
+          isError: true,
+          layer: {
+            id: item?.id,
+            opacity: item?.opacity,
+            order: item?.order,
+            url: null,
+            type: 'webtiled',
+            label: { en: item?.label },
+            sublabel: item?.dataLayer.sublabel,
+            layerGroupId: item?.layerGroupId,
+            group: item.layerGroupId,
+            metadata: {
+              metadata: null,
+              legendConfig: null,
+            },
+          },
+          dashboardURL: null,
+          group: item?.layerGroupId,
+          order: item?.order,
+          layerGroupId: item?.layerGroupId,
+        };
+        return newItem;
+      });
   }
 
   const remoteDataLayerRequests = remoteDataLayers.map((item: any) => {
