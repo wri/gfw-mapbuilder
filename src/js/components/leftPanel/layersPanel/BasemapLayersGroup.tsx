@@ -90,6 +90,8 @@ const PlanetBasemap = (props: BaseLayerPlanet): JSX.Element => {
               .join('-');
             return { value: d, label };
           });
+
+        console.log('planetTilesFormat', planetTilesFormat);
         setPlanetTiles(planetTilesFormat);
         setSelectedPlanetTileLayer(planetTilesFormat[0].value);
       })
@@ -261,6 +263,7 @@ const BasemapLayersGroup = (props: LayerGroupProps): React.ReactElement => {
   //Add BASEMAP from Webmap
   basemapsToRender.push({ id: 'webmap' });
 
+  console.log('basemapsToRender', basemapsToRender);
   const allowedBaseLayers = basemapsToRender.map((baselayer: any) => {
     if (baselayer.id === 'landsat') {
       return (

@@ -43,9 +43,9 @@ export const landsatBaselayerYears = [2013, 2014, 2015, 2016, 2017];
 
 export const WRIBasemapConfig = {
   wri_mono:
-    'https://api.mapbox.com/styles/v1/resourcewatch/ckaoefuc302dw1ipfh7tfi7ll/tiles/256/{level}/{col}/{row}@2x?access_token=pk.eyJ1IjoicmVzb3VyY2V3YXRjaCIsImEiOiJjajFlcXZhNzcwMDBqMzNzMTQ0bDN6Y3U4In0.FRcIP_yusVaAy0mwAX1B8w',
+    'https://api.mapbox.com/styles/v1/resourcewatch/ckaoefuc302dw1ipfh7tfi7ll/tiles/256/{level}/{col}/{row}@2x?access_token=pk.eyJ1IjoicmVzb3VyY2V3YXRjaCIsImEiOiJjbHVpdThvMXQwOHE3MnJwNTE5eG5ia2g5In0.MAe9L4aHjj97kAeD-S6KXA',
   wri_contextual:
-    'https://api.mapbox.com/styles/v1/resourcewatch/ckaoehoff02fn1ipfan4jblxh/tiles/256/{level}/{col}/{row}@2x?access_token=pk.eyJ1IjoicmVzb3VyY2V3YXRjaCIsImEiOiJjajFlcXZhNzcwMDBqMzNzMTQ0bDN6Y3U4In0.FRcIP_yusVaAy0mwAX1B8w',
+    'https://api.mapbox.com/styles/v1/resourcewatch/ckaoehoff02fn1ipfan4jblxh/tiles/256/{level}/{col}/{row}@2x?access_token=pk.eyJ1IjoicmVzb3VyY2V3YXRjaCIsImEiOiJjbHVpdThvMXQwOHE3MnJwNTE5eG5ia2g5In0.MAe9L4aHjj97kAeD-S6KXA',
 };
 
 export const customBasemapIcon = 'https://my.gfw-mapbuilder.org/img/custom_basemap.png';
