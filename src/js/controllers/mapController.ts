@@ -1855,6 +1855,7 @@ export class MapController {
 
   setWebmapOriginalBasemap(id: string): void {
     if (!this._webmapBasemap || !this._map) return;
+
     this._map.basemap = this._webmapBasemap;
     store.dispatch(setSelectedBasemap(id));
   }
