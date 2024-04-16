@@ -90,6 +90,7 @@ const PlanetBasemap = (props: BaseLayerPlanet): JSX.Element => {
               .join('-');
             return { value: d, label };
           });
+
         setPlanetTiles(planetTilesFormat);
         setSelectedPlanetTileLayer(planetTilesFormat[0].value);
       })

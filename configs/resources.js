@@ -1,5 +1,5 @@
 export default {
-  webmap: 'de85e3fcc07948238aa6c1afd2a4ceb0',
+  webmap: '4563142bba62461ab4e0de9480919e95',
   title: 'GFW Mapbuilder',
   subtitle: 'Make maps that matter',
   logoUrl: '',
@@ -18,7 +18,7 @@ export default {
   customColorTheme: '',
   language: 'en',
   useAlternativeLanguage: true,
-  alternativeWebmap: 'de85e3fcc07948238aa6c1afd2a4ceb0',
+  alternativeWebmap: '4563142bba62461ab4e0de9480919e95',
   alternativeLanguage: 'fr',
   alternativeLanguageTitle: 'Mapbuilder',
   alternativeLanguageSubtitle: 'Make maps that matter',
