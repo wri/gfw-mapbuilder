@@ -187,7 +187,6 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
     const newMarks = {};
     const yearsAvailable = end - start;
 
-    console.log('yearsAvailable', yearsAvailable);
     while (index <= end) {
       const display = index % 7 === 0 ? 'block' : 'none';
       newMarks[index] = {
@@ -205,8 +204,6 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
     const dateRangeResult = generateRangeDate(currentDateMinusTwoYears, new Date());
     switch (id) {
       case 'TREE_COVER_LOSS':
-        console.log('-->', generateDefaultMarks({ start: 2000, end: TREE_COVER_LOSS.max }));
-        console.log('tree cover loss', TREE_COVER_LOSS);
         return (
           <TimeSlider
             layerID={id}
