@@ -318,9 +318,7 @@ export class MapController {
             if (remoteLayerObject?.dataLayer) {
               newRemoteLayerObject.popup = remoteLayerObject.layer.popup;
               newRemoteLayerObject.sublabel = remoteLayerObject.layer.sublabel;
-
               newRemoteLayerObject.id = remoteLayerObject.dataLayer.id;
-
               newRemoteLayerObject.title =
                 remoteLayerObject.layer.label[appState.selectedLanguage] ||
                 `Untranslated layer id: ${remoteLayerObject.dataLayer.id}`;
@@ -717,7 +715,6 @@ export class MapController {
       // layers that failed to load will contained isError property and layer will be undefined, filter them out
       //@ts-ignore
       this._map?.addMany(esriNonWebmapLayers.filter((l) => l));
-
       const allLayerObjects = [...updatedLayerObjects, ...mapLayerObjects];
       store.dispatch(allAvailableLayers(allLayerObjects));
       const mapLayerIDs = getSortedLayers(appSettings.layerPanel, allLayerObjects, this._map);
