@@ -323,7 +323,7 @@ export class MapController {
 
               newRemoteLayerObject.title =
                 remoteLayerObject.layer.label[appState.selectedLanguage] ||
-                `Untranslated ---- layer id: ${remoteLayerObject.dataLayer.id}`;
+                `Untranslated layer id: ${remoteLayerObject.dataLayer.id}`;
               newRemoteLayerObject.group = remoteLayerObject.dataLayer.groupId;
               newRemoteLayerObject.url = remoteLayerObject.layer.url;
               newRemoteLayerObject.type = remoteLayerObject.layer.type;
@@ -358,7 +358,7 @@ export class MapController {
               newRemoteLayerObject.id = remoteLayerObject.id;
               newRemoteLayerObject.title = remoteLayerObject.label[appState.selectedLanguage]
                 ? remoteLayerObject.label[appState.selectedLanguage]
-                : 'Untitled Layer --L';
+                : 'Untitled Layer';
               newRemoteLayerObject.group = remoteLayerObject.groupId;
               newRemoteLayerObject.url = remoteLayerObject.url;
               newRemoteLayerObject.type = remoteLayerObject.type;
