@@ -300,7 +300,6 @@ export class MapController {
 
           const remoteLayerObjects: LayerProps[] = [];
 
-          console.log('allowedRemoteLayersObjects', allowedRemoteLayersObjects);
           for (const remoteLayerObject of allowedRemoteLayersObjects) {
             if (!remoteLayerObject) continue; //remoteLayerObject may be undefined if we failed to retrieve layer data from api for some reason
 
@@ -720,7 +719,6 @@ export class MapController {
       this._map?.addMany(esriNonWebmapLayers.filter((l) => l));
 
       const allLayerObjects = [...updatedLayerObjects, ...mapLayerObjects];
-      console.log('allLayerObjects', allLayerObjects);
       store.dispatch(allAvailableLayers(allLayerObjects));
       const mapLayerIDs = getSortedLayers(appSettings.layerPanel, allLayerObjects, this._map);
 

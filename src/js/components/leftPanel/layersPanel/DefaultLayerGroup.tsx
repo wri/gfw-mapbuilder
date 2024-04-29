@@ -98,7 +98,6 @@ const NestedLayerGroup = (props: NestedLayerGroupProps): JSX.Element => {
     const layers = props.layersInGroup
       .filter((layer: any) => nestedLayerIDs.includes(layer.id))
       .map((layer: any, index: number) => {
-        console.log('101: layer', layer);
         return (
           <Draggable
             isDragDisabled={true}
@@ -124,7 +123,6 @@ const NestedLayerGroup = (props: NestedLayerGroupProps): JSX.Element => {
       });
     return (
       <>
-        {console.log('127: layer', layers)};
         <LayerGroup
           key={k}
           selectedLanguage={props.selectedLanguage}
@@ -174,7 +172,6 @@ const RadioLayerGroup = (props: RadioLayerGroupProps): JSX.Element => {
     return (
       <Draggable key={index} index={index} draggableId={index.toString()}>
         {(providedDraggable, snapshotDraggable) => {
-          console.log('173: layer', layer);
           return (
             <GenericLayerControl
               dndProvided={providedDraggable}
@@ -285,7 +282,6 @@ const DefaultLayerGroup = ({ layerGroupKey, layerGroupConfig }: LayerGroupProps)
                 style={getListStyle(snapshot.isDraggingOver)}
               >
                 {layersInGroup.map((layer, index) => {
-                  console.log('288: layer', layer);
                   if (layer.id !== 'INPE_AMAZON_PRODES') {
                     return (
                       <Draggable key={index} index={index} draggableId={index.toString()}>
