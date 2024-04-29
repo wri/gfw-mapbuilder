@@ -98,6 +98,7 @@ const NestedLayerGroup = (props: NestedLayerGroupProps): JSX.Element => {
     const layers = props.layersInGroup
       .filter((layer: any) => nestedLayerIDs.includes(layer.id))
       .map((layer: any, index: number) => {
+        console.log('101: layer', layer);
         return (
           <Draggable
             isDragDisabled={true}
@@ -122,14 +123,17 @@ const NestedLayerGroup = (props: NestedLayerGroupProps): JSX.Element => {
         );
       });
     return (
-      <LayerGroup
-        key={k}
-        selectedLanguage={props.selectedLanguage}
-        lGroup={lGroup}
-        layers={layers}
-        activeGroups={activeGroups}
-        changeActiveGroups={handleGroupToggle}
-      />
+      <>
+        {console.log('127: layer', layers)};
+        <LayerGroup
+          key={k}
+          selectedLanguage={props.selectedLanguage}
+          lGroup={lGroup}
+          layers={layers}
+          activeGroups={activeGroups}
+          changeActiveGroups={handleGroupToggle}
+        />
+      </>
     );
   });
 
@@ -170,6 +174,7 @@ const RadioLayerGroup = (props: RadioLayerGroupProps): JSX.Element => {
     return (
       <Draggable key={index} index={index} draggableId={index.toString()}>
         {(providedDraggable, snapshotDraggable) => {
+          console.log('173: layer', layer);
           return (
             <GenericLayerControl
               dndProvided={providedDraggable}
@@ -280,22 +285,25 @@ const DefaultLayerGroup = ({ layerGroupKey, layerGroupConfig }: LayerGroupProps)
                 style={getListStyle(snapshot.isDraggingOver)}
               >
                 {layersInGroup.map((layer, index) => {
-                  return (
-                    <Draggable key={index} index={index} draggableId={index.toString()}>
-                      {(providedDraggable, snapshotDraggable) => {
-                        return (
-                          <GenericLayerControl
-                            dndProvided={providedDraggable}
-                            dndSnapshot={snapshotDraggable}
-                            layer={layer}
-                            id={layer.id}
-                            key={layer.id}
-                            type={layerGroupConfig.groupType}
-                          />
-                        );
-                      }}
-                    </Draggable>
-                  );
+                  console.log('288: layer', layer);
+                  if (layer.id !== 'INPE_AMAZON_PRODES') {
+                    return (
+                      <Draggable key={index} index={index} draggableId={index.toString()}>
+                        {(providedDraggable, snapshotDraggable) => {
+                          return (
+                            <GenericLayerControl
+                              dndProvided={providedDraggable}
+                              dndSnapshot={snapshotDraggable}
+                              layer={layer}
+                              id={layer.id}
+                              key={layer.id}
+                              type={layerGroupConfig.groupType}
+                            />
+                          );
+                        }}
+                      </Draggable>
+                    );
+                  }
                 })}
                 {provided.placeholder}
               </div>
