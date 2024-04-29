@@ -16,7 +16,7 @@ export default {
   includeMyGFWLogin: true,
   navLinksInNewTab: false,
   customColorTheme: '',
-  language: 'es',
+  language: 'en',
   useAlternativeLanguage: true,
   alternativeWebmap: '4563142bba62461ab4e0de9480919e95',
   alternativeLanguage: 'fr',
