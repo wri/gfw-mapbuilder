@@ -299,7 +299,6 @@ export class MapController {
           });
 
           const remoteLayerObjects: LayerProps[] = [];
-
           for (const remoteLayerObject of allowedRemoteLayersObjects) {
             if (!remoteLayerObject) continue; //remoteLayerObject may be undefined if we failed to retrieve layer data from api for some reason
 
