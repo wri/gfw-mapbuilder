@@ -268,7 +268,6 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
 
     if (props.layerID === LAYER_IDS.GFW_INTEGRATED_ALERTS && gfwLayer === LAYER_IDS.GFW_INTEGRATED_ALERTS) {
       await mapController.toggleGladLayer({ id: LAYER_IDS.GFW_INTEGRATED_ALERTS, start, end });
-
       dispatch(setIntegratedAlertLayerStart(convertStartDate));
       dispatch(setIntegratedAlertLayerEnd(convertEndDate));
     } else if (gfwLayer === LAYER_IDS.GLAD_ALERTS) {
@@ -296,8 +295,8 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
       const selectedLayer = mapController._map!.findLayerById(gfwLayer);
       selectedLayer.visible = true;
 
-      dispatch(setGladStart(convertStartDate));
-      dispatch(setGladEnd(convertEndDate));
+      //  dispatch(setGladStart(convertStartDate));
+      // dispatch(setGladEnd(convertEndDate));
     }
   };
 
@@ -364,7 +363,7 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
         max={props.max}
         defaultValue={props.defaultValue}
         value={range}
-        allowCross={false}
+        allowCross={true}
         tipFormatter={(val) => handleTipFormatter(val)}
         tipProps={{
           placement: 'top',
