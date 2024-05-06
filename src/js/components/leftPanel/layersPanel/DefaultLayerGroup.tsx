@@ -282,24 +282,22 @@ const DefaultLayerGroup = ({ layerGroupKey, layerGroupConfig }: LayerGroupProps)
                 style={getListStyle(snapshot.isDraggingOver)}
               >
                 {layersInGroup.map((layer, index) => {
-                  if (layer.id !== 'INPE_AMAZON_PRODES') {
-                    return (
-                      <Draggable key={index} index={index} draggableId={index.toString()}>
-                        {(providedDraggable, snapshotDraggable) => {
-                          return (
-                            <GenericLayerControl
-                              dndProvided={providedDraggable}
-                              dndSnapshot={snapshotDraggable}
-                              layer={layer}
-                              id={layer.id}
-                              key={layer.id}
-                              type={layerGroupConfig.groupType}
-                            />
-                          );
-                        }}
-                      </Draggable>
-                    );
-                  }
+                  return (
+                    <Draggable key={index} index={index} draggableId={index.toString()}>
+                      {(providedDraggable, snapshotDraggable) => {
+                        return (
+                          <GenericLayerControl
+                            dndProvided={providedDraggable}
+                            dndSnapshot={snapshotDraggable}
+                            layer={layer}
+                            id={layer.id}
+                            key={layer.id}
+                            type={layerGroupConfig.groupType}
+                          />
+                        );
+                      }}
+                    </Draggable>
+                  );
                 })}
                 {provided.placeholder}
               </div>

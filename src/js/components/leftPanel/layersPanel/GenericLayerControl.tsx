@@ -503,7 +503,10 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
     >
       <div
         style={
-          layer.title !== 'RADD Alerts' && layer.title !== 'GLAD S2 Alerts' && layer.title !== 'PRODES Amazon Biome'
+          layer.title !== 'RADD Alerts' &&
+          layer.id !== '440e53d0-36b3-47ad-993a-1c2018c3942c' &&
+          layer.title !== 'GLAD S2 Alerts' &&
+          layer.title !== 'PRODES Amazon Biome'
             ? { visibility: 'visible', borderBottom: '1px solid #8983834a', paddingBottom: 10 }
             : { display: 'none' }
         }
