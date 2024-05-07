@@ -235,7 +235,6 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
     setRange(selectedRange);
     dispatch(setTimeSlider(selectedRange));
     mapController.updateBaseTile(layerID, selectedRange);
-    console.log('does this run when click');
     let convertStartDate;
     let convertEndDate;
 
@@ -266,7 +265,6 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
     }
 
     if (props.layerID === LAYER_IDS.GFW_INTEGRATED_ALERTS && gfwLayer === LAYER_IDS.GFW_INTEGRATED_ALERTS) {
-      console.log('gfw integrated runniigggg -->>>>');
       await mapController.toggleGladLayer({ id: LAYER_IDS.GFW_INTEGRATED_ALERTS, start, end });
       dispatch(setIntegratedAlertLayerStart(convertStartDate));
       dispatch(setIntegratedAlertLayerEnd(convertEndDate));
@@ -283,28 +281,7 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
       dispatch(setRaddAlertStart(convertStartDate));
       dispatch(setRaddAlertEnd(convertEndDate));
     } else {
-      const gladLayerConfig: any = allAvailableLayers.filter((layer: any) => layer.id === layerID);
-      const gladLayerOld: any = mapController._map!.findLayerById(gfwLayer);
-      const other: any = mapController._map!.findLayerById(layerID);
-      const gladIndex: number = mapController._map!.layers.indexOf(gladLayerOld);
-      //mapController._map?.remove(gladLayerOld);
-      //mapController._map?.remove(other);
-      const gladLayerNew: any = await LayerFactory(mapController._mapview, gladLayerConfig[0]);
-      console.log('gladLayerNew', gladLayerNew);
-      console.log('gladLayerConfig', gladLayerConfig);
-      console.log('layerID', layerID);
-      console.log('gladLayerOld', gladLayerOld);
-      console.log('other', other);
-
-      gladLayerNew.julianFrom = start;
-      gladLayerNew.julianTo = end;
-      gladLayerNew.id = gfwLayer;
-      // mapController._map?.add(gladLayerNew, gladIndex);
-      const selectedLayer = mapController._map!.findLayerById(gfwLayer);
-      selectedLayer.visible = true;
-
-      //  dispatch(setGladStart(convertStartDate));
-      // dispatch(setGladEnd(convertEndDate));
+      mapController.updateBaseTile(layerID, [selectedRange[0], selectedRange[1]]);
     }
   };
 
