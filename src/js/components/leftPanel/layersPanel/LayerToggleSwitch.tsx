@@ -42,7 +42,7 @@ const LayerToggleSwitch = (props: LayerToggleProps): React.ReactElement => {
       if (layerID === LAYER_IDS.INPE_CERRADO_PRODES || layerID === LAYER_IDS.INPE_AMAZON_PRODES) {
         mapController.toggleProdLayers(checked, layerID);
       } else {
-        mapController.toggleLayerVisibility(layerID, sublayer, parentID);
+        mapController.toggleLayerVisibility(checked, layerID, sublayer, parentID);
       }
     }
 
@@ -62,12 +62,7 @@ const LayerToggleSwitch = (props: LayerToggleProps): React.ReactElement => {
   return (
     <CheckboxWrapper customColorTheme={themeColor}>
       <div className="layer-checkbox">
-        <ToggleComponent
-          themeColor={themeColor}
-          onChange={toggleVisibility}
-          checked={isChecked || false}
-          disabled={isError}
-        />
+        <ToggleComponent themeColor={themeColor} onChange={toggleVisibility} checked={!!isChecked} disabled={isError} />
         <label className="styled-checkboxlabel" htmlFor={`layer-checkbox-${layerID}`}>
           {layerID}
         </label>

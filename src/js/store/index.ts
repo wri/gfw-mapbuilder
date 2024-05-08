@@ -6,6 +6,10 @@ import { appStateReducer } from './appState/reducers';
 import { mapviewReducer } from './mapview/reducers';
 import { createLogger } from 'redux-logger';
 
+import * as actionCreators from './appState/actions';
+
+const composeEnhancers = composeWithDevTools({ actionCreators, trace: true, traceLimit: 25 });
+
 const rootReducer = combineReducers({
   appSettings: appSettingsReducer,
   appState: appStateReducer,
@@ -22,6 +26,6 @@ if (process.env.NODE_ENV === 'development') {
   middlewares.push(logger);
 }
 
-const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(...middlewares)));
+const store = createStore(rootReducer, composeEnhancers(applyMiddleware(...middlewares)));
 
 export default store;

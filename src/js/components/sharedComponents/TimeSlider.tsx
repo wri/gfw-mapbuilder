@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createSliderWithTooltip, Range } from 'rc-slider';
-
 import { mapController } from '../../controllers/mapController';
 
 import { setTimeSlider } from '../../store/mapview/actions';
@@ -236,7 +235,6 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
     setRange(selectedRange);
     dispatch(setTimeSlider(selectedRange));
     mapController.updateBaseTile(layerID, selectedRange);
-
     let convertStartDate;
     let convertEndDate;
 
@@ -283,20 +281,7 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
       dispatch(setRaddAlertStart(convertStartDate));
       dispatch(setRaddAlertEnd(convertEndDate));
     } else {
-      const gladLayerConfig: any = allAvailableLayers.filter((layer: any) => layer.id === layerID);
-      const gladLayerOld: any = mapController._map!.findLayerById(gfwLayer);
-      const gladIndex: number = mapController._map!.layers.indexOf(gladLayerOld);
-      mapController._map?.remove(gladLayerOld);
-      const gladLayerNew: any = await LayerFactory(mapController._mapview, gladLayerConfig[0]);
-      gladLayerNew.julianFrom = start;
-      gladLayerNew.julianTo = end;
-      gladLayerNew.id = gfwLayer;
-      mapController._map?.add(gladLayerNew, gladIndex);
-      const selectedLayer = mapController._map!.findLayerById(gfwLayer);
-      selectedLayer.visible = true;
-
-      //  dispatch(setGladStart(convertStartDate));
-      // dispatch(setGladEnd(convertEndDate));
+      mapController.updateBaseTile(layerID, [selectedRange[0], selectedRange[1]]);
     }
   };
 
@@ -363,7 +348,7 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
         max={props.max}
         defaultValue={props.defaultValue}
         value={range}
-        allowCross={true}
+        allowCross={false}
         tipFormatter={(val) => handleTipFormatter(val)}
         tipProps={{
           placement: 'top',
