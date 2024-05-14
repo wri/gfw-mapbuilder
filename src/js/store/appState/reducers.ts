@@ -50,6 +50,8 @@ import {
   SET_RADD_ALERT_END,
   SET_ACTIVE_TREE_MOSAIC_LAYER,
   SET_PRODES_LAYER,
+  SET_TREE_COVER_LOSS_START,
+  SET_TREE_COVER_LOSS_END,
 } from './types';
 
 const initialState: AppState = {
@@ -78,6 +80,8 @@ const initialState: AppState = {
     gladEnd: new Date().toString(),
     glad2Start: subYears(new Date(), 2).toString(),
     glad2End: new Date().toString(),
+    treeCoverLossStart: 2001,
+    treeCoverLossEnd: 2023,
     raddAlertStart: subYears(new Date(), 2).toString(),
     raddAlertEnd: new Date().toString(),
     gfwIntegratedStart: subYears(new Date(), 2).toString(),
@@ -253,6 +257,22 @@ export function appStateReducer(state = initialState, action: AppStateTypes): Ap
         leftPanel: {
           ...state.leftPanel,
           glad2Start: action.payload,
+        },
+      };
+    case SET_TREE_COVER_LOSS_START:
+      return {
+        ...state,
+        leftPanel: {
+          ...state.leftPanel,
+          treeCoverLossStart: action.payload,
+        },
+      };
+    case SET_TREE_COVER_LOSS_END:
+      return {
+        ...state,
+        leftPanel: {
+          ...state.leftPanel,
+          treeCoverLossEnd: action.payload,
         },
       };
     case SET_GLAD_2_END:

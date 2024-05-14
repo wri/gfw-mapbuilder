@@ -2,11 +2,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createSliderWithTooltip, Range } from 'rc-slider';
 import { mapController } from '../../controllers/mapController';
-
 import { setTimeSlider } from '../../store/mapview/actions';
-
 import { RootState } from '../../store';
-import { LayerFactory } from '../../helpers/LayerFactory';
 import {
   setIntegratedAlertLayerEnd,
   setIntegratedAlertLayerStart,
@@ -16,12 +13,17 @@ import {
   setGlad2End,
   setRaddAlertStart,
   setRaddAlertEnd,
+  setTreeCoverLossStart,
+  setTreeCoverLossEnd,
 } from '../../store/appState/actions';
 import { LAYER_IDS } from '../../../../configs/layer-config';
-
 const SliderWithTooltip = createSliderWithTooltip(Range);
 import { format } from 'date-fns';
 import { handleCustomColorTheme } from '../../../utils';
+import { DATES } from '../../../../configs/dates-config';
+import { generateDefaultMarks, generateGWFDateRange } from '../leftPanel/layersPanel/GenericLayerControl';
+const { TREE_COVER_LOSS } = DATES;
+
 interface TimeSliderProps {
   layer?: any;
   layerID: string;
@@ -36,6 +38,8 @@ interface TimeSliderProps {
   intervalSpeed?: number;
 }
 
+const LAYERS_DATE_RANGE = new Map();
+
 const TimeSlider = (props: TimeSliderProps): JSX.Element => {
   const dispatch = useDispatch();
   const timeSliderRef = useRef();
@@ -49,6 +53,7 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
   const customColorTheme = useSelector((store: RootState) => store.appSettings.customColorTheme);
   const gfwLayer = useSelector((store: RootState) => store.appState.leftPanel.integratedAlertLayer);
   const allAvailableLayers = useSelector((store: RootState) => store.mapviewState.allAvailableLayers);
+  const globalTimeSlider = useSelector((store: RootState) => store.mapviewState.timeSlider);
   const [marks, setMarks] = useState(props.defaultMarks);
 
   const gfwIntegratedStart = useSelector((store: RootState) => store.appState.leftPanel.gfwIntegratedStart);
@@ -63,6 +68,9 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
 
   const raddAlertStart = useSelector((store: RootState) => store.appState.leftPanel.raddAlertStart);
   const raddAlertEnd = useSelector((store: RootState) => store.appState.leftPanel.raddAlertEnd);
+
+  const treeCoverLossStart = useSelector((store: RootState) => store.appState.leftPanel.treeCoverLossStart);
+  const treeCoverLossEnd = useSelector((store: RootState) => store.appState.leftPanel.treeCoverLossEnd);
 
   const themeColor = handleCustomColorTheme(customColorTheme);
 
@@ -125,10 +133,10 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
     const playSequence = (): void => {
       const newMaxYear = (range[1] += 1);
 
-      setRange([range[0], newMaxYear]);
+      setRange([range[0], range[1]]);
       updateMarks(newMaxYear);
       if (layerID === LAYER_IDS.GFW_INTEGRATED_ALERTS) {
-        const { startDate, endDate } = handleSelectedDate([range[0], newMaxYear], props.defaultMarks);
+        const { startDate, endDate } = handleSelectedDate([range[0], range[1]], props.defaultMarks);
 
         const dateStart = startDate;
         const dateEnd = endDate;
@@ -151,11 +159,13 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
       }
     };
 
-    if (startTimeSlider && range[1] !== timeSlider[1]) {
+    const getValueByLayerId = LAYERS_DATE_RANGE.get(props.layerID);
+    const defaultDateValue = getValueByLayerId?.length ? getValueByLayerId : globalTimeSlider;
+    if (startTimeSlider && range[1] < defaultDateValue[1]) {
       (timeSliderRef as any).current = setInterval(playSequence, intervalSpeed);
+      setMarks(props.defaultMarks);
     } else if (startTimeSlider && range[1] === timeSlider[1]) {
       setRange([props.min, props.max]);
-
       setMarks(props.defaultMarks);
     }
 
@@ -191,6 +201,9 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
           minValue = startKey !== null ? startKey : props.min;
           maxValue = endKey !== null ? endKey : props.max;
         }
+      } else if (props.layerID === LAYER_IDS.TREE_COVER_LOSS) {
+        minValue = treeCoverLossStart;
+        maxValue = treeCoverLossEnd;
       } else {
         minValue = props.min;
         maxValue = props.max;
@@ -212,26 +225,8 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
     raddAlertEnd,
   ]);
 
-  const resetIntegratedAlertsDates = () => {
-    if (props.layerID === LAYER_IDS.GFW_INTEGRATED_ALERTS) {
-      const { startDate, endDate } = handleSelectedDate([props.min, props.max], props.defaultMarks);
-
-      const convertStartDate = startDate;
-      const convertEndDate = endDate;
-
-      dispatch(setIntegratedAlertLayerStart(convertStartDate));
-      dispatch(setGladStart(convertStartDate));
-      dispatch(setGlad2Start(convertStartDate));
-      dispatch(setRaddAlertStart(convertStartDate));
-
-      dispatch(setIntegratedAlertLayerEnd(convertEndDate));
-      dispatch(setGladEnd(convertEndDate));
-      dispatch(setGlad2End(convertEndDate));
-      dispatch(setRaddAlertEnd(convertEndDate));
-    }
-  };
-
   const setSelectedRange = async (selectedRange: Array<number>) => {
+    LAYERS_DATE_RANGE.set(props.layerID, selectedRange);
     setRange(selectedRange);
     dispatch(setTimeSlider(selectedRange));
     mapController.updateBaseTile(layerID, selectedRange);
@@ -254,29 +249,28 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
 
     if (props.layerID === LAYER_IDS.GFW_INTEGRATED_ALERTS) {
       dispatch(setIntegratedAlertLayerStart(convertStartDate));
-      dispatch(setGladStart(convertStartDate));
-      dispatch(setGlad2Start(convertStartDate));
-      dispatch(setRaddAlertStart(convertStartDate));
-
       dispatch(setIntegratedAlertLayerEnd(convertEndDate));
-      dispatch(setGladEnd(convertEndDate));
-      dispatch(setGlad2End(convertEndDate));
-      dispatch(setRaddAlertEnd(convertEndDate));
     }
-
+    if (props.layerID === LAYER_IDS.TREE_COVER_LOSS) {
+      dispatch(setTreeCoverLossStart(selectedRange[0]));
+      dispatch(setTreeCoverLossEnd(selectedRange[1]));
+    }
     if (props.layerID === LAYER_IDS.GFW_INTEGRATED_ALERTS && gfwLayer === LAYER_IDS.GFW_INTEGRATED_ALERTS) {
       await mapController.toggleGladLayer({ id: LAYER_IDS.GFW_INTEGRATED_ALERTS, start, end });
       dispatch(setIntegratedAlertLayerStart(convertStartDate));
       dispatch(setIntegratedAlertLayerEnd(convertEndDate));
-    } else if (gfwLayer === LAYER_IDS.GLAD_ALERTS) {
+    }
+    if (gfwLayer === LAYER_IDS.GLAD_ALERTS && props.layerID === LAYER_IDS.GFW_INTEGRATED_ALERTS) {
       await mapController.toggleGladLayer({ id: LAYER_IDS.GLAD_ALERTS, start, end });
       dispatch(setGladStart(convertStartDate));
       dispatch(setGladEnd(convertEndDate));
-    } else if (gfwLayer === LAYER_IDS.GLAD_S2_ALERTS) {
+    }
+    if (gfwLayer === LAYER_IDS.GLAD_S2_ALERTS && props.layerID === LAYER_IDS.GFW_INTEGRATED_ALERTS) {
       await mapController.toggleGladLayer({ id: LAYER_IDS.GLAD_S2_ALERTS, start, end });
       dispatch(setGlad2Start(convertStartDate));
       dispatch(setGlad2End(convertEndDate));
-    } else if (gfwLayer === LAYER_IDS.RADD_ALERTS) {
+    }
+    if (gfwLayer === LAYER_IDS.RADD_ALERTS && props.layerID === LAYER_IDS.GFW_INTEGRATED_ALERTS) {
       await mapController.toggleGladLayer({ id: LAYER_IDS.RADD_ALERTS, start, end });
       dispatch(setRaddAlertStart(convertStartDate));
       dispatch(setRaddAlertEnd(convertEndDate));
@@ -287,37 +281,29 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
 
   const playOrPauseTimeSlider = (startPlaying: boolean): any => {
     if (startPlaying) {
-      setRange([timeSlider[0], timeSlider[0]]);
-      mapController.updateBaseTile(layerID, [timeSlider[0], timeSlider[0]]);
+      const getRange = LAYERS_DATE_RANGE.get(props.layerID);
+      if (getRange) {
+        setRange([getRange[0], getRange[0]]);
+      } else {
+        setRange([props.defaultValue[0], props.defaultValue[0]]);
+      }
+      mapController.updateBaseTile(layerID, [globalTimeSlider[0], globalTimeSlider[0]]);
 
       setPlayButton(false);
       setStartTimeSlider(true);
     } else {
-      // * NOTE: stops & resets time slider
-      const { startDate, endDate } = handleSelectedDate(timeSlider, props.defaultMarks);
-
-      //@ts-ignore
-      let start = new Date(startDate).getJulian();
-      //@ts-ignore
-      let end = new Date(endDate).getJulian();
-
-      setRange(timeSlider);
-      resetIntegratedAlertsDates();
-
-      setMarks(props.defaultMarks);
-      if (layerID === LAYER_IDS.GFW_INTEGRATED_ALERTS) {
-        if (gfwLayer === LAYER_IDS.GFW_INTEGRATED_ALERTS) {
-          mapController.toggleGladLayer({ id: LAYER_IDS.GFW_INTEGRATED_ALERTS, start, end });
-        } else if (gfwLayer === LAYER_IDS.GLAD_ALERTS) {
-          mapController.toggleGladLayer({ id: LAYER_IDS.GLAD_ALERTS, start, end });
-        } else if (gfwLayer === LAYER_IDS.GLAD_S2_ALERTS) {
-          mapController.toggleGladLayer({ id: LAYER_IDS.GLAD_S2_ALERTS, start, end });
-        } else if (gfwLayer === LAYER_IDS.RADD_ALERTS) {
-          mapController.toggleGladLayer({ id: LAYER_IDS.RADD_ALERTS, start, end });
-        }
+      const getRange = LAYERS_DATE_RANGE.get(props.layerID);
+      setRange(getRange);
+      if (props.layerID === LAYER_IDS.TREE_COVER_LOSS) {
+        const treeCoverLossDefaultMarks = generateDefaultMarks({ start: 2000, end: TREE_COVER_LOSS.max });
+        setMarks(treeCoverLossDefaultMarks);
+      } else if (props.layerID === LAYER_IDS.GFW_INTEGRATED_ALERTS) {
+        const dateRangeResult = generateGWFDateRange();
+        setMarks(dateRangeResult.marks);
       } else {
-        mapController.updateBaseTile(layerID, timeSlider);
+        setMarks(props.defaultMarks);
       }
+
       setStartTimeSlider(false);
       setPlayButton(true);
       clearInterval(timeSliderRef.current);
@@ -325,11 +311,26 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
   };
 
   const handleTipFormatter = (val: any) => {
-    if (props.layerID !== LAYER_IDS.GFW_INTEGRATED_ALERTS) return val;
-    const label = props.defaultMarks[val]?.label;
-    return label;
+    if (
+      props.layerID === LAYER_IDS.GFW_INTEGRATED_ALERTS ||
+      props.layerID === LAYER_IDS.TREE_COVER_LOSS ||
+      gfwLayer === LAYER_IDS.GLAD_ALERTS ||
+      gfwLayer === LAYER_IDS.GLAD_S2_ALERTS ||
+      gfwLayer === LAYER_IDS.RADD_ALERTS
+    ) {
+      const label = props.defaultMarks[val]?.label;
+      return label;
+    }
+    return val;
   };
 
+  const getDateValue = () => {
+    const getRange = LAYERS_DATE_RANGE.get(props.layerID);
+    if (getRange?.length) {
+      return [getRange[0], getRange[0]];
+    }
+    return range;
+  };
   return (
     <div className="time-slider-container">
       {playButton ? (
@@ -346,7 +347,7 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
       <SliderWithTooltip
         min={props.min}
         max={props.max}
-        defaultValue={props.defaultValue}
+        defaultValue={getDateValue()}
         value={range}
         allowCross={false}
         tipFormatter={(val) => handleTipFormatter(val)}
