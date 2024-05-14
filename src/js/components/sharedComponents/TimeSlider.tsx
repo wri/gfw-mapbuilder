@@ -103,7 +103,6 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
   useEffect(() => {
     const updateMarks = (newMaxYear: number): void => {
       const sliderMarks = { ...marks };
-
       const oneYearPrior = newMaxYear - 1;
       const twoYearsPrior = newMaxYear - 2;
       const oneYearLater = newMaxYear + 1;
@@ -163,7 +162,6 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
     const defaultDateValue = getValueByLayerId?.length ? getValueByLayerId : globalTimeSlider;
     if (startTimeSlider && range[1] < defaultDateValue[1]) {
       (timeSliderRef as any).current = setInterval(playSequence, intervalSpeed);
-      setMarks(props.defaultMarks);
     } else if (startTimeSlider && range[1] === timeSlider[1]) {
       setRange([props.min, props.max]);
       setMarks(props.defaultMarks);
@@ -279,6 +277,21 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
     }
   };
 
+  const resetMarksByLayerId = () => {
+    if (props.layerID === LAYER_IDS.TREE_COVER_LOSS) {
+      const treeCoverLossDefaultMarks = generateDefaultMarks({ start: 2000, end: TREE_COVER_LOSS.max });
+      setMarks(treeCoverLossDefaultMarks);
+      return treeCoverLossDefaultMarks;
+    } else if (props.layerID === LAYER_IDS.GFW_INTEGRATED_ALERTS) {
+      const dateRangeResult = generateGWFDateRange();
+      setMarks(dateRangeResult.marks);
+      return dateRangeResult.marks;
+    } else {
+      setMarks(props.defaultMarks);
+      return props.defaultMarks;
+    }
+  };
+
   const playOrPauseTimeSlider = (startPlaying: boolean): any => {
     if (startPlaying) {
       const getRange = LAYERS_DATE_RANGE.get(props.layerID);
@@ -292,17 +305,7 @@ const TimeSlider = (props: TimeSliderProps): JSX.Element => {
       setPlayButton(false);
       setStartTimeSlider(true);
     } else {
-      const getRange = LAYERS_DATE_RANGE.get(props.layerID);
-      setRange(getRange);
-      if (props.layerID === LAYER_IDS.TREE_COVER_LOSS) {
-        const treeCoverLossDefaultMarks = generateDefaultMarks({ start: 2000, end: TREE_COVER_LOSS.max });
-        setMarks(treeCoverLossDefaultMarks);
-      } else if (props.layerID === LAYER_IDS.GFW_INTEGRATED_ALERTS) {
-        const dateRangeResult = generateGWFDateRange();
-        setMarks(dateRangeResult.marks);
-      } else {
-        setMarks(props.defaultMarks);
-      }
+      resetMarksByLayerId();
 
       setStartTimeSlider(false);
       setPlayButton(true);
