@@ -122,14 +122,16 @@ const NestedLayerGroup = (props: NestedLayerGroupProps): JSX.Element => {
         );
       });
     return (
-      <LayerGroup
-        key={k}
-        selectedLanguage={props.selectedLanguage}
-        lGroup={lGroup}
-        layers={layers}
-        activeGroups={activeGroups}
-        changeActiveGroups={handleGroupToggle}
-      />
+      <>
+        <LayerGroup
+          key={k}
+          selectedLanguage={props.selectedLanguage}
+          lGroup={lGroup}
+          layers={layers}
+          activeGroups={activeGroups}
+          changeActiveGroups={handleGroupToggle}
+        />
+      </>
     );
   });
 
