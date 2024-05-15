@@ -49,6 +49,8 @@ import {
   TreeMosaicLayerTypes,
   SET_ACTIVE_TREE_MOSAIC_LAYER,
   SET_PRODES_LAYER,
+  SET_TREE_COVER_LOSS_START,
+  SET_TREE_COVER_LOSS_END,
 } from './types';
 
 export function setSelectedSearchWidgetLayer(payload: AppState['selectedSearchWidgetLayer']) {
@@ -219,6 +221,18 @@ export function setGlad2Start(payload: AppState['leftPanel']['glad2Start']) {
   };
 }
 
+export function setTreeCoverLossStart(payload: AppState['leftPanel']['treeCoverLossStart']) {
+  return {
+    type: SET_TREE_COVER_LOSS_START as typeof SET_TREE_COVER_LOSS_START,
+    payload: payload,
+  };
+}
+export function setTreeCoverLossEnd(payload: AppState['leftPanel']['treeCoverLossEnd']) {
+  return {
+    type: SET_TREE_COVER_LOSS_END as typeof SET_TREE_COVER_LOSS_END,
+    payload: payload,
+  };
+}
 export function setGlad2End(payload: AppState['leftPanel']['glad2End']) {
   return {
     type: SET_GLAD_2_END as typeof SET_GLAD_2_END,

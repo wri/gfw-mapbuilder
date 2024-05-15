@@ -17,6 +17,8 @@ import {
 } from './helpers/IntegratedAlertControlsHelper';
 import DatePicker from 'react-datepicker';
 import styled from 'styled-components';
+import ToggleComponent from '../ui/ToggleComponent';
+import { handleCustomColorTheme } from '../../../utils';
 
 //Dynamic custom theme override using styled-components lib
 interface CheckBoxWrapperProps {
@@ -50,11 +52,14 @@ const IntegratedAlertControls = (props: GladControlsProps): JSX.Element => {
   const raddAlertEnd = useSelector((store: RootState) => store.appState.leftPanel.raddAlertEnd);
   const gfwIntegratedStart = useSelector((store: RootState) => store.appState.leftPanel.gfwIntegratedStart);
 
+  const customColorTheme = useSelector((store: RootState) => store.appSettings.customColorTheme);
   const [startDate, setStartDate] = React.useState(String(DATE_PICKER_START_DATES.GFW_INTEGRATED_ALERTS));
   const [startDateUnformatted, setStartDateUnformatted] = React.useState(
     String(DATE_PICKER_START_DATES.GFW_INTEGRATED_ALERTS)
   );
   const [endDate, setEndDate] = React.useState(gfwIntegratedEnd);
+
+  const themeColor = handleCustomColorTheme(customColorTheme);
 
   async function handleStartDateChange(day: any) {
     const year = new Date(day).getFullYear();
@@ -130,14 +135,11 @@ const IntegratedAlertControls = (props: GladControlsProps): JSX.Element => {
         <div className="glad-control-container">
           <div className="layer-checkbox">
             <CheckboxWrapper customColorTheme={props.customColorTheme}>
-              <input
-                title="High and Highest Confidence Alerts"
-                type="checkbox"
-                name="styled-checkbox"
-                className="styled-checkbox"
-                id="layer-checkbox-glad"
-                checked={highConfidenceConfirmed}
+              <ToggleComponent
+                themeColor={themeColor}
                 onChange={showOnlyHighConfidenceToggle}
+                checked={highConfidenceConfirmed}
+                disabled={false}
               />
               <label className="styled-checkboxlabel" htmlFor="layer-checkbox-glad"></label>
             </CheckboxWrapper>
@@ -147,14 +149,11 @@ const IntegratedAlertControls = (props: GladControlsProps): JSX.Element => {
         <div className="gfw-control-container" style={{ marginTop: 5 }}>
           <div className="layer-checkbox">
             <CheckboxWrapper customColorTheme={props.customColorTheme}>
-              <input
-                title="Geographic Coverage"
-                type="checkbox"
-                name="styled-checkbox"
-                className="styled-checkbox"
-                id="layer-checkbox-gfw"
-                checked={geographicCoverage}
+              <ToggleComponent
+                themeColor={themeColor}
                 onChange={showGeographicCoverage}
+                checked={geographicCoverage}
+                disabled={false}
               />
               <label className="styled-checkboxlabel" htmlFor="layer-checkbox-gfw"></label>
             </CheckboxWrapper>

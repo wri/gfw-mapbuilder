@@ -45,6 +45,31 @@ interface LayerInfo {
   layerInfo: any;
   selectedLanguage: string;
 }
+
+export const generateDefaultMarks = (params: any) => {
+  const { start, end } = params;
+  let index = start;
+  let rawIndex = 0;
+  const newMarks = {};
+  const yearsAvailable = end - start;
+
+  while (index <= end) {
+    const display = index % 7 === 0 ? 'block' : 'none';
+    newMarks[index] = {
+      style: { display: yearsAvailable < 6 ? 'block' : display },
+      label: index,
+      value: rawIndex,
+    };
+    rawIndex++;
+    index++;
+  }
+  return newMarks;
+};
+
+export const generateGWFDateRange = () => {
+  const currentDateMinusTwoYears = subYears(new Date(), 2);
+  return generateRangeDate(currentDateMinusTwoYears, new Date());
+};
 const LayerFilterSelection = (props: LayerInfo): JSX.Element => {
   const { layerInfo, selectedLanguage } = props;
   const [options, setOptions] = React.useState<any>([]);
@@ -181,27 +206,8 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
 
   const themeColor = handleCustomColorTheme(customColorTheme);
 
-  const generateDefaultMarks = (params: any) => {
-    const { start, end } = params;
-    let index = start;
-    const newMarks = {};
-    const yearsAvailable = end - start;
-
-    while (index <= end) {
-      const display = index % 7 === 0 ? 'block' : 'none';
-      newMarks[index] = {
-        style: { display: yearsAvailable < 6 ? 'block' : display },
-        label: index,
-      };
-
-      index++;
-    }
-    return newMarks;
-  };
-
   const returnTimeSlider = (id: string): any => {
-    const currentDateMinusTwoYears = subYears(new Date(), 2);
-    const dateRangeResult = generateRangeDate(currentDateMinusTwoYears, new Date());
+    const dateRangeResult = generateGWFDateRange();
     switch (id) {
       case 'TREE_COVER_LOSS':
         return (

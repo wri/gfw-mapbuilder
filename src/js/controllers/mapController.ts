@@ -986,7 +986,7 @@ export class MapController {
     store.dispatch(allAvailableLayers(newLayersArray));
   };
 
-  toggleLayerVisibility(layerID: string, sublayer?: boolean, parentID?: string): void {
+  toggleLayerVisibility(checked: boolean, layerID: string, sublayer?: boolean, parentID?: string): void {
     let layer = null as any;
     if (sublayer && parentID) {
       layer = this._map
@@ -1007,7 +1007,7 @@ export class MapController {
       }
 
       //1. update the map
-      layer.visible = visibility;
+      layer.visible = checked;
 
       //2. Update redux
       const { mapviewState } = store.getState();
@@ -1016,7 +1016,7 @@ export class MapController {
         if (l.id === layerID) {
           return {
             ...l,
-            visible: layer.visible,
+            visible: checked,
           };
         } else {
           return l;
