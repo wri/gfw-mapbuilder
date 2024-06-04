@@ -151,7 +151,6 @@ const BaseAnalysis = (): JSX.Element => {
       fetchGFWWidgetConfig(widgetURL).then((res) => {
         //Send attributes over for processing
         setVegaSpec(res);
-
         //grab download urls if they exist
         const widgetConfigData = res.data;
         const downloadUrl = widgetConfigData.find((e: any) => e.name === 'table');

@@ -1,4 +1,5 @@
 import { loadModules } from 'esri-loader';
+import { ENV_VARIABLES } from '../../../../../configs/envVariables';
 import { arcgisToGeoJSON } from '../../../helpers/spatialDataTransformation';
 import { markValueMap } from '../../mapWidgets/widgetContent/CanopyDensityContent';
 
@@ -126,5 +127,7 @@ export function generateWidgetURL({
   if (analysisId === 'LCC' || analysisId === 'TC_GAIN_TOTAL') {
     baseURL = baseURL.concat(`&sql=${sqlString}`);
   }
-  return baseURL;
+  const key = ENV_VARIABLES.GFW_DATA_API_KEY;
+  console.log('key from utils 130: ', { key });
+  return `${baseURL}&x-api-key=${key}`;
 }

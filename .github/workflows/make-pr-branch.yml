@@ -22,6 +22,7 @@ jobs:
       - name: Create Build
         env:
           REACT_APP_PLANET_API_KEY: ${{ secrets.REACT_APP_PLANET_API_KEY }}
+          REACT_APP_GFW_DATA_API_KEY: ${{ secrets.REACT_APP_GFW_DATA_API_KEY }}
         run: |
           npm install
           npm run build
