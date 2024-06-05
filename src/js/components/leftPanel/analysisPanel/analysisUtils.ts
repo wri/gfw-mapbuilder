@@ -128,6 +128,5 @@ export function generateWidgetURL({
     baseURL = baseURL.concat(`&sql=${sqlString}`);
   }
   const key = ENV_VARIABLES.GFW_DATA_API_KEY;
-  console.log('key from utils 130: ', { key });
   return `${baseURL}&x-api-key=${key}`;
 }
