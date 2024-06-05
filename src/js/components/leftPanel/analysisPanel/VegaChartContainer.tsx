@@ -105,7 +105,6 @@ const Chart = (props: ChartProps): JSX.Element => {
   }, [chartRef, spec, language]);
 
   const chartWrapperStyle = createChartWrapperStyle(chartType);
-
   function renderChartRef(): JSX.Element {
     return (
       <Measure
