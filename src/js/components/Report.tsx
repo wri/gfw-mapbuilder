@@ -95,6 +95,7 @@ const Report = (props: ReportProps): JSX.Element => {
     }
   }, []);
 
+  // Fetch Planet Tile Data if Planet Basemap is selected
   const getPlanetTileData = () => {
     const tileInfoURL = 'https://tiles.globalforestwatch.org/openapi.json';
 
@@ -152,9 +153,6 @@ const Report = (props: ReportProps): JSX.Element => {
         </button>
       </div>
       <div className="report-map">
-        {/* <Mapview /> */}
-
-        {/* {isMapReadyToRender && <props.mapview />} */}
         <props.mapview />
       </div>
       <div className="report-analysis">
