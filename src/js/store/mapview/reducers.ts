@@ -14,6 +14,7 @@ import {
   CHANGE_MAP_CENTER_COORDINATES,
   SET_LAYERS_LOADING,
   SET_USER_COORDINATES,
+  SET_SELECTED_BASEMAP_INFO,
 } from './types';
 
 const initialState: MapviewState = {
@@ -29,6 +30,7 @@ const initialState: MapviewState = {
   mapCenterCoordinates: { latitude: 0, longitude: 0 },
   layersLoading: true,
   userCoordinates: undefined,
+  selectedBasedMapInfo: null,
 };
 
 export function mapviewReducer(state = initialState, action: MapviewStateTypes): MapviewState {
@@ -57,6 +59,8 @@ export function mapviewReducer(state = initialState, action: MapviewStateTypes):
       return { ...state, userCoordinates: action.payload };
     case SET_DOCUMENTS:
       return { ...state, documents: action.payload };
+    case SET_SELECTED_BASEMAP_INFO:
+      return { ...state, selectedBasedMapInfo: action.payload };
     default:
       return state;
   }

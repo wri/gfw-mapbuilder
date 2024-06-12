@@ -12,6 +12,7 @@ import {
   CHANGE_MAP_CENTER_COORDINATES,
   SET_LAYERS_LOADING,
   SET_USER_COORDINATES,
+  SET_SELECTED_BASEMAP_INFO,
   MapviewState,
 } from './types';
 
@@ -95,6 +96,13 @@ export function setUserCoordinates(payload: MapviewState['userCoordinates']) {
 export function setDocuments(payload: MapviewState['documents']) {
   return {
     type: SET_DOCUMENTS as typeof SET_DOCUMENTS,
+    payload,
+  };
+}
+
+export function setSelectedBasemapInfo(payload: MapviewState['selectedBasedMapInfo']) {
+  return {
+    type: SET_SELECTED_BASEMAP_INFO as typeof SET_SELECTED_BASEMAP_INFO,
     payload,
   };
 }

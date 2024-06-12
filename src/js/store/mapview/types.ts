@@ -35,6 +35,7 @@ export interface MapviewState {
   layersLoading: boolean;
   userCoordinates: __esri.Point | undefined;
   documents: null | Attachment[];
+  selectedBasedMapInfo: null | any;
 }
 
 interface LegendConfigItem {
@@ -147,6 +148,7 @@ export const CHANGE_MAP_CENTER_COORDINATES = 'CHANGE_MAP_CENTER_COORDINATES';
 export const SET_LAYERS_LOADING = 'SET_LAYERS_LOADING';
 export const SET_USER_COORDINATES = 'SET_USER_COORDINATES';
 export const SET_DOCUMENTS = 'SET_DOCUMENTS';
+export const SET_SELECTED_BASEMAP_INFO = 'SET_SELECTED_BASEMAP_INFO';
 
 interface SetUserPoint {
   type: typeof SET_USER_COORDINATES;
@@ -187,6 +189,10 @@ interface SetDocuments {
   payload: MapviewState['documents'];
 }
 
+interface SetSelectedBasemapInfo {
+  type: typeof SET_SELECTED_BASEMAP_INFO;
+  payload: MapviewState['selectedBasedMapInfo'];
+}
 interface SetTimeSlider {
   type: typeof SET_TIME_SLIDER;
   payload: MapviewState['timeSlider'];
@@ -219,4 +225,5 @@ export type MapviewStateTypes =
   | ChangeMapCenterCoordinates
   | SetLayersLoading
   | SetUserPoint
-  | SetDocuments;
+  | SetDocuments
+  | SetSelectedBasemapInfo;

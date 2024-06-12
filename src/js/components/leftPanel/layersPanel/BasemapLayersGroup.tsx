@@ -11,6 +11,7 @@ import { LayerProps } from '../../../store/mapview/types';
 import { format } from 'date-fns';
 import { ENV_VARIABLES } from '../../../../../configs/envVariables';
 import { handleCustomColorTheme } from '../../../../utils';
+import { setSelectedBasemapInfo } from '../../../store/mapview/actions';
 
 interface DefaultBasemapProps {
   layerInfo: {
@@ -73,7 +74,6 @@ const PlanetBasemap = (props: BaseLayerPlanet): JSX.Element => {
   const apiKey = ENV_VARIABLES.PLANET_API_KEY;
 
   const themeColor = handleCustomColorTheme(customColorTheme);
-
   useEffect(() => {
     const tileInfoURL = 'https://tiles.globalforestwatch.org/openapi.json';
     fetch(tileInfoURL)
@@ -96,7 +96,6 @@ const PlanetBasemap = (props: BaseLayerPlanet): JSX.Element => {
       })
       .catch((e) => console.log(e));
   }, []);
-
   function handlePlanetTileChange(name: string): void {
     setSelectedPlanetTileLayer(name);
     mapController.addPlanetTileLayer(url, planetColor, name, apiKey);
@@ -108,6 +107,8 @@ const PlanetBasemap = (props: BaseLayerPlanet): JSX.Element => {
   }
 
   function handlePlanetTileClick() {
+    const basemapInfo = { id: 'planet', url, planetColor, selectedPlanetTileLayer, apiKey } as any;
+    dispatch(setSelectedBasemapInfo(basemapInfo));
     mapController.addPlanetTileLayer(url, planetColor, selectedPlanetTileLayer, apiKey);
   }
 
@@ -261,7 +262,6 @@ const BasemapLayersGroup = (props: LayerGroupProps): React.ReactElement => {
 
   //Add BASEMAP from Webmap
   basemapsToRender.push({ id: 'webmap' });
-
   const allowedBaseLayers = basemapsToRender.map((baselayer: any) => {
     if (baselayer.id === 'landsat') {
       return (
