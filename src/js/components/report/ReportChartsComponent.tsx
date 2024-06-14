@@ -123,6 +123,7 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
 
   React.useEffect(() => {
     setChartLoading(true);
+    console.log('moduleInfoData', moduleInfoData);
     if (moduleInfoData?.widgetId) {
       const stDate = moduleInfoData?.minDate ? moduleInfoData?.minDate : gladStart;
       const enDate = moduleInfoData?.maxDate ? moduleInfoData?.maxDate : gladEnd;
@@ -137,6 +138,8 @@ const ChartModule = (props: ChartModuleProps): JSX.Element => {
         analysisId: moduleInfoData.analysisId,
         sqlString: moduleInfoData.sqlString,
       });
+
+      console.log('console.log', { widgetURL, moduleInfoData });
 
       fetch(widgetURL)
         .then((response: any) => response.json())
