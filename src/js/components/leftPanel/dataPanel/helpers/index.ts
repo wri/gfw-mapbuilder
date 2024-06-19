@@ -160,7 +160,8 @@ export const checkForPopupImage = (value: string | number | null) => {
     const splitStr = value?.split('.');
     if (splitStr.length <= 1) return false;
 
-    const getLastItem = splitStr[splitStr.length - 1];
+    const getLastItem = splitStr[splitStr.length - 1].toLowerCase();
+
     if (IMAGE_TYPES.includes(getLastItem)) {
       return true;
     }
