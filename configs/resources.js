@@ -434,14 +434,15 @@ export default {
         opacity: 0.35,
         layerIds: [0],
       },
-      {
+      /* {
         id: 'LEGEND_LAYER',
         type: 'dynamic',
-        url: 'https://gis-gfw.wri.org/arcgis/rest/services/legends/MapServer',
+        url: '',
+        //url: 'https://gis-gfw.wri.org/arcgis/rest/services/legends/MapServer',
         visible: false,
         opacity: 0,
         layerIds: [],
-      },
+      }, */
       {
         id: 'USER_FEATURES',
         type: 'graphic',

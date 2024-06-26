@@ -1967,7 +1967,8 @@ export class MapController {
   }
 
   initializeAndSetMODISLayers(MapImageLayer: any) {
-    return MODISLayerIDs.map(({ id, url, layerIds }) => {
+    const modisLayer = MODISLayerIDs.map(({ id, url, layerIds }) => {
+      if (!url) return null;
       return new MapImageLayer({
         id: id,
         url,
@@ -1980,6 +1981,7 @@ export class MapController {
         ],
       });
     });
+    return modisLayer.filter((item) => item !== null);
   }
 
   setMODISDefinedRange(sublayerType: string): void {
