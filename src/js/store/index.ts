@@ -6,7 +6,7 @@ import { appStateReducer } from './appState/reducers';
 import { mapviewReducer } from './mapview/reducers';
 import { createLogger } from 'redux-logger';
 
-import * as actionCreators from './appState/actions';
+import * as actionCreators from './mapview/actions';
 
 const composeEnhancers = composeWithDevTools({ actionCreators, trace: true, traceLimit: 25 });
 

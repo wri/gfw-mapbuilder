@@ -10,7 +10,9 @@ import { MemoReportChartsComponent } from './report/ReportChartsComponent';
 import { ShareIcon } from '../../images/shareIcon';
 import { PrintIcon } from '../../images/printIcon';
 import { analysisReportConfig } from '../../../configs/translations/report.translations';
+import { format } from 'date-fns';
 import '../../css/report.scss';
+import { ENV_VARIABLES } from '../../../configs/envVariables';
 
 const geostoreURL = 'https://production-api.globalforestwatch.org/v1/geostore/';
 
@@ -28,6 +30,7 @@ const getLocalStorageAttributes = () => {
 
 const localStorageData = getLocalStorageAttributes();
 
+const API_KEY = ENV_VARIABLES.PLANET_API_KEY;
 const Report = (props: ReportProps): JSX.Element => {
   const dispatch = useDispatch();
   const logoURL = useSelector((store: RootState) => store.appSettings.logoUrl);
@@ -37,7 +40,10 @@ const Report = (props: ReportProps): JSX.Element => {
   const [esriGeometry, setEsriGeometry] = React.useState();
   const [geostoreID, setGeostoreID] = React.useState<string | null>(null);
   const { customAnalysisTitle, areaOfAnalysisTitle } = analysisReportConfig;
+  const [planetBasemapInfo, setPlanetBasemapInfo] = React.useState<any>(null);
+  const [planetTiles, setPlanetTiles] = React.useState<Array<{ label: string; value: string }>>([]);
 
+  const basempasInfo = useSelector((store: RootState) => store.appSettings.layerPanel.GROUP_BASEMAP.layers);
   const isMapReady = useSelector((store: RootState) => store.mapviewState.isMapReady);
 
   React.useEffect(() => {
@@ -69,8 +75,8 @@ const Report = (props: ReportProps): JSX.Element => {
         //Dealing with a poly
         addFeatures(esriGeo);
       } else {
-        //Dealing with a point
         mapController.addActiveFeaturePointGraphic(esriGeo[0]);
+        //Dealing with a point
       }
     }
 
@@ -78,6 +84,52 @@ const Report = (props: ReportProps): JSX.Element => {
     mapController.disableMapInteractions();
   }, [featureGeometry, layersLoading]);
 
+  React.useEffect(() => {
+    const basemapId = new URL(window.location.href).searchParams.get('b');
+
+    if (basemapId === 'planet') {
+      const findPlanetInfo = basempasInfo?.find((layer) => layer.id === basemapId) as any;
+      if (findPlanetInfo) {
+        setPlanetBasemapInfo(findPlanetInfo);
+      }
+    }
+  }, []);
+
+  // Fetch Planet Tile Data if Planet Basemap is selected
+  const getPlanetTileData = () => {
+    const tileInfoURL = 'https://tiles.globalforestwatch.org/openapi.json';
+
+    fetch(tileInfoURL)
+      .then((res) => res.json())
+      .then((data) => {
+        const planetDateRanges: Array<string> = data?.components?.schemas?.PlanetDateRange?.enum;
+        const planetTilesFormat = planetDateRanges
+          .reverse()
+          .filter((label) => label.length > 4)
+          .map((d) => {
+            const label = d
+              .split('_')
+              .map((date) => format(new Date(date), 'MMM yyyy'))
+              .join('-');
+            return { value: d, label };
+          });
+        setPlanetTiles(planetTilesFormat);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+  React.useEffect(() => {
+    if (planetBasemapInfo?.url) {
+      getPlanetTileData();
+    }
+  }, [planetBasemapInfo?.url]);
+
+  React.useEffect(() => {
+    if (planetTiles?.length) {
+      mapController.addPlanetTileLayer(planetBasemapInfo.url, 'rgb', planetTiles[0].value, API_KEY);
+    }
+  }, [planetTiles?.length, layersLoading, isMapReady]);
   function printReport(): void {
     window.print();
   }
