@@ -6,14 +6,15 @@ interface IToggleComponent {
   checked: boolean;
   themeColor: string;
   disabled: boolean;
+  layerName?: string;
 }
 
 const ToggleComponent = (props: IToggleComponent) => {
-  const { onChange, checked, themeColor, disabled } = props;
+  const { onChange, checked, themeColor, disabled, layerName } = props;
   return (
     <div>
       <Switch
-        className="react-switch"
+        className={'react-switch' + (checked ? ` toggle-${layerName}-on` : '')}
         checkedIcon={false}
         height={13}
         width={25}
