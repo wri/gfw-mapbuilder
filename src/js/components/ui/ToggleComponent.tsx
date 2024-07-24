@@ -14,7 +14,7 @@ const ToggleComponent = (props: IToggleComponent) => {
   return (
     <div>
       <Switch
-        className={'react-switch'}
+        className={'react-switch' + (checked ? ' layer-checkbox-on' : '')}
         id={checked ? `layer-checkbox-${layerName}` : ''}
         checkedIcon={false}
         height={13}
