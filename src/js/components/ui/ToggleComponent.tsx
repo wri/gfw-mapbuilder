@@ -14,7 +14,7 @@ const ToggleComponent = (props: IToggleComponent) => {
   const { onChange, checked, themeColor, disabled, layerName } = props;
 
   useEffect(() => {
-    // The class and id is tied to Google Analytics. And allows WRI to track clicks on the layer checkboxes and the layer name.
+    // The class and id is tied to Google Analytics. Allows WRI to track clicks on the layer checkboxes and the layer name.
     if (!layerName) return;
 
     const layerElement = document.querySelector(`[data-layer-name="${layerName}"]`);
