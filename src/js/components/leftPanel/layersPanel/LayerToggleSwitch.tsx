@@ -7,7 +7,6 @@ import '../../../../css/layer-toggle-checkbox.scss';
 import { handleCustomColorTheme } from '../../../../utils';
 import { LAYER_IDS } from '../../../../../configs/layer-config';
 import { setProdesLayer } from '../../../store/appState/actions';
-import Switch from 'react-switch';
 import ToggleComponent from '../../ui/ToggleComponent';
 //Dynamic custom theme override using styled-components lib
 interface CheckBoxWrapperProps {
@@ -62,7 +61,13 @@ const LayerToggleSwitch = (props: LayerToggleProps): React.ReactElement => {
   return (
     <CheckboxWrapper customColorTheme={themeColor}>
       <div className="layer-checkbox">
-        <ToggleComponent themeColor={themeColor} onChange={toggleVisibility} checked={!!isChecked} disabled={isError} />
+        <ToggleComponent
+          themeColor={themeColor}
+          onChange={toggleVisibility}
+          checked={!!isChecked}
+          disabled={isError}
+          layerName={layerID}
+        />
         <label className="styled-checkboxlabel" htmlFor={`layer-checkbox-${layerID}`}>
           {layerID}
         </label>
