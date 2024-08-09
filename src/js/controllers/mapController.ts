@@ -58,6 +58,8 @@ import legendInfoController from '../helpers/legendInfo';
 import { parseExtentConfig } from '../helpers/mapController/configParsing';
 import { overwriteColorTheme } from '../store/appSettings/actions';
 import { errorTranslations } from '../../../configs/translations/error.translations';
+import { map } from 'esri/widgets/TableList/TableListViewModel';
+import { group } from 'console';
 
 setDefaultOptions({ css: true, version: '4.19' });
 
@@ -70,6 +72,8 @@ interface URLCoordinates {
 interface ZoomParams {
   zoomIn: boolean;
 }
+
+const LAYERS_FROM_DEFAULT_WEBMAP = ['Integrated Deforestation Alerts'];
 
 export class MapController {
   _map: __esri.Map | undefined;
@@ -112,7 +116,7 @@ export class MapController {
   async initializeMap(domRef: RefObject<any>): Promise<void> {
     this._domRef = domRef;
     const { appSettings, appState } = store.getState();
-
+    console.log(appSettings.layerPanel);
     const [MapView, WebMap, Portal, GraphicsLayer, Polygon, Graphic] = await loadModules([
       'esri/views/MapView',
       'esri/WebMap',
@@ -185,6 +189,7 @@ export class MapController {
           'esri/core/watchUtils',
           'esri/layers/MapImageLayer',
         ]);
+
         store.dispatch(isMapReady(true));
         //default scale for map
         this._webmapBasemap = this._map?.basemap.clone();
@@ -283,11 +288,283 @@ export class MapController {
         //@ts-ignore -- this ensures that webmap layers are ready on map before the steps get initialized
         Promise.all(this._map?.layers.items.map((l) => l.load())).then(async () => {
           //Add layers that are already on the map (webmap layers) to redux array
-          const mapLayerObjects: LayerProps[] = await extractWebmapLayerObjects(this._map);
-          store.dispatch(allAvailableLayers(mapLayerObjects));
+
+          const layerArray = this._map?.layers.toArray() as any;
+          console.log('layerArray', layerArray);
+
+          // LAYERS_FROM_DEFAULT_WEBMAP is included, do not use extractWebmapLayerObjects
+          let mapLayerObjects: LayerProps[] = [];
 
           //Fetching all other (non webmap) layer information from resources file AND GFW Api for those that are deemed as 'remoteDataLayer' in the config
           const remoteAndServiceLayersObjects = await getRemoteAndServiceLayers();
+
+          const getLayerArrayLayerNames = layerArray.map((layer: any) => layer.title);
+
+          LAYERS_FROM_DEFAULT_WEBMAP.forEach(async (layerName) => {
+            if (getLayerArrayLayerNames.includes('Integrated Deforestation Alerts')) {
+              const layer = layerArray.find((l: any) => l.title === 'Integrated Deforestation Alerts');
+              if (layer) {
+                const layerObject = {
+                  dashboardURL: layer?.portalItem?.url,
+                  dataLayer: {
+                    groupId: 'GROUP_LCD',
+                    id: 'Integrated Deforestation Alerts',
+                    order: 0,
+                    type: 'webmap',
+                  },
+                  isError: false,
+                  layer: {
+                    metadata: {
+                      metadata: {
+                        function:
+                          '<p>Monitor forest disturbance in near-real-time using integrated alerts from three alerting systems </p>',
+                        geographic_coverage: '<p>30°N to 30°S</p>',
+                        download_data:
+                          'https://data.globalforestwatch.org/datasets/gfw::integrated-deforestation-alerts/about',
+                        map_service: '',
+                        subtitle: 'daily, 10m, tropics, UMD/GLAD and WUR',
+                        license: '<p><a href="https://creativecommons.org/licenses/by/4.0/">CC by 4.0</a></p>',
+                        title: 'Integrated deforestation alerts',
+                        agol_id: '',
+                        overview:
+                          '<p>This dataset, assembled by Global Forest Watch, aggregates deforestation alerts from three alert systems (GLAD-L, GLAD-S2, RADD) into a single, integrated deforestation alert layer. This integration allows users to detect deforestation events faster than any single system alone, as the integrated layer is updated when any of the source alert systems are updated. </p><p>The source alert systems are derived from satellites of varying spectral and spatial resolutions. 30 m <a href="https://gfw.global/2Lv8vVc">GLAD Landsat-based alerts</a> are up-sampled to match the 10 m spatial resolution of Sentinel-based alerts (<a href="https://gfw.global/3vxHe7F">GLAD-S2</a>, <a href="https://gfw.global/3ca04tV">RADD</a>). This avoids the double counting of overlapping alerts, which are instead classified at a higher confidence level, indicated by darker pixels. </p><p>Alerts are classified as _high_ confidence when detected twice by a single alert system. This can occur in areas and at times when only one alert system was operating. Where multiple alert systems are operating, alerts detected by multiple (two or three) of these systems are classified as _highest_ confidence. With multiple sensors picking up change in the same location, we can be more confident that an alert was not a false positive and do not need to wait for additional satellite imagery to increase confidence in detected loss, thus providing more confident alerting faster than with a single system. </p>',
+                        citation:
+                          '<p>Source: "Integrated Deforestation Alerts". UMD/GLAD and WUR, accessed through Global Forest Watch</p>',
+                        cautions:
+                          '<ul><br><li>Although called ‘deforestation alerts’ these alerts detect forest or tree cover disturbances. This product does not distinguish between human-caused and other disturbance types. Where alerts are detected within plantation forests (more likely to happen in the GLAD-L system), alerts may indicate timber harvesting operations, without a conversion to a non-forest land use. </li><br><li>The term deforestation is used because these are potential deforestation events, and alerts could be further investigated to determine this.  </li><br><li>We do not recommend using deforestation alerts for global or regional trend assessment, nor for area estimates. We recommend using the annual tree cover loss data for a more accurate comparison of the trends in forest change over time, and for area estimates. Recent alerts will include false positives that have yet to raise their confidence level and may eventually be removed. Past alerts may have been removed in error from the database if rapid canopy closure precedes the additional unobscured satellite observations within 6 months. Additionally, updates to the methodologies, differing number of systems (in the case of the integrated alerts), and variation in cloud cover between months and years pose additional risks to using deforestation alerts for inter/intra-annual comparison.</li><br><li>The alerts can be ‘curated’ to identify those alerts of interest to a user, such as those alerts which are likely to be deforestation and might be prioritized for action. A user can do this by overlaying other contextual datasets, such as protected areas, or planted trees. The non-curated data are provided here in order that users can define their own prioritization approaches. Curated alert locations are provided in the Places to Watch data layer.<br>The three alert systems have different definitions of forest/tree cover, and forest/tree cover disturbances: <br /><br><ul><br><li><strong>GLAD-L</strong>: alerts are within “tree cover” which is defined as all vegetation greater than 5 meters in height with greater than 60% canopy cover, and may take the form of natural forests or plantations. “Tree cover loss” indicates the canopy removal of at least half a pixel and can be due to a variety of factors, including mechanical harvesting, fire, disease, or storm damage. As such, “loss” does not equate to deforestation. </li><br><li><strong>GLAD-S2</strong>: alerts are within the primary forest mask of <a href="https://doi.org/10.1088/1748-9326/aacd1c">Turubanova et al (2018)</a> in the Amazon river basin, with 2001-present forest loss from <a href="https://doi.org/10.1126/science.1244693">Hansen et al. (2013)</a> removed. </li><br><li><strong>RADD</strong>: alerts are within primary humid forests. Forest loss is defined as complete or partial removal of tree cover within a pixel, and a minimum-mapping unit of 0.5 ha is used. <br>The input alert systems do not have the same spatial and temporal coverage:</li><br><li><strong>GLAD-L</strong>: Operating in the entire tropics (30°N to 30°S) from January 1, 2018 to the present, and from 2015 to the present (although paused for a period during 2022) for select countries in the Amazon, Congo Basin, and insular Southeast Asia </li><br><li><strong>GLAD-S2</strong>: Operating in the primary humid tropical forest areas of South America from January 2019 to the present </li><br><li><strong>RADD</strong>: Operating in the primary humid tropical forest areas of South America, sub-Saharan Africa and insular Southeast Asia with coverage from January 2019 to the present for Africa and January 2020 to the present for South America and Southeast Asia, with Central America covered from January 2023 (expansion to continental SE Asia and the Pacific is forthcoming by end 2023) </li><br></ul></li><br><li>In order to integrate the three alerting systems on a common grid, GLAD-L is resampled from a 30 m spatial resolution to 10 m to match GLAD-S2 and RADD. As a result, a single 30 m GLAD-L pixel will become multiple 10 m pixels in the integrated layer. Users should use caution when comparing the analysis results of individual systems to the integrated alert layer, as the number of integrated alerts will be much greater than the number of native GLAD-L alerts. In addition, pixels in the integrated layer may not exactly align on the map with pixels in the individual GLAD-L layer as a result of this resampling.  </li><br><li>Each pixel in the integrated layer preserves the earliest date of detection from any alerting system, even if multiple systems have reported an alert in that pixel. In some situations, this may lead to inconsistent visualizations when switching from the integrated layer to individual alerting system layers. It is advisable to use the integrated layer when you are interested in the earliest date of detection by any alerting system. However, it is better to use the individual alerting system layers if you are interested in a specific alert type. </li><br><li>The “Highest confidence: detected by multiple alert systems” level can only be achieved in areas and for time periods where more than one alert system was in operation for that region.  </li><br><li>The confidence level may change retroactively as source data is updated; alerts that have not become high confidence within 180 days are removed from the dataset.</li><br><li>Once an alert pixel reaches high confidence, forest loss will not be detected by the same alert system at that location again</li><br><li>Accuracies vary across the coverage of the integrated alerts, due to different characteristics of the three alert systems – Radar (RADD) alerts for example may have more false detections in swamp forests due to the high sensitivity of short wavelength C-band radar to moisture variation</li><br><li>When zoomed out, this data layer displays some degree of inaccuracy because the data points must be collapsed to be visible on a larger scale. Zoom in for greater detail.   </li><br></ul>',
+                        date_of_content: '<p>January 1st, 2019 – present </p>',
+                        learn_more: '',
+                        source:
+                          '<p><em>GLAD Alerts:</em><br>Hansen, M.C., A. Krylov, A. Tyukavina, P.V. Potapov, S. Turubanova, B. Zutta, S. Ifo, B. Margono, F. Stolle, and R. Moore. 2016. Humid tropical forest disturbance alerts using Landsat data. Environmental Research Letters, 11 (3). (https://dx.doi.org/10.1088/1748-9326/11/3/034008)[https://dx.doi.org/10.1088/1748-9326/11/3/034008] </p><p><em>GLAD-S2 Alerts:</em><br>Pickens, A.H., Hansen, M.C., Adusei, B., and Potapov P. 2020. Sentinel-2 Forest Loss Alert. Global Land Analysis and Discovery (GLAD), University of Maryland. </p><p><em>RADD Alerts:</em><br>Reiche, J., Mullissa, A., Slagter, B., Gou, Y., Tsendbazar, N.E., Braun, C., Vollrath, A., Weisse, M.J., Stolle, F., Pickens, A., Donchyts, G., Clinton, N., Gorelick, N., Herold, M. 2021. Forest disturbance alerts for the Congo Basin using Sentinel-1. Environmental Research Letters. (https://doi.org/10.1088/1748-9326/abd0a8)[https://doi.org/10.1088/1748-9326/abd0a8]</p>',
+                        carto_table: '',
+                        amazon_link: '',
+                        translation: {
+                          fr: {},
+                          es: {},
+                        },
+                        other: '',
+                        resolution: '<p>10 × 10 m</p>',
+                        frequency_of_updates: '<p>Daily</p>',
+                        tags: 'Forest Change',
+                      },
+                      legendConfig: {
+                        name: {
+                          ka: 'ინტეგრირებული ტყის გაჩეხვის გაფრთხილებები',
+                          zh: '综合毁林警报',
+                          id: 'Peringatan Deforestasi Terpadu',
+                          pt: 'Alertas de desflorestação integrados',
+                          es: 'Alertas de deforestación integradas',
+                          fr: 'Alertes intégrées sur la déforestation',
+                          en: 'Integrated deforestation alerts',
+                        },
+                        type: 'basic',
+                        items: [
+                          {
+                            outlineColor: '#555555',
+                            color: '#EDA4C3',
+                            name: {
+                              ka: 'Հայտնաբերվել է մեկ ահազանգման համակարգով',
+                              zh: '由单一警报系统检测到',
+                              id: 'Terdeteksi oleh satu sistem peringatan',
+                              pt: 'Detectado por um único sistema de alerta',
+                              es: 'Detectado por un solo sistema de alerta',
+                              fr: "Détectée par un seul système d'alerte",
+                              en: 'Detected by a single alert system',
+                            },
+                          },
+                          {
+                            outlineColor: '#555555',
+                            color: '#DC6699',
+                            name: {
+                              ka: 'Բարձր վստահություն. հայտնաբերվում է մեկից ավելի անգամ մեկ ահազանգման համակարգի միջոցով',
+                              zh: '高置信度：由单一警报系统检测到一次以上',
+                              id: 'Keyakinan tinggi: terdeteksi lebih dari satu kali oleh satu sistem peringatan',
+                              pt: 'Alta confiança: detectado mais de uma vez por um único sistema de alerta',
+                              es: 'Alta confianza: Detectado más de una vez por un solo sistema de alerta',
+                              fr: "Confiance élevée : détectée plus d'une fois par un seul système d'alerte",
+                              en: 'High confidence: detected more than once by a single alert system',
+                            },
+                          },
+                          {
+                            outlineColor: '#555555',
+                            color: '#C92A6D',
+                            name: {
+                              ka: 'Ամենաբարձր վստահությունը. հայտնաբերվում է բազմաթիվ ահազանգման համակարգերով',
+                              zh: '置信度最高：由多个警报系统检测到',
+                              id: 'Keyakinan tertinggi: terdeteksi oleh beberapa sistem peringatan',
+                              pt: 'Confiança mais alta: detectado por vários sistemas de alerta',
+                              es: 'Muy alta confianza: Detectado por múltiples sistemas de alertas',
+                              fr: "Confiance plus élevée : détectée par plusieurs systèmes d'alerte",
+                              en: 'Highest confidence: detected by multiple alert systems',
+                            },
+                          },
+                        ],
+                      },
+                      interactionConfig: {},
+                    },
+                    id: 'INTEGRATED_DEFORESTATION_ALERTS',
+                    type: 'integrated-alert-layer',
+                    url: layer.urlTemplate,
+                    technicalName: 'integrated_deforestation_alerts',
+                    label: {
+                      en: 'Integrated Deforestation Alerts',
+                      fr: 'Taux potentiel de séquestration du carbone',
+                      es: 'Tasa potencial de captura de carbono',
+                      pt: 'Taxa potencial de sequestro de carbono',
+                      id: 'Potensi tingkat penyerapan karbon',
+                      zh: '潜在的碳封存率',
+                      ka: 'Potential carbon sequestration rate',
+                    },
+                    sublabel: {
+                      en: '(daily, 10m, tropics, UMD/GLAD and WUR)',
+                      fr: '(zones reboisables, 1 kilomètre, Cook-Patton et al. 2020)',
+                      es: '(áreas reforestables, 1 kilómetro, Cook-Patton et al. 2020)',
+                      pt: '(áreas de reflorestamento, 1 quilómetro, Cook-Patton et al. 2020)',
+                      id: '(area yang dapat dihutankan kembali, 1 kilometer, Cook-Patton et al. 2020)',
+                      ka: '(reforestable areas, 1 km, Cook-Patton et al. 2020)',
+                    },
+                  },
+                  layerGroupId: 'GROUP_LCD',
+                  order: 0,
+                  searchField: '',
+                };
+                remoteAndServiceLayersObjects.push(layerObject);
+              }
+            }
+            if (getLayerArrayLayerNames.includes('GLAD S2 alerts')) {
+              const layer = layerArray.find((l: any) => l.title === 'GLAD S2 alerts');
+              if (layer) {
+                const layerObject = {
+                  dashboardURL: layer?.portalItem?.url,
+                  dataLayer: {
+                    groupId: 'GROUP_LCD',
+                    id: 'GLAD S2 alerts',
+                    order: 1,
+                    type: 'webmap',
+                  },
+                  isError: false,
+                  layer: {
+                    metadata: {
+                      metadata: {
+                        function:
+                          '<p>Monitor forest disturbance in near-real-time using integrated alerts from three alerting systems </p>',
+                        geographic_coverage: '<p>30°N to 30°S</p>',
+                        download_data:
+                          'https://data.globalforestwatch.org/datasets/gfw::integrated-deforestation-alerts/about',
+                        map_service: '',
+                        subtitle: 'daily, 10m, tropics, UMD/GLAD and WUR',
+                        license: '<p><a href="https://creativecommons.org/licenses/by/4.0/">CC by 4.0</a></p>',
+                        title: 'Integrated deforestation alerts',
+                        agol_id: '',
+                        overview:
+                          '<p>This dataset, assembled by Global Forest Watch, aggregates deforestation alerts from three alert systems (GLAD-L, GLAD-S2, RADD) into a single, integrated deforestation alert layer. This integration allows users to detect deforestation events faster than any single system alone, as the integrated layer is updated when any of the source alert systems are updated. </p><p>The source alert systems are derived from satellites of varying spectral and spatial resolutions. 30 m <a href="https://gfw.global/2Lv8vVc">GLAD Landsat-based alerts</a> are up-sampled to match the 10 m spatial resolution of Sentinel-based alerts (<a href="https://gfw.global/3vxHe7F">GLAD-S2</a>, <a href="https://gfw.global/3ca04tV">RADD</a>). This avoids the double counting of overlapping alerts, which are instead classified at a higher confidence level, indicated by darker pixels. </p><p>Alerts are classified as _high_ confidence when detected twice by a single alert system. This can occur in areas and at times when only one alert system was operating. Where multiple alert systems are operating, alerts detected by multiple (two or three) of these systems are classified as _highest_ confidence. With multiple sensors picking up change in the same location, we can be more confident that an alert was not a false positive and do not need to wait for additional satellite imagery to increase confidence in detected loss, thus providing more confident alerting faster than with a single system. </p>',
+                        citation:
+                          '<p>Source: "Integrated Deforestation Alerts". UMD/GLAD and WUR, accessed through Global Forest Watch</p>',
+                        cautions:
+                          '<ul><br><li>Although called ‘deforestation alerts’ these alerts detect forest or tree cover disturbances. This product does not distinguish between human-caused and other disturbance types. Where alerts are detected within plantation forests (more likely to happen in the GLAD-L system), alerts may indicate timber harvesting operations, without a conversion to a non-forest land use. </li><br><li>The term deforestation is used because these are potential deforestation events, and alerts could be further investigated to determine this.  </li><br><li>We do not recommend using deforestation alerts for global or regional trend assessment, nor for area estimates. We recommend using the annual tree cover loss data for a more accurate comparison of the trends in forest change over time, and for area estimates. Recent alerts will include false positives that have yet to raise their confidence level and may eventually be removed. Past alerts may have been removed in error from the database if rapid canopy closure precedes the additional unobscured satellite observations within 6 months. Additionally, updates to the methodologies, differing number of systems (in the case of the integrated alerts), and variation in cloud cover between months and years pose additional risks to using deforestation alerts for inter/intra-annual comparison.</li><br><li>The alerts can be ‘curated’ to identify those alerts of interest to a user, such as those alerts which are likely to be deforestation and might be prioritized for action. A user can do this by overlaying other contextual datasets, such as protected areas, or planted trees. The non-curated data are provided here in order that users can define their own prioritization approaches. Curated alert locations are provided in the Places to Watch data layer.<br>The three alert systems have different definitions of forest/tree cover, and forest/tree cover disturbances: <br /><br><ul><br><li><strong>GLAD-L</strong>: alerts are within “tree cover” which is defined as all vegetation greater than 5 meters in height with greater than 60% canopy cover, and may take the form of natural forests or plantations. “Tree cover loss” indicates the canopy removal of at least half a pixel and can be due to a variety of factors, including mechanical harvesting, fire, disease, or storm damage. As such, “loss” does not equate to deforestation. </li><br><li><strong>GLAD-S2</strong>: alerts are within the primary forest mask of <a href="https://doi.org/10.1088/1748-9326/aacd1c">Turubanova et al (2018)</a> in the Amazon river basin, with 2001-present forest loss from <a href="https://doi.org/10.1126/science.1244693">Hansen et al. (2013)</a> removed. </li><br><li><strong>RADD</strong>: alerts are within primary humid forests. Forest loss is defined as complete or partial removal of tree cover within a pixel, and a minimum-mapping unit of 0.5 ha is used. <br>The input alert systems do not have the same spatial and temporal coverage:</li><br><li><strong>GLAD-L</strong>: Operating in the entire tropics (30°N to 30°S) from January 1, 2018 to the present, and from 2015 to the present (although paused for a period during 2022) for select countries in the Amazon, Congo Basin, and insular Southeast Asia </li><br><li><strong>GLAD-S2</strong>: Operating in the primary humid tropical forest areas of South America from January 2019 to the present </li><br><li><strong>RADD</strong>: Operating in the primary humid tropical forest areas of South America, sub-Saharan Africa and insular Southeast Asia with coverage from January 2019 to the present for Africa and January 2020 to the present for South America and Southeast Asia, with Central America covered from January 2023 (expansion to continental SE Asia and the Pacific is forthcoming by end 2023) </li><br></ul></li><br><li>In order to integrate the three alerting systems on a common grid, GLAD-L is resampled from a 30 m spatial resolution to 10 m to match GLAD-S2 and RADD. As a result, a single 30 m GLAD-L pixel will become multiple 10 m pixels in the integrated layer. Users should use caution when comparing the analysis results of individual systems to the integrated alert layer, as the number of integrated alerts will be much greater than the number of native GLAD-L alerts. In addition, pixels in the integrated layer may not exactly align on the map with pixels in the individual GLAD-L layer as a result of this resampling.  </li><br><li>Each pixel in the integrated layer preserves the earliest date of detection from any alerting system, even if multiple systems have reported an alert in that pixel. In some situations, this may lead to inconsistent visualizations when switching from the integrated layer to individual alerting system layers. It is advisable to use the integrated layer when you are interested in the earliest date of detection by any alerting system. However, it is better to use the individual alerting system layers if you are interested in a specific alert type. </li><br><li>The “Highest confidence: detected by multiple alert systems” level can only be achieved in areas and for time periods where more than one alert system was in operation for that region.  </li><br><li>The confidence level may change retroactively as source data is updated; alerts that have not become high confidence within 180 days are removed from the dataset.</li><br><li>Once an alert pixel reaches high confidence, forest loss will not be detected by the same alert system at that location again</li><br><li>Accuracies vary across the coverage of the integrated alerts, due to different characteristics of the three alert systems – Radar (RADD) alerts for example may have more false detections in swamp forests due to the high sensitivity of short wavelength C-band radar to moisture variation</li><br><li>When zoomed out, this data layer displays some degree of inaccuracy because the data points must be collapsed to be visible on a larger scale. Zoom in for greater detail.   </li><br></ul>',
+                        date_of_content: '<p>January 1st, 2019 – present </p>',
+                        learn_more: '',
+                        source:
+                          '<p><em>GLAD Alerts:</em><br>Hansen, M.C., A. Krylov, A. Tyukavina, P.V. Potapov, S. Turubanova, B. Zutta, S. Ifo, B. Margono, F. Stolle, and R. Moore. 2016. Humid tropical forest disturbance alerts using Landsat data. Environmental Research Letters, 11 (3). (https://dx.doi.org/10.1088/1748-9326/11/3/034008)[https://dx.doi.org/10.1088/1748-9326/11/3/034008] </p><p><em>GLAD-S2 Alerts:</em><br>Pickens, A.H., Hansen, M.C., Adusei, B., and Potapov P. 2020. Sentinel-2 Forest Loss Alert. Global Land Analysis and Discovery (GLAD), University of Maryland. </p><p><em>RADD Alerts:</em><br>Reiche, J., Mullissa, A., Slagter, B., Gou, Y., Tsendbazar, N.E., Braun, C., Vollrath, A., Weisse, M.J., Stolle, F., Pickens, A., Donchyts, G., Clinton, N., Gorelick, N., Herold, M. 2021. Forest disturbance alerts for the Congo Basin using Sentinel-1. Environmental Research Letters. (https://doi.org/10.1088/1748-9326/abd0a8)[https://doi.org/10.1088/1748-9326/abd0a8]</p>',
+                        carto_table: '',
+                        amazon_link: '',
+                        translation: {
+                          fr: {},
+                          es: {},
+                        },
+                        other: '',
+                        resolution: '<p>10 × 10 m</p>',
+                        frequency_of_updates: '<p>Daily</p>',
+                        tags: 'Forest Change',
+                      },
+                      legendConfig: {
+                        name: {
+                          ka: 'ინტეგრირებული ტყის გაჩეხვის გაფრთხილებები',
+                          zh: '综合毁林警报',
+                          id: 'Peringatan Deforestasi Terpadu',
+                          pt: 'Alertas de desflorestação integrados',
+                          es: 'Alertas de deforestación integradas',
+                          fr: 'Alertes intégrées sur la déforestation',
+                          en: 'Integrated deforestation alerts',
+                        },
+                        type: 'basic',
+                        items: [
+                          {
+                            outlineColor: '#555555',
+                            color: '#EDA4C3',
+                            name: {
+                              ka: 'Հայտնաբերվել է մեկ ահազանգման համակարգով',
+                              zh: '由单一警报系统检测到',
+                              id: 'Terdeteksi oleh satu sistem peringatan',
+                              pt: 'Detectado por um único sistema de alerta',
+                              es: 'Detectado por un solo sistema de alerta',
+                              fr: "Détectée par un seul système d'alerte",
+                              en: 'Detected by a single alert system',
+                            },
+                          },
+                          {
+                            outlineColor: '#555555',
+                            color: '#DC6699',
+                            name: {
+                              ka: 'Բարձր վստահություն. հայտնաբերվում է մեկից ավելի անգամ մեկ ահազանգման համակարգի միջոցով',
+                              zh: '高置信度：由单一警报系统检测到一次以上',
+                              id: 'Keyakinan tinggi: terdeteksi lebih dari satu kali oleh satu sistem peringatan',
+                              pt: 'Alta confiança: detectado mais de uma vez por um único sistema de alerta',
+                              es: 'Alta confianza: Detectado más de una vez por un solo sistema de alerta',
+                              fr: "Confiance élevée : détectée plus d'une fois par un seul système d'alerte",
+                              en: 'High confidence: detected more than once by a single alert system',
+                            },
+                          },
+                          {
+                            outlineColor: '#555555',
+                            color: '#C92A6D',
+                            name: {
+                              ka: 'Ամենաբարձր վստահությունը. հայտնաբերվում է բազմաթիվ ահազանգման համակարգերով',
+                              zh: '置信度最高：由多个警报系统检测到',
+                              id: 'Keyakinan tertinggi: terdeteksi oleh beberapa sistem peringatan',
+                              pt: 'Confiança mais alta: detectado por vários sistemas de alerta',
+                              es: 'Muy alta confianza: Detectado por múltiples sistemas de alertas',
+                              fr: "Confiance plus élevée : détectée par plusieurs systèmes d'alerte",
+                              en: 'Highest confidence: detected by multiple alert systems',
+                            },
+                          },
+                        ],
+                      },
+                      interactionConfig: {},
+                    },
+                    id: 'GLAD_S2_ALERTS',
+                    type: 'glad',
+                    url: layer.urlTemplate,
+                    technicalName: 'glad_s2_alerts',
+                    label: {
+                      en: 'GLAD S2 alerts',
+                      fr: 'Taux potentiel de séquestration du carbone',
+                      es: 'Tasa potencial de captura de carbono',
+                      pt: 'Taxa potencial de sequestro de carbono',
+                      id: 'Potensi tingkat penyerapan karbon',
+                      zh: '潜在的碳封存率',
+                      ka: 'Potential carbon sequestration rate',
+                    },
+                    sublabel: {
+                      en: '(daily, 10m, tropics, UMD/GLAD and WUR)',
+                      fr: '(zones reboisables, 1 kilomètre, Cook-Patton et al. 2020)',
+                      es: '(áreas reforestables, 1 kilómetro, Cook-Patton et al. 2020)',
+                      pt: '(áreas de reflorestamento, 1 quilómetro, Cook-Patton et al. 2020)',
+                      id: '(area yang dapat dihutankan kembali, 1 kilometer, Cook-Patton et al. 2020)',
+                      ka: '(reforestable areas, 1 km, Cook-Patton et al. 2020)',
+                    },
+                  },
+                  layerGroupId: 'GROUP_LCD',
+                  order: 0,
+                  searchField: '',
+                };
+                remoteAndServiceLayersObjects.push(layerObject);
+              }
+            } else {
+              mapLayerObjects = await extractWebmapLayerObjects(this._map);
+              store.dispatch(allAvailableLayers(mapLayerObjects));
+            }
+          });
 
           const getErrorLayers = remoteAndServiceLayersObjects.filter((layer) => layer?.isError);
 
@@ -474,6 +751,8 @@ export class MapController {
 
             this._map?.addMany(allLayers);
 
+            console.log(allLayerObjects);
+
             //Retrieve sorted layer array
             const mapLayerIDs = getSortedLayers(appSettings.layerPanel, allLayerObjects, this._map);
 
@@ -501,6 +780,8 @@ export class MapController {
       store.dispatch(mapError(true));
     });
   }
+
+  async getLayersFromWebmap(): Promise<void> {}
 
   setPageTitle(currentLanguage: string, defaultLanguage: string, primaryTitle: string, secondaryTitle: string): void {
     if (currentLanguage === defaultLanguage) {
@@ -997,6 +1278,8 @@ export class MapController {
       layer = this._map?.findLayerById(layerID);
     }
     if (layer) {
+      console.log(layer);
+
       const visibility = !layer.visible;
 
       if (visibility) {
@@ -1008,6 +1291,7 @@ export class MapController {
 
       //1. update the map
       layer.visible = checked;
+      layer.opacity = checked ? 1 : 0;
 
       //2. Update redux
       const { mapviewState } = store.getState();

@@ -94,10 +94,10 @@ export async function extractWebmapLayerObjects(esriMap?: __esri.Map): Promise<L
   const mapLayerObjects: LayerProps[] = [];
   if (!esriMap) return [];
   const layerArray = esriMap.layers.toArray() as any;
-
   let count = 0;
   for (const layer of layerArray) {
     if (layer.type === 'graphics') continue;
+    console.log('hit2');
 
     //@TODO this needs to be cleaned up and refactored to be more readable
 
@@ -190,6 +190,8 @@ export async function extractWebmapLayerObjects(esriMap?: __esri.Map): Promise<L
 
       // => Handle all other layers that are not sublayers here
     } else {
+      console.log('other layers', layer);
+
       let legendInfo = await legendInfoController.fetchLegendInfo(layer.url);
       if (legendInfo?.error) {
         legendInfo = undefined;
@@ -262,6 +264,7 @@ export async function getRemoteAndServiceLayers(): Promise<any> {
       }
       return list.concat(orderedGroups);
     }, []);
+  console.log('layers', layers);
 
   const configLayerFilters = {
     VIIRS_ACTIVE_FIRES: 'viirsFires',

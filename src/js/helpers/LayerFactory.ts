@@ -334,7 +334,10 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
         id: layerConfig.id,
         title: layerConfig.title,
         visible: layerConfig.visible,
-        urlTemplate: layerConfig.url,
+        urlTemplate: layerConfig.url
+          .replace(/{level}/g, '{z}')
+          .replace(/{col}/g, '{x}')
+          .replace(/{row}/g, '{y}'),
         view: mapView,
       });
       esriLayer = gladLayer;
@@ -353,7 +356,10 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
         id: layerConfig.id,
         title: layerConfig.title,
         visible: layerConfig.visible,
-        urlTemplate: layerConfig.url,
+        urlTemplate: layerConfig.url
+          .replace(/{level}/g, '{z}')
+          .replace(/{col}/g, '{x}')
+          .replace(/{row}/g, '{y}'),
         view: mapView,
       });
       esriLayer = integratedAlertLayer;
