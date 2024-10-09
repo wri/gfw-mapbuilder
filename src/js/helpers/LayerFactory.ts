@@ -1,5 +1,16 @@
 /* eslint-disable no-case-declarations */
-import { loadModules } from 'esri-loader';
+//import { loadModules } from 'esri-loader';
+
+import ImageryLayer from '@arcgis/core/layers/ImageryLayer';
+import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
+import MapImageLayer from '@arcgis/core/layers/MapImageLayer';
+import WebTileLayer from '@arcgis/core/layers/WebTileLayer';
+import VectorTileLayer from '@arcgis/core/layers/VectorTileLayer';
+import MosaicRule from '@arcgis/core/layers/support/MosaicRule';
+import RasterFunction from '@arcgis/core/layers/support/RasterFunction';
+import TileLayer from '@arcgis/core/layers/TileLayer';
+import WMSLayer from '@arcgis/core/layers/WMSLayer';
+
 import { createTCL } from '../layers/TreeCoverLossLayer';
 import { createTreeCover } from '../layers/TreeCoverLayer';
 import { createGlad } from '../layers/GladLayer';
@@ -34,7 +45,7 @@ interface LayerOptions {
 }
 
 export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promise<any> {
-  const [
+  /* const [
     ImageryLayer,
     FeatureLayer,
     MapImageLayer,
@@ -54,7 +65,7 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
     'esri/layers/support/RasterFunction',
     'esri/layers/TileLayer',
     'esri/layers/WMSLayer',
-  ]);
+  ]); */
   const { appState, mapviewState } = store.getState();
   let esriLayer;
   switch (layerConfig.type) {

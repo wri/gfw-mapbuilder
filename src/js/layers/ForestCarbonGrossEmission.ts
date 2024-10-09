@@ -1,6 +1,6 @@
 //@ts-nocheck
-import { loadModules } from 'esri-loader';
-
+import BaseTileLayer from '@arcgis/core/layers/BaseTileLayer';
+import esriRequest from '@arcgis/core/request';
 const intensityBank = {};
 const getScalePowFunc = (exp) => {
   // y = m * x ^ k + b
@@ -29,7 +29,7 @@ for (let z = 1; z < 21; z++) {
 }
 
 export const createForestCarbonGrossEmission = async () => {
-  const [esriRequest, BaseTileLayer] = await loadModules(['esri/request', 'esri/layers/BaseTileLayer']);
+  //const [esriRequest, BaseTileLayer] = await loadModules(['esri/request', 'esri/layers/BaseTileLayer']);
 
   return BaseTileLayer.createSubclass({
     properties: {
