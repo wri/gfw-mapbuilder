@@ -1,4 +1,9 @@
-import { loadModules } from 'esri-loader';
+import MapView from '@arcgis/core/views/MapView';
+import WebMap from '@arcgis/core/WebMap';
+import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer';
+import Graphic from '@arcgis/core/Graphic';
+import Polygon from '@arcgis/core/geometry/Polygon';
+import SimpleFillSymbol from '@arcgis/core/symbols/SimpleFillSymbol';
 
 export async function miniMapInit(
   webmapID: string,
@@ -7,7 +12,7 @@ export async function miniMapInit(
 ): Promise<void> {
   if (!htmlRef.current) return;
 
-  const [
+  /* const [
     MapView,
     WebMap,
     GraphicsLayer,
@@ -21,30 +26,30 @@ export async function miniMapInit(
     'esri/Graphic',
     'esri/symbols/SimpleFillSymbol',
     'esri/geometry/Polygon'
-  ]);
+  ]); */
 
   const mapRef = new WebMap({
     portalItem: {
-      id: webmapID
-    }
+      id: webmapID,
+    },
   });
 
   const miniMapView = new MapView({
     map: mapRef,
-    container: htmlRef.current
+    container: htmlRef.current,
   });
 
   miniMapView.when(() => {
     //Clean up mapview from UI elements and interactions
     miniMapView.ui.remove('zoom');
     miniMapView.ui.remove('attribution');
-    miniMapView.on('mouse-wheel', function(event: any) {
+    miniMapView.on('mouse-wheel', function (event: any) {
       event.stopPropagation();
     });
-    miniMapView.on('double-click', function(event: any) {
+    miniMapView.on('double-click', function (event: any) {
       event.stopPropagation();
     });
-    miniMapView.on('drag', function(event: any) {
+    miniMapView.on('drag', function (event: any) {
       event.stopPropagation();
     });
 
@@ -59,13 +64,13 @@ export async function miniMapInit(
         color: [210, 210, 210, 0.0],
         outline: {
           color: [3, 188, 255],
-          width: 3
-        }
-      })
+          width: 3,
+        },
+      }),
     });
 
     const gLayer = new GraphicsLayer({
-      graphics: [aoiGraphic]
+      graphics: [aoiGraphic],
     });
 
     mapRef.add(gLayer);

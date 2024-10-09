@@ -6,11 +6,11 @@
 
 //@ts-nocheck
 import PNG from 'png-ts';
-import { loadModules } from 'esri-loader';
+import BaseTileLayer from '@arcgis/core/layers/BaseTileLayer';
 import { confidenceLevelConfig } from '../../../configs/confidence-level';
 
 export const createGFWIntegratedLayer = async () => {
-  const [BaseTileLayer] = await loadModules(['esri/layers/BaseTileLayer']);
+  //const [BaseTileLayer] = await loadModules(['esri/layers/BaseTileLayer']);
 
   return BaseTileLayer.createSubclass({
     properties: {

@@ -1,6 +1,7 @@
 // @ts-nocheck
 
-import { loadModules } from 'esri-loader';
+import BaseTileLayer from '@arcgis/core/layers/BaseTileLayer';
+import esriRequest from '@arcgis/core/request';
 
 // Power function to determine intensity
 const getScalePowFunc = (exp: number) => {
@@ -33,7 +34,7 @@ for (let z = 1; z < 21; z++) {
 }
 
 export const createTCL = async () => {
-  const [esriRequest, BaseTileLayer] = await loadModules(['esri/request', 'esri/layers/BaseTileLayer']);
+  //const [esriRequest, BaseTileLayer] = await loadModules(['esri/request', 'esri/layers/BaseTileLayer']);
 
   const TreeCoverLossLayer: any = BaseTileLayer.createSubclass({
     properties: {

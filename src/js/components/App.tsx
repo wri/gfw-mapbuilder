@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import { loadModules } from 'esri-loader';
+import Portal from '@arcgis/core/portal/Portal';
+import PortalItem from '@arcgis/core/portal/PortalItem';
+
 import MapContent from './MapContent';
 import Header from './header/Header';
 import ModalCard from './modal/modalCard';
@@ -36,7 +38,7 @@ const App = (props: AppSettings | any): JSX.Element => {
   if (resources.analyticsCode) loadDefaultGoogleAnalytics(resources.analyticsCode);
 
   const fetchPortalInfo = async (appID: string) => {
-    const [Portal, PortalItem] = await loadModules(['esri/portal/Portal', 'esri/portal/PortalItem']);
+    //const [Portal, PortalItem] = await loadModules(['esri/portal/Portal', 'esri/portal/PortalItem']);
 
     // APPID existing on the URL indicates that mapbuilder is loaded using arcgis template, and we need to fetch settings using that app id to overwrite our default settings
     const portalURL = sharinghost || 'https://www.arcgis.com';

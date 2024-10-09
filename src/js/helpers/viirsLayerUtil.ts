@@ -1,4 +1,4 @@
-import { loadModules } from 'esri-loader';
+import VectorTileLayer from '@arcgis/core/layers/VectorTileLayer';
 import { format, subDays, parse } from 'date-fns';
 
 //FieldNames that we pre-define. These field names will show in the info window
@@ -6,48 +6,47 @@ export const viirsFieldNames = [
   {
     fieldName: 'latitude',
     label: 'LATITUDE',
-    format: null
+    format: null,
   },
   {
     fieldName: 'longitude',
     label: 'LONGITUDE',
-    format: null
+    format: null,
   },
   {
     fieldName: 'confidence__cat',
     label: 'CONFIDENCE CATEGORY',
-    format: null
+    format: null,
   },
   {
     fieldName: 'alert__date',
     label: 'ALERT DATE',
-    format: null
+    format: null,
   },
   {
     fieldName: 'alert__time_utc',
     label: 'ALERT TIME (UTC)',
-    format: null
+    format: null,
   },
   {
     fieldName: 'frp__MW',
     label: 'RADIATIVE POWER (MEGAWATSS)',
-    format: null
+    format: null,
   },
   {
     fieldName: 'bright_ti4__K',
     label: 'BRIGHTNESS (KELVIN)',
-    format: null
-  }
+    format: null,
+  },
 ];
 
-export const maxDateURL =
-  'https://tiles.globalforestwatch.org/nasa_viirs_fire_alerts/latest/max_alert__date';
+export const maxDateURL = 'https://tiles.globalforestwatch.org/nasa_viirs_fire_alerts/latest/max_alert__date';
 //Getting the latest available day for tiles as it will not always be today or yesterday.
 //Those assuptions cannot be made so that is why they have this endpoint to check the day.
 export async function getMaxDateForViirsTiles(): Promise<string> {
   const dateRes = await fetch(maxDateURL)
-    .then(res => res.json())
-    .catch(e => console.log(e));
+    .then((res) => res.json())
+    .catch((e) => console.log(e));
   return dateRes.data.max_date;
 }
 
@@ -85,8 +84,8 @@ async function viirsLayer(
     sources: {
       nasa_viirs_fire_alerts: {
         type: 'vector',
-        url: url
-      }
+        url: url,
+      },
     },
     layers: [
       {
@@ -106,11 +105,11 @@ async function viirsLayer(
               [9, 2],
               [10, 2.5],
               [11, 3],
-              [12, 4]
-            ]
+              [12, 4],
+            ],
           },
-          'circle-color': '#FFDA07'
-        }
+          'circle-color': '#FFDA07',
+        },
       },
       {
         id: 'viirs-points_1-2',
@@ -129,11 +128,11 @@ async function viirsLayer(
               [9, 2],
               [10, 2.5],
               [11, 3],
-              [12, 4]
-            ]
+              [12, 4],
+            ],
           },
-          'circle-color': '#FFCC00'
-        }
+          'circle-color': '#FFCC00',
+        },
       },
       {
         id: 'viirs-points_2-4',
@@ -152,11 +151,11 @@ async function viirsLayer(
               [9, 2],
               [10, 2.5],
               [11, 3],
-              [12, 4]
-            ]
+              [12, 4],
+            ],
           },
-          'circle-color': '#F76000'
-        }
+          'circle-color': '#F76000',
+        },
       },
       {
         id: 'viirs-points_4-8',
@@ -175,11 +174,11 @@ async function viirsLayer(
               [9, 2],
               [10, 2.5],
               [11, 3],
-              [12, 4]
-            ]
+              [12, 4],
+            ],
           },
-          'circle-color': '#FF0000'
-        }
+          'circle-color': '#FF0000',
+        },
       },
       {
         id: 'viirs-points_8-16',
@@ -198,11 +197,11 @@ async function viirsLayer(
               [9, 2],
               [10, 2.5],
               [11, 3],
-              [12, 4]
-            ]
+              [12, 4],
+            ],
           },
-          'circle-color': '#B51212'
-        }
+          'circle-color': '#B51212',
+        },
       },
       {
         id: 'viirs-points_0-2',
@@ -221,22 +220,22 @@ async function viirsLayer(
               [9, 2],
               [10, 2.5],
               [11, 3],
-              [12, 4]
-            ]
+              [12, 4],
+            ],
           },
-          'circle-color': '#000000'
-        }
-      }
-    ]
+          'circle-color': '#000000',
+        },
+      },
+    ],
   };
 
-  const [VectorTileLayer] = await loadModules(['esri/layers/VectorTileLayer']);
+  //  const [VectorTileLayer] = await loadModules(['esri/layers/VectorTileLayer']);
 
   return new VectorTileLayer({
     style: viirsStyleJSON,
     id,
     url,
-    visible
+    visible,
   });
 }
 

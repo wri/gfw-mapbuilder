@@ -4,7 +4,8 @@ import { allAvailableLayers as allAvailableLayersAction } from '../../../../js/s
 import { RootState } from '../../../store';
 import { mapController } from '../../../controllers/mapController';
 import legendInfoController from '../../../../js/helpers/legendInfo';
-import { loadModules } from 'esri-loader';
+import MapImageLayer from '@arcgis/core/layers/MapImageLayer';
+import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
 import { setVersionedLayer } from '../../../store/appState/actions';
 import { handleCustomColorTheme } from '../../../../utils';
 
@@ -39,7 +40,7 @@ export const LayerVersionPicker = (props: LayerVersionPickerProps): JSX.Element 
   const themeColor = handleCustomColorTheme(customColorTheme);
 
   async function swapLayersAndSyncMap(layerInfo: any, versionValue: string): Promise<void> {
-    const [MapImageLayer, FeatureLayer] = await loadModules(['esri/layers/MapImageLayer', 'esri/layers/FeatureLayer']);
+    //const [MapImageLayer, FeatureLayer] = await loadModules(['esri/layers/MapImageLayer', 'esri/layers/FeatureLayer']);
     //Remove previous version layer from the map
     const prevLayer = mapController._map?.findLayerById(layerInfo.id);
     if (!prevLayer) return;

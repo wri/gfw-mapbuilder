@@ -1,5 +1,6 @@
 import { GEOGRAPHIC_COVER_LAYER_URL, LAYER_IDS } from '../../../../../configs/layer-config';
-import { loadModules } from 'esri-loader';
+
+import VectorTileLayer from '@arcgis/core/layers/VectorTileLayer';
 import { mapController } from '../../../controllers/mapController';
 import { createGladS2Layer } from '../../../layers/GladS2Layer';
 import { createRadd } from '../../../layers/RaddLayer';
@@ -85,7 +86,7 @@ export const onEndDateChange = async (date: string, dFormat: string) => {
 };
 
 export const displayGeographicCoverageLayer = async (layerId: string, isVisible: boolean) => {
-  const [VectorTileLayer] = await loadModules(['esri/layers/VectorTileLayer']);
+  /* const [VectorTileLayer] = await loadModules(['esri/layers/VectorTileLayer']); */
 
   let layer;
 

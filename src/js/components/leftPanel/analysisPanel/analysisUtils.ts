@@ -1,4 +1,4 @@
-import { loadModules } from 'esri-loader';
+import * as webMercatorUtils from '@arcgis/core/geometry/support/webMercatorUtils';
 import { ENV_VARIABLES } from '../../../../../configs/envVariables';
 import { arcgisToGeoJSON } from '../../../helpers/spatialDataTransformation';
 import { markValueMap } from '../../mapWidgets/widgetContent/CanopyDensityContent';
@@ -42,7 +42,7 @@ export async function fetchWCSAnalysis(
   yearRange: number[] | null,
   selectedLanguage: string
 ): Promise<any> {
-  const [webMercatorUtils] = await loadModules(['esri/geometry/support/webMercatorUtils']);
+  //const [webMercatorUtils] = await loadModules(['esri/geometry/support/webMercatorUtils']);
   if (activeFeature.geometry.spatialReference.isWebMercator) {
     activeFeature.geometry = webMercatorUtils.webMercatorToGeographic(activeFeature.geometry);
   }

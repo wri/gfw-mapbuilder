@@ -1,5 +1,4 @@
 /* eslint-disable no-case-declarations */
-//import { loadModules } from 'esri-loader';
 
 import ImageryLayer from '@arcgis/core/layers/ImageryLayer';
 import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
@@ -92,7 +91,8 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
         id: layerConfig.id,
         visible: layerConfig.visible,
         url: layerConfig.url,
-        opacity: layerConfig.opacity,
+        //INFO: comback to this, opacity is a number not an object
+        //opacity: layerConfig.opacity,
       });
       if (layerConfig.metadata.colormap) {
         const remapRF = new RasterFunction();
@@ -129,7 +129,8 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
         title: layerConfig.title,
         visible: layerConfig.visible,
         url: layerConfig.url,
-        searchField: layerConfig.searchField,
+        // INFO: comback to this, search fields does not exist in FeatureLayer anymore
+        //searchField: layerConfig.searchField,
       });
       break;
     case 'loss':
@@ -404,7 +405,8 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
           id: layerConfig.id,
           url: layerConfig.url,
           visible: layerConfig.visible,
-          opacity: layerConfig.opacity,
+          // INFO: comback to this, opacity is a number not an object
+          //opacity: layerConfig.opacity,
         });
       }
       if (

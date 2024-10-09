@@ -1,15 +1,16 @@
 //@ts-nocheck
-import { loadModules } from 'esri-loader';
+import BaseTileLayer from '@arcgis/core/layers/BaseTileLayer';
+import esriRequest from '@arcgis/core/request';
 
 const intensityBank = {};
-const getScalePowFunc = exp => {
+const getScalePowFunc = (exp) => {
   // y = m * x ^ k + b
   const domain = [0, 256];
   const range = [0, 256];
   const b = range[0] - domain[0];
   const m = (range[1] - b) / Math.pow(domain[1], exp);
 
-  return x => {
+  return (x) => {
     return Math.pow(x, exp) * m + b;
   };
 };
@@ -29,14 +30,14 @@ for (let z = 1; z < 21; z++) {
 }
 
 export const createTreeMosaicCover = async () => {
-  const [esriRequest, BaseTileLayer] = await loadModules(['esri/request', 'esri/layers/BaseTileLayer']);
+  // const [esriRequest, BaseTileLayer] = await loadModules(['esri/request', 'esri/layers/BaseTileLayer']);
 
   return BaseTileLayer.createSubclass({
     properties: {
-      threshold: 30
+      threshold: 30,
     },
 
-    getTileUrl: function(level: number, row: number, column: number) {
+    getTileUrl: function (level: number, row: number, column: number) {
       return this.urlTemplate
         .replace('{z}', level)
         .replace('{x}', column)
@@ -44,7 +45,7 @@ export const createTreeMosaicCover = async () => {
         .replace('{thresh}', this.threshold);
     },
 
-    fetchTile: function(level: number, row: number, column: number) {
+    fetchTile: function (level: number, row: number, column: number) {
       // call getTileUrl() method to construct the URL to tiles
       // for a given level, row and col provided by the LayerView
       const url = this.getTileUrl(level, row, column);
@@ -53,9 +54,9 @@ export const createTreeMosaicCover = async () => {
       // cross-domain access to create WebGL textures for 3D.
       return esriRequest(url, {
         responseType: 'image',
-        allowImageDataAccess: true
+        allowImageDataAccess: true,
       }).then(
-        function(response) {
+        function (response) {
           // when esri request resolves successfully
           // get the image from the response
           const image = response.data;
@@ -74,6 +75,6 @@ export const createTreeMosaicCover = async () => {
           return canvas;
         }.bind(this)
       );
-    }
+    },
   });
 };
