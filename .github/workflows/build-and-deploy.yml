@@ -20,7 +20,7 @@ jobs:
           REACT_APP_PLANET_API_KEY: ${{ secrets.REACT_APP_PLANET_API_KEY }}
           REACT_APP_GFW_DATA_API_KEY: ${{ secrets.REACT_APP_GFW_DATA_API_KEY }}
         run: |
-          npm install
+          npm install --legacy-peer-deps
           npm run build
           npm run log
       - name: Deploy Build
