@@ -1,12 +1,9 @@
 import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
 import LayerSearchSource from '@arcgis/core/widgets/Search/LayerSearchSource';
-
 import { mapController } from '../../../js/controllers/mapController';
-
 type ArrayOfLayerSources = Array<__esri.LayerSearchSource>;
 
 const layerSearchSources = async (allFeatureLayers: Array<__esri.FeatureLayer>): Promise<ArrayOfLayerSources> => {
-  //const [LayerSearchSource] = await loadModules(['esri/widgets/Search/LayerSearchSource']);
   return allFeatureLayers.map((layer: any) => {
     return new LayerSearchSource({
       layer,
@@ -45,7 +42,6 @@ const setFeatureLayerSources = (): Promise<ArrayOfLayerSources> => {
 
 const setMapImageLayerSources = async (): Promise<ArrayOfLayerSources> => {
   let allSublayers: Array<__esri.Sublayer> = [];
-  //const [FeatureLayer] = await loadModules(['esri/layers/FeatureLayer']);
   const mapImageLayers = (mapController._map?.allLayers as any).items.filter(
     (layer: __esri.Layer) => layer.type === 'map-image'
   );

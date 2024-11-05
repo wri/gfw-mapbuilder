@@ -21,7 +21,6 @@ const setSymbol = (symbolType: string): Promise<__esri.SimpleFillSymbol | __esri
 };
 
 const setGeometry = async (symbolType: string, geometry: __esri.Geometry): Promise<any> => {
-  //const [Point, Polygon] = await loadModules(['esri/geometry/Point', 'esri/geometry/Polygon']);
   switch (symbolType) {
     case 'polygon':
       return new Polygon(geometry);
@@ -35,11 +34,6 @@ const setGeometry = async (symbolType: string, geometry: __esri.Geometry): Promi
 
 //Helper for Report graphics in order to add POINT to the map
 export async function addPointGraphic(map: __esri.Map, feature: any): Promise<void> {
-  /* const [GraphicsLayer, Graphic, Point] = await loadModules([
-    'esri/layers/GraphicsLayer',
-    'esri/Graphic',
-    'esri/geometry/Point',
-  ]); */
   let graphicsLayer: any = map.findLayerById('active-feature-layer');
   let graphicsLayerExists = graphicsLayer;
   if (graphicsLayer) {
@@ -123,7 +117,6 @@ export async function deleteMultiPolygonLayer(activeAnalysisFeatures: any) {
 }
 
 export async function addToMultiPolygonLayer(activeFeature: any) {
-  //const [GraphicsLayer, Graphic] = await loadModules(['esri/layers/GraphicsLayer', 'esri/Graphic']);
   clearMultiPolygonGraphic();
 
   const graphicsLayer = new GraphicsLayer({
@@ -148,8 +141,6 @@ export async function addToMultiPolygonLayer(activeFeature: any) {
 }
 
 export async function drawIntersectingGraphic(geometry: __esri.Geometry): Promise<void> {
-  //const [GraphicsLayer, Graphic] = await loadModules(['esri/layers/GraphicsLayer', 'esri/Graphic']);
-
   let graphicsLayer = mapController._map?.findLayerById('overlap-feature-layer') as __esri.GraphicsLayer;
   if (graphicsLayer) {
     graphicsLayer.removeAll();
@@ -178,11 +169,6 @@ export async function drawIntersectingGraphic(geometry: __esri.Geometry): Promis
 }
 
 export async function setNewGraphic({ map, mapview, allFeatures, isUploadFile }: GraphicConfig): Promise<void> {
-  /* const [GraphicsLayer, Graphic, projection] = await loadModules([
-    'esri/layers/GraphicsLayer',
-    'esri/Graphic',
-    'esri/geometry/projection',
-  ]); */
   //TODO: this needs a refactor, we are handling file uploads and featues on the map with a single
   //function, we likely need to either reuse multiple functions or split this up
   let graphicsLayer: any = map.findLayerById('active-feature-layer');

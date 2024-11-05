@@ -3,11 +3,6 @@ import BaseTileLayer from '@arcgis/core/layers/BaseTileLayer';
 import esriRequest from '@arcgis/core/request';
 
 export const createHeight = async () => {
-  /* const [esriRequest, BaseTileLayer] = await loadModules([
-    'esri/request',
-    'esri/layers/BaseTileLayer'
-  ]); */
-
   const TreeCoverHeightLayer: any = BaseTileLayer.createSubclass({
     properties: {
       urlTemplate: null,

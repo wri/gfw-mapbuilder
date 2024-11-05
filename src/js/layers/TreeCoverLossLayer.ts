@@ -34,8 +34,6 @@ for (let z = 1; z < 21; z++) {
 }
 
 export const createTCL = async () => {
-  //const [esriRequest, BaseTileLayer] = await loadModules(['esri/request', 'esri/layers/BaseTileLayer']);
-
   const TreeCoverLossLayer: any = BaseTileLayer.createSubclass({
     properties: {
       threshold: 30,

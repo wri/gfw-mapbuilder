@@ -12,22 +12,6 @@ export async function miniMapInit(
 ): Promise<void> {
   if (!htmlRef.current) return;
 
-  /* const [
-    MapView,
-    WebMap,
-    GraphicsLayer,
-    Graphic,
-    SimpleFillSymbol,
-    Polygon
-  ] = await loadModules([
-    'esri/views/MapView',
-    'esri/WebMap',
-    'esri/layers/GraphicsLayer',
-    'esri/Graphic',
-    'esri/symbols/SimpleFillSymbol',
-    'esri/geometry/Polygon'
-  ]); */
-
   const mapRef = new WebMap({
     portalItem: {
       id: webmapID,

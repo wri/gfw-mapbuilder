@@ -44,27 +44,6 @@ interface LayerOptions {
 }
 
 export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promise<any> {
-  /* const [
-    ImageryLayer,
-    FeatureLayer,
-    MapImageLayer,
-    WebTileLayer,
-    VectorTileLayer,
-    MosaicRule,
-    RasterFunction,
-    TileLayer,
-    WMSLayer,
-  ] = await loadModules([
-    'esri/layers/ImageryLayer',
-    'esri/layers/FeatureLayer',
-    'esri/layers/MapImageLayer',
-    'esri/layers/WebTileLayer',
-    'esri/layers/VectorTileLayer',
-    'esri/layers/support/MosaicRule',
-    'esri/layers/support/RasterFunction',
-    'esri/layers/TileLayer',
-    'esri/layers/WMSLayer',
-  ]); */
   const { appState, mapviewState } = store.getState();
   let esriLayer;
   switch (layerConfig.type) {

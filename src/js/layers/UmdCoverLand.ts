@@ -28,7 +28,6 @@ Date.prototype.getJulian = function () {
 };
 
 export const umdCoverLand = async () => {
-  // const [esriRequest, BaseTileLayer] = await loadModules(['esri/request', 'esri/layers/BaseTileLayer']);
   return BaseTileLayer.createSubclass({
     properties: {
       julianFrom: '15000',

@@ -3,11 +3,6 @@ import BaseTileLayer from '@arcgis/core/layers/BaseTileLayer';
 import esriRequest from '@arcgis/core/request';
 
 export const createPrimary = async () => {
-  /* const [esriRequest, BaseTileLayer] = await loadModules([
-    'esri/request',
-    'esri/layers/BaseTileLayer'
-  ]); */
-
   const PrimaryForestLayer = BaseTileLayer.createSubclass({
     getTileUrl: function (level, row, column) {
       return this.urlTemplate.replace('{z}', level).replace('{x}', column).replace('{y}', row);

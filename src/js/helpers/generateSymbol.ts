@@ -2,8 +2,6 @@ import SimpleFillSymbol from '@arcgis/core/symbols/SimpleFillSymbol';
 import SimpleMarkerSymbol from '@arcgis/core/symbols/SimpleMarkerSymbol';
 
 export const getCustomSymbol = async (): Promise<__esri.SimpleFillSymbol> => {
-  //const [SimpleFillSymbol] = await loadModules(['esri/symbols/SimpleFillSymbol']);
-
   return new SimpleFillSymbol({
     style: 'solid',
     color: [210, 210, 210, 0.0],
@@ -15,7 +13,6 @@ export const getCustomSymbol = async (): Promise<__esri.SimpleFillSymbol> => {
 };
 
 export const getImagerySymbol = async (): Promise<__esri.SimpleFillSymbol> => {
-  //const [SimpleFillSymbol] = await loadModules(['esri/symbols/SimpleFillSymbol']);
   return new SimpleFillSymbol({
     style: 'solid',
     color: [210, 210, 210, 0.0],
@@ -27,7 +24,6 @@ export const getImagerySymbol = async (): Promise<__esri.SimpleFillSymbol> => {
 };
 
 export const getPointSymbol = async (): Promise<__esri.SimpleMarkerSymbol> => {
-  //const [SimpleMarkerSymbol] = await loadModules(['esri/symbols/SimpleMarkerSymbol']);
   return new SimpleMarkerSymbol({
     style: 'circle',
     color: [210, 210, 210, 0.0],

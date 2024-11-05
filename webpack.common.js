@@ -3,6 +3,7 @@ const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
+const webpack = require('webpack');
 
 module.exports = {
   entry: {
@@ -16,8 +17,10 @@ module.exports = {
     rules: [
       {
         test: /\.tsx?$/,
-        loader: 'ts-loader',
-        options: {},
+        use: ['ts-loader'],
+        //loader: 'ts-loader',
+        //options: {},
+        exclude: /node_modules/,
       },
       {
         test: /\.html$/,
@@ -59,7 +62,23 @@ module.exports = {
       },
       {
         test: /\.svg$/,
-        loader: ['file-loader'],
+        use: ['file-loader'],
+        //loader: ['file-loader'],
+      },
+      {
+        test: /\.js$/,
+        include: /node_modules\/(@arcgis|@esri\/calcite-components|@zip.js)/,
+        use: [
+          {
+            loader: 'babel-loader',
+            options: {
+              presets: ['@babel/preset-env'],
+              plugins: [['@babel/plugin-proposal-decorators', { legacy: true }]],
+              compact: true,
+              sourceType: 'unambiguous',
+            },
+          },
+        ],
       },
     ],
   },
@@ -76,8 +95,16 @@ module.exports = {
       chunksSortMode: 'none',
       inlineSource: '.(css)$',
     }),
+    new webpack.ProvidePlugin({
+      Buffer: ['buffer', 'Buffer'],
+      process: 'process/browser.js',
+    }),
   ],
   resolve: {
+    fallback: {
+      stream: require.resolve('stream-browserify'),
+      buffer: require.resolve('buffer'),
+    },
     modules: [path.resolve(__dirname, '/src'), path.resolve(__dirname, 'node_modules/')],
     extensions: ['.ts', '.tsx', '.js', '.scss', '.css'],
   },

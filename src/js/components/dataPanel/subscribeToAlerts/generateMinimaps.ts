@@ -1,10 +1,13 @@
-import { loadModules } from 'esri-loader';
 import MapView from '@arcgis/core/views/MapView';
 import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer';
 import Graphic from '@arcgis/core/Graphic';
 import Polygon from '@arcgis/core/geometry/Polygon';
 import Map from '@arcgis/core/Map';
 import SimpleFillSymbol from '@arcgis/core/symbols/SimpleFillSymbol';
+import * as print from '@arcgis/core/rest/print';
+import PrintTemplate from '@arcgis/core/rest/support/PrintTemplate';
+import PrintParameters from '@arcgis/core/rest/support/PrintParameters';
+
 import { geojsonToArcGIS } from '../../../../js/helpers/spatialDataTransformation';
 import store from '../../../../js/store/index';
 import { setAreaImages } from '../../../../js/store/appState/actions';
@@ -12,12 +15,6 @@ import { setAreaImages } from '../../../../js/store/appState/actions';
 const geostoreURL = 'https://production-api.globalforestwatch.org/v1/geostore/';
 
 export async function generateMinimaps(areas: any): Promise<void> {
-  // INFO: come back to this later
-  const [PrintTask, PrintTemplate, PrintParameters] = await loadModules([
-    'esri/tasks/PrintTask',
-    'esri/tasks/support/PrintTemplate',
-    'esri/tasks/support/PrintParameters',
-  ]);
   const areaIds = areas.map((a: any) => {
     return {
       id: a.id,
@@ -80,9 +77,9 @@ export async function generateMinimaps(areas: any): Promise<void> {
 
   const printServiceURL = store.getState().appSettings.printServiceUrl;
 
-  const printTask = new PrintTask({
+  /* const printTask = new PrintTask({
     url: printServiceURL,
-  });
+  }); */
 
   const template = new PrintTemplate({
     format: 'png8',
@@ -121,7 +118,8 @@ export async function generateMinimaps(areas: any): Promise<void> {
         view: miniMapView,
         template,
       });
-      const img = await printTask.execute(params).catch((e: Error) => console.log(e));
+      const img = await print.execute(printServiceURL!, params).catch((e: Error) => console.log(e));
+      //const img = await printTask.execute(params).catch((e: Error) => console.log(e));
       return img;
     });
   }

@@ -1,9 +1,7 @@
 import Point from '@arcgis/core/geometry/Point';
-
 import { SpecificDMSSection, SpecificDDSection } from '../types/coordinateForm';
 
 export const convertDMSToXY = async (setDMSForm: Array<SpecificDMSSection>): Promise<__esri.Point[]> => {
-  //const [Point] = await loadModules(['esri/geometry/Point']);
   return setDMSForm.map((point) => {
     const { latitude, longitude } = point;
     let convertedLatitude;
@@ -30,7 +28,6 @@ export const convertDMSToXY = async (setDMSForm: Array<SpecificDMSSection>): Pro
 };
 
 export const convertXYToPoint = async (setDDForm: Array<SpecificDDSection>): Promise<__esri.Point[]> => {
-  //const [Point] = await loadModules(['esri/geometry/Point']);
   return setDDForm.map((point) => {
     const { latitude, longitude } = point;
 

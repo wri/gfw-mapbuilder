@@ -10,8 +10,6 @@ import BaseTileLayer from '@arcgis/core/layers/BaseTileLayer';
 import { confidenceLevelConfig } from '../../../configs/confidence-level';
 
 export const createGFWIntegratedLayer = async () => {
-  //const [BaseTileLayer] = await loadModules(['esri/layers/BaseTileLayer']);
-
   return BaseTileLayer.createSubclass({
     properties: {
       // '2457023' days since 12/31/14 (encoded across two bytes (16 bits) today would be 0B54 (2,900 Days)

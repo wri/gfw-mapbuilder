@@ -42,7 +42,6 @@ export async function fetchWCSAnalysis(
   yearRange: number[] | null,
   selectedLanguage: string
 ): Promise<any> {
-  //const [webMercatorUtils] = await loadModules(['esri/geometry/support/webMercatorUtils']);
   if (activeFeature.geometry.spatialReference.isWebMercator) {
     activeFeature.geometry = webMercatorUtils.webMercatorToGeographic(activeFeature.geometry);
   }

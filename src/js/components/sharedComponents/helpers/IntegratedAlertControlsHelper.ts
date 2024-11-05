@@ -52,6 +52,7 @@ export const onStartDateChange = async (dFormat: string, endDate: string) => {
 
 export const onEndDateChange = async (date: string, dFormat: string) => {
   let start;
+  //@ts-ignore
   const end = new Date(dFormat).getJulian();
   const integratedAlertLayer = store.getState().appState.leftPanel.integratedAlertLayer;
 
@@ -86,8 +87,6 @@ export const onEndDateChange = async (date: string, dFormat: string) => {
 };
 
 export const displayGeographicCoverageLayer = async (layerId: string, isVisible: boolean) => {
-  /* const [VectorTileLayer] = await loadModules(['esri/layers/VectorTileLayer']); */
-
   let layer;
 
   if (layerId === LAYER_IDS.GFW_INTEGRATED_ALERTS || layerId === LAYER_IDS.GLAD_ALERTS) {

@@ -40,7 +40,6 @@ export const LayerVersionPicker = (props: LayerVersionPickerProps): JSX.Element 
   const themeColor = handleCustomColorTheme(customColorTheme);
 
   async function swapLayersAndSyncMap(layerInfo: any, versionValue: string): Promise<void> {
-    //const [MapImageLayer, FeatureLayer] = await loadModules(['esri/layers/MapImageLayer', 'esri/layers/FeatureLayer']);
     //Remove previous version layer from the map
     const prevLayer = mapController._map?.findLayerById(layerInfo.id);
     if (!prevLayer) return;

@@ -4,9 +4,6 @@ import { FeatureResult } from '../../js/store/mapview/types';
 
 export async function registerGeometry(feature: FeatureResult): Promise<any> {
   let geographic;
-  /* const [webMercatorUtils] = await loadModules([
-    'esri/geometry/support/webMercatorUtils'
-  ]); */
 
   if (feature.geometry.spatialReference.wkid === 4326) {
     geographic = feature.geometry;

@@ -267,7 +267,6 @@ const AOIDashboard = () => {
     //Sets active feature to the AOI in redux, adds graphic on the map and zooms to the location on the map.
     async function handleViewOnMap(): Promise<void> {
       if (!esriGeometry) return;
-      //const [Polygon] = await loadModules(['esri/geometry/Polygon']);
       const featureFromAOIData = createFeatureObject(props.dataObject, esriGeometry);
       const poly = new Polygon({
         rings: esriGeometry.geometry.rings,

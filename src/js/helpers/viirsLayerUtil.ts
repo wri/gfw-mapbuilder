@@ -229,8 +229,6 @@ async function viirsLayer(
     ],
   };
 
-  //  const [VectorTileLayer] = await loadModules(['esri/layers/VectorTileLayer']);
-
   return new VectorTileLayer({
     style: viirsStyleJSON,
     id,
