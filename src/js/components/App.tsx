@@ -38,8 +38,6 @@ const App = (props: AppSettings | any): JSX.Element => {
   if (resources.analyticsCode) loadDefaultGoogleAnalytics(resources.analyticsCode);
 
   const fetchPortalInfo = async (appID: string) => {
-    //const [Portal, PortalItem] = await loadModules(['esri/portal/Portal', 'esri/portal/PortalItem']);
-
     // APPID existing on the URL indicates that mapbuilder is loaded using arcgis template, and we need to fetch settings using that app id to overwrite our default settings
     const portalURL = sharinghost || 'https://www.arcgis.com';
     const portalA = new Portal({ url: portalURL });
