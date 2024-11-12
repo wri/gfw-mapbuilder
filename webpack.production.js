@@ -19,12 +19,17 @@ module.exports = (env) => {
       filename: '[name].js',
     },
     optimization: {
+      minimize: true,
       minimizer: [
         new TerserPlugin({
-          cache: true,
-          parallel: true,
-          sourceMap: false,
+          //cache: true,
+          //parallel: true,
+          //sourceMap: true,
+          /* minify: {
+            sourceMap: true,
+          }, */
           terserOptions: {
+            ecma: 2020,
             output: {
               comments: false,
             },
@@ -70,12 +75,13 @@ module.exports = (env) => {
         },
         {
           test: /\.svg$/,
-          loader: ['file-loader'],
+          loader: 'file-loader',
         },
       ],
     },
     plugins: [
       new CleanWebpackPlugin(),
+
       new webpack.optimize.LimitChunkCountPlugin({
         maxChunks: 20,
       }),
@@ -92,10 +98,10 @@ module.exports = (env) => {
         ],
       }),
 
-      new Dotenv({
+      /* new Dotenv({
         path: path.resolve(__dirname, './.env'),
         systemvars: true,
-      }),
+      }), */
       new HtmlWebPackPlugin({
         title: 'ArcGIS Template Application',
         template: './src/static.html',
@@ -111,10 +117,12 @@ module.exports = (env) => {
       }),
 
       new CompressionPlugin({
-        filename: '[path].gz[query]',
+        filename: '[path][base].gz',
+        //filename: '[path].gz[query]',
         algorithm: 'gzip',
         test: /\.(js|html|css)$/,
         threshold: 10240,
+        deleteOriginalAssets: true,
       }),
     ],
     resolve: {
@@ -129,6 +137,10 @@ module.exports = (env) => {
         path.resolve(__dirname, 'node_modules/'),
       ],
       extensions: ['.ts', '.tsx', '.js', '.scss', '.css'],
+      fallback: {
+        stream: require.resolve('stream-browserify'),
+        buffer: require.resolve('buffer'),
+      },
     },
   };
 };
