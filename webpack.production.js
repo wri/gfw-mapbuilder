@@ -134,14 +134,14 @@ module.exports = (env) => {
         chunkFilename: '[id].css',
       }),
 
-      new CompressionPlugin({
+      /* new CompressionPlugin({
         filename: '[path][base].gz',
         //filename: '[path].gz[query]',
         algorithm: 'gzip',
         test: /\.(js|html|css)$/,
         threshold: 10240,
         deleteOriginalAssets: true,
-      }),
+      }), */
     ],
     resolve: {
       alias: {

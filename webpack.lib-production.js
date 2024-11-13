@@ -63,11 +63,26 @@ module.exports = (env) => {
         },
         {
           test: /\.svg$/,
-          loader: ['file-loader'],
+          loader: 'file-loader',
+        },
+        {
+          test: /\.js$/,
+          include: /node_modules\/(@arcgis|@esri\/calcite-components|@zip.js)/,
+          use: [
+            {
+              loader: 'babel-loader',
+              options: {
+                presets: ['@babel/preset-env'],
+                plugins: [['@babel/plugin-proposal-decorators', { legacy: true }]],
+                compact: true,
+                sourceType: 'unambiguous',
+              },
+            },
+          ],
         },
       ],
     },
-    optimization: {
+    /* optimization: {
       minimizer: [
         new TerserPlugin({
           cache: true,
@@ -80,7 +95,7 @@ module.exports = (env) => {
           },
         }),
       ],
-    },
+    }, */
     plugins: [
       new CleanWebpackPlugin(),
       new webpack.optimize.LimitChunkCountPlugin({
@@ -104,12 +119,12 @@ module.exports = (env) => {
         chunkFilename: '[id].css',
       }),
 
-      new CompressionPlugin({
+      /* new CompressionPlugin({
         filename: '[path].gz[query]',
         algorithm: 'gzip',
         test: /\.(js|html|css)$/,
         threshold: 10240,
-      }),
+      }), */
     ],
     resolve: {
       alias: {
@@ -123,6 +138,10 @@ module.exports = (env) => {
         path.resolve(__dirname, 'node_modules/'),
       ],
       extensions: ['.ts', '.tsx', '.js', '.scss', '.css'],
+      fallback: {
+        stream: require.resolve('stream-browserify'),
+        buffer: require.resolve('buffer'),
+      },
     },
   };
 };
