@@ -15,19 +15,22 @@ module.exports = (env) => {
     entry: {
       main: ['./src/js/static.tsx'],
     },
-    output: {
+    /* output: {
       filename: '[name].js',
-    },
-    optimization: {
-      minimize: true,
+      library: 'MapBuilderLoader', // Expose as a global variable
+      libraryTarget: 'window', // Attach to the window object
+      publicPath: '/',
+    }, */
+    /* optimization: {
+      //minimize: true,
       minimizer: [
         new TerserPlugin({
           //cache: true,
           //parallel: true,
           //sourceMap: true,
-          /* minify: {
+          minify: {
             sourceMap: true,
-          }, */
+          },
           terserOptions: {
             ecma: 2020,
             output: {
@@ -36,7 +39,7 @@ module.exports = (env) => {
           },
         }),
       ],
-    },
+    }, */
     /////
     module: {
       rules: [
@@ -76,6 +79,21 @@ module.exports = (env) => {
         {
           test: /\.svg$/,
           loader: 'file-loader',
+        },
+        {
+          test: /\.js$/,
+          include: /node_modules\/(@arcgis|@esri\/calcite-components|@zip.js)/,
+          use: [
+            {
+              loader: 'babel-loader',
+              options: {
+                presets: ['@babel/preset-env'],
+                plugins: [['@babel/plugin-proposal-decorators', { legacy: true }]],
+                compact: true,
+                sourceType: 'unambiguous',
+              },
+            },
+          ],
         },
       ],
     },
