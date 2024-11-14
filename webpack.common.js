@@ -18,8 +18,6 @@ module.exports = {
       {
         test: /\.tsx?$/,
         use: ['ts-loader'],
-        //loader: 'ts-loader',
-        //options: {},
         exclude: /node_modules/,
       },
       {
@@ -63,7 +61,6 @@ module.exports = {
       {
         test: /\.svg$/,
         use: ['file-loader'],
-        //loader: ['file-loader'],
       },
       {
         test: /\.js$/,

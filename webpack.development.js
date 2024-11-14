@@ -7,7 +7,6 @@ module.exports = merge(common, {
   mode: 'development',
   devtool: 'inline-source-map',
   output: { pathinfo: false },
-  //output: { pathinfo: false, futureEmitAssets: true },
   optimization: {
     removeEmptyChunks: false,
     removeAvailableModules: false,

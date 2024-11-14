@@ -80,7 +80,6 @@ import legendInfoController from '../helpers/legendInfo';
 import { parseExtentConfig } from '../helpers/mapController/configParsing';
 import { overwriteColorTheme } from '../store/appSettings/actions';
 import { errorTranslations } from '../../../configs/translations/error.translations';
-//import { config } from 'process';
 
 interface URLCoordinates {
   zoom: number;
@@ -464,8 +463,6 @@ export class MapController {
                   .whenOnce(() => this._mapview.loaded)
                   .then(() => {
                     store.dispatch(setLayersLoading(false));
-
-                    console.log('Popup used for the first time');
                   });
               }
             } else {

@@ -82,20 +82,6 @@ module.exports = (env) => {
         },
       ],
     },
-    /* optimization: {
-      minimizer: [
-        new TerserPlugin({
-          cache: true,
-          parallel: true,
-          sourceMap: false,
-          terserOptions: {
-            output: {
-              comments: false,
-            },
-          },
-        }),
-      ],
-    }, */
     plugins: [
       new CleanWebpackPlugin(),
       new webpack.optimize.LimitChunkCountPlugin({
@@ -118,13 +104,6 @@ module.exports = (env) => {
         filename: '[name].[chunkhash].css',
         chunkFilename: '[id].css',
       }),
-
-      /* new CompressionPlugin({
-        filename: '[path].gz[query]',
-        algorithm: 'gzip',
-        test: /\.(js|html|css)$/,
-        threshold: 10240,
-      }), */
     ],
     resolve: {
       alias: {

@@ -77,10 +77,6 @@ export async function generateMinimaps(areas: any): Promise<void> {
 
   const printServiceURL = store.getState().appSettings.printServiceUrl;
 
-  /* const printTask = new PrintTask({
-    url: printServiceURL,
-  }); */
-
   const template = new PrintTemplate({
     format: 'png8',
     layout: 'map-only',
@@ -119,7 +115,6 @@ export async function generateMinimaps(areas: any): Promise<void> {
         template,
       });
       const img = await print.execute(printServiceURL!, params).catch((e: Error) => console.log(e));
-      //const img = await printTask.execute(params).catch((e: Error) => console.log(e));
       return img;
     });
   }

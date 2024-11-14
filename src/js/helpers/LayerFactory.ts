@@ -70,8 +70,7 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
         id: layerConfig.id,
         visible: layerConfig.visible,
         url: layerConfig.url,
-        //INFO: comback to this, opacity is a number not an object
-        //opacity: layerConfig.opacity,
+        opacity: layerConfig?.opacity?.combined || 1,
       });
       if (layerConfig.metadata.colormap) {
         const remapRF = new RasterFunction();
@@ -108,8 +107,6 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
         title: layerConfig.title,
         visible: layerConfig.visible,
         url: layerConfig.url,
-        // INFO: comback to this, search fields does not exist in FeatureLayer anymore
-        //searchField: layerConfig.searchField,
       });
       break;
     case 'loss':

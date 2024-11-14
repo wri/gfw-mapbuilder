@@ -15,31 +15,6 @@ module.exports = (env) => {
     entry: {
       main: ['./src/js/static.tsx'],
     },
-    /* output: {
-      filename: '[name].js',
-      library: 'MapBuilderLoader', // Expose as a global variable
-      libraryTarget: 'window', // Attach to the window object
-      publicPath: '/',
-    }, */
-    /* optimization: {
-      //minimize: true,
-      minimizer: [
-        new TerserPlugin({
-          //cache: true,
-          //parallel: true,
-          //sourceMap: true,
-          minify: {
-            sourceMap: true,
-          },
-          terserOptions: {
-            ecma: 2020,
-            output: {
-              comments: false,
-            },
-          },
-        }),
-      ],
-    }, */
     /////
     module: {
       rules: [
@@ -116,10 +91,6 @@ module.exports = (env) => {
         ],
       }),
 
-      /* new Dotenv({
-        path: path.resolve(__dirname, './.env'),
-        systemvars: true,
-      }), */
       new HtmlWebPackPlugin({
         title: 'ArcGIS Template Application',
         template: './src/static.html',
@@ -133,15 +104,6 @@ module.exports = (env) => {
         filename: '[name].[chunkhash].css',
         chunkFilename: '[id].css',
       }),
-
-      /* new CompressionPlugin({
-        filename: '[path][base].gz',
-        //filename: '[path].gz[query]',
-        algorithm: 'gzip',
-        test: /\.(js|html|css)$/,
-        threshold: 10240,
-        deleteOriginalAssets: true,
-      }), */
     ],
     resolve: {
       alias: {
