@@ -381,8 +381,7 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
           id: layerConfig.id,
           url: layerConfig.url,
           visible: layerConfig.visible,
-          // INFO: comback to this, opacity is a number not an object
-          //opacity: layerConfig.opacity,
+          opacity: layerConfig?.opacity?.combined || 1,
         });
       }
       if (
