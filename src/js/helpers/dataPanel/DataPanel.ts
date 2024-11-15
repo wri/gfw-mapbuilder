@@ -1,4 +1,5 @@
-import { loadModules } from 'esri-loader';
+import Graphic from '@arcgis/core/Graphic';
+import * as esriIntl from '@arcgis/core/intl';
 import store from '../../../js/store';
 import { esriQuery } from './esriQuery';
 import { getAttributesToFetch } from './getAttributes';
@@ -102,7 +103,6 @@ async function fetchQueryTask(
     const newOutFields = attributesToFetch?.map((f) => f.fieldName);
     queryParams.outFields = newOutFields ? queryParams.outFields.concat(newOutFields) : ['*'];
     const sublayerResult = await esriQuery(url, queryParams);
-    const [esriIntl] = await loadModules(['esri/intl']);
 
     if (sublayerResult.features.length > 0) {
       featureResult = sublayerResult.features.map((f) => {
@@ -234,7 +234,6 @@ export async function queryLayersForFeatures(
           const viirsConfig = mapviewState.allAvailableLayers.find((l) => l.id === 'VIIRS_ACTIVE_FIRES');
           if (!viirsConfig) return;
 
-          const [Graphic] = await loadModules(['esri/Graphic']);
           const viirsFeatures = await fetchVIIRSFeatures(mapview, event.mapPoint, viirsConfig);
 
           if (viirsFeatures.length > 0) {

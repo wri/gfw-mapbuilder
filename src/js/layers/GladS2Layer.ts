@@ -1,10 +1,8 @@
 //@ts-nocheck
 import PNG from 'png-ts';
-import { loadModules } from 'esri-loader';
+import BaseTileLayer from '@arcgis/core/layers/BaseTileLayer';
 
 export const createGladS2Layer = async () => {
-  const [BaseTileLayer] = await loadModules(['esri/layers/BaseTileLayer']);
-
   return BaseTileLayer.createSubclass({
     properties: {
       julianFrom: '20063',

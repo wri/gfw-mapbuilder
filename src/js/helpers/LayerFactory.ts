@@ -1,5 +1,15 @@
 /* eslint-disable no-case-declarations */
-import { loadModules } from 'esri-loader';
+
+import ImageryLayer from '@arcgis/core/layers/ImageryLayer';
+import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
+import MapImageLayer from '@arcgis/core/layers/MapImageLayer';
+import WebTileLayer from '@arcgis/core/layers/WebTileLayer';
+import VectorTileLayer from '@arcgis/core/layers/VectorTileLayer';
+import MosaicRule from '@arcgis/core/layers/support/MosaicRule';
+import RasterFunction from '@arcgis/core/layers/support/RasterFunction';
+import TileLayer from '@arcgis/core/layers/TileLayer';
+import WMSLayer from '@arcgis/core/layers/WMSLayer';
+
 import { createTCL } from '../layers/TreeCoverLossLayer';
 import { createTreeCover } from '../layers/TreeCoverLayer';
 import { createGlad } from '../layers/GladLayer';
@@ -34,27 +44,6 @@ interface LayerOptions {
 }
 
 export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promise<any> {
-  const [
-    ImageryLayer,
-    FeatureLayer,
-    MapImageLayer,
-    WebTileLayer,
-    VectorTileLayer,
-    MosaicRule,
-    RasterFunction,
-    TileLayer,
-    WMSLayer,
-  ] = await loadModules([
-    'esri/layers/ImageryLayer',
-    'esri/layers/FeatureLayer',
-    'esri/layers/MapImageLayer',
-    'esri/layers/WebTileLayer',
-    'esri/layers/VectorTileLayer',
-    'esri/layers/support/MosaicRule',
-    'esri/layers/support/RasterFunction',
-    'esri/layers/TileLayer',
-    'esri/layers/WMSLayer',
-  ]);
   const { appState, mapviewState } = store.getState();
   let esriLayer;
   switch (layerConfig.type) {
@@ -81,7 +70,7 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
         id: layerConfig.id,
         visible: layerConfig.visible,
         url: layerConfig.url,
-        opacity: layerConfig.opacity,
+        opacity: layerConfig?.opacity?.combined || 1,
       });
       if (layerConfig.metadata.colormap) {
         const remapRF = new RasterFunction();
@@ -118,7 +107,6 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
         title: layerConfig.title,
         visible: layerConfig.visible,
         url: layerConfig.url,
-        searchField: layerConfig.searchField,
       });
       break;
     case 'loss':
@@ -393,7 +381,7 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
           id: layerConfig.id,
           url: layerConfig.url,
           visible: layerConfig.visible,
-          opacity: layerConfig.opacity,
+          opacity: layerConfig?.opacity?.combined || 1,
         });
       }
       if (

@@ -1,5 +1,7 @@
 //@ts-nocheck
-import { loadModules } from 'esri-loader';
+import BaseTileLayer from '@arcgis/core/layers/BaseTileLayer';
+import esriRequest from '@arcgis/core/request';
+
 import { getYear, startOfYear, differenceInDays } from 'date-fns';
 
 // Modify the JS Date object
@@ -26,7 +28,6 @@ Date.prototype.getJulian = function () {
 };
 
 export const createGlad = async () => {
-  const [esriRequest, BaseTileLayer] = await loadModules(['esri/request', 'esri/layers/BaseTileLayer']);
   return BaseTileLayer.createSubclass({
     properties: {
       julianFrom: '15000',

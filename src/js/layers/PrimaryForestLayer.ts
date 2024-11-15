@@ -1,21 +1,14 @@
 //@ts-nocheck
-import { loadModules } from 'esri-loader';
+import BaseTileLayer from '@arcgis/core/layers/BaseTileLayer';
+import esriRequest from '@arcgis/core/request';
 
 export const createPrimary = async () => {
-  const [esriRequest, BaseTileLayer] = await loadModules([
-    'esri/request',
-    'esri/layers/BaseTileLayer'
-  ]);
-
   const PrimaryForestLayer = BaseTileLayer.createSubclass({
-    getTileUrl: function(level, row, column) {
-      return this.urlTemplate
-        .replace('{z}', level)
-        .replace('{x}', column)
-        .replace('{y}', row);
+    getTileUrl: function (level, row, column) {
+      return this.urlTemplate.replace('{z}', level).replace('{x}', column).replace('{y}', row);
     },
 
-    fetchTile: function(level, row, column) {
+    fetchTile: function (level, row, column) {
       // call getTileUrl() method to construct the URL to tiles
       // for a given level, row and col provided by the LayerView
       const url = this.getTileUrl(level, row, column);
@@ -24,8 +17,8 @@ export const createPrimary = async () => {
       // cross-domain access to create WebGL textures for 3D.
       return esriRequest(url, {
         responseType: 'image',
-        allowImageDataAccess: true
-      }).then(response => {
+        allowImageDataAccess: true,
+      }).then((response) => {
         const image = response.data;
         const width = this.tileInfo.size[0];
         const height = this.tileInfo.size[0];
@@ -46,7 +39,7 @@ export const createPrimary = async () => {
         imageObject.src = image.src;
         return canvas;
       });
-    }
+    },
   });
   return PrimaryForestLayer;
 };

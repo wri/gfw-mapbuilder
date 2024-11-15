@@ -1,25 +1,18 @@
 // @ts-nocheck
-import { loadModules } from 'esri-loader';
+import BaseTileLayer from '@arcgis/core/layers/BaseTileLayer';
+import esriRequest from '@arcgis/core/request';
 
 export const createGain = async () => {
-  const [esriRequest, BaseTileLayer] = await loadModules([
-    'esri/request',
-    'esri/layers/BaseTileLayer'
-  ]);
-
   const TreeCoverGainLayer: any = BaseTileLayer.createSubclass({
     properties: {
-      urlTemplate: null
+      urlTemplate: null,
     },
 
-    getTileUrl: function(level: number, row: number, column: number) {
-      return this.urlTemplate
-        .replace('{z}', level)
-        .replace('{x}', column)
-        .replace('{y}', row);
+    getTileUrl: function (level: number, row: number, column: number) {
+      return this.urlTemplate.replace('{z}', level).replace('{x}', column).replace('{y}', row);
     },
 
-    fetchTile: function(level: number, row: number, column: number) {
+    fetchTile: function (level: number, row: number, column: number) {
       // call getTileUrl() method to construct the URL to tiles
       // for a given level, row and col provided by the LayerView
       const url = this.getTileUrl(level, row, column);
@@ -31,9 +24,9 @@ export const createGain = async () => {
       // the signal option ensures that obsolete requests are aborted
       return esriRequest(url, {
         responseType: 'image',
-        allowImageDataAccess: true
+        allowImageDataAccess: true,
       }).then(
-        function(response) {
+        function (response) {
           // when esri request resolves successfully
           // get the image from the response
           const image = response.data;
@@ -52,7 +45,7 @@ export const createGain = async () => {
           return canvas;
         }.bind(this)
       );
-    }
+    },
   });
   return TreeCoverGainLayer;
 };

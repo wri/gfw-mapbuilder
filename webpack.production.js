@@ -1,36 +1,16 @@
 //@ts-ignore
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const CompressionPlugin = require('compression-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const TerserPlugin = require('terser-webpack-plugin');
 const path = require('path');
 const webpack = require('webpack');
-const Dotenv = require('dotenv-webpack');
 
 module.exports = (env) => {
   return {
     mode: 'production',
     entry: {
       main: ['./src/js/static.tsx'],
-    },
-    output: {
-      filename: '[name].js',
-    },
-    optimization: {
-      minimizer: [
-        new TerserPlugin({
-          cache: true,
-          parallel: true,
-          sourceMap: false,
-          terserOptions: {
-            output: {
-              comments: false,
-            },
-          },
-        }),
-      ],
     },
     /////
     module: {
@@ -70,12 +50,28 @@ module.exports = (env) => {
         },
         {
           test: /\.svg$/,
-          loader: ['file-loader'],
+          loader: 'file-loader',
+        },
+        {
+          test: /\.js$/,
+          include: /node_modules\/(@arcgis|@esri\/calcite-components|@zip.js)/,
+          use: [
+            {
+              loader: 'babel-loader',
+              options: {
+                presets: ['@babel/preset-env'],
+                plugins: [['@babel/plugin-proposal-decorators', { legacy: true }]],
+                compact: true,
+                sourceType: 'unambiguous',
+              },
+            },
+          ],
         },
       ],
     },
     plugins: [
       new CleanWebpackPlugin(),
+
       new webpack.optimize.LimitChunkCountPlugin({
         maxChunks: 20,
       }),
@@ -92,10 +88,6 @@ module.exports = (env) => {
         ],
       }),
 
-      new Dotenv({
-        path: path.resolve(__dirname, './.env'),
-        systemvars: true,
-      }),
       new HtmlWebPackPlugin({
         title: 'ArcGIS Template Application',
         template: './src/static.html',
@@ -108,13 +100,6 @@ module.exports = (env) => {
       new MiniCssExtractPlugin({
         filename: '[name].[chunkhash].css',
         chunkFilename: '[id].css',
-      }),
-
-      new CompressionPlugin({
-        filename: '[path].gz[query]',
-        algorithm: 'gzip',
-        test: /\.(js|html|css)$/,
-        threshold: 10240,
       }),
     ],
     resolve: {
@@ -129,6 +114,10 @@ module.exports = (env) => {
         path.resolve(__dirname, 'node_modules/'),
       ],
       extensions: ['.ts', '.tsx', '.js', '.scss', '.css'],
+      fallback: {
+        stream: require.resolve('stream-browserify'),
+        buffer: require.resolve('buffer'),
+      },
     },
   };
 };
