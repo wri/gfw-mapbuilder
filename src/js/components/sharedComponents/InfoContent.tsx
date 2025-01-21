@@ -5,6 +5,8 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../../js/store';
 import { infoContent } from '../../../../configs/translations/modal.tanslations';
 
+import { METADATA_CONFIG } from '../../../../configs/metadata/metadata-config';
+
 function createMarkup(content: any) {
   return { __html: content };
 }
@@ -117,6 +119,83 @@ const getServiceGroupContent = async (technicalName: string): Promise<any> => {
     });
 };
 
+const testM = {
+  en: {
+    map_service: '',
+
+    agol_id: '',
+
+    carto_table: '',
+    amazon_link: '',
+    other: '',
+  },
+};
+
+const metadata = {
+  layerId: 'TREE_COVER_LOSS',
+
+  en: {
+    title: 'Tree cover loss',
+    subtitle: '(annual, 30m, global, Hansen/UMD/Google/USGS/NASA)',
+    download_data: 'https://storage.googleapis.com/earthenginepartners-hansen/GFC-2023-v1.11/download.html',
+    lean_more: 'http://science.sciencemag.org/content/342/6160/850',
+    content: [
+      {
+        label: 'Function',
+        value: '<p>Identifies areas of gross tree cover loss</p>',
+      },
+
+      {
+        label: 'Resolution',
+        value: '<p>30 × 30 meters</p>',
+      },
+      {
+        label: 'Tags',
+        value: 'Forest Change',
+      },
+
+      {
+        label: 'Geographic coverage',
+        value: '<p>Global land area (excluding Antarctica and other Arctic islands).</p>',
+      },
+      {
+        label: 'Source',
+        value:
+          '<p>Hansen, M. C., P. V. Potapov, R. Moore, M. Hancher, S. A. Turubanova, A. Tyukavina, D. Thau, S. V. Stehman, S. J. Goetz, T. R. Loveland, A. Kommareddy, A. Egorov, L. Chini, C. O. Justice, and J. R. G. Townshend. 2013. “High-Resolution Global Maps of 21st-Century Forest Cover Change.” <em>Science</em> 342 (15 November): 850–53. Data available from: <a href="http://earthenginepartners.appspot.com/science-2013-global-forest">earthenginepartners.appspot.com/science-2013-global-forest</a>.</p>',
+      },
+      {
+        label: 'Frequency',
+        value: '<p>Annual</p>',
+      },
+
+      {
+        label: 'Date of content',
+        value: '<p>2001-2023</p>',
+      },
+      {
+        label: 'Cautions',
+        value:
+          '<p>" and 97 percent confident that it occurred within a year before or after. Users of the data can smooth out such uncertainty by examining the average over multiple years. Read our <a href="http://blog.globalforestwatch.org/data/how-accurate-is-accurate-enough-examining-the-glad-global-tree-cover-change-data-part-1.html">blog series</a> on the accuracy of this data for more information."</p>',
+      },
+      {
+        label: 'License',
+        value: '<p><a href="http://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></p>',
+      },
+      { label: 'Overview', value: '<p>on the accuracy of this data for more information.</p>' },
+
+      {
+        label: 'Citation',
+        value:
+          '<p> Data available on-line from:http://earthenginepartners.appspot.com/science-2013-global-forest. Accessed through Global Forest Watch on [date]. www.globalforestwatch.org <br>"</p>',
+      },
+    ],
+  },
+};
+
+const metadataInfo = {
+  TREE_COVER_LOSS: metadata,
+};
+
 const InfoContent: FunctionComponent<{}> = (): any => {
   const [content, setContent] = useState<any>({});
   const [dataLoading, setDataLoading] = useState(true);
@@ -159,15 +238,18 @@ const InfoContent: FunctionComponent<{}> = (): any => {
         setDataLoading(false);
       } else {
         // * else conditionally grab metadata from 2 locations
+        //const findById = metadataInfo[layer.id];
         const results = await getMetadata(layer, sharinghost);
+        //setContent(findById);
         setContent(results);
         setDataLoading(false);
       }
     };
 
     const getRemoteContent = (): void => {
+      const findById = METADATA_CONFIG[layer.id]['en'];
       const results = layer.metadata?.metadata;
-      setContent(results);
+      setContent(findById);
       setDataLoading(false);
     };
 
@@ -492,17 +574,63 @@ const InfoContent: FunctionComponent<{}> = (): any => {
     }
   };
 
+  const RenderContent = (props: any) => {
+    // * if metadata cam from GFW metadata API
+    const { title, subtitle, download_data, content, overview, citation } = props.content;
+
+    return (
+      <>
+        <div className="header">
+          <h2>{title}</h2>
+          <h3>{subtitle}</h3>
+        </div>
+        <table>
+          <tbody>
+            {content?.map((item: any, index) => {
+              return (
+                <tr key={index}>
+                  <td className="label">{item.label}</td>
+                  <td className="label-info" dangerouslySetInnerHTML={{ __html: item.value }} />
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+
+        <div className="overview-container">
+          <h3>{overview.label}</h3>
+          <div dangerouslySetInnerHTML={{ __html: overview.value }} />
+        </div>
+
+        <div className="citation-container">
+          <h4>{citation.label}</h4>
+
+          <div dangerouslySetInnerHTML={{ __html: citation.value }} />
+        </div>
+
+        {download_data && (
+          <div className="button-container">
+            <a href={download_data} target="_blank" rel="noopener noreferrer">
+              <button className="orange-button">{downloadDataLabel}</button>
+            </a>
+          </div>
+        )}
+      </>
+    );
+  };
+
   const RenderLayerContent = (): any => {
-    if (layer.type === 'webmap') {
+    /* if (layer.type === 'webmap') {
       return returnWebmapGroupContent();
     } else if (layer.origin === 'service') {
       return returnOtherGroupContent();
     } else {
       return returnOtherGroupContent();
-    }
+    } */
   };
 
-  return <div className="info-content-container">{!dataLoading && <RenderLayerContent />}</div>;
+  return <div className="info-content-container">{!dataLoading && <RenderContent content={content} />}</div>;
+  //return <div className="info-content-container">{!dataLoading && <RenderLayerContent />}</div>;
 };
 
 export default InfoContent;
