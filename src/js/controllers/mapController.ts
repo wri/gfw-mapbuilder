@@ -382,6 +382,7 @@ export class MapController {
               newRemoteLayerObject.versionHeaderText = remoteLayerObject.versionHeaderText;
               newRemoteLayerObject.dashboardURL = remoteLayerObject?.dashboardURL;
               newRemoteLayerObject.popup = remoteLayerObject.popup;
+              newRemoteLayerObject.metadata = remoteLayerObject?.metadata || null;
             }
 
             remoteLayerObjects.push(newRemoteLayerObject);

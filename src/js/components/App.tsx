@@ -22,6 +22,8 @@ import resources from '../../../configs/resources';
 import { allRequiredFieldsPresent, CHECK_LOGGED_URL, getUserData } from './gfwContent/utils';
 import '../../css/index.scss';
 
+import tt from '../../../templateConfig';
+
 const App = (props: AppSettings | any): JSX.Element => {
   //Check for Report param in the URL (if that exists, we render a report view instead of our full scale application
   const reportView = checkForReportView();
@@ -46,7 +48,9 @@ const App = (props: AppSettings | any): JSX.Element => {
       .fetchData('json')
       .then((res) => {
         const { values } = res;
-        dispatch(overwriteSettings({ ...resources, ...props, ...values }));
+        const check = { ...resources, ...props, ...tt };
+        dispatch(overwriteSettings({ ...resources, ...props, ...tt }));
+        //dispatch(overwriteSettings({ ...resources, ...props, ...tt }));
         changeDefaultLanguage(values?.language);
         setShowGlobalSpinner(false);
       })

@@ -197,7 +197,7 @@ const metadataInfo = {
 };
 
 const InfoContent: FunctionComponent<{}> = (): any => {
-  const [content, setContent] = useState<any>({});
+  const [content, setContent] = useState<any>(null);
   const [dataLoading, setDataLoading] = useState(true);
   const sharinghost = useSelector((state: RootState) => state.appSettings.sharinghost);
   const { infoModalLayerID: layerID, selectedLanguage } = useSelector((store: RootState) => store.appState);
@@ -228,9 +228,36 @@ const InfoContent: FunctionComponent<{}> = (): any => {
       setContent(results);
       setDataLoading(false);
     };
-
+    const checkForURLParams = () => {
+      const url = new URL(window.location.href);
+      const params = url.searchParams;
+      const appid = params.get('appid');
+      const s = appid;
+      if (appid) return true;
+      return false;
+    };
     const getServiceContent = async (): Promise<void> => {
-      if (layer.technicalName) {
+      const hasAppID = checkForURLParams();
+      if (!hasAppID) {
+        setContent(null);
+        setDataLoading(false);
+        return;
+      }
+      if (!layer?.metadata) {
+        setContent(null);
+        setDataLoading(false);
+        return;
+      }
+
+      const metadataContent = layer?.metadata[selectedLanguage];
+      if (!metadataContent) {
+        setContent(null);
+      } else {
+        setContent(metadataContent);
+      }
+
+      setDataLoading(false);
+      /* if (layer.technicalName) {
         // * if layer has technical name
         // * grab metadata from GFW metadata API
         const results = await getServiceGroupContent(layer.technicalName);
@@ -243,12 +270,13 @@ const InfoContent: FunctionComponent<{}> = (): any => {
         //setContent(findById);
         setContent(results);
         setDataLoading(false);
-      }
+      } */
     };
 
     const getRemoteContent = (): void => {
-      const findById = METADATA_CONFIG[layer.id]['en'];
+      const findById = METADATA_CONFIG[layer.id]['es'];
       const results = layer.metadata?.metadata;
+      checkForURLParams();
       setContent(findById);
       setDataLoading(false);
     };
@@ -575,14 +603,20 @@ const InfoContent: FunctionComponent<{}> = (): any => {
   };
 
   const RenderContent = (props: any) => {
+    if (!props.content?.content)
+      return (
+        <div>
+          <h2>Metadata not available</h2>
+        </div>
+      );
     // * if metadata cam from GFW metadata API
     const { title, subtitle, download_data, content, overview, citation } = props.content;
-
+    const cc = props;
     return (
       <>
         <div className="header">
-          <h2>{title}</h2>
-          <h3>{subtitle}</h3>
+          <h2>{title || 'Title not provided'}</h2>
+          <h3>{subtitle || 'subtitle not provided'}</h3>
         </div>
         <table>
           <tbody>
@@ -597,16 +631,20 @@ const InfoContent: FunctionComponent<{}> = (): any => {
           </tbody>
         </table>
 
-        <div className="overview-container">
-          <h3>{overview.label}</h3>
-          <div dangerouslySetInnerHTML={{ __html: overview.value }} />
-        </div>
+        {overview && (
+          <div className="overview-container">
+            <h3>{overview.label}</h3>
+            <div dangerouslySetInnerHTML={{ __html: overview.value }} />
+          </div>
+        )}
 
-        <div className="citation-container">
-          <h4>{citation.label}</h4>
+        {citation && (
+          <div className="citation-container">
+            <h4>{citation.label}</h4>
 
-          <div dangerouslySetInnerHTML={{ __html: citation.value }} />
-        </div>
+            <div dangerouslySetInnerHTML={{ __html: citation.value }} />
+          </div>
+        )}
 
         {download_data && (
           <div className="button-container">
