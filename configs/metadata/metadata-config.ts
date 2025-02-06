@@ -1,6 +1,7 @@
 import treeCoverLoss from './tree-cover-loss';
 import co2AccomulationPotential from './co2-accoumulation-potential-2020';
 import gfwForestCarbonNetflux from './gfw-forest-carbon-net-flux';
+import gfwIntegratedAlerts from './gfw-integrated-alerts';
 import { LAYER_IDS } from '../layer-config';
 
 export const METADATA_CONFIG = {
@@ -12,5 +13,8 @@ export const METADATA_CONFIG = {
   },
   ['pending']: {
     en: gfwForestCarbonNetflux.en,
+  },
+  [LAYER_IDS.GFW_INTEGRATED_ALERTS]: {
+    en: gfwIntegratedAlerts.en,
   },
 };
