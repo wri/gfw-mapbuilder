@@ -1,4 +1,4 @@
-import treeCoverLoss from './tree-cover-loss';
+import umdTreeCoverLoss from './umd-tree-cover-loss';
 import co2AccomulationPotential from './co2-accoumulation-potential-2020';
 import gfwForestCarbonNetflux from './gfw-forest-carbon-net-flux';
 import gfwIntegratedAlerts from './gfw-integrated-alerts';
@@ -9,13 +9,14 @@ import umdTreeCoverGainFromHeight from './umd-tree-cover-gain-from-height';
 import gwfForestCarbonGrossRemovals from './gwf-forest-carbon-gross-removals';
 import abovegroundBiomassTropics from './aboveground-biomass-tropics';
 import treeCover from './tree-cover';
+import umdLandCover from './umd-land-cover';
 import gfwForestCarbonGrossEmissions from './gfw-forest-carbon-gross-emissions';
 import { LAYER_IDS } from '../layer-config';
 const { UMD_LAND_COVER, TREE_COVER_LOSS, GFW_INTEGRATED_ALERTS, INPE_AMAZON_PRODES } = LAYER_IDS;
 
 export const METADATA_CONFIG = {
   [TREE_COVER_LOSS]: {
-    en: treeCoverLoss.en,
+    en: umdTreeCoverLoss.en,
   },
   ['pding']: {
     en: co2AccomulationPotential.en,
@@ -51,5 +52,9 @@ export const METADATA_CONFIG = {
   },
   ['gfwForestCarbonGrossEmissions']: {
     en: gfwForestCarbonGrossEmissions.en,
+  },
+
+  ['umdLandCover']: {
+    en: umdLandCover.en,
   },
 };
