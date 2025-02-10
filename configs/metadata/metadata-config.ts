@@ -3,8 +3,9 @@ import co2AccomulationPotential from './co2-accoumulation-potential-2020';
 import gfwForestCarbonNetflux from './gfw-forest-carbon-net-flux';
 import gfwIntegratedAlerts from './gfw-integrated-alerts';
 import umdLandsatAlerts from './umd-landsat-alerts';
+import inpeAmazonProdes from './inpe-amazon-prodes';
 import { LAYER_IDS } from '../layer-config';
-const { UMD_LAND_COVER, TREE_COVER_LOSS, GFW_INTEGRATED_ALERTS } = LAYER_IDS;
+const { UMD_LAND_COVER, TREE_COVER_LOSS, GFW_INTEGRATED_ALERTS, INPE_AMAZON_PRODES } = LAYER_IDS;
 
 export const METADATA_CONFIG = {
   [TREE_COVER_LOSS]: {
@@ -21,5 +22,8 @@ export const METADATA_CONFIG = {
   },
   [UMD_LAND_COVER]: {
     en: umdLandsatAlerts.en,
+  },
+  [INPE_AMAZON_PRODES]: {
+    en: inpeAmazonProdes.en,
   },
 };
