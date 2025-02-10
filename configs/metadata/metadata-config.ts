@@ -8,6 +8,7 @@ import terraIAlerts from './terra-i-alerts';
 import umdTreeCoverGainFromHeight from './umd-tree-cover-gain-from-height';
 import gwfForestCarbonGrossRemovals from './gwf-forest-carbon-gross-removals';
 import abovegroundBiomassTropics from './aboveground-biomass-tropics';
+import treeCover from './tree-cover';
 import { LAYER_IDS } from '../layer-config';
 const { UMD_LAND_COVER, TREE_COVER_LOSS, GFW_INTEGRATED_ALERTS, INPE_AMAZON_PRODES } = LAYER_IDS;
 
@@ -42,5 +43,9 @@ export const METADATA_CONFIG = {
 
   ['dfdfdfdfdfdfdfd']: {
     en: abovegroundBiomassTropics.en,
+  },
+
+  ['treeCoverLoss']: {
+    en: treeCover.en,
   },
 };
