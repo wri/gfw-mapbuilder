@@ -1,8 +1,8 @@
 export const en = {
   title: 'PRODES (Legal Amazon)',
   subtitle: 'annual, 6.25ha, Legal Amazon, INPE',
-  download_data: 'https://storage.googleapis.com/earthenginepartners-hansen/GFC-2023-v1.11/download.html',
-  lean_more: 'http://science.sciencemag.org/content/342/6160/850',
+  download_data: '',
+  lean_more: '',
   content: [
     {
       label: 'Function',
