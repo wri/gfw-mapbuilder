@@ -11,6 +11,7 @@ import abovegroundBiomassTropics from './aboveground-biomass-tropics';
 import treeCover from './tree-cover';
 import umdLandCover from './umd-land-cover';
 import gfwForestCarbonGrossEmissions from './gfw-forest-carbon-gross-emissions';
+import intactForestLandscapesChange from './intact-forest-landscapes-change';
 import { LAYER_IDS } from '../layer-config';
 const { UMD_LAND_COVER, TREE_COVER_LOSS, GFW_INTEGRATED_ALERTS, INPE_AMAZON_PRODES } = LAYER_IDS;
 
@@ -56,5 +57,9 @@ export const METADATA_CONFIG = {
 
   ['umdLandCover']: {
     en: umdLandCover.en,
+  },
+
+  ['intactForestLandscapesChange']: {
+    en: intactForestLandscapesChange.en,
   },
 };
