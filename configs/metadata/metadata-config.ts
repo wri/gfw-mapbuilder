@@ -13,6 +13,8 @@ import umdLandCover from './umd-land-cover';
 import gfwForestCarbonGrossEmissions from './gfw-forest-carbon-gross-emissions';
 import intactForestLandscapesChange from './intact-forest-landscapes-change';
 import globalLandcover from './global-landcover';
+import regionalPrimaryForest from './regional-primary-forest';
+import umdGladSentinel2Alerts from './umd-glad-sentinel2-alerts';
 import { LAYER_IDS } from '../layer-config';
 const { UMD_LAND_COVER, TREE_COVER_LOSS, GFW_INTEGRATED_ALERTS, INPE_AMAZON_PRODES } = LAYER_IDS;
 
@@ -65,5 +67,13 @@ export const METADATA_CONFIG = {
   },
   ['globalLandcover']: {
     en: globalLandcover.en,
+  },
+
+  ['regionalPrimaryForest']: {
+    en: regionalPrimaryForest.en,
+  },
+
+  ['umdGladSentinel2Alerts']: {
+    en: umdGladSentinel2Alerts.en,
   },
 };
