@@ -17,6 +17,7 @@ import regionalPrimaryForest from './regional-primary-forest';
 import umdGladSentinel2Alerts from './umd-glad-sentinel2-alerts';
 import wurRaddAlerts from './wur-radd-alerts';
 import treeCoverHeight from './tree-cover-height';
+import gfwForestCarbonGrossRemovals from './gfw-forest-carbon-gross-removals';
 import { LAYER_IDS } from '../layer-config';
 const { UMD_LAND_COVER, TREE_COVER_LOSS, GFW_INTEGRATED_ALERTS, INPE_AMAZON_PRODES } = LAYER_IDS;
 
@@ -84,5 +85,8 @@ export const METADATA_CONFIG = {
 
   ['treeCoverHeight']: {
     en: treeCoverHeight.en,
+  },
+  ['gfwForestCarbonGrossRemovals']: {
+    en: gfwForestCarbonGrossRemovals.en,
   },
 };
