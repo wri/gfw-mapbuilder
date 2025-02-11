@@ -30,7 +30,8 @@ export const en = {
 
     {
       label: 'Source',
-      value: '<p>Hansen, M. C., P. V. Potapov, R. Moore, M. Hancher, S. A. Turubanova, A. Tyukavina...</p>',
+      value:
+        '<p>Hansen, M. C., P. V. Potapov, R. Moore, M. Hancher, S. A. Turubanova, A. Tyukavina, D. Thau, S. V. Stehman, S. J. Goetz, T. R. Loveland, A. Kommareddy, A. Egorov, L. Chini, C. O. Justice, and J. R. G. Townshend. 2013. “High-Resolution Global Maps of 21st-Century Forest Cover Change.” Science 342 (15 November): 850–53. Data available from: <a href="https://glad.umd.edu/dataset/global-2010-tree-cover-30-m">https://glad.umd.edu/dataset/global-2010-tree-cover-30-m</a>.</p>',
     },
     {
       label: 'Resolution',
