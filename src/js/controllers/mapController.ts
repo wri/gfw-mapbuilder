@@ -334,9 +334,9 @@ export class MapController {
               newRemoteLayerObject.origin = 'remote';
               newRemoteLayerObject.label = remoteLayerObject.layer.label;
               newRemoteLayerObject.metadata = remoteLayerObject.layer.metadata;
-              newRemoteLayerObject.metadata.colormap = remoteLayerObject.layer.colormap;
-              newRemoteLayerObject.metadata.inputRange = remoteLayerObject.layer.inputRange;
-              newRemoteLayerObject.metadata.outputRange = remoteLayerObject.layer.outputRange;
+              newRemoteLayerObject.metadata.colormap = remoteLayerObject?.layer?.colormap;
+              newRemoteLayerObject.metadata.inputRange = remoteLayerObject?.layer?.inputRange;
+              newRemoteLayerObject.metadata.outputRange = remoteLayerObject.layer?.outputRange;
               newRemoteLayerObject.parentID = undefined;
               newRemoteLayerObject.legendInfo = remoteLayerObject.layer.metadata.legendConfig;
               newRemoteLayerObject.dashboardURL = remoteLayerObject.dashboardURL;
