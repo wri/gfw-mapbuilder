@@ -6,7 +6,7 @@ import umdLandsatAlerts from './umd-landsat-alerts';
 import inpeAmazonProdes from './inpe-amazon-prodes';
 import terraIAlerts from './terra-i-alerts';
 import umdTreeCoverGainFromHeight from './umd-tree-cover-gain-from-height';
-import gwfForestCarbonGrossRemovals from './gwf-forest-carbon-gross-removals';
+import gfwForestCarbonGrossRemovals from './gfw-forest-carbon-gross-removals';
 import abovegroundBiomassTropics from './aboveground-biomass-tropics';
 import treeCover from './tree-cover';
 import umdLandCover from './umd-land-cover';
@@ -17,76 +17,127 @@ import regionalPrimaryForest from './regional-primary-forest';
 import umdGladSentinel2Alerts from './umd-glad-sentinel2-alerts';
 import wurRaddAlerts from './wur-radd-alerts';
 import treeCoverHeight from './tree-cover-height';
-import gfwForestCarbonGrossRemovals from './gfw-forest-carbon-gross-removals';
+import wriTreesInMosaicLandscapes from './wri-trees-in-mosaic-landscapes';
+import viirsFires from './viirs-fires';
+import projectedChangeDrySpells from './projected-change-dry-spells';
+import airQuality from './air-quality';
+import windSpeed from './wind-speed';
+import satelliteImagery from './satellite-imagery';
 import { LAYER_IDS } from '../layer-config';
-const { UMD_LAND_COVER, TREE_COVER_LOSS, GFW_INTEGRATED_ALERTS, INPE_AMAZON_PRODES } = LAYER_IDS;
+const {
+  GLAD_ALERTS,
+  UMD_LAND_COVER,
+  TREE_COVER_LOSS,
+  GFW_INTEGRATED_ALERTS,
+  INPE_AMAZON_PRODES,
+  INPE_CERRADO_PRODES,
+  TREE_COVER_GAIN,
+  VIIRS_ACTIVE_FIRES,
+  IFL,
+  PRIMARY_FORESTS,
+  AG_BIOMASS,
+  TREE_COVER,
+  LAND_COVER,
+  TREE_COVER_HEIGHT,
+  TROPICAL_TREE_COVER,
+  CARBON_SEQ,
+  DRY_SPELLS,
+  AIR_QUALITY,
+  WIND_SPEED,
+  FOREST_CARBON_GROSS_REMOVALS,
+  FOREST_CARBON_GROSS_EMISSIONS,
+  FOREST_CARBON_NET_FLUX,
+  RECENT_IMAGERY,
+} = LAYER_IDS;
 
 export const METADATA_CONFIG = {
   [TREE_COVER_LOSS]: {
     en: umdTreeCoverLoss.en,
   },
-  ['pding']: {
+  [CARBON_SEQ]: {
     en: co2AccomulationPotential.en,
   },
-  ['pending']: {
+  [FOREST_CARBON_NET_FLUX]: {
     en: gfwForestCarbonNetflux.en,
   },
   [GFW_INTEGRATED_ALERTS]: {
     en: gfwIntegratedAlerts.en,
   },
-  [UMD_LAND_COVER]: {
+  [GLAD_ALERTS]: {
     en: umdLandsatAlerts.en,
   },
   [INPE_AMAZON_PRODES]: {
     en: inpeAmazonProdes.en,
   },
-  ['ddd']: {
-    en: terraIAlerts.en,
+  [INPE_CERRADO_PRODES]: {
+    en: inpeAmazonProdes.en,
   },
-  ['dfdfdd']: {
+  /* ['ddd']: {
+    en: terraIAlerts.en,
+  }, */
+  [TREE_COVER_GAIN]: {
     en: umdTreeCoverGainFromHeight.en,
   },
-  ['dfdfdfdfdd']: {
-    en: gwfForestCarbonGrossRemovals.en,
-  },
 
-  ['dfdfdfdfdfdfdfd']: {
+  [AG_BIOMASS]: {
     en: abovegroundBiomassTropics.en,
   },
 
-  ['treeCoverLoss']: {
+  [TREE_COVER]: {
     en: treeCover.en,
   },
-  ['gfwForestCarbonGrossEmissions']: {
+  [FOREST_CARBON_GROSS_EMISSIONS]: {
     en: gfwForestCarbonGrossEmissions.en,
   },
 
-  ['umdLandCover']: {
+  [UMD_LAND_COVER]: {
     en: umdLandCover.en,
   },
 
-  ['intactForestLandscapesChange']: {
+  [IFL]: {
     en: intactForestLandscapesChange.en,
   },
-  ['globalLandcover']: {
+  [LAND_COVER]: {
     en: globalLandcover.en,
   },
 
-  ['regionalPrimaryForest']: {
+  [PRIMARY_FORESTS]: {
     en: regionalPrimaryForest.en,
   },
 
-  ['umdGladSentinel2Alerts']: {
+  /* ['umdGladSentinel2Alerts']: {
     en: umdGladSentinel2Alerts.en,
   },
   ['wurRaddAlerts']: {
     en: wurRaddAlerts.en,
-  },
+  }, */
 
-  ['treeCoverHeight']: {
+  [TREE_COVER_HEIGHT]: {
     en: treeCoverHeight.en,
   },
-  ['gfwForestCarbonGrossRemovals']: {
+  [FOREST_CARBON_GROSS_REMOVALS]: {
     en: gfwForestCarbonGrossRemovals.en,
+  },
+
+  [VIIRS_ACTIVE_FIRES]: {
+    en: viirsFires.en,
+  },
+  [TROPICAL_TREE_COVER]: {
+    en: wriTreesInMosaicLandscapes.en,
+  },
+
+  [DRY_SPELLS]: {
+    en: projectedChangeDrySpells.en,
+  },
+
+  [AIR_QUALITY]: {
+    en: airQuality.en,
+  },
+
+  [WIND_SPEED]: {
+    en: windSpeed.en,
+  },
+  [RECENT_IMAGERY]: {
+    en: satelliteImagery.en,
   },
 };

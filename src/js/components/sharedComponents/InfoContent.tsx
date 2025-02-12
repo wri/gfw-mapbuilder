@@ -119,7 +119,7 @@ const getServiceGroupContent = async (technicalName: string): Promise<any> => {
     });
 };
 
-const testM = {
+/* const testM = {
   en: {
     map_service: '',
 
@@ -129,9 +129,9 @@ const testM = {
     amazon_link: '',
     other: '',
   },
-};
+}; */
 
-const metadata = {
+/* const metadata = {
   layerId: 'TREE_COVER_LOSS',
 
   en: {
@@ -190,11 +190,11 @@ const metadata = {
       },
     ],
   },
-};
+}; */
 
-const metadataInfo = {
+/* const metadataInfo = {
   TREE_COVER_LOSS: metadata,
-};
+}; */
 
 const InfoContent: FunctionComponent<{}> = (): any => {
   const [content, setContent] = useState<any>(null);
@@ -222,27 +222,22 @@ const InfoContent: FunctionComponent<{}> = (): any => {
   } = infoContent[selectedLanguage];
 
   useEffect(() => {
-    const getWebmapContent = async (): Promise<void> => {
+    /* const getWebmapContent = async (): Promise<void> => {
       const results = await getWebmapGroupContent(layer, sharinghost);
 
       setContent(results);
       setDataLoading(false);
-    };
+    }; */
     const checkForURLParams = () => {
       const url = new URL(window.location.href);
       const params = url.searchParams;
       const appid = params.get('appid');
-      const s = appid;
+      //const s = appid;
       if (appid) return true;
       return false;
     };
-    const getServiceContent = async (): Promise<void> => {
-      const hasAppID = checkForURLParams();
-      if (!hasAppID) {
-        setContent(null);
-        setDataLoading(false);
-        return;
-      }
+
+    const getMetadataFromLayer = () => {
       if (!layer?.metadata) {
         setContent(null);
         setDataLoading(false);
@@ -257,6 +252,38 @@ const InfoContent: FunctionComponent<{}> = (): any => {
       }
 
       setDataLoading(false);
+    };
+
+    const getCoreLayerMetadata = async () => {
+      const findById = METADATA_CONFIG[layer.id][selectedLanguage];
+      //const results = layer.metadata?.metadata;
+      checkForURLParams();
+      setContent(findById);
+      setDataLoading(false);
+    };
+    const getServiceContent = async (): Promise<void> => {
+      const hasAppID = checkForURLParams();
+      if (hasAppID) {
+        getMetadataFromLayer();
+        /* setContent(null);
+        setDataLoading(false); */
+        return;
+      }
+      getCoreLayerMetadata();
+      /* if (!layer?.metadata) {
+        setContent(null);
+        setDataLoading(false);
+        return;
+      }
+
+      const metadataContent = layer?.metadata[selectedLanguage];
+      if (!metadataContent) {
+        setContent(null);
+      } else {
+        setContent(metadataContent);
+      }
+ */
+      //setDataLoading(false);
       /* if (layer.technicalName) {
         // * if layer has technical name
         // * grab metadata from GFW metadata API
@@ -273,24 +300,25 @@ const InfoContent: FunctionComponent<{}> = (): any => {
       } */
     };
 
-    const getRemoteContent = (): void => {
+    /* const getRemoteContent = (): void => {
       const findById = METADATA_CONFIG[layer.id]['es'];
       const results = layer.metadata?.metadata;
       checkForURLParams();
       setContent(findById);
       setDataLoading(false);
-    };
+    }; */
 
-    if (layer.type === 'webmap') {
+    getServiceContent();
+    /* if (layer.type === 'webmap') {
       getWebmapContent();
     } else if (layer.origin === 'service') {
       getServiceContent();
     } else {
       getRemoteContent();
-    }
+    } */
   }, []);
 
-  const returnWebmapGroupContent = (): JSX.Element | undefined => {
+  /* const returnWebmapGroupContent = (): JSX.Element | undefined => {
     if (content.title) {
       // * return metadata
       const { title, functionOrPurpose, geographicCoverage, overview } = content;
@@ -369,9 +397,9 @@ const InfoContent: FunctionComponent<{}> = (): any => {
         </>
       );
     }
-  };
+  }; */
 
-  const returnOtherGroupContent = (): JSX.Element | undefined => {
+  /* const returnOtherGroupContent = (): JSX.Element | undefined => {
     if (content && content.function) {
       // * if metadata cam from GFW metadata API
       const {
@@ -600,7 +628,7 @@ const InfoContent: FunctionComponent<{}> = (): any => {
         </>
       );
     }
-  };
+  }; */
 
   const RenderContent = (props: any) => {
     if (!props.content?.content)
@@ -615,8 +643,8 @@ const InfoContent: FunctionComponent<{}> = (): any => {
     return (
       <>
         <div className="header">
-          <h2>{title || 'Title not provided'}</h2>
-          <h3>{subtitle || 'subtitle not provided'}</h3>
+          <h2>{title || ''}</h2>
+          <h3>{subtitle || ''}</h3>
         </div>
         <table>
           <tbody>
@@ -631,14 +659,14 @@ const InfoContent: FunctionComponent<{}> = (): any => {
           </tbody>
         </table>
 
-        {overview && (
+        {overview?.value && (
           <div className="overview-container">
             <h3>{overview.label}</h3>
             <div dangerouslySetInnerHTML={{ __html: overview.value }} />
           </div>
         )}
 
-        {citation && (
+        {citation?.value && (
           <div className="citation-container">
             <h4>{citation.label}</h4>
 

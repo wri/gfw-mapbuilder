@@ -20,7 +20,8 @@ export const en = {
 
     {
       label: 'Source',
-      value: '<p>Turubanova, S., Potapov, P.V., Tyukavina, A. and Hansen, M.C., 2018...</p>',
+      value:
+        '<p>Turubanova, S., Potapov, P.V., Tyukavina, A. and Hansen, M.C., 2018. <a href="http://iopscience.iop.org/article/10.1088/1748-9326/aacd1c/meta">Ongoing primary forest loss in Brazil, Democratic Republic of the Congo, and Indonesia</a>. Environmental Research Letters, 13(7), p.074028.</p>',
     },
     {
       label: 'Amazon Link',
