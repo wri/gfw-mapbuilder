@@ -478,10 +478,14 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
 
   const handleLayerError = () => {
     // layer error is higher priority than metadata error
-    if (layer?.isError) return true;
+    let disbleLayer = false;
+    if (layer?.isError) disbleLayer = true;
+    if (!layer?.metadata?.en) disbleLayer = true;
 
-    if (layer?.isMetadataError) return true;
-    return false;
+    if (layer?.id in LAYER_IDS) disbleLayer = false;
+
+    if (layer?.isMetadataError) disbleLayer = true;
+    return disbleLayer;
   };
 
   const handleInfoModalClick = () => {
