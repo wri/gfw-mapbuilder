@@ -123,7 +123,6 @@ const InfoContent = () => {
   };
 
   return <div className="info-content-container">{!dataLoading && <RenderContent content={content} />}</div>;
-  //return <div className="info-content-container">{!dataLoading && <RenderLayerContent />}</div>;
 };
 
 export default InfoContent;
