@@ -563,7 +563,6 @@ export async function getRemoteAndServiceLayers(): Promise<any> {
   detailedLayers.forEach((detailedLayer) => {
     result.push(detailedLayer);
   });
-  console.log('detail', detailedLayers);
 
   return result;
 }
