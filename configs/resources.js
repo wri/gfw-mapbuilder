@@ -1,5 +1,4 @@
 export default {
-  //webmap: '0174a49d49244b1cb57f7491c173144c',
   webmap: '4563142bba62461ab4e0de9480919e95',
   title: 'GFW Mapbuilder',
   subtitle: 'Make maps that matter',

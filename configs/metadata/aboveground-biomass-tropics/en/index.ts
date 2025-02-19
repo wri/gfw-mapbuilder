@@ -19,11 +19,6 @@ export const en = {
     },
 
     {
-      label: 'Citation',
-      value:
-        '<p>Baccini A., W. Walker, L. Carvahlo, M. Farina, D. Sulla-Menashe, R. Houghton (2015). Tropical forests are a net carbon source based on new measurements of gain and loss...</p>',
-    },
-    {
       label: 'Cautions',
       value:
         '<p>It is recommended that both aboveground carbon density and uncertainty values be used together for carbon assessments and verification. The map will provide accurate estimates of aboveground carbon stock and aboveground carbon density when aggregated to large areas (5,000 to 10,000 ha) for project and regional level assessments. The biomass density value of a single pixel may have large uncertainty when compared with small plots for verification.</p>',

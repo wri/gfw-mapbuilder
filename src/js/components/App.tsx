@@ -46,10 +46,7 @@ const App = (props: AppSettings | any): JSX.Element => {
       .fetchData('json')
       .then((res) => {
         const { values } = res;
-        const check = { ...resources, ...props, ...values };
         dispatch(overwriteSettings({ ...resources, ...props, ...values }));
-        //dispatch(overwriteSettings({ ...resources, ...props, ...tt }));
-        //dispatch(overwriteSettings({ ...resources, ...props, ...tt }));
         changeDefaultLanguage(values?.language);
         setShowGlobalSpinner(false);
       })

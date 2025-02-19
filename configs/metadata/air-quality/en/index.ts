@@ -1,7 +1,6 @@
 export const en = {
   title: 'Air Quality: Nitrogen Dioxide (NO₂) Satellite Measurements',
   subtitle: '',
-  /* download_data: 'https://earthdata.nasa.gov/earth-observation-data/near-real-time/firms/active-fire-data', */
   download_data: '',
   lean_more: 'https://sentinel.esa.int/web/sentinel/missions/sentinel-5p',
   content: [

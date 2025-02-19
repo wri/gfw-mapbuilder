@@ -4,7 +4,6 @@ import gfwForestCarbonNetflux from './gfw-forest-carbon-net-flux';
 import gfwIntegratedAlerts from './gfw-integrated-alerts';
 import umdLandsatAlerts from './umd-landsat-alerts';
 import inpeAmazonProdes from './inpe-amazon-prodes';
-import terraIAlerts from './terra-i-alerts';
 import umdTreeCoverGainFromHeight from './umd-tree-cover-gain-from-height';
 import gfwForestCarbonGrossRemovals from './gfw-forest-carbon-gross-removals';
 import abovegroundBiomassTropics from './aboveground-biomass-tropics';
@@ -14,8 +13,6 @@ import gfwForestCarbonGrossEmissions from './gfw-forest-carbon-gross-emissions';
 import intactForestLandscapesChange from './intact-forest-landscapes-change';
 import globalLandcover from './global-landcover';
 import regionalPrimaryForest from './regional-primary-forest';
-import umdGladSentinel2Alerts from './umd-glad-sentinel2-alerts';
-import wurRaddAlerts from './wur-radd-alerts';
 import treeCoverHeight from './tree-cover-height';
 import wriTreesInMosaicLandscapes from './wri-trees-in-mosaic-landscapes';
 import viirsFires from './viirs-fires';
@@ -72,9 +69,7 @@ export const METADATA_CONFIG = {
   [INPE_CERRADO_PRODES]: {
     en: inpeAmazonProdes.en,
   },
-  /* ['ddd']: {
-    en: terraIAlerts.en,
-  }, */
+
   [TREE_COVER_GAIN]: {
     en: umdTreeCoverGainFromHeight.en,
   },
@@ -104,13 +99,6 @@ export const METADATA_CONFIG = {
   [PRIMARY_FORESTS]: {
     en: regionalPrimaryForest.en,
   },
-
-  /* ['umdGladSentinel2Alerts']: {
-    en: umdGladSentinel2Alerts.en,
-  },
-  ['wurRaddAlerts']: {
-    en: wurRaddAlerts.en,
-  }, */
 
   [TREE_COVER_HEIGHT]: {
     en: treeCoverHeight.en,
