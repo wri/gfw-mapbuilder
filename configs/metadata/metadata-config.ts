@@ -249,7 +249,7 @@ export const METADATA_CONFIG = {
   },
   [FOREST_CARBON_GROSS_REMOVALS]: {
     en: gfwForestCarbonGrossRemovals.en,
-    /*  az: gfwForestCarbonGrossRemovals.az,
+    az: gfwForestCarbonGrossRemovals.az,
     nl: gfwForestCarbonGrossRemovals.nl,
     hy: gfwForestCarbonGrossRemovals.hy,
     ka: gfwForestCarbonGrossRemovals.ka,
@@ -257,7 +257,7 @@ export const METADATA_CONFIG = {
     es: gfwForestCarbonGrossRemovals.es,
     pt: gfwForestCarbonGrossRemovals.pt,
     id: gfwForestCarbonGrossRemovals.id,
-    zh: gfwForestCarbonGrossRemovals.zh, */
+    zh: gfwForestCarbonGrossRemovals.zh,
   },
 
   [VIIRS_ACTIVE_FIRES]: {

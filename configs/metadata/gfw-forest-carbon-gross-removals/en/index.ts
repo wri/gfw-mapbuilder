@@ -1,6 +1,6 @@
 export const en = {
   title: 'Forest Carbon Removals',
-  subtitle: '(2001-2023/30m/Harris et al. 2021)',
+  subtitle: '30 m, global, 2001-2023, Harris et al. 2021',
   download_data: 'https://data.globalforestwatch.org/datasets/94871bf57f544ea39e594feb92b06305',
   lean_more: 'https://www.nature.com/articles/s41558-020-00976-6',
   content: [
