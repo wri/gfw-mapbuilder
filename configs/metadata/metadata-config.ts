@@ -76,6 +76,15 @@ export const METADATA_CONFIG = {
 
   [AG_BIOMASS]: {
     en: abovegroundBiomassTropics.en,
+    az: abovegroundBiomassTropics.az,
+    nl: abovegroundBiomassTropics.nl,
+    hy: abovegroundBiomassTropics.hy,
+    ka: abovegroundBiomassTropics.ka,
+    fr: abovegroundBiomassTropics.fr,
+    es: abovegroundBiomassTropics.es,
+    pt: abovegroundBiomassTropics.pt,
+    id: abovegroundBiomassTropics.id,
+    zh: abovegroundBiomassTropics.zh,
   },
 
   [TREE_COVER]: {
