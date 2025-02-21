@@ -349,69 +349,51 @@ export async function getRemoteAndServiceLayers(): Promise<any> {
   async function fetchRemoteApiLayer(item): Promise<any> {
     const baseURL = `https://production-api.globalforestwatch.org/v1/layer/${item?.dataLayer?.uuid}`;
 
-    return fetch(baseURL)
-      .then((response) => response.json())
-      .then((json) => json.data)
-      .then((layer) => {
-        const attributes = layer.attributes;
-        const intConfig = layer.attributes?.interactionConfig;
-        const itemGroup = item.group;
-        //if metadata url does not exist and a object is in its place
-        if (layer.attributes.layerConfig.metadata.constructor.name === 'Object') {
-          item.layer = layer.attributes.layerConfig;
-          item.dashboardURL = item.dataLayer?.dashboardURL?.length !== 0 ? item.dataLayer.dashboardURL : null;
-          item.group = itemGroup;
-          item.layer.metadata = {
-            colormap: null,
-            inputRange: null,
-            metadata: layer.attributes.layerConfig.metadata,
-            legendConfig: attributes.legendConfig,
-            interactionConfig: intConfig,
-            outputRange: null,
-          };
-          item.isError = false;
-          return item;
-        } else {
-          return fetch(layer.attributes.layerConfig.metadata)
-            .then((response) => response.json())
-            .then((metadata) => {
-              item.layer = layer.attributes.layerConfig;
-              item.dashboardURL = item.dataLayer?.dashboardURL?.length !== 0 ? item.dataLayer.dashboardURL : null;
-              item.isMetadataError = false;
-              item.group = itemGroup;
-              item.layer.metadata = {
-                metadata,
-                legendConfig: attributes.legendConfig,
-                interactionConfig: intConfig,
-              };
-              item.isError = false;
-              return item;
-            })
-            .catch((err) => {
-              console.error('Error fetching metadata', err);
-              item.layer = layer.attributes.layerConfig;
-              item.dashboardURL = item.dataLayer?.dashboardURL?.length !== 0 ? item.dataLayer.dashboardURL : null;
-              item.group = itemGroup;
-              item.isMetadataError = true;
-              item.layer.metadata = {
-                metadata: null,
-                legendConfig: attributes.legendConfig,
-                interactionConfig: intConfig,
-              };
-              item.isError = false;
-              return item;
-            });
-        }
-      })
-      .catch((error) => {
-        console.error('Error ', error);
-        const itemWithError = {
-          ...item,
-          isError: true,
-          errorMessage: error?.message,
+    try {
+      const response = await fetch(baseURL);
+      const layer = await response.json();
+      const attributes = layer.data.attributes;
+      const intConfig = layer.data.attributes?.interactionConfig;
+      const itemGroup = item.group;
+      //if metadata url does not exist and a object is in its place
+      if (layer.data.attributes.layerConfig.metadata.constructor.name === 'Object') {
+        item.layer = layer.data.attributes.layerConfig;
+        item.dashboardURL = item.dataLayer?.dashboardURL?.length !== 0 ? item.dataLayer.dashboardURL : null;
+        item.group = itemGroup;
+        item.layer.metadata = {
+          colormap: null,
+          inputRange: null,
+          metadata: layer.data.attributes.layerConfig.metadata,
+          legendConfig: attributes.legendConfig,
+          interactionConfig: intConfig,
+          outputRange: null,
         };
-        return itemWithError;
-      });
+        item.isError = false;
+        return item;
+      } else {
+        item.layer = layer.data.attributes.layerConfig;
+        item.dashboardURL = item.dataLayer?.dashboardURL?.length !== 0 ? item.dataLayer.dashboardURL : null;
+        item.isMetadataError = false;
+        item.group = itemGroup;
+        item.layer.metadata = null;
+        item.isError = false;
+        item.layer.metadata = {
+          metadata: null,
+          legendConfig: attributes.legendConfig,
+          interactionConfig: intConfig,
+        };
+
+        return item;
+      }
+    } catch (error: any) {
+      console.error('Error ', error);
+      const itemWithError = {
+        ...item,
+        isError: true,
+        errorMessage: error?.message,
+      };
+      return itemWithError;
+    }
   }
 
   function fetchFlagshipLayer(item): Promise<any> {
@@ -563,19 +545,24 @@ export async function getRemoteAndServiceLayers(): Promise<any> {
       });
   }
 
-  const remoteDataLayerRequests = remoteDataLayers.map((item: any) => {
+  const result = [] as any;
+  // TODO: this will also go away when refactoring layers config
+  for (const item of remoteDataLayers) {
     if (item?.origin === 'gfw-api') {
-      return fetchFlagshipLayer(item);
+      const res = await fetchFlagshipLayer(item);
+      result.push(res);
     } else if (item?.origin === 'rw-api') {
-      return fetchRWLayer(item);
+      const res = await fetchRWLayer(item);
+      result.push(res);
     } else {
-      return fetchRemoteApiLayer(item);
+      const res = await fetchRemoteApiLayer(item);
+      result.push(res);
     }
-  });
+  }
 
   detailedLayers.forEach((detailedLayer) => {
-    remoteDataLayerRequests.push(detailedLayer);
+    result.push(detailedLayer);
   });
 
-  return Promise.all(remoteDataLayerRequests);
+  return result;
 }
