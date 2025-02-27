@@ -173,7 +173,7 @@ export const METADATA_CONFIG = {
   },
   [FOREST_CARBON_GROSS_EMISSIONS]: {
     en: gfwForestCarbonGrossEmissions.en,
-    /*  az: gfwForestCarbonGrossEmissions.az,
+    az: gfwForestCarbonGrossEmissions.az,
     nl: gfwForestCarbonGrossEmissions.nl,
     hy: gfwForestCarbonGrossEmissions.hy,
     ka: gfwForestCarbonGrossEmissions.ka,
@@ -181,7 +181,7 @@ export const METADATA_CONFIG = {
     es: gfwForestCarbonGrossEmissions.es,
     pt: gfwForestCarbonGrossEmissions.pt,
     id: gfwForestCarbonGrossEmissions.id,
-    zh: gfwForestCarbonGrossEmissions.zh, */
+    zh: gfwForestCarbonGrossEmissions.zh,
   },
 
   [UMD_LAND_COVER]: {
