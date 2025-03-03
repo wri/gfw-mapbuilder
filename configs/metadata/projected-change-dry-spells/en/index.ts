@@ -1,8 +1,8 @@
 export const en = {
-  title: 'PROJECTED CHANGE IN DRY SPELLS',
-  subtitle: '',
-  download_data: 'https://www.wri.org/publications/permissions-licensing',
-  lean_more: '',
+  title: 'Projected change in dry spells',
+  subtitle: '0.25°, global, 2000-2080, WRI/Vizzuality',
+  download_data: '',
+  learn_more: '',
   content: [
     {
       label: 'Function',
@@ -13,7 +13,7 @@ export const en = {
       value: '0.25 degree x 0.25 degree',
     },
     {
-      label: 'Geographic Coverage',
+      label: 'Geographic coverage',
       value: 'Global',
     },
     {
@@ -21,18 +21,21 @@ export const en = {
       value: 'WRI/Vizzuality',
     },
     {
+      label: 'Frequency',
+      value: '',
+    },
+    {
+      label: 'Date of content',
+      value: '',
+    },
+    {
       label: 'Cautions',
       value:
-        '- Some GCM perform better than others in recreating regional climate patterns, such as monsoons, in hindcasts. For specific applications, it may be appropriate to select individual models based on regional performance.\n- The downscaling approaches used to produce these indicators inherently assume that the relative spatial patterns in temperature and precipitation will remain constant under future climate change.\n- The historical data used for downscaling varies in quality across the world. In particular, areas that have short records or sparse coverage of in situ weather observations may have reduced accuracy.\n- GCM are developed by independent research teams and incorporate different assumptions and mechanisms, covering a range of probable futures.',
+        '- Some GCM perform better than others in recreating regional climate patterns, such as monsoons, in hindcasts. For specific applications, it may be appropriate to select individual models based on regional performance. \n- The downscaling approaches used to produce these indicators inherently assume that the relative spatial patterns in temperature and precipitation will remain constant under future climate change. Dramatic shifts in global weather patterns, such as the slowing or reversal of major air and ocean currents are possible, but will not be captured in these indicators.\n - The historical data used for downscaling varies in quality across the world. In particular, areas that have short records or sparse coverage of in situ weather observations may have reduced accuracy. \n- Because GCM are developed by independent research teams and incorporate different assumptions and mechanisms, it is likely that they cover a substantial range of probable futures. We provide both low and high estimates so that users can see and evaluate this likely range of outcomes.',
     },
     {
       label: 'License',
       value: '[Attribution Required](https://www.wri.org/publications/permissions-licensing)',
-    },
-
-    {
-      label: 'Tags',
-      value: ['geospatial', 'global', 'time_period', 'future', 'annual', 'climate', 'climate_change', 'raster'],
     },
   ],
   overview: {
@@ -42,6 +45,7 @@ export const en = {
   },
   citation: {
     label: 'Citation',
-    value: `Gassert, F., E. Cornejo, and E. Nilson. 2021. “Making Climate Data Accessible: Methods for Producing NEX-GDDP and LOCA Downscaled Climate Indicators” Technical Note. Washington, DC: World Resources Institute. Available online at https://www.wri.org/research/making-climate-data-accessible. [www.resourcewatch.org](https://www.resourcewatch.org/). We acknowledge the World Climate Research Programme's Working Group on Coupled Modelling, which is responsible for CMIP, and we thank the climate modeling groups for producing and making available their model output. The U.S. Department of Energy's Program for Climate Model Diagnosis and Intercomparison provides coordinating support and development of software infrastructure in partnership with the Global Organization for Earth System Science Portals for CMIP. Climate scenarios used were from the NEX-GDDP dataset, prepared by the Climate Analytics Group and NASA Ames Research Center using the NASA Earth Exchange, and distributed by the NASA Center for Climate Simulation (NCCS).`,
+    value:
+      "Gassert, F., E. Cornejo, and E. Nilson. 2021. “Making Climate Data Accessible: Methods for Producing NEX-GDDP and LOCA Downscaled Climate Indicators” Technical Note. Washington, DC: World Resources Institute. Available online at https://www.wri.org/research/making-climate-data-accessible. [www.resourcewatch.org](https://www.resourcewatch.org/). We acknowledge the World Climate Research Programme's Working Group on Coupled Modelling, which is responsible for CMIP, and we thank the climate modeling groups for producing and making available their model output. The U.S. Department of Energy's Program for Climate Model Diagnosis and Intercomparison provides coordinating support and development of software infrastructure in partnership with the Global Organization for Earth System Science Portals for CMIP. Climate scenarios used were from the NEX-GDDP dataset, prepared by the Climate Analytics Group and NASA Ames Research Center using the NASA Earth Exchange, and distributed by the NASA Center for Climate Simulation (NCCS).",
   },
 };
