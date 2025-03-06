@@ -325,14 +325,14 @@ export const METADATA_CONFIG = {
   },
   [RECENT_IMAGERY]: {
     en: satelliteImagery.en,
-    /*  az:satelliteImagery.az,
-    nl:satelliteImagery.nl,
-    hy:satelliteImagery.hy,
-    ka:satelliteImagery.ka,
-    fr:satelliteImagery.fr,
-    es:satelliteImagery.es,
-    pt:satelliteImagery.pt,
-    id:satelliteImagery.id,
-    zh:satelliteImagery.zh, */
+    az: satelliteImagery.az,
+    nl: satelliteImagery.nl,
+    hy: satelliteImagery.hy,
+    ka: satelliteImagery.ka,
+    fr: satelliteImagery.fr,
+    es: satelliteImagery.es,
+    pt: satelliteImagery.pt,
+    id: satelliteImagery.id,
+    zh: satelliteImagery.zh,
   },
 };
