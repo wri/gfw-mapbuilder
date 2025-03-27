@@ -75,6 +75,7 @@ const Header: FunctionComponent = () => {
     <>
       <div className="header-container" data-cy="header">
         {appSettings.treeMosaicLandscapes && <Banner />}
+        <Banner />
         <div className="header-spacer">
           <div className="title-container">
             {logoUrl && logoLinkUrl && (

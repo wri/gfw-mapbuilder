@@ -125,11 +125,6 @@ const Report = (props: ReportProps): JSX.Element => {
     }
   }, [planetBasemapInfo?.url]);
 
-  React.useEffect(() => {
-    if (planetTiles?.length) {
-      mapController.addPlanetTileLayer(planetBasemapInfo.url, 'rgb', planetTiles[0].value, API_KEY);
-    }
-  }, [planetTiles?.length, layersLoading, isMapReady]);
   function printReport(): void {
     window.print();
   }

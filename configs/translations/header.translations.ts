@@ -178,43 +178,43 @@ export const headerContent = {
 
 export const bannerContent = {
   en: {
-    text: 'The Trees in Mosaic Landscapes dataset will be deprecated as of February 2024. Please use our new Tropical Tree Cover dataset instead. Find out more at',
-    linkUrlText: 'Replacing Trees in Mosaic Landscapes - MapBuilder',
+    text: 'Planet imagery — including all new and historical mosaics — are no longer available on MapBuilder as of April 1, 2025. For more information on this change and an overview of the other satellite imagery already available, please read our blog',
+    linkUrlText: '(link).',
   },
   az: {
-    text: 'Mozaika Mənzərələrindəki Ağaclar verilənlər bazası 2024-cü ilin fevral ayından etibarən köhnələcək. Əvəzində yeni Tropik Ağac Örtüsü məlumat dəstimizdən istifadə edin. Ətraflı buradan öyrənin',
-    linkUrlText: 'Mozaika mənzərələrində ağacların dəyişdirilməsi - MapBuilder',
+    text: 'Planet təsvirləri - bütün yeni və tarixi mozaikalar da daxil olmaqla - 1 aprel 2025-ci il tarixindən MapBuilder-də mövcud deyil. Bu dəyişiklik haqqında ətraflı məlumat və artıq mövcud olan digər peyk şəkillərinin icmalı üçün lütfən, bloqumuzu oxuyun',
+    linkUrlText: '(link).',
   },
   nl: {
-    text: 'De dataset Trees in Mosaic Landscapes wordt vanaf februari 2024 beëindigd. Gebruik in plaats daarvan onze nieuwe Tropical Tree Cover-dataset. Lees meer op',
-    linkUrlText: 'Bomen vervangen in mozaïeklandschappen - MapBuilder',
+    text: 'Planet beelden - inclusief alle nieuwe en historische mozaïeken - zijn vanaf 1 april 2025 niet langer beschikbaar in MapBuilder. Lees voor meer informatie over deze wijziging en een overzicht van de andere satellietbeelden die al beschikbaar zijn onze blog ',
+    linkUrlText: '(link).',
   },
   hy: {
-    text: '«Ծառերը մոզաիկ լանդշաֆտներում» տվյալների բազան կհնացվի 2024 թվականի փետրվարից: Փոխարենը, խնդրում ենք օգտագործել մեր նոր «Արևադարձային ծառերի ծածկույթի» տվյալները: Իմացեք ավելին այստեղ',
-    linkUrlText: 'Ծառերի փոխարինում խճանկարային լանդշաֆտներում - MapBuilder',
+    text: 'Մոլորակի պատկերները, ներառյալ բոլոր նոր և պատմական խճանկարները, այլևս հասանելի չեն MapBuilder-ում 2025 թվականի ապրիլի 1-ից: Այս փոփոխության վերաբերյալ լրացուցիչ տեղեկությունների և արդեն հասանելի արբանյակային այլ պատկերների ակնարկի համար կարդացեք մեր բլոգը ',
+    linkUrlText: '(հղումը).',
   },
   ka: {
-    text: 'ხეები მოზაიკის პეიზაჟებში მოძველებული იქნება 2024 წლის თებერვლიდან. ამის ნაცვლად, გთხოვთ, გამოიყენოთ ჩვენი ახალი ტროპიკული ხეების საფარის მონაცემთა ნაკრები. შეიტყვეთ მეტი აქ',
-    linkUrlText: 'ხეების ჩანაცვლება მოზაიკურ პეიზაჟებში - MapBuilder',
+    text: 'პლანეტის გამოსახულებები — მათ შორის ყველა ახალი და ისტორიული მოზაიკის ჩათვლით — აღარ არის ხელმისაწვდომი MapBuilder-ზე 2025 წლის 1 აპრილიდან. დამატებითი ინფორმაციისთვის ამ ცვლილების შესახებ და უკვე ხელმისაწვდომი სხვა სატელიტური სურათების მიმოხილვისთვის, გთხოვთ, წაიკითხოთ ჩვენი ბლოგი',
+    linkUrlText: '(ბმული).',
   },
   fr: {
-    text: 'Le jeu de données Trees in Mosaic Landscapes sera obsolète à partir de février 2024. Veuillez utiliser notre nouveau jeu de données Tropical Tree Cover à la place. En savoir plus sur',
-    linkUrlText: 'Remplacer les arbres dans les paysages en mosaïque - MapBuilder',
+    text: "L'imagerie Planet - y compris toutes les mosaïques nouvelles et historiques - n'est plus disponible sur MapBuilder à partir du 1er avril 2025. Pour plus d'informations sur ce changement et une description des autres images satellites déjà disponibles, consulter notre blog",
+    linkUrlText: '(lien).',
   },
   es: {
-    text: 'El conjunto de datos Trees in Mosaic Landscapes quedará obsoleto a partir de febrero de 2024. En su lugar, utilice nuestro nuevo conjunto de datos Cobertura de árboles tropicales. Obtenga más información en',
-    linkUrlText: 'Sustitución de árboles en paisajes de mosaico - MapBuilder',
+    text: 'A partir del 1 de abril de 2025, MapBuilder dejará de ofrecer imágenes de Planet, incluidos todos los mosaicos nuevos e históricos. Para más información sobre este cambio y detalles de las demás imágenes de satélite ya disponibles, lea nuestro blog',
+    linkUrlText: '(enlace).',
   },
   pt: {
-    text: 'O conjunto de dados Trees in Mosaic Landscapes será descontinuado a partir de fevereiro de 2024. Em vez disso, use nosso novo conjunto de dados Tropical Tree Cover. Saiba mais em',
-    linkUrlText: 'Substituindo Árvores em Paisagens em Mosaico - MapBuilder',
+    text: 'As imagens Planet - incluindo todos os mosaicos novos e históricos - não estarão mais disponíveis no MapBuilder a partir de 1º de abril de 2025. Para obter mais informações sobre essa mudança e uma visão geral das outras imagens de satélite já disponíveis, leia nosso blog',
+    linkUrlText: '(link).',
   },
   id: {
-    text: 'Set data Pepohonan dalam Lanskap Mosaik tidak akan digunakan lagi mulai Februari 2024. Sebagai gantinya, gunakan set data Tutupan Pohon Tropis kami yang baru. Cari tahu lebih lanjut di',
-    linkUrlText: 'Mengganti Pohon di Lanskap Mosaik - MapBuilder',
+    text: `Citra satelit “Planet” - termasuk semua mosaik baru dan historis - tidak lagi tersedia di MapBuilder per tanggal 1 April 2025. Untuk informasi lebih lanjut mengenai perubahan ini dan gambaran umum mengenai citra satelit lainnya yang sudah tersedia, silakan baca blog kam`,
+    linkUrlText: '(link).',
   },
   zh: {
-    text: '自 2024 年 2 月起，马赛克景观中的树木数据集将被弃用。请改用我们新的热带树木覆盖数据集。欲了解更多信息，请访问',
-    linkUrlText: '替换马赛克景观中的树木 - MapBuilder',
+    text: '自 2025 年 4 月 1 日起，MapBuilder 不再提供 行星 图像，包括所有新的和历史的马赛克图像。有关这一变化的更多信息以及其他已有卫星图像的概述，请阅读我们的博客',
+    linkUrlText: '(接)',
   },
 };
