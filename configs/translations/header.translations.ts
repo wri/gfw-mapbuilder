@@ -178,43 +178,53 @@ export const headerContent = {
 
 export const bannerContent = {
   en: {
-    text: 'Planet imagery — including all new and historical mosaics — are no longer available on MapBuilder as of April 1, 2025. For more information on this change and an overview of the other satellite imagery already available, please read our blog',
-    linkUrlText: '(link).',
+    text: 'Planet imagery — including all new and historical mosaics — are no longer available on MapBuilder as of April 1, 2025. For more information on this change and an overview of the other satellite imagery already available, please read our ',
+    linkUrlText: 'blog.',
+    textAfterLink: '',
   },
   az: {
-    text: 'Planet təsvirləri - bütün yeni və tarixi mozaikalar da daxil olmaqla - 1 aprel 2025-ci il tarixindən MapBuilder-də mövcud deyil. Bu dəyişiklik haqqında ətraflı məlumat və artıq mövcud olan digər peyk şəkillərinin icmalı üçün lütfən, bloqumuzu oxuyun',
-    linkUrlText: '(link).',
+    text: 'Planet təsvirləri - bütün yeni və tarixi mozaikalar da daxil olmaqla - 1 aprel 2025-ci il tarixindən MapBuilder-də mövcud deyil. Bu dəyişiklik haqqında ətraflı məlumat və artıq mövcud olan digər peyk şəkillərinin icmalı üçün lütfən, bloqumuzu ',
+    linkUrlText: 'bloqumuzu',
+    textAfterLink: ' oxuyun.',
   },
   nl: {
-    text: 'Planet beelden - inclusief alle nieuwe en historische mozaïeken - zijn vanaf 1 april 2025 niet langer beschikbaar in MapBuilder. Lees voor meer informatie over deze wijziging en een overzicht van de andere satellietbeelden die al beschikbaar zijn onze blog ',
-    linkUrlText: '(link).',
+    text: 'Planet beelden - inclusief alle nieuwe en historische mozaïeken - zijn vanaf 1 april 2025 niet langer beschikbaar in MapBuilder. Lees voor meer informatie over deze wijziging en een overzicht van de andere satellietbeelden die al beschikbaar zijn onze ',
+    linkUrlText: 'blog.',
+    textAfterLink: '',
   },
   hy: {
-    text: 'Մոլորակի պատկերները, ներառյալ բոլոր նոր և պատմական խճանկարները, այլևս հասանելի չեն MapBuilder-ում 2025 թվականի ապրիլի 1-ից: Այս փոփոխության վերաբերյալ լրացուցիչ տեղեկությունների և արդեն հասանելի արբանյակային այլ պատկերների ակնարկի համար կարդացեք մեր բլոգը ',
-    linkUrlText: '(հղումը).',
+    text: 'Մոլորակի պատկերները, ներառյալ բոլոր նոր և պատմական խճանկարները, այլևս հասանելի չեն MapBuilder-ում 2025 թվականի ապրիլի 1-ից: Այս փոփոխության վերաբերյալ լրացուցիչ տեղեկությունների և արդեն հասանելի արբանյակային այլ պատկերների ակնարկի համար կարդացեք մեր ',
+    linkUrlText: 'բլոգը.',
+    textAfterLink: '',
   },
   ka: {
-    text: 'პლანეტის გამოსახულებები — მათ შორის ყველა ახალი და ისტორიული მოზაიკის ჩათვლით — აღარ არის ხელმისაწვდომი MapBuilder-ზე 2025 წლის 1 აპრილიდან. დამატებითი ინფორმაციისთვის ამ ცვლილების შესახებ და უკვე ხელმისაწვდომი სხვა სატელიტური სურათების მიმოხილვისთვის, გთხოვთ, წაიკითხოთ ჩვენი ბლოგი',
-    linkUrlText: '(ბმული).',
+    text: 'პლანეტის გამოსახულებები — მათ შორის ყველა ახალი და ისტორიული მოზაიკის ჩათვლით — აღარ არის ხელმისაწვდომი MapBuilder-ზე 2025 წლის 1 აპრილიდან. დამატებითი ინფორმაციისთვის ამ ცვლილების შესახებ და უკვე ხელმისაწვდომი სხვა სატელიტური სურათების მიმოხილვისთვის, გთხოვთ, წაიკითხოთ ჩვენი ',
+    linkUrlText: 'ბლოგი.',
+    textAfterLink: '',
   },
   fr: {
-    text: "L'imagerie Planet - y compris toutes les mosaïques nouvelles et historiques - n'est plus disponible sur MapBuilder à partir du 1er avril 2025. Pour plus d'informations sur ce changement et une description des autres images satellites déjà disponibles, consulter notre blog",
-    linkUrlText: '(lien).',
+    text: "L'imagerie Planet - y compris toutes les mosaïques nouvelles et historiques - n'est plus disponible sur MapBuilder à partir du 1er avril 2025. Pour plus d'informations sur ce changement et une description des autres images satellites déjà disponibles, consulter notre ",
+    linkUrlText: 'blog.',
+    textAfterLink: '',
   },
   es: {
-    text: 'A partir del 1 de abril de 2025, MapBuilder dejará de ofrecer imágenes de Planet, incluidos todos los mosaicos nuevos e históricos. Para más información sobre este cambio y detalles de las demás imágenes de satélite ya disponibles, lea nuestro blog',
-    linkUrlText: '(enlace).',
+    text: 'A partir del 1 de abril de 2025, MapBuilder dejará de ofrecer imágenes de Planet, incluidos todos los mosaicos nuevos e históricos. Para más información sobre este cambio y detalles de las demás imágenes de satélite ya disponibles, lea nuestro ',
+    textAfterLink: '',
+    linkUrlText: 'blog.',
   },
   pt: {
-    text: 'As imagens Planet - incluindo todos os mosaicos novos e históricos - não estarão mais disponíveis no MapBuilder a partir de 1º de abril de 2025. Para obter mais informações sobre essa mudança e uma visão geral das outras imagens de satélite já disponíveis, leia nosso blog',
-    linkUrlText: '(link).',
+    text: 'As imagens Planet - incluindo todos os mosaicos novos e históricos - não estarão mais disponíveis no MapBuilder a partir de 1º de abril de 2025. Para obter mais informações sobre essa mudança e uma visão geral das outras imagens de satélite já disponíveis, leia nosso ',
+    linkUrlText: 'blog.',
+    textAfterLink: '',
   },
   id: {
-    text: `Citra satelit “Planet” - termasuk semua mosaik baru dan historis - tidak lagi tersedia di MapBuilder per tanggal 1 April 2025. Untuk informasi lebih lanjut mengenai perubahan ini dan gambaran umum mengenai citra satelit lainnya yang sudah tersedia, silakan baca blog kam`,
-    linkUrlText: '(link).',
+    text: `Citra satelit “Planet” - termasuk semua mosaik baru dan historis - tidak lagi tersedia di MapBuilder per tanggal 1 April 2025. Untuk informasi lebih lanjut mengenai perubahan ini dan gambaran umum mengenai citra satelit lainnya yang sudah tersedia, silakan baca `,
+    linkUrlText: 'blog',
+    textAfterLink: ' kami.',
   },
   zh: {
     text: '自 2025 年 4 月 1 日起，MapBuilder 不再提供 行星 图像，包括所有新的和历史的马赛克图像。有关这一变化的更多信息以及其他已有卫星图像的概述，请阅读我们的博客',
-    linkUrlText: '(接)',
+    linkUrlText: '请阅读我们的博客',
+    textAfterLink: '',
   },
 };

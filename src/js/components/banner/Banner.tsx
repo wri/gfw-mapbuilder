@@ -15,6 +15,7 @@ const Banner = () => {
         <a href={LINK_URL} rel="noreferrer" className="banner__text__link" target="_blank">
           {bannerContent[selectedLanguage].linkUrlText}
         </a>
+        {bannerContent[selectedLanguage].textAfterLink}
       </h1>
     </div>
   );
