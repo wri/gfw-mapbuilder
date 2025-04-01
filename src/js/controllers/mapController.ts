@@ -773,47 +773,6 @@ export class MapController {
     store.dispatch(setSelectedBasemap(`landsat-${year}`));
   }
 
-  async addPlanetTileLayer(
-    proxyURL: string,
-    planetColor: string,
-    selectedTile: string,
-    apiKey?: string
-  ): Promise<void> {
-    if (!apiKey) return;
-    const esriConf = esriConfig as esriConfig | any;
-    const planetBasemapReferenceLayer1 = new TileLayer({
-      id: 'planet-basemap-reference-layer',
-      url: 'https://services.arcgisonline.com/arcgis/rest/services/Canvas/World_Dark_Gray_Base/MapServer',
-      visible: true,
-    });
-    const planetBasemapReferenceLayer2 = new TileLayer({
-      id: 'planet-basemap-reference-layer',
-      url: 'https://services.arcgisonline.com/arcgis/rest/services/Canvas/World_Dark_Gray_Reference/MapServer',
-      visible: true,
-    });
-
-    const planetConfig = {
-      type: 'webtiled',
-      url: `https://tiles.planet.com/basemaps/v1/planet-tiles/planet_medres_normalized_analytic_${selectedTile}_mosaic/gmap/{z}/{x}/{y}.png?proc=${planetColor}&api_key=${apiKey}`,
-      title: 'planet',
-      id: 'planet',
-    };
-
-    esriConf.request.interceptors.push({
-      urls: 'https://tiles.globalforestwatch.org/planet/v1/planet_medres_normalized_analytic',
-    });
-
-    const planetLayer = new WebTileLayer({
-      urlTemplate: planetConfig.url,
-    });
-    const planetBase = new Basemap({
-      baseLayers: [planetBasemapReferenceLayer1, planetLayer, planetBasemapReferenceLayer2],
-    });
-    this._planetBasemap = planetBase;
-    this._map!.basemap = planetBase;
-    store.dispatch(setSelectedBasemap(planetConfig.id));
-  }
-
   zoomInOrOut({ zoomIn }: ZoomParams): void {
     if (this._mapview) {
       const zoomNum = zoomIn ? this._mapview.zoom + 1 : this._mapview.zoom - 1;
