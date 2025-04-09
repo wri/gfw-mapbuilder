@@ -6,6 +6,7 @@ import forestCarbonGrossRemovals from './forest-carbon-gross-removals';
 import forestGreenhouseGasEmissions from './forest-greenhouse-gas-emissions';
 import forestGreenhouseNetFlux from './forest-greenhouse-net-flux';
 import treeCoverLoss from './tree-cover-loss';
+import treeCoverGain from './tree-cover-gain';
 
 export const layersContentConfig = [
   projectedChangeDrySpells,
@@ -15,5 +16,7 @@ export const layersContentConfig = [
   forestCarbonGrossRemovals,
   forestGreenhouseGasEmissions,
   forestGreenhouseNetFlux,
+
   treeCoverLoss,
+  treeCoverGain,
 ] as any;
