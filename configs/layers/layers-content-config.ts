@@ -3,6 +3,7 @@ import potentialCarbonSequestrationRate from './potential-carbon-sequestration-r
 import airQuality from './air-quality';
 import windSpeed from './wind-speed';
 import forestCarbonGrossRemovals from './forest-carbon-gross-removals';
+import forestGreenhouseGasEmissions from './forest-greenhouse-gas-emissions';
 
 export const layersContentConfig = [
   projectedChangeDrySpells,
@@ -10,4 +11,5 @@ export const layersContentConfig = [
   airQuality,
   windSpeed,
   forestCarbonGrossRemovals,
+  forestGreenhouseGasEmissions,
 ] as any;
