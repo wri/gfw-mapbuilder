@@ -14,6 +14,7 @@ import integratedDeforestationAlerts from './integrated-deforestation-alerts';
 import gladS2Alerts from './glad-s2-alerts';
 import raddAlerts from './radd-alerts';
 import prodesDeforestation from './prodes-deforestation';
+import prodesAmazonBiome from './prodes-amazon-biome';
 
 export const layersContentConfig = [
   projectedChangeDrySpells,
@@ -33,4 +34,5 @@ export const layersContentConfig = [
   gladS2Alerts,
   raddAlerts,
   prodesDeforestation,
+  prodesAmazonBiome,
 ] as any;
