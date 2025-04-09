@@ -13,6 +13,7 @@ import viirsActiveFires from './viirs-active-fires';
 import integratedDeforestationAlerts from './integrated-deforestation-alerts';
 import gladS2Alerts from './glad-s2-alerts';
 import raddAlerts from './radd-alerts';
+import prodesDeforestation from './prodes-deforestation';
 
 export const layersContentConfig = [
   projectedChangeDrySpells,
@@ -31,4 +32,5 @@ export const layersContentConfig = [
   integratedDeforestationAlerts,
   gladS2Alerts,
   raddAlerts,
+  prodesDeforestation,
 ] as any;
