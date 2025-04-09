@@ -11,6 +11,7 @@ import gladAlerts from './glad-alerts';
 import terraIAlerts from './terra-i-alerts';
 import viirsActiveFires from './viirs-active-fires';
 import integratedDeforestationAlerts from './integrated-deforestation-alerts';
+import gladS2Alerts from './glad-s2-alerts';
 
 export const layersContentConfig = [
   projectedChangeDrySpells,
@@ -27,4 +28,5 @@ export const layersContentConfig = [
   terraIAlerts,
   viirsActiveFires,
   integratedDeforestationAlerts,
+  gladS2Alerts,
 ] as any;
