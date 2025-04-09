@@ -10,6 +10,7 @@ import treeCoverGain from './tree-cover-gain';
 import gladAlerts from './glad-alerts';
 import terraIAlerts from './terra-i-alerts';
 import viirsActiveFires from './viirs-active-fires';
+import integratedDeforestationAlerts from './integrated-deforestation-alerts';
 
 export const layersContentConfig = [
   projectedChangeDrySpells,
@@ -25,4 +26,5 @@ export const layersContentConfig = [
   gladAlerts,
   terraIAlerts,
   viirsActiveFires,
+  integratedDeforestationAlerts,
 ] as any;
