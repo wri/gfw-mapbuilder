@@ -1,0 +1,68 @@
+export default {
+  order: 2,
+  layerGroupId: 'GROUP_LC',
+  dataLayer: {
+    id: 'PRIMARY_FORESTS',
+    order: 2,
+    type: 'remoteDataLayer',
+    uuid: 'edffb745-e523-462d-ad1e-3052006a3dbc',
+    groupId: 'GROUP_LC',
+  },
+  layer: {
+    label: {
+      ka: 'პირველყოფილი ტყეები',
+      zh: '原始森林',
+      id: 'Hutan Primer',
+      pt: 'Florestas primárias',
+      es: 'Bosques Primarios',
+      fr: 'Forêt primaire',
+      en: 'Primary Forests',
+    },
+    sublabel: {
+      ka: '(2001, ტროპიკები, UMD)',
+      zh: '（2001 年，热带地区，UMD）',
+      id: '(2001, negara terpilih, UMD)',
+      pt: '(2001, trópicos, UMD)',
+      es: '(2001, tropis, UMD)',
+      fr: '(2001, tropiques, UMD)',
+      en: '(2001, tropics, UMD)',
+    },
+    technicalName: 'regional_primary_forests',
+    url: 'https://api.resourcewatch.org/v1/layer/41086554-5ca5-456c-80dd-f6bee61bc45f/tile/gee/{z}/{x}/{y}',
+    type: 'primed',
+    id: 'PRIMARY_FORESTS',
+    metadata: {
+      metadata: null,
+      legendConfig: {
+        type: 'basic',
+        name: {
+          ka: 'პირველყოფილი ტყეები',
+          zh: '原始森林',
+          id: 'Hutan Primer',
+          pt: 'Florestas primárias',
+          es: 'Bosques primarios',
+          fr: 'Forêt primaire',
+          en: 'Primary Forests',
+        },
+        items: [
+          {
+            color: '#658434',
+            outlineColor: '#555555',
+            name: {
+              ka: 'პირველყოფილი ტყეები',
+              zh: '原始森林',
+              id: 'Hutan Primer',
+              pt: 'Florestas primárias',
+              es: 'Bosques primarios',
+              fr: 'Forêt primaire',
+              en: 'Primary Forests',
+            },
+          },
+        ],
+      },
+      interactionConfig: {},
+    },
+  },
+  isMetadataError: false,
+  isError: false,
+};

@@ -16,6 +16,7 @@ import raddAlerts from './radd-alerts';
 import prodesDeforestation from './prodes-deforestation';
 import prodesAmazonBiome from './prodes-amazon-biome';
 import intactForestLandscapes from './intact-forest-landscape';
+import primaryForest from './primary-forest';
 
 export const layersContentConfig = [
   projectedChangeDrySpells,
@@ -37,4 +38,5 @@ export const layersContentConfig = [
   prodesDeforestation,
   prodesAmazonBiome,
   intactForestLandscapes,
+  primaryForest,
 ] as any;
