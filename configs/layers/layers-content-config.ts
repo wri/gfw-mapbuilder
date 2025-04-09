@@ -8,6 +8,7 @@ import forestGreenhouseNetFlux from './forest-greenhouse-net-flux';
 import treeCoverLoss from './tree-cover-loss';
 import treeCoverGain from './tree-cover-gain';
 import gladAlerts from './glad-alerts';
+import terraIAlerts from './terra-i-alerts';
 
 export const layersContentConfig = [
   projectedChangeDrySpells,
@@ -21,4 +22,5 @@ export const layersContentConfig = [
   treeCoverLoss,
   treeCoverGain,
   gladAlerts,
+  terraIAlerts,
 ] as any;
