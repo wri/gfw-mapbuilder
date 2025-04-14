@@ -17,6 +17,7 @@ import prodesDeforestation from './prodes-deforestation';
 import prodesAmazonBiome from './prodes-amazon-biome';
 import intactForestLandscapes from './intact-forest-landscape';
 import primaryForest from './primary-forest';
+import aboveGroundLiveWoodyBiomassDensity from './above-ground-live-woody-biomas-density';
 
 export const layersContentConfig = [
   projectedChangeDrySpells,
@@ -39,4 +40,5 @@ export const layersContentConfig = [
   prodesAmazonBiome,
   intactForestLandscapes,
   primaryForest,
+  aboveGroundLiveWoodyBiomassDensity,
 ] as any;
