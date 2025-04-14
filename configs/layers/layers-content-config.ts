@@ -20,6 +20,7 @@ import primaryForest from './primary-forest';
 import aboveGroundLiveWoodyBiomassDensity from './above-ground-live-woody-biomas-density';
 import treeCover from './tree-cover';
 import landCover from './land-cover';
+import landCover2000_2020 from './land-cover-2000-2020';
 
 export const layersContentConfig = [
   projectedChangeDrySpells,
@@ -45,4 +46,5 @@ export const layersContentConfig = [
   aboveGroundLiveWoodyBiomassDensity,
   treeCover,
   landCover,
+  landCover2000_2020,
 ] as any;
