@@ -19,6 +19,7 @@ import intactForestLandscapes from './intact-forest-landscape';
 import primaryForest from './primary-forest';
 import aboveGroundLiveWoodyBiomassDensity from './above-ground-live-woody-biomas-density';
 import treeCover from './tree-cover';
+import landCover from './land-cover';
 
 export const layersContentConfig = [
   projectedChangeDrySpells,
@@ -43,4 +44,5 @@ export const layersContentConfig = [
   primaryForest,
   aboveGroundLiveWoodyBiomassDensity,
   treeCover,
+  landCover,
 ] as any;
