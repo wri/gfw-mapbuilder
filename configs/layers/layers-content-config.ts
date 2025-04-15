@@ -34,7 +34,6 @@ export const layersContentConfig = [
   forestCarbonGrossRemovals,
   forestGreenhouseGasEmissions,
   forestGreenhouseNetFlux,
-
   treeCoverLoss,
   treeCoverGain,
   gladAlerts,

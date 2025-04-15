@@ -73,7 +73,6 @@ import {
   determineLayerOpacity,
   determineLayerVisibility,
   extractWebmapLayerObjects,
-  getRemoteAndServiceLayers,
   requestWMSLayerLegendInfo,
 } from '../helpers/mapController/miscLayerHelpers';
 import legendInfoController from '../helpers/legendInfo';
@@ -295,7 +294,6 @@ export class MapController {
           store.dispatch(allAvailableLayers(mapLayerObjects));
 
           //Fetching all other (non webmap) layer information from resources file AND GFW Api for those that are deemed as 'remoteDataLayer' in the config
-          //const remoteAndServiceLayersObjects = await getRemoteAndServiceLayers();
           const remoteAndServiceLayersObjects = layersContentConfig;
 
           const getErrorLayers = remoteAndServiceLayersObjects.filter((layer) => layer?.isError);
