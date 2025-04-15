@@ -24,6 +24,7 @@ import landCover2000_2020 from './land-cover-2000-2020';
 import treeCoverHeight from './tree-cover-height';
 import tropicalTreeCover from './tropical-tree-cover';
 import satelliteImagery from './satellite-imagery';
+import { IMBLayer } from './types/index';
 
 export const layersContentConfig = [
   projectedChangeDrySpells,
@@ -53,4 +54,4 @@ export const layersContentConfig = [
   treeCoverHeight,
   tropicalTreeCover,
   satelliteImagery,
-] as any;
+] as IMBLayer[];
