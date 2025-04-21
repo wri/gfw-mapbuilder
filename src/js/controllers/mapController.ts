@@ -73,13 +73,13 @@ import {
   determineLayerOpacity,
   determineLayerVisibility,
   extractWebmapLayerObjects,
-  getRemoteAndServiceLayers,
   requestWMSLayerLegendInfo,
 } from '../helpers/mapController/miscLayerHelpers';
 import legendInfoController from '../helpers/legendInfo';
 import { parseExtentConfig } from '../helpers/mapController/configParsing';
 import { overwriteColorTheme } from '../store/appSettings/actions';
 import { errorTranslations } from '../../../configs/translations/error.translations';
+import { layersContentConfig } from '../../../configs/layers/layers-content-config';
 
 interface URLCoordinates {
   zoom: number;
@@ -294,7 +294,7 @@ export class MapController {
           store.dispatch(allAvailableLayers(mapLayerObjects));
 
           //Fetching all other (non webmap) layer information from resources file AND GFW Api for those that are deemed as 'remoteDataLayer' in the config
-          const remoteAndServiceLayersObjects = await getRemoteAndServiceLayers();
+          const remoteAndServiceLayersObjects = layersContentConfig;
 
           const getErrorLayers = remoteAndServiceLayersObjects.filter((layer) => layer?.isError);
 
@@ -351,12 +351,12 @@ export class MapController {
 
               if (remoteLayerObject.type === 'wms') {
                 newRemoteLayerObject.legendInfo = await requestWMSLayerLegendInfo(
-                  remoteLayerObject.url,
+                  remoteLayerObject.url || '',
                   remoteLayerObject.layerName || remoteLayerObject.layer
                 );
               } else {
                 //Attempt to fetch legend info from layer service
-                newRemoteLayerObject.legendInfo = await this.retrieveLegendInfo(remoteLayerObject);
+                newRemoteLayerObject.legendInfo = await this.retrieveLegendInfo(remoteLayerObject as any);
               }
 
               newRemoteLayerObject.id = remoteLayerObject.id;
@@ -364,7 +364,7 @@ export class MapController {
                 ? remoteLayerObject.label[appState.selectedLanguage]
                 : 'Untitled Layer';
               newRemoteLayerObject.group = remoteLayerObject.groupId;
-              newRemoteLayerObject.url = remoteLayerObject.url;
+              newRemoteLayerObject.url = remoteLayerObject.url || '';
               newRemoteLayerObject.type = remoteLayerObject.type;
               newRemoteLayerObject.origin = 'service';
               newRemoteLayerObject.technicalName = remoteLayerObject.technicalName;
@@ -437,7 +437,7 @@ export class MapController {
                 url: null,
                 group: layer.dataLayer.groupId,
               };
-            });
+            }) as any;
             allLayerObjects.push(...appendMissingProps);
           }
           store.dispatch(allAvailableLayers(allLayerObjects));
