@@ -13,6 +13,8 @@ Before you can begin, make sure you have [node.js](https://nodejs.org/en/).
 Create .env file at the root of the project and add `REACT_APP_PLANET_API_KEY` checkout `.env.examples` file.
 Reach out to point of contact for Mapbuilder and ask for api key
 
+Make sure you are using Node version 16x or greater
+
 Install all the javascript dependencies.
 
 ```shell
@@ -46,6 +48,28 @@ npm run test
 ```
 
 These [Jest](https://jestjs.io/) unit tests will ensure that you have correctly configured any properties that are required in the `layerPanel` and `analysisModules` sections.
+
+#### Adding or updating core layers for MapBuilder
+
+Layer configuration is located at`configs/layers/*`
+
+To Update layer config:
+
+- To update layer configuration navigate to the `configs/layers/`, open the index.ts file
+- If you were to update ** Glad Alerts ** layer label for example, navigate to `configs/layers/glad-alerts/index.ts`
+
+To Add a new layer config:
+
+- For consistency folder name is the same as layer name, `glad-alerts`
+- Navigate to `configs/`, create a folder inside layers folder, make sure folder name matches the layer name for consistency.
+- Once folder created, create an `index.ts` file and add your new layer configuration.
+- If you are not sure about the expected config schema, you can also reference any of the other layers OR
+  there is also a a schema example of what is expected in `configs/layers/types/index.ts` that you can also reference.
+
+- Once new config layer is created, you need to import your new layer configuration to `configs/layers/layers-content-config.ts`.
+- import your new layer configuration from here, for example:
+  `import newLayerConfig from './new-layer-config'`
+- Lastly, add your imported layer configuration to `layersContentConfig` list
 
 #### Configuring Layers and Accordions
 
@@ -305,11 +329,11 @@ Backup 1.5.0 folder
 
 Copy dist folder into 1.5.0 aws folder
 
-`aws s3 sync --content-type "text/html" /Users/dstarr/Documents/dev/gfw-mapbuilder/dist/ s3://wri-sites/gfw-mapbuilder.org/library.gfw-mapbuilder.org/1.5.0/ --profile wri`
+`aws s3 sync --content-type "text/html" /{project_path}/gfw-mapbuilder/dist/ s3://wri-sites/gfw-mapbuilder.org/library.gfw-mapbuilder.org/1.5.0/ --profile wri`
 
 Copy dist > 1.5.0.js file in dist folder into 1.5.0.js file in aws folder
 
-`aws s3 cp --content-type "text/html" /Users/dstarr/Documents/dev/gfw-mapbuilder/dist/loader/1.5.0.js s3://wri-sites/gfw-mapbuilder.org/library.gfw-mapbuilder.org/1.5.0/1.5.0.js --profile wri`
+`aws s3 cp --content-type "text/html" /{project_path}/gfw-mapbuilder/dist/loader/1.5.0.js s3://wri-sites/gfw-mapbuilder.org/library.gfw-mapbuilder.org/1.5.0/1.5.0.js --profile wri`
 
 Clear cache
 

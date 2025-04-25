@@ -53,7 +53,7 @@ export interface ILayer {
   id: string;
   metadata: ILayerMetadata;
   popup?: any;
-  // TODO: check if properties below are actually needed, if not remove them from codebase
+  // TODO: Properties below may not actually be needed, if so, remove them from codebase
   colormap?: any;
   inputRange?: any;
   outputRange?: any;
