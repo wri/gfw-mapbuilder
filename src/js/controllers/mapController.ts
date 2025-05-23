@@ -21,6 +21,7 @@ import Polygon from '@arcgis/core/geometry/Polygon';
 import * as print from '@arcgis/core/rest/print';
 import PrintTemplate from '@arcgis/core/rest/support/PrintTemplate';
 import PrintParameters from '@arcgis/core/rest/support/PrintParameters';
+import PrintWidget from '@arcgis/core/widgets/Print';
 import { format, parse, subDays } from 'date-fns';
 import { debounce } from 'lodash-es';
 import { getMaxDateForViirsTiles } from '../helpers/viirsLayerUtil';
@@ -152,6 +153,21 @@ export class MapController {
       map: this._map,
       container: domRef.current,
     });
+
+    const print = new PrintWidget({
+      view: this._mapview,
+      printServiceUrl:
+        'https://utility.arcgisonline.com/arcgis/rest/services/Utilities/PrintingTools/GPServer/Export%20Web%20Map%20Task',
+      templateOptions: {
+        title: 'Print Map',
+        author: 'Anthony',
+        copyright: 'Copyright',
+        legendEnabled: true,
+        scaleEnabled: true,
+      },
+    });
+
+    //this._mapview.ui.add(print, 'bottom-right');
 
     //if we have init extent, use it.
     if (appSettings.initialExtent) {
@@ -1514,10 +1530,13 @@ export class MapController {
 
     const template = new PrintTemplate({
       format: 'pdf',
-      layout,
+      layout: 'a4-landscape',
       // * NOTE - must set 'layout' as type of 'any' in order to assign
       // * custom layout types from GFW print service URL
       layoutOptions: {
+        titleText: 'GFW Mapbuilder',
+        copyrightText: '© Global Forest Watch',
+        authorText: 'GFW Mapbuilder',
         scalebarUnit: 'Kilometers',
         customTextElements: [{ title: 'GFW Mapbuilder' }, { subtitle: 'Make maps that matter' }],
         legendLayers: [],
@@ -1533,7 +1552,10 @@ export class MapController {
     });
 
     try {
-      const result = await print.execute(printServiceURL!, params);
+      const pUrl =
+        'https://utility.arcgisonline.com/arcgis/rest/services/Utilities/PrintingTools/GPServer/Export%20Web%20Map%20Task';
+      const result = await print.execute(pUrl, params);
+      //const result = await print.execute(printServiceURL!, params);
       if (result?.url) {
         this.toggleMaskLayer(true);
         return result;
@@ -2231,6 +2253,16 @@ export class MapController {
     gladLayerNew.gfwjulianFrom = start;
     gladLayerNew.gfwjulianTo = end;
     this._map?.add(gladLayerNew, gladIndex);
+  };
+
+  takeSnapshot = async () => {
+    const scale = 3;
+    const result = await this._mapview?.takeScreenshot({
+      width: 490 * scale,
+      height: 250 * scale,
+    });
+
+    return result?.dataUrl;
   };
 }
 
