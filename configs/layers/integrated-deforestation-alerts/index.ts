@@ -88,7 +88,7 @@ export default {
     maxDateValue: 999999,
     minDateValue: 15000,
     technicalName: 'gfw_integrated_alerts',
-    url: 'https://tiles.globalforestwatch.org/gfw_integrated_alerts/latest/default/{z}/{x}/{y}.png',
+    url: 'https://tiles.globalforestwatch.org/gfw_integrated_alerts/latest/dynamic/{z}/{x}/{y}.png?render_type=encoded&start_date=2021-01-01',
     type: 'integrated-alert-layer',
     id: 'GFW_INTEGRATED_ALERTS',
   },
