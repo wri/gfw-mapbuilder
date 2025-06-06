@@ -22,6 +22,7 @@ import * as print from '@arcgis/core/rest/print';
 import PrintTemplate from '@arcgis/core/rest/support/PrintTemplate';
 import PrintParameters from '@arcgis/core/rest/support/PrintParameters';
 import PrintWidget from '@arcgis/core/widgets/Print';
+import Legend from '@arcgis/core/widgets/Legend';
 import { format, parse, subDays } from 'date-fns';
 import { debounce } from 'lodash-es';
 import { getMaxDateForViirsTiles } from '../helpers/viirsLayerUtil';
@@ -82,6 +83,9 @@ import { overwriteColorTheme } from '../store/appSettings/actions';
 import { errorTranslations } from '../../../configs/translations/error.translations';
 import { layersContentConfig } from '../../../configs/layers/layers-content-config';
 
+import { PRINT_SERVICE_URL } from '../../../configs/esri/urls-config';
+import { MAP_CONFIG } from '../../../configs/esri/map-config';
+
 interface URLCoordinates {
   zoom: number;
   latitude: string;
@@ -91,6 +95,18 @@ interface URLCoordinates {
 interface ZoomParams {
   zoomIn: boolean;
 }
+
+export type PrintLayoutType =
+  | 'map-only'
+  | 'a3-landscape'
+  | 'a3-portrait'
+  | 'a4-landscape'
+  | 'a4-portrait'
+  | 'letter-ansi-a-landscape'
+  | 'letter-ansi-a-portrait'
+  | 'tabloid-ansi-b-landscape'
+  | 'tabloid-ansi-b-portrait'
+  | undefined;
 
 export class MapController {
   _map: __esri.Map | undefined;
@@ -167,6 +183,11 @@ export class MapController {
       },
     });
 
+    const legend = new Legend({
+      view: this._mapview,
+    });
+
+    this._mapview.ui.add(legend, 'bottom-left');
     //this._mapview.ui.add(print, 'bottom-right');
 
     //if we have init extent, use it.
@@ -1510,39 +1531,11 @@ export class MapController {
     });
   }
 
-  generateMapPDF = async (layoutType: string): Promise<any> => {
-    const printServiceURL = store.getState().appSettings.printServiceUrl;
-    let printOptions: any = [];
-
-    let layout = '' as any;
-
-    printOptions = await fetch(`${printServiceURL}/?f=json`)
-      .then((res) => res.json())
-      .then((results) => {
-        return results.parameters.filter((param: any) => param.name === 'Layout_Template');
-      });
-
-    if (layoutType === 'Landscape') {
-      layout = printOptions[0]?.defaultValue;
-    } else {
-      layout = printOptions[0]?.choiceList[0];
-    }
-
+  generateMapPDF = async (layout: PrintLayoutType): Promise<any> => {
+    const printWidget = MAP_CONFIG.printWidget as any;
     const template = new PrintTemplate({
-      format: 'pdf',
-      layout: 'a4-landscape',
-      // * NOTE - must set 'layout' as type of 'any' in order to assign
-      // * custom layout types from GFW print service URL
-      layoutOptions: {
-        titleText: 'GFW Mapbuilder',
-        copyrightText: '© Global Forest Watch',
-        authorText: 'GFW Mapbuilder',
-        scalebarUnit: 'Kilometers',
-        customTextElements: [{ title: 'GFW Mapbuilder' }, { subtitle: 'Make maps that matter' }],
-        legendLayers: [],
-      },
-      forceFeatureAttributes: true,
-      showLabels: false,
+      layout,
+      ...printWidget,
     });
     this.toggleMaskLayer(false);
 
@@ -1552,10 +1545,7 @@ export class MapController {
     });
 
     try {
-      const pUrl =
-        'https://utility.arcgisonline.com/arcgis/rest/services/Utilities/PrintingTools/GPServer/Export%20Web%20Map%20Task';
-      const result = await print.execute(pUrl, params);
-      //const result = await print.execute(printServiceURL!, params);
+      const result = await print.execute(PRINT_SERVICE_URL, params);
       if (result?.url) {
         this.toggleMaskLayer(true);
         return result;
