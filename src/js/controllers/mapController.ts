@@ -11,8 +11,6 @@ import AreaMeasurement2D from '@arcgis/core/widgets/AreaMeasurement2D';
 import DistanceMeasurement2D from '@arcgis/core/widgets/DistanceMeasurement2D';
 import SketchViewModel from '@arcgis/core/widgets/Sketch/SketchViewModel';
 import CoordinateConversion from '@arcgis/core/widgets/CoordinateConversion';
-import TileLayer from '@arcgis/core/layers/TileLayer';
-import esriConfig from '@arcgis/core/config';
 import MapView from '@arcgis/core/views/MapView';
 import WebMap from '@arcgis/core/WebMap';
 import Portal from '@arcgis/core/portal/Portal';
@@ -21,8 +19,6 @@ import Polygon from '@arcgis/core/geometry/Polygon';
 import * as print from '@arcgis/core/rest/print';
 import PrintTemplate from '@arcgis/core/rest/support/PrintTemplate';
 import PrintParameters from '@arcgis/core/rest/support/PrintParameters';
-import PrintWidget from '@arcgis/core/widgets/Print';
-import Legend from '@arcgis/core/widgets/Legend';
 import { format, parse, subDays } from 'date-fns';
 import { debounce } from 'lodash-es';
 import { getMaxDateForViirsTiles } from '../helpers/viirsLayerUtil';
@@ -169,26 +165,6 @@ export class MapController {
       map: this._map,
       container: domRef.current,
     });
-
-    const print = new PrintWidget({
-      view: this._mapview,
-      printServiceUrl:
-        'https://utility.arcgisonline.com/arcgis/rest/services/Utilities/PrintingTools/GPServer/Export%20Web%20Map%20Task',
-      templateOptions: {
-        title: 'Print Map',
-        author: 'Anthony',
-        copyright: 'Copyright',
-        legendEnabled: true,
-        scaleEnabled: true,
-      },
-    });
-
-    const legend = new Legend({
-      view: this._mapview,
-    });
-
-    this._mapview.ui.add(legend, 'bottom-left');
-    //this._mapview.ui.add(print, 'bottom-right');
 
     //if we have init extent, use it.
     if (appSettings.initialExtent) {
