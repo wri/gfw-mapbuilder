@@ -8,7 +8,6 @@ export const printContent = {
     buttonLabel: 'Çap çıxışını seçin',
     dropdownLabel: 'Çap eding',
     printOptions: ['a4-landscape', 'map-only'],
-    //printOptions: ['Landscape', 'MAP_ONLY'],
   },
   nl: {
     buttonLabel: 'Kies een afdruk output',
