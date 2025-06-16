@@ -27,7 +27,7 @@ export const fr = {
     },
     {
       label: 'Date du contenu',
-      value: '2001-2023',
+      value: '2001-2024',
     },
     {
       label: 'Mises en garde',

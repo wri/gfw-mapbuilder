@@ -81,7 +81,7 @@ const initialState: AppState = {
     glad2Start: subYears(new Date(), 2).toString(),
     glad2End: new Date().toString(),
     treeCoverLossStart: 2001,
-    treeCoverLossEnd: 2023,
+    treeCoverLossEnd: 2024,
     raddAlertStart: subYears(new Date(), 2).toString(),
     raddAlertEnd: new Date().toString(),
     gfwIntegratedStart: subYears(new Date(), 2).toString(),

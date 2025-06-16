@@ -27,7 +27,7 @@ export const id = {
     },
     {
       label: 'Tanggal konten',
-      value: '2001-2023',
+      value: '2001-2024',
     },
     {
       label: 'Peringatan',

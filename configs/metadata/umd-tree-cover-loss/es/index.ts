@@ -1,7 +1,7 @@
 export const es = {
   title: 'Pérdida de cobertura arbórea',
   subtitle: '(anual, 30m, global, Hansen/UMD/Google/USGS/NASA)',
-  download_data: 'https://storage.googleapis.com/earthenginepartners-hansen/GFC-2023-v1.11/download.html',
+  download_data: 'https://storage.googleapis.com/earthenginepartners-hansen/GFC-023-v1.11/download.html',
   learn_more: 'http://science.sciencemag.org/content/342/6160/850',
   content: [
     {
@@ -27,7 +27,7 @@ export const es = {
     },
     {
       label: 'Fecha del contenido',
-      value: '2001-2023',
+      value: '2001-2024',
     },
     {
       label: 'Precauciones',

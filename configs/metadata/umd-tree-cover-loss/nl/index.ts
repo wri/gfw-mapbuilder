@@ -27,7 +27,7 @@ export const nl = {
     },
     {
       label: 'Datum van inhoud',
-      value: '2001-2023',
+      value: '2001-2024',
     },
     {
       label: 'Waarschuwingen',

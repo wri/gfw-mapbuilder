@@ -27,7 +27,7 @@ export const pt = {
     },
     {
       label: 'Dados de conteúdo',
-      value: '2001-2023',
+      value: '2001-2024',
     },
     {
       label: 'Precauções',
