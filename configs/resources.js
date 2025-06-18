@@ -1,4 +1,4 @@
-/* export default {
+export default {
   webmap: '4563142bba62461ab4e0de9480919e95',
   title: 'GFW Mapbuilder',
   subtitle: 'Make maps that matter',
@@ -442,9 +442,9 @@
       },
     ],
   },
-}; */
+};
 
-export default {
+/* export default {
   webmap: '7850232128774b7cb4bd091d097f0989',
   title: 'Hay Natiora',
   subtitle: 'Troubleshooting',
@@ -884,4 +884,4 @@ export default {
       },
     ],
   },
-};
+}; */
