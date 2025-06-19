@@ -1,7 +1,7 @@
 export const zh = {
   title: '森林覆盖减少',
   subtitle: '汉森/UMD/谷歌/美国地质调查局/美国国家航空航天局',
-  download_data: 'https://storage.googleapis.com/earthenginepartners-hansen/GFC-2024-v1.11/download.html',
+  download_data: 'https://storage.googleapis.com/earthenginepartners-hansen/GFC-2024-v1.12/download.html',
   learn_more: 'http://science.sciencemag.org/content/342/6160/850',
   content: [
     {

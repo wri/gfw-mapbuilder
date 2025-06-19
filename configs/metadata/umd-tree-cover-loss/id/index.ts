@@ -1,7 +1,7 @@
 export const id = {
   title: 'Kehilangan tutupan pohon',
   subtitle: '(tahunan, 30m, global, Hansen/UMD/Google/USGS/NASA)',
-  download_data: 'https://storage.googleapis.com/earthenginepartners-hansen/GFC-2024-v1.11/download.html',
+  download_data: 'https://storage.googleapis.com/earthenginepartners-hansen/GFC-2024-v1.12/download.html',
   learn_more: 'http://science.sciencemag.org/content/342/6160/850',
   content: [
     {
