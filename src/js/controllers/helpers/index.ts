@@ -89,8 +89,6 @@ export const filterDataByAppSettings = () => {
   const layers = getLayers();
   const filteredLayers = layers.filter((l) => checkLayerFilterConfig(l, appSettings));
   const uniqueLayers = generateHashMapData(filteredLayers);
-  const tt = filteredLayers;
-  console.log('filteredLayers', filteredLayers);
   return uniqueLayers;
 };
 
@@ -99,7 +97,6 @@ export const getUserLayerSelections = (configLayers: any, uniqueLayerHashMap: an
 
   for (const layer of configLayers) {
     if (uniqueLayerHashMap.has(layer?.layer?.id)) {
-      const layerData = uniqueLayerHashMap.get(layer?.layer?.id);
       result.push(layer);
     }
   }
