@@ -295,7 +295,6 @@ export class MapController {
           store.dispatch(allAvailableLayers(mapLayerObjects));
 
           //Fetching all other (non webmap) layer information from resources file AND GFW Api for those that are deemed as 'remoteDataLayer' in the config
-          // const remoteAndServiceLayersObjects = layersContentConfig;
           const layerHashMap = filterDataByAppSettings();
           const remoteAndServiceLayersObjects = getUserLayerSelections(layersContentConfig, layerHashMap);
 
