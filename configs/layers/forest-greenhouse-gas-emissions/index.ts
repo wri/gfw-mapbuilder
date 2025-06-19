@@ -13,7 +13,7 @@ export default {
       metadata: null,
       legendConfig: {
         name: {
-          en: 'Forest Greenhouse Gas Emissions (2001-2023)',
+          en: 'Forest Greenhouse Gas Emissions (2001-2024)',
           fr: 'Émissions de gaz à effet de serre provenant des forêts',
           es: 'Emisiones de gases de efecto invernadero en los bosques',
           pt: 'Emissões de Gases de Efeito Estufa Florestais',
@@ -89,7 +89,7 @@ export default {
     },
     id: 'WRI_FOREST_CARBON_GROSS_EMISSION',
     type: 'forest-carbon-gross-emissions',
-    url: 'https://tiles.globalforestwatch.org/gfw_forest_carbon_gross_emissions/v20240308/tcd_{tcd}/{z}/{x}/{y}.png',
+    url: 'https://tiles.globalforestwatch.org/gfw_forest_carbon_gross_emissions/v20250430/tcd_{tcd}/{z}/{x}/{y}.png',
     technicalName: 'wri_forest_carbon_gross_emission',
     label: {
       en: 'Forest Greenhouse Gas Emissions',
@@ -101,13 +101,13 @@ export default {
       ka: 'Орманның жауапкершілік тауып қазуылары',
     },
     sublabel: {
-      en: '30m, global, 2001-2023, Harris et al. 2023',
-      fr: '30m, global, 2001-2023, Harris et al. 2023',
-      es: '30m, global, 2001-2023, Harris et al. 2023',
-      pt: '30m, global, 2001-2023, Harris et al. 2023',
-      id: '30m, global, 2001-2023, Harris et al. 2023',
-      zh: '30m, global, 2001-2023, Harris et al. 2023',
-      ka: '30m, global, 2001-2023, Harris et al. 2023',
+      en: '30m, global, 2001-2024, Harris et al. 2024',
+      fr: '30m, global, 2001-2024, Harris et al. 2024',
+      es: '30m, global, 2001-2024, Harris et al. 2024',
+      pt: '30m, global, 2001-2024, Harris et al. 2024',
+      id: '30m, global, 2001-2024, Harris et al. 2024',
+      zh: '30m, global, 2001-2024, Harris et al. 2024',
+      ka: '30m, global, 2001-2024, Harris et al. 2024',
     },
   },
   isMetadataError: false,
