@@ -11,8 +11,6 @@ import AreaMeasurement2D from '@arcgis/core/widgets/AreaMeasurement2D';
 import DistanceMeasurement2D from '@arcgis/core/widgets/DistanceMeasurement2D';
 import SketchViewModel from '@arcgis/core/widgets/Sketch/SketchViewModel';
 import CoordinateConversion from '@arcgis/core/widgets/CoordinateConversion';
-import TileLayer from '@arcgis/core/layers/TileLayer';
-import esriConfig from '@arcgis/core/config';
 import MapView from '@arcgis/core/views/MapView';
 import WebMap from '@arcgis/core/WebMap';
 import Portal from '@arcgis/core/portal/Portal';
@@ -82,6 +80,9 @@ import { errorTranslations } from '../../../configs/translations/error.translati
 import { layersContentConfig } from '../../../configs/layers/layers-content-config';
 import { filterDataByAppSettings, getUserLayerSelections } from './helpers/index';
 
+import { PRINT_SERVICE_URL } from '../../../configs/esri/urls-config';
+import { MAP_CONFIG } from '../../../configs/esri/map-config';
+
 interface URLCoordinates {
   zoom: number;
   latitude: string;
@@ -91,6 +92,18 @@ interface URLCoordinates {
 interface ZoomParams {
   zoomIn: boolean;
 }
+
+export type PrintLayoutType =
+  | 'map-only'
+  | 'a3-landscape'
+  | 'a3-portrait'
+  | 'a4-landscape'
+  | 'a4-portrait'
+  | 'letter-ansi-a-landscape'
+  | 'letter-ansi-a-portrait'
+  | 'tabloid-ansi-b-landscape'
+  | 'tabloid-ansi-b-portrait'
+  | undefined;
 
 export class MapController {
   _map: __esri.Map | undefined;
@@ -1496,36 +1509,16 @@ export class MapController {
     });
   }
 
-  generateMapPDF = async (layoutType: string): Promise<any> => {
-    const printServiceURL = store.getState().appSettings.printServiceUrl;
-    let printOptions: any = [];
+  getPrintButtonLabel = (layout: string) => {
+    if (layout === 'map-only') return 'MAP ONLY';
+    if (layout === 'a4-landscape') return 'LANDSCAPE';
+  };
 
-    let layout = '' as any;
-
-    printOptions = await fetch(`${printServiceURL}/?f=json`)
-      .then((res) => res.json())
-      .then((results) => {
-        return results.parameters.filter((param: any) => param.name === 'Layout_Template');
-      });
-
-    if (layoutType === 'Landscape') {
-      layout = printOptions[0]?.defaultValue;
-    } else {
-      layout = printOptions[0]?.choiceList[0];
-    }
-
+  generateMapPDF = async (layout: PrintLayoutType): Promise<any> => {
+    const printWidget = MAP_CONFIG.printWidget as any;
     const template = new PrintTemplate({
-      format: 'pdf',
       layout,
-      // * NOTE - must set 'layout' as type of 'any' in order to assign
-      // * custom layout types from GFW print service URL
-      layoutOptions: {
-        scalebarUnit: 'Kilometers',
-        customTextElements: [{ title: 'GFW Mapbuilder' }, { subtitle: 'Make maps that matter' }],
-        legendLayers: [],
-      },
-      forceFeatureAttributes: true,
-      showLabels: false,
+      ...printWidget,
     });
     this.toggleMaskLayer(false);
 
@@ -1535,7 +1528,7 @@ export class MapController {
     });
 
     try {
-      const result = await print.execute(printServiceURL!, params);
+      const result = await print.execute(PRINT_SERVICE_URL, params);
       if (result?.url) {
         this.toggleMaskLayer(true);
         return result;
@@ -2233,6 +2226,16 @@ export class MapController {
     gladLayerNew.gfwjulianFrom = start;
     gladLayerNew.gfwjulianTo = end;
     this._map?.add(gladLayerNew, gladIndex);
+  };
+
+  takeSnapshot = async () => {
+    const scale = 3;
+    const result = await this._mapview?.takeScreenshot({
+      width: 490 * scale,
+      height: 250 * scale,
+    });
+
+    return result?.dataUrl;
   };
 }
 
