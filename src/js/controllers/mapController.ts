@@ -80,6 +80,7 @@ import { parseExtentConfig } from '../helpers/mapController/configParsing';
 import { overwriteColorTheme } from '../store/appSettings/actions';
 import { errorTranslations } from '../../../configs/translations/error.translations';
 import { layersContentConfig } from '../../../configs/layers/layers-content-config';
+import { filterDataByAppSettings, getUserLayerSelections } from './helpers/index';
 
 interface URLCoordinates {
   zoom: number;
@@ -294,7 +295,8 @@ export class MapController {
           store.dispatch(allAvailableLayers(mapLayerObjects));
 
           //Fetching all other (non webmap) layer information from resources file AND GFW Api for those that are deemed as 'remoteDataLayer' in the config
-          const remoteAndServiceLayersObjects = layersContentConfig;
+          const layerHashMap = filterDataByAppSettings();
+          const remoteAndServiceLayersObjects = getUserLayerSelections(layersContentConfig, layerHashMap);
 
           const getErrorLayers = remoteAndServiceLayersObjects.filter((layer) => layer?.isError);
 
