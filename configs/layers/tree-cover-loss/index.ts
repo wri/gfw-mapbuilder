@@ -30,7 +30,7 @@ export default {
     technicalName: 'tree_cover_loss',
     maxYear: 17,
     minYear: 1,
-    url: 'https://tiles.globalforestwatch.org/umd_tree_cover_loss/v1.11/tcd_30/{z}/{x}/{y}.png',
+    url: 'https://tiles.globalforestwatch.org/umd_tree_cover_loss/v1.12/tcd_30/{z}/{x}/{y}.png',
     type: 'loss',
     id: 'TREE_COVER_LOSS',
     metadata: {

@@ -13,7 +13,7 @@ export default {
       metadata: null,
       legendConfig: {
         name: {
-          en: 'Forest Greenhouse Net Flux (2001-2023)',
+          en: 'Forest Greenhouse Net Flux (2001-2024)',
           fr: 'Flux net des serres forestières',
           es: 'Flujo neto de invernaderos forestales',
           pt: 'fluxo líquido de estufa florestal',
@@ -104,7 +104,7 @@ export default {
     },
     id: 'WRI_FOREST_CARBON_NET_FLUX',
     type: 'forest-carbon-net-flux',
-    url: 'https://tiles.globalforestwatch.org/gfw_forest_carbon_net_flux/v20240308/tcd_{tcd}/{z}/{x}/{y}.png',
+    url: 'https://tiles.globalforestwatch.org/gfw_forest_carbon_net_flux/v20250430/tcd_{tcd}/{z}/{x}/{y}.png',
     technicalName: 'wri_forest_carbon_net_flux',
     label: {
       en: 'Forest Greenhouse Net Flux',
@@ -116,13 +116,13 @@ export default {
       ka: 'орман климат павландыру желдерінің жалпы айналымы',
     },
     sublabel: {
-      en: '30m, global, 2001-2023, Harris et al. 2023',
-      fr: '30m, global, 2001-2023, Harris et al. 2023',
-      es: '30m, global, 2001-2023, Harris et al. 2023',
-      pt: '30m, global, 2001-2023, Harris et al. 2023',
-      id: '30m, global, 2001-2023, Harris et al. 2023',
-      zh: '30m, global, 2001-2023, Harris et al. 2023',
-      ka: '30m, global, 2001-2023, Harris et al. 2023',
+      en: '30m, global, 2001-2024, Harris et al. 2024',
+      fr: '30m, global, 2001-2024, Harris et al. 2024',
+      es: '30m, global, 2001-2024, Harris et al. 2024',
+      pt: '30m, global, 2001-2024, Harris et al. 2024',
+      id: '30m, global, 2001-2024, Harris et al. 2024',
+      zh: '30m, global, 2001-2024, Harris et al. 2024',
+      ka: '30m, global, 2001-2024, Harris et al. 2024',
     },
   },
   isMetadataError: false,

@@ -13,7 +13,7 @@ export default {
       metadata: null,
       legendConfig: {
         name: {
-          en: 'Forest carbon gross removals (2001-2023)',
+          en: 'Forest carbon gross removals (2001-2024)',
           fr: 'Retraits bruts de carbone en forêt',
           es: 'Extracciones brutas de carbono en bosques',
           pt: 'Remoções brutas de carbono florestal',
@@ -89,7 +89,7 @@ export default {
     },
     id: 'WRI_FOREST_CARBON_GROSS_REMOVALS',
     type: 'forest-carbon-gross-removals',
-    url: 'https://tiles.globalforestwatch.org/gfw_forest_carbon_gross_removals/v20240308/tcd_30/{z}/{x}/{y}.png',
+    url: 'https://tiles.globalforestwatch.org/gfw_forest_carbon_gross_removals/v20250416/tcd_30/{z}/{x}/{y}.png',
     technicalName: 'wri_forest_carbon_gross_removals',
     label: {
       en: 'Forest carbon gross removals',
@@ -101,13 +101,13 @@ export default {
       ka: 'Орман карбондық жалпы шығындар',
     },
     sublabel: {
-      en: '30m, global, 2001-2023, Harris et al. 2023',
-      fr: '30m, global, 2001-2023, Harris et al. 2023',
-      es: '30m, global, 2001-2023, Harris et al. 2023',
-      pt: '30m, global, 2001-2023, Harris et al. 2023',
-      id: '30m, global, 2001-2023, Harris et al. 2023',
-      zh: '30m, global, 2001-2023, Harris et al. 2023',
-      ka: '30m, global, 2001-2023, Harris et al. 2023',
+      en: '30m, global, 2001-2024, Harris et al. 2024',
+      fr: '30m, global, 2001-2024, Harris et al. 2024',
+      es: '30m, global, 2001-2024, Harris et al. 2024',
+      pt: '30m, global, 2001-2024, Harris et al. 2024',
+      id: '30m, global, 2001-2024, Harris et al. 2024',
+      zh: '30m, global, 2001-2024, Harris et al. 2024',
+      ka: '30m, global, 2001-2024, Harris et al. 2024',
     },
   },
   isMetadataError: false,

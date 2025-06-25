@@ -1,7 +1,7 @@
 export const fr = {
   title: 'Perte de couvert arboré',
   subtitle: '(annuel, 30 m, mondial, Hansen/UMD/Google/USGS/NASA)',
-  download_data: 'https://storage.googleapis.com/earthenginepartners-hansen/GFC-2023-v1.11/download.html',
+  download_data: 'https://storage.googleapis.com/earthenginepartners-hansen/GFC-2024-v1.12/download.html',
   learn_more: 'http://science.sciencemag.org/content/342/6160/850',
   content: [
     {
@@ -27,7 +27,7 @@ export const fr = {
     },
     {
       label: 'Date du contenu',
-      value: '2001-2023',
+      value: '2001-2024',
     },
     {
       label: 'Mises en garde',
@@ -42,7 +42,7 @@ export const fr = {
   overview: {
     label: 'Aperçu',
     value:
-      "Dans cet ensemble de données, le « couvert végétal » est défini comme toute végétation d'au moins 5 mètres de haut, et peut prendre la forme de forêt naturelle ou de plantation, en passant par un vaste éventail de densité du couvert. « Perte » indique la suppression ou la mortalité de la couverture arborée et peut être due à un ensemble de facteurs, notamment l'abattage mécanique, les incendies, les maladies, ou les dégâts causés par les tempêtes. En tant que tel, « perte » n'équivaut pas à déforestation.\n\nÀ cause des variations dans la méthodologie de recherche et dans la date du contenu, les séries de données sur le couvert végétal, ses pertes et ses gains ne peuvent pas être comparées de manière précise les unes avec les autres. De la même manière, la perte « nette » ne peut pas être calculée en soustrayant la valeur correspondant au gain de couvert végétal à celle de la perte de couvert végétal, et le couvert végétal actuel (post-2000) ne peut pas être déterminé en soustrayant du couvert végétal de l'année 2000 la valeur correspondant à la perte de couvert végétal annuelle.\n\nLes données de la période de 2011 à 2023 ont été produites en utilisant une méthodologie mise à jour. Les comparaisons entre les données originales de 2001 à 2010 et la mise à jour de 2011 à 2023 doivent être effectuées avec prudence.\n\nDans la publication originale, les auteurs ont évalué la prévalence mondiale des faux positifs (erreurs de commission) dans ces données à 13 %, et la prévalence des faux négatifs (erreurs d'omission) à 12 %, même si la précision change en fonction du biome et peut ainsi être supérieure ou inférieure dans n'importe quel endroit particulier. Le modèle omet souvent les perturbations dans les paysages des petits exploitants, ce qui se traduit par une précision plus faible des données en Afrique subsaharienne, où ce type de perturbation est plus fréquent. Les auteurs sont sûrs à 75 % que la perte s'est produite pendant l'année en question, et à 97 % qu'elle s'est produite pendant l'année précédente ou suivante. Les utilisateurs des données peuvent réduire cette incertitude en examinant la moyenne sur plusieurs années. Pour plus d'informations, lisez notre série de blogs sur l'exactitude de ces données.",
+      "Dans cet ensemble de données, le « couvert végétal » est défini comme toute végétation d'au moins 5 mètres de haut, et peut prendre la forme de forêt naturelle ou de plantation, en passant par un vaste éventail de densité du couvert. « Perte » indique la suppression ou la mortalité de la couverture arborée et peut être due à un ensemble de facteurs, notamment l'abattage mécanique, les incendies, les maladies, ou les dégâts causés par les tempêtes. En tant que tel, « perte » n'équivaut pas à déforestation.\n\nÀ cause des variations dans la méthodologie de recherche et dans la date du contenu, les séries de données sur le couvert végétal, ses pertes et ses gains ne peuvent pas être comparées de manière précise les unes avec les autres. De la même manière, la perte « nette » ne peut pas être calculée en soustrayant la valeur correspondant au gain de couvert végétal à celle de la perte de couvert végétal, et le couvert végétal actuel (post-2000) ne peut pas être déterminé en soustrayant du couvert végétal de l'année 2000 la valeur correspondant à la perte de couvert végétal annuelle.\n\nLes données de la période de 2011 à 2024 ont été produites en utilisant une méthodologie mise à jour. Les comparaisons entre les données originales de 2001 à 2010 et la mise à jour de 2011 à 2024 doivent être effectuées avec prudence.\n\nDans la publication originale, les auteurs ont évalué la prévalence mondiale des faux positifs (erreurs de commission) dans ces données à 13 %, et la prévalence des faux négatifs (erreurs d'omission) à 12 %, même si la précision change en fonction du biome et peut ainsi être supérieure ou inférieure dans n'importe quel endroit particulier. Le modèle omet souvent les perturbations dans les paysages des petits exploitants, ce qui se traduit par une précision plus faible des données en Afrique subsaharienne, où ce type de perturbation est plus fréquent. Les auteurs sont sûrs à 75 % que la perte s'est produite pendant l'année en question, et à 97 % qu'elle s'est produite pendant l'année précédente ou suivante. Les utilisateurs des données peuvent réduire cette incertitude en examinant la moyenne sur plusieurs années. Pour plus d'informations, lisez notre série de blogs sur l'exactitude de ces données.",
   },
   citation: {
     label: 'Citation',

@@ -54,7 +54,7 @@ export const generateDefaultMarks = (params: any) => {
   const yearsAvailable = end - start;
 
   while (index <= end) {
-    const display = index % 7 === 0 ? 'block' : 'none';
+    const display = index % 8 === 0 ? 'block' : 'none';
     newMarks[index] = {
       style: { display: yearsAvailable < 6 ? 'block' : display },
       label: index,
@@ -208,12 +208,13 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
 
   const returnTimeSlider = (id: string): any => {
     const dateRangeResult = generateGWFDateRange();
+    const treeCoverLossMarks = generateDefaultMarks({ start: 2000, end: TREE_COVER_LOSS.max });
     switch (id) {
       case 'TREE_COVER_LOSS':
         return (
           <TimeSlider
             layerID={id}
-            defaultMarks={generateDefaultMarks({ start: 2000, end: TREE_COVER_LOSS.max })}
+            defaultMarks={treeCoverLossMarks}
             min={TREE_COVER_LOSS.min}
             max={TREE_COVER_LOSS.max}
             defaultValue={[TREE_COVER_LOSS.min, TREE_COVER_LOSS.max]}

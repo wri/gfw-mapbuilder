@@ -1,7 +1,7 @@
 export const nl = {
   title: 'Verlies van boombedekking',
   subtitle: '(jaarlijks, 30 m, wereldwijd, Hansen/UMD/Google/USGS/NASA)',
-  download_data: 'https://storage.googleapis.com/earthenginepartners-hansen/GFC-2023-v1.11/download.html',
+  download_data: 'https://storage.googleapis.com/earthenginepartners-hansen/GFC-2024-v1.12/download.html',
   learn_more: 'http://science.sciencemag.org/content/342/6160/850',
   content: [
     {
@@ -27,7 +27,7 @@ export const nl = {
     },
     {
       label: 'Datum van inhoud',
-      value: '2001-2023',
+      value: '2001-2024',
     },
     {
       label: 'Waarschuwingen',
@@ -42,7 +42,7 @@ export const nl = {
   overview: {
     label: 'Overzicht',
     value:
-      'In deze dataset wordt “boombedekking” gedefinieerd als alle vegetatie die hoger is dan 5 meter, en kan de vorm aannemen van natuurlijke bossen of plantages over een reeks van kroonbedekkingsdichtheden. “Verlies” duidt op de verwijdering of sterfte van bomen en kan te wijten zijn aan verschillende factoren, waaronder mechanische oogst, brand, ziekte of stormschade. Als zodanig staat “verlies” niet gelijk aan ontbossing.\n\nDoor de variatie in onderzoeksmethodologie en -datum kunnen gegevensverzamelingen over boombedekking, verlies en aanwas niet nauwkeurig met elkaar worden vergeleken. Dienovereenkomstig kan “netto” verlies niet worden berekend door de cijfers voor de toename van de boombedekking af te trekken van de afname van de boombedekking, en de huidige (post-2000) boombedekking kan niet worden bepaald door de cijfers voor de jaarlijkse afname van de boombedekking af te trekken van de boombedekking in het jaar 2000.\n\nDe gegevens voor 2011-2023 zijn geproduceerd met behulp van een bijgewerkte methodologie. Vergelijkingen tussen de oorspronkelijke gegevens van 2001-2010 en de update van 2011-2023 moeten met voorzichtigheid worden uitgevoerd.\n\nIn de oorspronkelijke publicatie schatten de auteurs de algemene prevalentie van fout-positieven (opdrachtfouten) in deze gegevens op 13%, en de prevalentie van fout-negatieven (weglatingsfouten) op 12%, hoewel de nauwkeurigheid per bioom verschilt en dus hoger of lager kan zijn op een bepaalde locatie. Het model mist vaak verstoringen in kleine boerenlandschappen, wat resulteert in een lagere nauwkeurigheid van de gegevens in Afrika ten zuiden van de Sahara, waar dit type verstoring vaker voorkomt. De auteurs zijn er 75% zeker van dat het verlies zich binnen het opgegeven jaar heeft voorgedaan en 97% zeker dat het zich binnen een jaar ervoor of erna heeft voorgedaan. Gebruikers van de gegevens kunnen deze onzekerheid wegnemen door het gemiddelde over meerdere jaren te bekijken. Lees onze blogserie over de nauwkeurigheid van deze gegevens voor meer informatie.',
+      'In deze dataset wordt “boombedekking” gedefinieerd als alle vegetatie die hoger is dan 5 meter, en kan de vorm aannemen van natuurlijke bossen of plantages over een reeks van kroonbedekkingsdichtheden. “Verlies” duidt op de verwijdering of sterfte van bomen en kan te wijten zijn aan verschillende factoren, waaronder mechanische oogst, brand, ziekte of stormschade. Als zodanig staat “verlies” niet gelijk aan ontbossing.\n\nDoor de variatie in onderzoeksmethodologie en -datum kunnen gegevensverzamelingen over boombedekking, verlies en aanwas niet nauwkeurig met elkaar worden vergeleken. Dienovereenkomstig kan “netto” verlies niet worden berekend door de cijfers voor de toename van de boombedekking af te trekken van de afname van de boombedekking, en de huidige (post-2000) boombedekking kan niet worden bepaald door de cijfers voor de jaarlijkse afname van de boombedekking af te trekken van de boombedekking in het jaar 2000.\n\nDe gegevens voor 2011-2024 zijn geproduceerd met behulp van een bijgewerkte methodologie. Vergelijkingen tussen de oorspronkelijke gegevens van 2001-2010 en de update van 2011-2024 moeten met voorzichtigheid worden uitgevoerd.\n\nIn de oorspronkelijke publicatie schatten de auteurs de algemene prevalentie van fout-positieven (opdrachtfouten) in deze gegevens op 13%, en de prevalentie van fout-negatieven (weglatingsfouten) op 12%, hoewel de nauwkeurigheid per bioom verschilt en dus hoger of lager kan zijn op een bepaalde locatie. Het model mist vaak verstoringen in kleine boerenlandschappen, wat resulteert in een lagere nauwkeurigheid van de gegevens in Afrika ten zuiden van de Sahara, waar dit type verstoring vaker voorkomt. De auteurs zijn er 75% zeker van dat het verlies zich binnen het opgegeven jaar heeft voorgedaan en 97% zeker dat het zich binnen een jaar ervoor of erna heeft voorgedaan. Gebruikers van de gegevens kunnen deze onzekerheid wegnemen door het gemiddelde over meerdere jaren te bekijken. Lees onze blogserie over de nauwkeurigheid van deze gegevens voor meer informatie.',
   },
   citation: {
     label: 'Aanhaling',
