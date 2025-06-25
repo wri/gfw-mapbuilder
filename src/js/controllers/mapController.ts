@@ -1507,6 +1507,11 @@ export class MapController {
     });
   }
 
+  getPrintButtonLabel = (layout: string) => {
+    if (layout === 'map-only') return 'MAP ONLY';
+    if (layout === 'a4-landscape') return 'LANDSCAPE';
+  };
+
   generateMapPDF = async (layout: PrintLayoutType): Promise<any> => {
     const printWidget = MAP_CONFIG.printWidget as any;
     const template = new PrintTemplate({

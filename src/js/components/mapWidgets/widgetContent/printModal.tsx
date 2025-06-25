@@ -41,9 +41,9 @@ export const PrintModal: FunctionComponent = () => {
               className="orange-button"
               style={{ backgroundColor: themeColor }}
               key={index}
-              onClick={(e): Promise<void> => printMap(printOption)}
+              onClick={() => printMap(printOption)}
             >
-              {printOption}
+              {mapController.getPrintButtonLabel(printOption)}
             </button>
           );
         })}
