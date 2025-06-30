@@ -87,7 +87,7 @@ export default {
       },
       interactionConfig: {},
     },
-    id: 'WRI_FOREST_CARBON_GROSS_EMISSION',
+    id: 'FOREST_CARBON_GROSS_EMISSIONS',
     type: 'forest-carbon-gross-emissions',
     url: 'https://tiles.globalforestwatch.org/gfw_forest_carbon_gross_emissions/v20250430/tcd_{tcd}/{z}/{x}/{y}.png',
     technicalName: 'wri_forest_carbon_gross_emission',

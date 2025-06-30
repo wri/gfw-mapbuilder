@@ -87,7 +87,7 @@ export default {
       },
       interactionConfig: {},
     },
-    id: 'WRI_FOREST_CARBON_GROSS_REMOVALS',
+    id: 'FOREST_CARBON_GROSS_REMOVALS',
     type: 'forest-carbon-gross-removals',
     url: 'https://tiles.globalforestwatch.org/gfw_forest_carbon_gross_removals/v20250416/tcd_30/{z}/{x}/{y}.png',
     technicalName: 'wri_forest_carbon_gross_removals',
