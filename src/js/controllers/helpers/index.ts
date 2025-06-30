@@ -94,11 +94,22 @@ export const filterDataByAppSettings = () => {
 
 export const getUserLayerSelections = (configLayers: any, uniqueLayerHashMap: any) => {
   const result = [] as any;
+  const pending = [] as any;
 
   for (const layer of configLayers) {
     if (uniqueLayerHashMap.has(layer?.layer?.id)) {
       result.push(layer);
+      uniqueLayerHashMap.delete(layer?.layer?.id);
     }
   }
-  return result;
+
+  const check = uniqueLayerHashMap;
+
+  for (const [key, value] of uniqueLayerHashMap) {
+    pending.push(value);
+  }
+
+  const testingg = pending;
+  //console.log('check', check);
+  return [...result, ...pending];
 };
