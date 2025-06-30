@@ -102,7 +102,7 @@ export default {
       },
       interactionConfig: {},
     },
-    id: 'WRI_FOREST_CARBON_NET_FLUX',
+    id: 'FOREST_CARBON_NET_FLUX',
     type: 'forest-carbon-net-flux',
     url: 'https://tiles.globalforestwatch.org/gfw_forest_carbon_net_flux/v20250430/tcd_{tcd}/{z}/{x}/{y}.png',
     technicalName: 'wri_forest_carbon_net_flux',

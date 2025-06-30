@@ -40,7 +40,7 @@ export default {
       },
       interactionConfig: {},
     },
-    id: 'WRI_TROPICAL_TREE_COVER',
+    id: 'TROPICAL_TREE_COVER',
     type: 'tropical-tree-cover',
     url: 'https://tiles.globalforestwatch.org/wri_trees_in_mosaic_landscapes/v20220922/tcd_40/{z}/{x}/{y}.png',
     technicalName: 'wri_tropical_tree_cover',

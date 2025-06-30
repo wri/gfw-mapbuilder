@@ -147,7 +147,7 @@ export default {
       },
       interactionConfig: {},
     },
-    id: 'WRI_UMD_LAND_COVER',
+    id: 'UMD_LAND_COVER',
     type: 'umd-land-cover',
     url: 'https://storage.googleapis.com/lcl_tiles/GLCLU{year}/composite{year}/{z}/{x}/{y}.png',
     technicalName: 'umd_land_cover',
