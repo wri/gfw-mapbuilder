@@ -89,16 +89,22 @@ export const filterDataByAppSettings = () => {
   const layers = getLayers();
   const filteredLayers = layers.filter((l) => checkLayerFilterConfig(l, appSettings));
   const uniqueLayers = generateHashMapData(filteredLayers);
-  return uniqueLayers;
+  return filteredLayers;
 };
 
 export const getUserLayerSelections = (configLayers: any, uniqueLayerHashMap: any) => {
   const result = [] as any;
   const pending = [] as any;
 
+  const testtetetet = [...configLayers, ...uniqueLayerHashMap];
+
+  console.log('testtetetet', testtetetet);
+  return testtetetet;
+
   for (const layer of configLayers) {
     if (uniqueLayerHashMap.has(layer?.layer?.id)) {
-      result.push(layer);
+      const getLayer = uniqueLayerHashMap.get(layer?.layer?.id);
+      result.push(getLayer);
       uniqueLayerHashMap.delete(layer?.layer?.id);
     }
   }
