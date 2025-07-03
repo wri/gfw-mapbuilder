@@ -1,4 +1,4 @@
-/* export default {
+export default {
   webmap: '4563142bba62461ab4e0de9480919e95',
   title: 'GFW Mapbuilder',
   subtitle: 'Make maps that matter',
@@ -442,9 +442,9 @@
       },
     ],
   },
-}; */
+};
 
-export default {
+/* export default {
   webmap: 'f44474c063cc444aa1c99dd82dafc1f2',
   title: '',
   subtitle: '',
@@ -5134,4 +5134,4 @@ export default {
   webmap_url: 'https://worldresources.maps.arcgis.com/home/webmap/viewer.html?webmap=f44474c063cc444aa1c99dd82dafc1f2',
   alternativeWebmap_url:
     'https://worldresources.maps.arcgis.com/home/webmap/viewer.html?webmap=f44474c063cc444aa1c99dd82dafc1f2',
-};
+}; */
