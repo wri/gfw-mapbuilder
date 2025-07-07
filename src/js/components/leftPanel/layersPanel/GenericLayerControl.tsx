@@ -106,20 +106,20 @@ const LayerFilterSelection = (props: LayerInfo): JSX.Element => {
         });
         setOptions(fieldOptions);
       } else {
+        //console.log('LayerInfo', layerInfo);
         const fieldPromises = layerInfo.layerIds.map((id: number) => {
           const subUrl = `${layerInfo.url}/${id}`;
           return esriQuery(subUrl, queryParams);
         });
+
         Promise.all(fieldPromises).then((values) => {
           const allFieldOptions: any = [];
           values.forEach((value: any) => {
-            const fieldOptions = value.features
+            const ccc = value;
+            const fieldOptions = value
               .map((feature: any) => {
-                const entry = feature.attributes[layerInfo.filterField[selectedLanguage]];
-                return {
-                  label: entry,
-                  value: entry,
-                };
+                const entry = feature[layerInfo.filterField[selectedLanguage]];
+                return { label: entry, value: entry };
               })
               .filter((option: any) => option.label !== null);
             allFieldOptions.push(fieldOptions);

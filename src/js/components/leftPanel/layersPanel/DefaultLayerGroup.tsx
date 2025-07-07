@@ -207,13 +207,13 @@ const DefaultLayerGroup = ({ layerGroupKey, layerGroupConfig }: LayerGroupProps)
 
   const layersInGroup = allLayersInScale.filter((layer) => layer.group === layerGroupKey);
 
-  console.log('DEFAULT ALYER ===>>> ,', {
+  /* console.log('DEFAULT ALYER ===>>> ,', {
     layerGroupKey,
     allAvailableLayers,
     allLayersInScale,
     layersInGroup,
   });
-
+ */
   const dispatch = useDispatch();
 
   const themeColor = handleCustomColorTheme(customColorTheme);
@@ -289,11 +289,11 @@ const DefaultLayerGroup = ({ layerGroupKey, layerGroupConfig }: LayerGroupProps)
                 style={getListStyle(snapshot.isDraggingOver)}
               >
                 {layersInGroup.map((layer, index) => {
-                  console.log('check info here ', {
+                  /* console.log('check info here ', {
                     layerGroupKey,
                     layerGroupConfig,
                     layer,
-                  });
+                  }); */
 
                   return (
                     <Draggable key={index} index={index} draggableId={index.toString()}>

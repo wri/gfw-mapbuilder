@@ -477,7 +477,10 @@ export default {
         {
           order: 1,
           id: 'GADM36_COM',
+          //layerIds: [0],
+          //type: 'feature',
           type: 'dynamic',
+          //url: 'https://services7.arcgis.com/iv56fY5TFtS8nlsY/arcgis/rest/services/limite_administrative/FeatureServer',
           url: 'https://services7.arcgis.com/iv56fY5TFtS8nlsY/arcgis/rest/services/limite_administrative/FeatureServer/0',
           label: {
             en: 'Communes',

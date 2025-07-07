@@ -79,7 +79,13 @@ const generateHashMapData = (layres: any) => {
   const hashMap = new Map();
 
   for (const layer of layres) {
-    hashMap.set(layer.id, layer);
+    if (!hashMap.has(layer.id)) {
+      hashMap.set(layer.id, [layer]);
+    } else {
+      const existingLayer = hashMap.get(layer.id);
+      existingLayer.push(layer);
+      hashMap.set(layer.id, existingLayer);
+    }
   }
   return hashMap;
 };
@@ -89,33 +95,35 @@ export const filterDataByAppSettings = () => {
   const layers = getLayers();
   const filteredLayers = layers.filter((l) => checkLayerFilterConfig(l, appSettings));
   const uniqueLayers = generateHashMapData(filteredLayers);
-  return filteredLayers;
+  return uniqueLayers;
 };
 
 export const getUserLayerSelections = (configLayers: any, uniqueLayerHashMap: any) => {
-  const result = [] as any;
+  //const result = [] as any;
   const pending = [] as any;
+  const defaultLayers = [] as any;
 
-  const testtetetet = [...configLayers, ...uniqueLayerHashMap];
+  //const testtetetet = [...configLayers, ...uniqueLayerHashMap];
 
-  console.log('testtetetet', testtetetet);
-  return testtetetet;
+  //console.log('testtetetet', testtetetet);
 
   for (const layer of configLayers) {
     if (uniqueLayerHashMap.has(layer?.layer?.id)) {
       const getLayer = uniqueLayerHashMap.get(layer?.layer?.id);
-      result.push(getLayer);
+      const newLayerDef = { ...layer.layer, groupId: getLayer[0].groupId, order: getLayer[0].order };
+      defaultLayers.push(newLayerDef);
+      //result.push(getLayer[0]);
       uniqueLayerHashMap.delete(layer?.layer?.id);
     }
   }
 
-  const check = uniqueLayerHashMap;
+  //const check = uniqueLayerHashMap;
 
   for (const [key, value] of uniqueLayerHashMap) {
-    pending.push(value);
+    pending.push(value[0]);
   }
-
-  const testingg = pending;
+  //const newDef = defaultLayers;
+  //const testingg = pending;
   //console.log('check', check);
-  return [...result, ...pending];
+  return [...defaultLayers, ...pending];
 };

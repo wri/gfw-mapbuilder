@@ -41,10 +41,10 @@ const LayersTabView = (props: LayersTabViewProps) => {
   const layerPanel = useSelector((store: RootState) => store.appSettings.layerPanel);
   const tabViewIsVisible = tabViewVisible && activeTab === props.label;
 
-  const testVar = Object.keys(layerPanel).sort((a: string, b: string) => layerPanel[a].order - layerPanel[b].order);
+  //const testVar = Object.keys(layerPanel).sort((a: string, b: string) => layerPanel[a].order - layerPanel[b].order);
 
-  console.log('testVar', testVar);
-  console.log('layerPanel', layerPanel);
+  // console.log('testVar', testVar);
+  // console.log('layerPanel', layerPanel);
   const layerGroupsToRender = Object.keys(layerPanel)
     .sort((a: string, b: string) => layerPanel[a].order - layerPanel[b].order)
     .map((layerGroupKey: string) => {
