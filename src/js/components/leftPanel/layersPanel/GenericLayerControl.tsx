@@ -106,7 +106,6 @@ const LayerFilterSelection = (props: LayerInfo): JSX.Element => {
         });
         setOptions(fieldOptions);
       } else {
-        //console.log('LayerInfo', layerInfo);
         const fieldPromises = layerInfo.layerIds.map((id: number) => {
           const subUrl = `${layerInfo.url}/${id}`;
           return esriQuery(subUrl, queryParams);
@@ -115,7 +114,6 @@ const LayerFilterSelection = (props: LayerInfo): JSX.Element => {
         Promise.all(fieldPromises).then((values) => {
           const allFieldOptions: any = [];
           values.forEach((value: any) => {
-            const ccc = value;
             const fieldOptions = value
               .map((feature: any) => {
                 const entry = feature[layerInfo.filterField[selectedLanguage]];

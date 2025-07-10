@@ -403,8 +403,6 @@ export class MapController {
 
             remoteLayerObjects.push(newRemoteLayerObject);
           }
-          const test = remoteLayerObjects;
-          const m = mapLayerObjects;
           const allLayerObjects = [...mapLayerObjects, ...remoteLayerObjects];
           parseURLandApplyChanges();
 
@@ -458,7 +456,6 @@ export class MapController {
             }) as any;
             allLayerObjects.push(...appendMissingProps);
           }
-          const allL = allLayerObjects;
           store.dispatch(allAvailableLayers(allLayerObjects));
           const esriRemoteLayersPromises: any = remoteLayerObjects.map((layerObject) => {
             return LayerFactory(this._mapview, layerObject);

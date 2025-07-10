@@ -99,31 +99,20 @@ export const filterDataByAppSettings = () => {
 };
 
 export const getUserLayerSelections = (configLayers: any, uniqueLayerHashMap: any) => {
-  //const result = [] as any;
-  const pending = [] as any;
+  const uniqueCombinedLayers = [] as any;
   const defaultLayers = [] as any;
-
-  //const testtetetet = [...configLayers, ...uniqueLayerHashMap];
-
-  //console.log('testtetetet', testtetetet);
 
   for (const layer of configLayers) {
     if (uniqueLayerHashMap.has(layer?.layer?.id)) {
       const getLayer = uniqueLayerHashMap.get(layer?.layer?.id);
       const newLayerDef = { ...layer.layer, groupId: getLayer[0].groupId, order: getLayer[0].order };
       defaultLayers.push(newLayerDef);
-      //result.push(getLayer[0]);
       uniqueLayerHashMap.delete(layer?.layer?.id);
     }
   }
 
-  //const check = uniqueLayerHashMap;
-
-  for (const [key, value] of uniqueLayerHashMap) {
-    pending.push(value[0]);
+  for (const [_key, value] of uniqueLayerHashMap) {
+    uniqueCombinedLayers.push(value[0]);
   }
-  //const newDef = defaultLayers;
-  //const testingg = pending;
-  //console.log('check', check);
-  return [...defaultLayers, ...pending];
+  return [...defaultLayers, ...uniqueCombinedLayers];
 };
