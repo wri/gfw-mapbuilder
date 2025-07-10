@@ -309,6 +309,7 @@ export class MapController {
 
           //Fetching all other (non webmap) layer information from resources file AND GFW Api for those that are deemed as 'remoteDataLayer' in the config
           const layerHashMap = filterDataByAppSettings();
+          //const layerHashMap = filterDataByAppSettings();
           const remoteAndServiceLayersObjects = getUserLayerSelections(layersContentConfig, layerHashMap);
 
           const getErrorLayers = remoteAndServiceLayersObjects.filter((layer) => layer?.isError);

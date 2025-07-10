@@ -74,7 +74,7 @@ const Header: FunctionComponent = () => {
   return (
     <>
       <div className="header-container" data-cy="header">
-        {appSettings.treeMosaicLandscapes && <Banner />}
+        {/* {appSettings.treeMosaicLandscapes && <Banner />} */}
         <Banner />
         <div className="header-spacer">
           <div className="title-container">

@@ -79,7 +79,13 @@ const generateHashMapData = (layres: any) => {
   const hashMap = new Map();
 
   for (const layer of layres) {
-    hashMap.set(layer.id, layer);
+    if (!hashMap.has(layer.id)) {
+      hashMap.set(layer.id, [layer]);
+    } else {
+      const existingLayer = hashMap.get(layer.id);
+      existingLayer.push(layer);
+      hashMap.set(layer.id, existingLayer);
+    }
   }
   return hashMap;
 };
@@ -93,12 +99,20 @@ export const filterDataByAppSettings = () => {
 };
 
 export const getUserLayerSelections = (configLayers: any, uniqueLayerHashMap: any) => {
-  const result = [] as any;
+  const uniqueCombinedLayers = [] as any;
+  const defaultLayers = [] as any;
 
   for (const layer of configLayers) {
     if (uniqueLayerHashMap.has(layer?.layer?.id)) {
-      result.push(layer);
+      const getLayer = uniqueLayerHashMap.get(layer?.layer?.id);
+      const newLayerDef = { ...layer.layer, groupId: getLayer[0].groupId, order: getLayer[0].order };
+      defaultLayers.push(newLayerDef);
+      uniqueLayerHashMap.delete(layer?.layer?.id);
     }
   }
-  return result;
+
+  for (const [_key, value] of uniqueLayerHashMap) {
+    uniqueCombinedLayers.push(value[0]);
+  }
+  return [...defaultLayers, ...uniqueCombinedLayers];
 };
