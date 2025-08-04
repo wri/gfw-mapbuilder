@@ -358,20 +358,40 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
     case 'MASK':
       const { appSettings } = store.getState();
       const countryISOCode = appSettings?.iso;
-      const maskDefExp = `code_iso3 <> '${countryISOCode}'`;
-      const maskLayerOptions: LayerOptions = {
+      const maskDefExp = `ISO <> '${countryISOCode}'`;
+      /* const maskLayerOptions: LayerOptions = {
         id: layerConfig.id,
         visible: true,
         url: layerConfig.url,
         //@ts-ignore
         opacity: layerConfig.opacity,
-      };
-      if (layerConfig.layerIds) {
+      }; */
+
+      esriLayer = new FeatureLayer({
+        id: layerConfig.id,
+        definitionExpression: maskDefExp,
+        title: layerConfig.title,
+        visible: true,
+        url: layerConfig.url,
+        opacity: 0.5,
+        renderer: {
+          type: 'simple',
+          symbol: {
+            type: 'simple-fill',
+            color: 'rgba(51,51, 51, 0.5)', // Main green color with transparency
+            outline: {
+              width: 0.5,
+              color: 'rgba(51,51, 51, 0.8)', // Main green color without transparency
+            },
+          },
+        } as any,
+      });
+      /* if (layerConfig.layerIds) {
         maskLayerOptions.sublayers = layerConfig.layerIds.map((id) => {
           return { id: id, visible: true, definitionExpression: maskDefExp };
         });
-      }
-      esriLayer = new MapImageLayer(maskLayerOptions);
+      } */
+      //esriLayer = new MapImageLayer(maskLayerOptions);
       break;
     case 'Vector.Layer': //only viirs is supported at this time
       if (layerConfig.id === 'VIIRS_ACTIVE_FIRES') {
