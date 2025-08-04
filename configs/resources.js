@@ -431,7 +431,6 @@ export default {
         type: 'dynamic',
         order: 10000,
         url: 'https://services.arcgis.com/P3ePLMYs2RVChkJx/ArcGIS/rest/services/World_Countries_(Generalized)/FeatureServer',
-        //url: 'https://gis.forest-atlas.org/server/rest/services/country_masks/country_mask_global/MapServer',
         opacity: 0.35,
         layerIds: [0],
       },
