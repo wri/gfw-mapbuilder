@@ -6,7 +6,8 @@ export default {
   logoLinkUrl: '',
   aboutLinkUrl: '',
   downloadLinkUrl: '',
-  printServiceUrl: 'https://gis.forest-atlas.org/server/rest/services/print/ExportWebMap/GPServer/Export%20Web%20Map',
+  printServiceUrl:
+    'https://utility.arcgisonline.com/arcgis/rest/services/Utilities/PrintingTools/GPServer/Export%20Web%20Map%20Task',
   maskServiceUrl: '',
   mapThemeIds: '',
   mapThemes: '',

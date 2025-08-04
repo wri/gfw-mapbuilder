@@ -80,7 +80,6 @@ import { errorTranslations } from '../../../configs/translations/error.translati
 import { layersContentConfig } from '../../../configs/layers/layers-content-config';
 import { filterDataByAppSettings, getUserLayerSelections } from './helpers/index';
 
-import { PRINT_SERVICE_URL } from '../../../configs/esri/urls-config';
 import { MAP_CONFIG } from '../../../configs/esri/map-config';
 
 interface URLCoordinates {
@@ -1516,6 +1515,7 @@ export class MapController {
   };
 
   generateMapPDF = async (layout: PrintLayoutType): Promise<any> => {
+    const printServiceURL = store.getState().appSettings.printServiceUrl;
     const printWidget = MAP_CONFIG.printWidget as any;
     const template = new PrintTemplate({
       layout,
@@ -1529,7 +1529,7 @@ export class MapController {
     });
 
     try {
-      const result = await print.execute(PRINT_SERVICE_URL, params);
+      const result = await print.execute(printServiceURL ?? '', params);
       if (result?.url) {
         this.toggleMaskLayer(true);
         return result;
