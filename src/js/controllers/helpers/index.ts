@@ -105,7 +105,13 @@ export const getUserLayerSelections = (configLayers: any, uniqueLayerHashMap: an
   for (const layer of configLayers) {
     if (uniqueLayerHashMap.has(layer?.layer?.id)) {
       const getLayer = uniqueLayerHashMap.get(layer?.layer?.id);
-      const newLayerDef = { ...layer.layer, groupId: getLayer[0].groupId, order: getLayer[0].order };
+      const newLayerDef = {
+        ...layer.layer,
+        dataLayer: getLayer[0],
+        layer: layer.layer,
+        groupId: getLayer[0].groupId,
+        order: getLayer[0].order,
+      };
       defaultLayers.push(newLayerDef);
       uniqueLayerHashMap.delete(layer?.layer?.id);
     }
