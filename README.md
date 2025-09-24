@@ -41,14 +41,6 @@ npm run build
 
 This application has a general ([`resources.js`](https://github.com/wri/gfw-mapbuilder/blob/develop/configs/resources.js)). file that contains things controlled by the developers. Also, the Resources file contains configurations that are controlled via ArcGIS Online or whomever may be deploying the application. You can control things like the layers in the accordion, their source urls, their order on the map and in the UI, service urls (print, geometry, map, etc.), which layers to include in the analysis, and even the configurations for slope analysis and other aspects of the analysis. Anything that needs to be controlled from ArcGIS Online or the person deploying it, should be placed in `resources.js`.
 
-To ensure that your `resources.js` has a valid configuration run the following command
-
-```shell
-npm run test
-```
-
-These [Jest](https://jestjs.io/) unit tests will ensure that you have correctly configured any properties that are required in the `layerPanel` and `analysisModules` sections.
-
 #### Adding or updating core layers for MapBuilder
 
 Layer configuration is located at`configs/layers/*`
@@ -273,70 +265,6 @@ popup: {
 
 This way you can add more languages and also use modifiers on fields. `fieldExpression` get's used in the same manner the JSAPI uses fields for popup content, in a string like so: '\${BRIGHTNESS}'. This is why we can use modifiers like `ACQ_DATE:DateString(hideTime:true)`. You can see a list of available modifiers here: [Format info window content](https://developers.arcgis.com/javascript/3/jshelp/intro_formatinfowindow.html)
 
-### Strings
-
-This portion refers to how a developer could add some new strings, if you are looking at adding translations, see [Translations](#translations) below. The convention to add new strings to the application is to add them in each language, in `src/js/languages.js`. The name should be all uppercase separated by an underscore. For example, a link in the navigation bar for the word about would be added four times, once for each supported language in their appropriate section, like so:
-
-```javascript
-strings.en.NAV_ABOUT = 'About';
-...
-strings.fr.NAV_ABOUT = 'About';
-...
-strings.es.NAV_ABOUT = 'About';
-...
-strings.pt.NAV_ABOUT = 'About';
-```
-
-Then in your components, or any other part of the code, simply import the languages module, get the current language from React's context(or pass it out from a component if needs be).
-
-```javascript
-import text from 'js/languages';
-
-export default class MyComponent extends Component {
-  static contextTypes = {
-    language: PropTypes.string.isRequired,
-  };
-
-  render() {
-    const { language } = this.context;
-
-    return <div>{text[language].NAV_ABOUT}</div>;
-  }
-}
-```
-
-### Translations
-
-If you are adding or fixing translations. The strings used in the application can be found in two locations. The majority of them will be in the `src/js/languages.js` file. They are prefixed by the two digit country code. Add the appropriate translation in the correct language section. You may see something like this:
-
-```javascript
-strings.en.DATA = 'Data'; //English
-...
-strings.fr.DATA = 'Data'; // French
-...
-strings.es.DATA = 'Data'; // Spanish
-...
-strings.pt.DATA = 'Data'; // Portuguese
-```
-
-The other location is the `src/js/resources.js` file. There are `layers` and `basemaps` each with subsections for each of the four languages. In each subsection is an array or objects containing the layer configuration. Be careful what you change in here, the only three things related to labels are `label`, `sublabel`, and `group`. The `group` refers to the name on the accordion, it needs to be the same as the other layers in the same group (they are linked by a `groupKey`).
-
 ### Deployment
 
-Backup 1.5.0 folder
-
-`aws s3 sync s3://wri-sites/gfw-mapbuilder.org/library.gfw-mapbuilder.org/1.5.0/ /Users/dstarr/Desktop/MapbuilderBackups/04212022/ --profile wri`
-
-Copy dist folder into 1.5.0 aws folder
-
-`aws s3 sync --content-type "text/html" /{project_path}/gfw-mapbuilder/dist/ s3://wri-sites/gfw-mapbuilder.org/library.gfw-mapbuilder.org/1.5.0/ --profile wri`
-
-Copy dist > 1.5.0.js file in dist folder into 1.5.0.js file in aws folder
-
-`aws s3 cp --content-type "text/html" /{project_path}/gfw-mapbuilder/dist/loader/1.5.0.js s3://wri-sites/gfw-mapbuilder.org/library.gfw-mapbuilder.org/1.5.0/1.5.0.js --profile wri`
-
-Clear cache
-
-`aws cloudfront create-invalidation --distribution-id E58RE0T7L0R9N --path "/" --profile wri`
-
-`aws cloudfront create-invalidation --distribution-id E2B81LN86UDRTJ --path "/" --profile wri`
+see [deployment.md](/DEPLOY.md)
