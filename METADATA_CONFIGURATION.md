@@ -203,8 +203,6 @@ export default metadata;
 - [ ] Labels are consistent across languages (same set and order; translated appropriately).
 - [ ] Links are valid and use https where possible.
 - [ ] Long text uses line breaks (\n\n) rather than irregular spacing.
-- [ ] Formatting follows repository lint rules (no trailing commas where disallowed, quote style, etc.).
-- [ ] Type checks (tsc), lints (eslint), and tests pass.
 
 ## Local Testing
 
@@ -226,32 +224,6 @@ No feature flags are typically required to view metadata; ensure the layer is en
 - Adding/removing an item in one language but not the others.
 - Pasting URLs without protocol or with tracking parameters that violate guidelines.
 - Using irregular whitespace instead of \n\n for paragraph breaks.
-
-## Version Control & PR Requirements
-
-- Follow your team’s commit message conventions (if any).
-- Include in the PR:
-  - Screenshots or a short GIF/Loom of the metadata modal in English and at least one other language.
-  - A checklist confirming language parity and link validation.
-
-Suggested PR template snippet
-
-```md
-### Summary
-
-Updates metadata for {layerName}.
-
-### Languages Updated
-
-- [x] az - [x] en - [x] es - [x] fr - [x] hy
-- [x] id - [x] ka - [x] nl - [x] pt - [x] zh
-
-### QA
-
-- [x] Order confirmed in UI
-- [x] Links validated (https, resolves)
-- [x] Types & lint pass
-```
 
 ## Appendix: Full Example (commented)
 
