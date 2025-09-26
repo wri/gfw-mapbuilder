@@ -1,5 +1,15 @@
 [![Build Status](https://github.com/wri/gfw-mapbuilder/workflows/build-and-deploy/badge.svg)](https://github.com/wri/gfw-mapbuilder/actions)
 
+# GFW Mapbuilder Project Overview
+
+This document provides a comprehensive overview of the GFW Mapbuilder application, including its architecture, project structure, and primary functionalities.
+
+## 1. High-Level Summary
+
+The GFW Mapbuilder is a web application designed to display and interact with geospatial data through a configurable map interface. It is built as a template for ArcGIS Online, allowing for easy deployment and customization. The application leverages the Esri ArcGIS API for JavaScript to handle map rendering and data visualization, with a frontend built on React and TypeScript.
+
+The core philosophy of the Mapbuilder is to be highly configurable. Most of the application's features, including the layers displayed on the map, the layout of the UI, and even language translations, are controlled by external configuration files. This allows for the creation of different map applications for various regions or purposes without modifying the core source code.
+
 # GFW Map Builder ArcGIS Online Template
 
 > Template for the GFW Map Builder that will be available through ArcGIS Online.
@@ -264,6 +274,70 @@ popup: {
 ```
 
 This way you can add more languages and also use modifiers on fields. `fieldExpression` get's used in the same manner the JSAPI uses fields for popup content, in a string like so: '\${BRIGHTNESS}'. This is why we can use modifiers like `ACQ_DATE:DateString(hideTime:true)`. You can see a list of available modifiers here: [Format info window content](https://developers.arcgis.com/javascript/3/jshelp/intro_formatinfowindow.html)
+
+### Core Technologies
+
+The application is built with a modern web stack:
+
+- **Frontend Framework:** [React](https://reactjs.org/) with [TypeScript](https://www.typescriptlang.org/) for building a component-based, type-safe user interface.
+- **State Management:** [Redux](https://redux.js.org/) for centralized and predictable application state management.
+- **Mapping Library:** [ArcGIS API for JavaScript](https://developers.arcgis.com/javascript/) for all geospatial functionality, including map rendering, layer management, and spatial analysis.
+- **Build System:** [Webpack](https://webpack.js.org/) is used to bundle the application for development and production, with configurations for code splitting, optimization, and asset management.
+- **Styling:** SCSS and [Styled Components](https://styled-components.com/) for styling the application.
+- **End-to-End Testing:** [Cypress](https://www.cypress.io/) for automated end-to-end testing of the application.
+
+### Project Structure
+
+The project is organized into several key directories:
+
+- **`/src`**: This is the main directory for the application's source code.
+
+  - **`/src/js`**: Contains the core TypeScript and React code.
+    - **`/components`**: This directory holds the React components that make up the UI. It is further subdivided by feature, such as `header`, `leftPanel`, `mapview`, and `report`.
+    - **`/store`**: The Redux store is defined here, with subdirectories for `actions`, `reducers`, and `types`. This manages the global state of the application.
+    - **`/layers`**: Contains definitions and logic for the various types of map layers the application can display (e.g., `GladLayer`, `TreeCoverLossLayer`).
+    - **`/helpers`**: A collection of utility functions and helper classes used throughout the application. Key helpers include `LayerFactory.ts` for creating layer instances and `mapController.ts` for managing the map.
+    - **`/controllers`**: Contains the main application logic, such as the `mapController.ts` which orchestrates map interactions.
+    - **`index.tsx`**: The main entry point of the application, where the React application is rendered and the Redux store is initialized.
+  - **`/src/css`**: Contains the SCSS stylesheets for the application.
+  - **`/src/assets`** and **`/src/images`**: Static assets like icons, images, and fonts.
+  - **`index.html`**: The main HTML file that serves as the entry point for the web application.
+
+- **`/configs`**: This directory is central to the application's configurability.
+
+  - **`resources.js`**: The main configuration file for the application. It defines the web map ID, layers, UI elements, themes, and other application-level settings.
+  - **`/layers`**: Contains detailed configurations for individual data layers.
+  - **`/translations`**: Holds the language files for internationalization.
+  - **`/countryConfigs`**: Provides specific configurations for different countries or regions.
+
+- **`/webpack.*.js`**: Webpack configuration files for different environments (`common`, `development`, `production`).
+
+- **`/cypress`**: Contains the end-to-end tests for the application.
+
+- **`package.json`**: Defines the project's dependencies, scripts, and metadata.
+
+- **`tsconfig.json`**: The configuration file for the TypeScript compiler.
+
+#### Architecture and Data Flow
+
+The application follows a modern, component-based architecture with a centralized state management pattern.
+
+1.  **Application Initialization**: The application starts with `src/js/index.tsx`. This file renders the main `App` component and injects the Redux store, making the application state available to all components.
+
+2.  **Configuration Loading**: On startup, the application loads its configuration from `configs/resources.js` and other files in the `/configs` directory. This configuration object dictates which layers are available, how the UI is structured, and what tools are enabled.
+
+3.  **State Management (Redux)**: The Redux store serves as the single source of truth for the application state. This includes the current language, the visibility of layers, user information, and the state of various UI components. Actions are dispatched to update the state, and reducers specify how the state changes in response to these actions.
+
+4.  **Component-Based UI (React)**: The user interface is built as a tree of React components. These components are organized by feature in the `/src/js/components` directory. Components can subscribe to the Redux store to access and display application state, and they can dispatch actions to trigger state changes.
+
+5.  **Map Interaction (ArcGIS API)**: The `mapController.ts` is a key component that manages the ArcGIS map. It is responsible for:
+
+    - Initializing the map with the configured basemaps and extent.
+    - Using the `LayerFactory.ts` to create instances of map layers based on the configuration in `resources.js`.
+    - Handling user interactions with the map, such as clicks, zooms, and pans.
+    - Toggling the visibility of layers based on user input from the UI.
+
+6.  **Dynamic Layer Generation**: One of the primary capabilities of the Mapbuilder is its ability to dynamically generate and manage map layers. The `LayerFactory.ts` reads the layer configurations from `resources.js` and creates the appropriate layer objects using the ArcGIS API. This allows for a flexible and easily customizable map experience.
 
 ### Deployment
 
