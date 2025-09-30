@@ -33,7 +33,7 @@ This generates the compiled library files for deployment.
 
 ```sh
 # Replace [source] with your local build output directory (e.g., ./dist)
-aws s3 sync ./dist s3://wri-sites/gfw-mapbuilder.org/library.gfw-mapbuilder.org/1.5.0/ --profile WRI-Profile
+aws s3 sync ./dist s3://wri-sites/gfw-mapbuilder.org/library.gfw-mapbuilder.org/1.5.0/ --profile {YOUR-WRI-PROFILE}
 ```
 
 Verify that files are uploaded.
@@ -42,7 +42,7 @@ Add a new version file:
 
 ```sh
 touch 1.5.0.js
-aws s3 cp 1.5.0.js s3://wri-sites/gfw-mapbuilder.org/library.gfw-mapbuilder.org/ --profile WRI-Profile
+aws s3 cp 1.5.0.js s3://wri-sites/gfw-mapbuilder.org/library.gfw-mapbuilder.org/ --profile {YOUR-WRI-PROFILE}
 ```
 
 ## 6. Invalidate CloudFront Cache
@@ -50,8 +50,8 @@ aws s3 cp 1.5.0.js s3://wri-sites/gfw-mapbuilder.org/library.gfw-mapbuilder.org/
 Run both commands to clear caches for production distributions:
 
 ```sh
-aws cloudfront create-invalidation --distribution-id E58RE0T7L0R9N --path "/" --profile wri
-aws cloudfront create-invalidation --distribution-id E2B81LN86UDRTJ --path "/" --profile wri
+aws cloudfront create-invalidation --distribution-id E58RE0T7L0R9N --path "/" --profile {YOUR-WRI-PROFILE}
+aws cloudfront create-invalidation --distribution-id E2B81LN86UDRTJ --path "/" --profile {YOUR-WRI-PROFILE}
 ```
 
 Wait until invalidation status is Completed.
@@ -84,13 +84,13 @@ This ensures users see the latest files immediately.
 npm run lib-cms
 
 # 2. Sync files to S3
-aws s3 sync ./dist s3://wri-sites/gfw-mapbuilder.org/library.gfw-mapbuilder.org/1.5.0/ --profile WRI-Profile
+aws s3 sync ./dist s3://wri-sites/gfw-mapbuilder.org/library.gfw-mapbuilder.org/1.5.0/ --profile {YOUR-WRI-PROFILE}
 
 # 3. Upload version file
 touch 1.5.0.js
-aws s3 cp 1.5.0.js s3://wri-sites/gfw-mapbuilder.org/library.gfw-mapbuilder.org/ --profile WRI-Profile
+aws s3 cp 1.5.0.js s3://wri-sites/gfw-mapbuilder.org/library.gfw-mapbuilder.org/ --profile {YOUR-WRI-PROFILE}
 
 # 4. Invalidate CloudFront cache
-aws cloudfront create-invalidation --distribution-id E58RE0T7L0R9N --path "/" --profile wri
-aws cloudfront create-invalidation --distribution-id E2B81LN86UDRTJ --path "/" --profile wri
+aws cloudfront create-invalidation --distribution-id E58RE0T7L0R9N --path "/" --profile {YOUR-WRI-PROFILE}
+aws cloudfront create-invalidation --distribution-id E2B81LN86UDRTJ --path "/" --profile {YOUR-WRI-PROFILE}
 ```
