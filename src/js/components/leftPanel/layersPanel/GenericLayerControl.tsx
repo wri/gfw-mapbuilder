@@ -54,7 +54,7 @@ export const generateDefaultMarks = (params: any) => {
   const yearsAvailable = end - start;
 
   while (index <= end) {
-    const display = index % 7 === 0 ? 'block' : 'none';
+    const display = index % 8 === 0 ? 'block' : 'none';
     newMarks[index] = {
       style: { display: yearsAvailable < 6 ? 'block' : display },
       label: index,
@@ -110,16 +110,14 @@ const LayerFilterSelection = (props: LayerInfo): JSX.Element => {
           const subUrl = `${layerInfo.url}/${id}`;
           return esriQuery(subUrl, queryParams);
         });
+
         Promise.all(fieldPromises).then((values) => {
           const allFieldOptions: any = [];
           values.forEach((value: any) => {
-            const fieldOptions = value.features
+            const fieldOptions = value
               .map((feature: any) => {
-                const entry = feature.attributes[layerInfo.filterField[selectedLanguage]];
-                return {
-                  label: entry,
-                  value: entry,
-                };
+                const entry = feature[layerInfo.filterField[selectedLanguage]];
+                return { label: entry, value: entry };
               })
               .filter((option: any) => option.label !== null);
             allFieldOptions.push(fieldOptions);
@@ -208,12 +206,13 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
 
   const returnTimeSlider = (id: string): any => {
     const dateRangeResult = generateGWFDateRange();
+    const treeCoverLossMarks = generateDefaultMarks({ start: 2000, end: TREE_COVER_LOSS.max });
     switch (id) {
       case 'TREE_COVER_LOSS':
         return (
           <TimeSlider
             layerID={id}
-            defaultMarks={generateDefaultMarks({ start: 2000, end: TREE_COVER_LOSS.max })}
+            defaultMarks={treeCoverLossMarks}
             min={TREE_COVER_LOSS.min}
             max={TREE_COVER_LOSS.max}
             defaultValue={[TREE_COVER_LOSS.min, TREE_COVER_LOSS.max]}
@@ -478,10 +477,14 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
 
   const handleLayerError = () => {
     // layer error is higher priority than metadata error
-    if (layer?.isError) return true;
+    let disbleLayer = false;
+    if (layer?.isError) disbleLayer = true;
+    if (!layer?.metadata?.en) disbleLayer = true;
 
-    if (layer?.isMetadataError) return true;
-    return false;
+    if (layer?.id in LAYER_IDS) disbleLayer = false;
+
+    if (layer?.isMetadataError) disbleLayer = true;
+    return disbleLayer;
   };
 
   const handleInfoModalClick = () => {

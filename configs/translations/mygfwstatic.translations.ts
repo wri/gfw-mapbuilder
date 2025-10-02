@@ -8,7 +8,7 @@ export const saveAOIText = {
     alertNote:
       'We will send you email updates about alerts and forest cover change in your selected area, based on your user profile.',
     email: 'email',
-    notifications: 'WOULD YOU LIKE TO RECIEVE ALERT NOTIFICATIONS?',
+    notifications: 'WOULD YOU LIKE TO RECEIVE ALERT NOTIFICATIONS?',
     fireDetected: 'As soon as fires are detected',
     forestChange: 'As soon as forest change is detected',
     language: 'Language',
@@ -17,10 +17,10 @@ export const saveAOIText = {
     successButton: 'BACK TO MY AREAS',
     successText: [
       'Your area has been saved',
-      "Check your email and click on the link to confirm your subscription. If you don't see an email, check your junk or spam email folder."
+      "Check your email and click on the link to confirm your subscription. If you don't see an email, check your junk or spam email folder.",
     ],
     deleteText: 'This area has been deleted from your My GFW.',
-    monthly: 'Monthly summary'
+    monthly: 'Monthly summary',
   },
   az: {
     title: 'Save area of interest',
@@ -31,7 +31,7 @@ export const saveAOIText = {
     alertNote:
       'We will send you email updates about alerts and forest cover change in your selected area, based on your user profile.',
     email: 'email',
-    notifications: 'WOULD YOU LIKE TO RECIEVE ALERT NOTIFICATIONS?',
+    notifications: 'WOULD YOU LIKE TO RECEIVE ALERT NOTIFICATIONS?',
     fireDetected: 'As soon as fires are detected',
     forestChange: 'As soon as forest change is detected',
     language: 'Language',
@@ -40,10 +40,10 @@ export const saveAOIText = {
     successButton: 'BACK TO MY AREAS',
     successText: [
       'Your area has been saved',
-      "Check your email and click on the link to confirm your subscription. If you don't see an email, check your junk or spam email folder."
+      "Check your email and click on the link to confirm your subscription. If you don't see an email, check your junk or spam email folder.",
     ],
     deleteText: 'This area has been deleted from your My GFW.',
-    monthly: 'Monthly summary'
+    monthly: 'Monthly summary',
   },
   hy: {
     // * NOTE: translations not provided
@@ -55,7 +55,7 @@ export const saveAOIText = {
     alertNote:
       'We will send you email updates about alerts and forest cover change in your selected area, based on your user profile.',
     email: 'email',
-    notifications: 'WOULD YOU LIKE TO RECIEVE ALERT NOTIFICATIONS?',
+    notifications: 'WOULD YOU LIKE TO RECEIVE ALERT NOTIFICATIONS?',
     fireDetected: 'As soon as fires are detected',
     forestChange: 'As soon as forest change is detected',
     language: 'Language',
@@ -64,10 +64,10 @@ export const saveAOIText = {
     successButton: 'Նախորդը',
     successText: [
       'Your area has been saved',
-      "Check your email and click on the link to confirm your subscription. If you don't see an email, check your junk or spam email folder."
+      "Check your email and click on the link to confirm your subscription. If you don't see an email, check your junk or spam email folder.",
     ],
     deleteText: 'This area has been deleted from your My GFW.',
-    monthly: 'Monthly summary'
+    monthly: 'Monthly summary',
   },
   nl: {
     // * NOTE: translations not provided
@@ -79,7 +79,7 @@ export const saveAOIText = {
     alertNote:
       'We will send you email updates about alerts and forest cover change in your selected area, based on your user profile.',
     email: 'email',
-    notifications: 'WOULD YOU LIKE TO RECIEVE ALERT NOTIFICATIONS?',
+    notifications: 'WOULD YOU LIKE TO RECEIVE ALERT NOTIFICATIONS?',
     fireDetected: 'As soon as fires are detected',
     forestChange: 'As soon as forest change is detected',
     language: 'Language',
@@ -88,10 +88,10 @@ export const saveAOIText = {
     successButton: 'BACK TO MY AREAS',
     successText: [
       'Your area has been saved',
-      "Check your email and click on the link to confirm your subscription. If you don't see an email, check your junk or spam email folder."
+      "Check your email and click on the link to confirm your subscription. If you don't see an email, check your junk or spam email folder.",
     ],
     deleteText: 'This area has been deleted from your My GFW.',
-    monthly: 'Monthly summary'
+    monthly: 'Monthly summary',
   },
   fr: {
     title: "Enregistrer une zone d'intérêt",
@@ -109,12 +109,9 @@ export const saveAOIText = {
     save: 'ENREGISTRER',
     delete: 'SUPPRIMER LA ZONE',
     successButton: 'Revenir vers mes zones',
-    successText: [
-      'Votre région a été enregistré',
-      'Vous pouvez visualiser toutes vos zones dans « Mon GFW »'
-    ],
+    successText: ['Votre région a été enregistré', 'Vous pouvez visualiser toutes vos zones dans « Mon GFW »'],
     deleteText: 'This area has been deleted from your My GFW.',
-    monthly: 'Monthly summary'
+    monthly: 'Monthly summary',
   },
   ka: {
     title: 'შეინახეთ თქვენთვის საინტერესო არეალი',
@@ -134,10 +131,10 @@ export const saveAOIText = {
     successButton: 'არეალებზე დაბრუნება',
     successText: [
       'თქვენი არეალი შენახულია',
-      'შეამოწმეთ თქვენი ელ.ფოსტა და გამოწერა დაადასტურეთ ლინკზე დაჭერით. თუ ვერ ხედავთ წერილს, შეამოწმეთ სპამის საქაღალდე.'
+      'შეამოწმეთ თქვენი ელ.ფოსტა და გამოწერა დაადასტურეთ ლინკზე დაჭერით. თუ ვერ ხედავთ წერილს, შეამოწმეთ სპამის საქაღალდე.',
     ],
     deleteText: 'This area has been deleted from your My GFW.',
-    monthly: 'ყოველთვიური რეზიუმე'
+    monthly: 'ყოველთვიური რეზიუმე',
   },
   es: {
     title: 'Guardar zona de interés',
@@ -155,12 +152,9 @@ export const saveAOIText = {
     save: 'GUARDAR',
     delete: 'ELIMINAR ZONA',
     successButton: 'Volver a mis zonas',
-    successText: [
-      'Su zona ha sido guardada',
-      'Puede ver todas sus zonas en My GFW'
-    ],
+    successText: ['Su zona ha sido guardada', 'Puede ver todas sus zonas en My GFW'],
     deleteText: 'This area has been deleted from your My GFW.',
-    monthly: 'Monthly summary'
+    monthly: 'Monthly summary',
   },
   pt: {
     title: 'Salvar área de interesse',
@@ -178,18 +172,14 @@ export const saveAOIText = {
     save: 'SALVAR',
     delete: 'EXCLUIR ÁREA',
     successButton: 'Voltar para minhas áreas',
-    successText: [
-      'Sua área foi salva',
-      'Você pode ver todas as suas áreas em Meu GFW'
-    ],
+    successText: ['Sua área foi salva', 'Você pode ver todas as suas áreas em Meu GFW'],
     deleteText: 'This area has been deleted from your My GFW.',
-    monthly: 'Monthly summary'
+    monthly: 'Monthly summary',
   },
   id: {
     title: 'Simpan daerah yang diminati',
     nameLabel: 'BERI NAMA DAERAH INI UNTUK REFERENSI DI SAAT SELANJUTNYA *',
-    tagsLabel:
-      'AASIGNE ETIQUETAS PARA ORGANIZAR Y AGRUPAR ZONASSIGNE ETIQUETAS PARA ORGANIZAR Y AGRUPAR ZONAS',
+    tagsLabel: 'AASIGNE ETIQUETAS PARA ORGANIZAR Y AGRUPAR ZONASSIGNE ETIQUETAS PARA ORGANIZAR Y AGRUPAR ZONAS',
     tagsSubLabel: 'Tekan enter untuk membuat dan memisahkan tag',
     required: 'Diperlukan',
     alertNote:
@@ -202,12 +192,9 @@ export const saveAOIText = {
     save: 'SIMPAN',
     delete: 'HAPUS DAERAH',
     successButton: 'Kembali ke daerah saya',
-    successText: [
-      'Daerah Anda telah disimpan',
-      'Anda dapat melihat semua area Anda di GFW Saya'
-    ],
+    successText: ['Daerah Anda telah disimpan', 'Anda dapat melihat semua area Anda di GFW Saya'],
     deleteText: 'This area has been deleted from your My GFW.',
-    monthly: 'Monthly summary'
+    monthly: 'Monthly summary',
   },
   zh: {
     title: '保存关注区域',
@@ -215,8 +202,7 @@ export const saveAOIText = {
     tagsLabel: '为不同的区域分配标签以便进行归纳整理',
     tagsSubLabel: '按 Enter 键创建并分隔标签',
     required: '必填',
-    alertNote:
-      '我们将根据您的用户资料向您发送电子邮件，更新您选择的区域的预警和森林覆盖变化情况。',
+    alertNote: '我们将根据您的用户资料向您发送电子邮件，更新您选择的区域的预警和森林覆盖变化情况。',
     email: '电子邮件 *',
     notifications: '您是否要接收预警通知？',
     fireDetected: '一旦检测到火情',
@@ -227,6 +213,6 @@ export const saveAOIText = {
     successButton: '返回到我的区域',
     successText: ['已保存您的区域', '您可以在“我的 GFW”中查看您所有的区域'],
     deleteText: 'This area has been deleted from your My GFW.',
-    monthly: 'Monthly summary'
-  }
+    monthly: 'Monthly summary',
+  },
 };

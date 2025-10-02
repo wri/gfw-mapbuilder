@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../../store';
 import { setOpenLayerGroup, renderModal } from '../../../store/appState/actions';
@@ -28,10 +27,6 @@ interface BaseLayerControlLandsatProps {
   customColorTheme?: string;
 }
 
-interface BaseLayerPlanet extends BaseLayerControlLandsatProps {
-  url: string;
-}
-
 const WebmapOriginal = (props: DefaultBasemapProps): JSX.Element => {
   const { id, activeBasemap } = props.layerInfo;
   return (
@@ -54,116 +49,6 @@ const BaseLayerWRI = (props: DefaultBasemapProps): JSX.Element => {
     >
       <img src={thumbnailUrl} alt="basemap" />
       <span>{title}</span>
-    </div>
-  );
-};
-
-const PlanetBasemap = (props: BaseLayerPlanet): JSX.Element => {
-  const { title, url } = props.layerInfo;
-
-  const [planetColor, setPlanetColor] = useState('rgb');
-  const [planetTiles, setPlanetTiles] = useState<Array<{ label: string; value: string }>>([]);
-  const [selectedPlanetTileLayer, setSelectedPlanetTileLayer] = useState<string>('2021-02');
-
-  const activeBasemap = useSelector((store: RootState) => store.mapviewState.activeBasemap);
-
-  const customColorTheme = useSelector((store: RootState) => store.appSettings.customColorTheme);
-
-  const dispatch = useDispatch();
-
-  const apiKey = ENV_VARIABLES.PLANET_API_KEY;
-
-  const themeColor = handleCustomColorTheme(customColorTheme);
-  useEffect(() => {
-    const tileInfoURL = 'https://tiles.globalforestwatch.org/openapi.json';
-    fetch(tileInfoURL)
-      .then((res) => res.json())
-      .then((data) => {
-        const planetDateRanges: Array<string> = data?.components?.schemas?.PlanetDateRange?.enum;
-        const planetTilesFormat = planetDateRanges
-          .reverse()
-          .filter((label) => label.length > 4)
-          .map((d) => {
-            const label = d
-              .split('_')
-              .map((date) => format(new Date(date), 'MMM yyyy'))
-              .join('-');
-            return { value: d, label };
-          });
-
-        setPlanetTiles(planetTilesFormat);
-        setSelectedPlanetTileLayer(planetTilesFormat[0].value);
-      })
-      .catch((e) => console.log(e));
-  }, []);
-  function handlePlanetTileChange(name: string): void {
-    setSelectedPlanetTileLayer(name);
-    mapController.addPlanetTileLayer(url, planetColor, name, apiKey);
-  }
-
-  function handlePlanetColorChange(val: string): void {
-    setPlanetColor(val);
-    mapController.addPlanetTileLayer(url, val, selectedPlanetTileLayer, apiKey);
-  }
-
-  function handlePlanetTileClick() {
-    const basemapInfo = { id: 'planet', url, planetColor, selectedPlanetTileLayer, apiKey } as any;
-    dispatch(setSelectedBasemapInfo(basemapInfo));
-    mapController.addPlanetTileLayer(url, planetColor, selectedPlanetTileLayer, apiKey);
-  }
-
-  const tileOptions = planetTiles?.map((tileInfo) => {
-    return (
-      <option value={tileInfo.value} key={tileInfo.value}>
-        {tileInfo.label}
-      </option>
-    );
-  });
-
-  const TileColors = () => {
-    return (
-      <select
-        onChange={(e) => handlePlanetColorChange(e.target.value)}
-        value={planetColor}
-        style={{ border: `1px solid ${props.customColorTheme}` }}
-        className="landsat-years"
-      >
-        <option key={'rgb'} value={'rgb'}>
-          Natural color
-        </option>
-        <option key={'cir'} value={'cir'}>
-          False color
-        </option>
-      </select>
-    );
-  };
-
-  return (
-    <div className={`layer-basemap landsat ${activeBasemap === 'planet' ? 'selected' : ''}`}>
-      <span className="planet-thumb" onClick={() => handlePlanetTileClick()}></span>
-      <span onClick={() => handlePlanetTileClick()}>{title && title[props.selectedLanguage]}</span>
-      <div className="planet-selectors">
-        <select
-          onChange={(e) => handlePlanetTileChange(e.target.value)}
-          value={selectedPlanetTileLayer}
-          style={{ border: `1px solid ${props.customColorTheme}` }}
-          className="landsat-years"
-        >
-          {planetTiles && tileOptions}
-        </select>
-        <TileColors />
-      </div>
-      <div
-        onClick={() => dispatch(renderModal('PlanetInfo'))}
-        className="info-icon-container"
-        style={{
-          marginLeft: 25,
-          marginBottom: 30,
-          backgroundColor: `${themeColor}`,
-        }}
-      >
-        <InfoIcon width={10} height={10} fill={'#fff'} />
-      </div>
     </div>
   );
 };
@@ -271,18 +156,6 @@ const BasemapLayersGroup = (props: LayerGroupProps): React.ReactElement => {
           selectedLanguage={selectedLanguage}
           customColorTheme={themeColor}
         />
-      );
-    } else if (baselayer.id === 'planet' && baselayer?.url && baselayer.url.length !== 0) {
-      return (
-        baselayer.visible && (
-          <PlanetBasemap
-            key={baselayer.id}
-            url={baselayer.url}
-            layerInfo={baselayer}
-            selectedLanguage={selectedLanguage}
-            customColorTheme={themeColor}
-          />
-        )
       );
     } else if (baselayer.id === 'webmap') {
       return (

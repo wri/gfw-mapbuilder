@@ -1,5 +1,6 @@
 import { GEOGRAPHIC_COVER_LAYER_URL, LAYER_IDS } from '../../../../../configs/layer-config';
-import { loadModules } from 'esri-loader';
+
+import VectorTileLayer from '@arcgis/core/layers/VectorTileLayer';
 import { mapController } from '../../../controllers/mapController';
 import { createGladS2Layer } from '../../../layers/GladS2Layer';
 import { createRadd } from '../../../layers/RaddLayer';
@@ -51,6 +52,7 @@ export const onStartDateChange = async (dFormat: string, endDate: string) => {
 
 export const onEndDateChange = async (date: string, dFormat: string) => {
   let start;
+  //@ts-ignore
   const end = new Date(dFormat).getJulian();
   const integratedAlertLayer = store.getState().appState.leftPanel.integratedAlertLayer;
 
@@ -85,8 +87,6 @@ export const onEndDateChange = async (date: string, dFormat: string) => {
 };
 
 export const displayGeographicCoverageLayer = async (layerId: string, isVisible: boolean) => {
-  const [VectorTileLayer] = await loadModules(['esri/layers/VectorTileLayer']);
-
   let layer;
 
   if (layerId === LAYER_IDS.GFW_INTEGRATED_ALERTS || layerId === LAYER_IDS.GLAD_ALERTS) {

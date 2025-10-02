@@ -6,7 +6,8 @@ export default {
   logoLinkUrl: '',
   aboutLinkUrl: '',
   downloadLinkUrl: '',
-  printServiceUrl: 'https://gis.forest-atlas.org/server/rest/services/print/ExportWebMap/GPServer/Export%20Web%20Map',
+  printServiceUrl:
+    'https://utility.arcgisonline.com/arcgis/rest/services/Utilities/PrintingTools/GPServer/Export%20Web%20Map%20Task',
   maskServiceUrl: '',
   mapThemeIds: '',
   mapThemes: '',
@@ -430,7 +431,7 @@ export default {
         id: 'MASK',
         type: 'dynamic',
         order: 10000,
-        url: 'https://gis.forest-atlas.org/server/rest/services/country_masks/country_mask_global/MapServer',
+        url: 'https://services.arcgis.com/P3ePLMYs2RVChkJx/ArcGIS/rest/services/World_Countries_(Generalized)/FeatureServer',
         opacity: 0.35,
         layerIds: [0],
       },

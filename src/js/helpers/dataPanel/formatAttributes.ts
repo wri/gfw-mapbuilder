@@ -6,7 +6,6 @@ export function formatAttributeValues(
   fields: FieldInfo[] | null,
   esriIntl: any
 ): object {
-  // const [esriIntl] = await loadModules(['esri/intl']);
   const formatAttributeObject = {} as object;
   Object.keys(attributes).forEach((attribute) => {
     const attributeField = fields?.find((f) => f.fieldName === attribute);

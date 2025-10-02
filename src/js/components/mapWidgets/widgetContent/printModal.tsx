@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { mapController } from '../../../../js/controllers/mapController';
+import { mapController, PrintLayoutType } from '../../../../js/controllers/mapController';
 import { printContent } from '../../../../../configs/translations/modal.tanslations';
 import { RootState } from '../../../../js/store/index';
 import { handleCustomColorTheme } from '../../../../utils';
@@ -21,7 +21,7 @@ export const PrintModal: FunctionComponent = () => {
     setPDFLoading(true);
     setURL('');
 
-    const { url } = await mapController.generateMapPDF(printType);
+    const { url } = await mapController.generateMapPDF(printType as PrintLayoutType);
 
     if (url) {
       setURL(url);
@@ -32,7 +32,7 @@ export const PrintModal: FunctionComponent = () => {
   };
 
   return (
-    <div>
+    <div style={{ width: '100%' }}>
       <div className="directions">
         <p>{buttonLabel}</p>
         {printOptions.map((printOption: string, index: number) => {
@@ -41,9 +41,9 @@ export const PrintModal: FunctionComponent = () => {
               className="orange-button"
               style={{ backgroundColor: themeColor }}
               key={index}
-              onClick={(e): Promise<void> => printMap(printOption)}
+              onClick={() => printMap(printOption)}
             >
-              {printOption}
+              {mapController.getPrintButtonLabel(printOption)}
             </button>
           );
         })}

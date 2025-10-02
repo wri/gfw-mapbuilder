@@ -1,4 +1,24 @@
-import { loadModules, setDefaultOptions } from 'esri-loader';
+import * as geometryEngine from '@arcgis/core/geometry/geometryEngine';
+import * as reactiveUtils from '@arcgis/core/core/reactiveUtils';
+import ScaleBar from '@arcgis/core/widgets/ScaleBar';
+import Attribution from '@arcgis/core/widgets/Attribution';
+import Basemap from '@arcgis/core/Basemap';
+import WebTileLayer from '@arcgis/core/layers/WebTileLayer';
+import Point from '@arcgis/core/geometry/Point';
+import Graphic from '@arcgis/core/Graphic';
+import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer';
+import AreaMeasurement2D from '@arcgis/core/widgets/AreaMeasurement2D';
+import DistanceMeasurement2D from '@arcgis/core/widgets/DistanceMeasurement2D';
+import SketchViewModel from '@arcgis/core/widgets/Sketch/SketchViewModel';
+import CoordinateConversion from '@arcgis/core/widgets/CoordinateConversion';
+import MapView from '@arcgis/core/views/MapView';
+import WebMap from '@arcgis/core/WebMap';
+import Portal from '@arcgis/core/portal/Portal';
+import Search from '@arcgis/core/widgets/Search.js';
+import Polygon from '@arcgis/core/geometry/Polygon';
+import * as print from '@arcgis/core/rest/print';
+import PrintTemplate from '@arcgis/core/rest/support/PrintTemplate';
+import PrintParameters from '@arcgis/core/rest/support/PrintParameters';
 import { format, parse, subDays } from 'date-fns';
 import { debounce } from 'lodash-es';
 import { getMaxDateForViirsTiles } from '../helpers/viirsLayerUtil';
@@ -51,15 +71,16 @@ import {
   determineLayerOpacity,
   determineLayerVisibility,
   extractWebmapLayerObjects,
-  getRemoteAndServiceLayers,
   requestWMSLayerLegendInfo,
 } from '../helpers/mapController/miscLayerHelpers';
 import legendInfoController from '../helpers/legendInfo';
 import { parseExtentConfig } from '../helpers/mapController/configParsing';
 import { overwriteColorTheme } from '../store/appSettings/actions';
 import { errorTranslations } from '../../../configs/translations/error.translations';
+import { layersContentConfig } from '../../../configs/layers/layers-content-config';
+import { filterDataByAppSettings, getUserLayerSelections } from './helpers/index';
 
-setDefaultOptions({ css: true, version: '4.19' });
+import { MAP_CONFIG } from '../../../configs/esri/map-config';
 
 interface URLCoordinates {
   zoom: number;
@@ -70,6 +91,18 @@ interface URLCoordinates {
 interface ZoomParams {
   zoomIn: boolean;
 }
+
+export type PrintLayoutType =
+  | 'map-only'
+  | 'a3-landscape'
+  | 'a3-portrait'
+  | 'a4-landscape'
+  | 'a4-portrait'
+  | 'letter-ansi-a-landscape'
+  | 'letter-ansi-a-portrait'
+  | 'tabloid-ansi-b-landscape'
+  | 'tabloid-ansi-b-portrait'
+  | undefined;
 
 export class MapController {
   _map: __esri.Map | undefined;
@@ -113,17 +146,9 @@ export class MapController {
     this._domRef = domRef;
     const { appSettings, appState } = store.getState();
 
-    const [MapView, WebMap, Portal, GraphicsLayer, Polygon, Graphic] = await loadModules([
-      'esri/views/MapView',
-      'esri/WebMap',
-      'esri/portal/Portal',
-      'esri/layers/GraphicsLayer',
-      'esri/geometry/Polygon',
-      'esri/Graphic',
-    ]);
-
     this._GraphicsLayer = GraphicsLayer;
     this._Polygon = Polygon;
+
     this._Graphic = Graphic;
 
     const webmapID =
@@ -180,11 +205,6 @@ export class MapController {
 
     this._mapview!.when(
       async () => {
-        const [geometryEngine, watchUtils] = await loadModules([
-          'esri/geometry/geometryEngine',
-          'esri/core/watchUtils',
-          'esri/layers/MapImageLayer',
-        ]);
         store.dispatch(isMapReady(true));
         //default scale for map
         this._webmapBasemap = this._map?.basemap.clone();
@@ -287,7 +307,9 @@ export class MapController {
           store.dispatch(allAvailableLayers(mapLayerObjects));
 
           //Fetching all other (non webmap) layer information from resources file AND GFW Api for those that are deemed as 'remoteDataLayer' in the config
-          const remoteAndServiceLayersObjects = await getRemoteAndServiceLayers();
+          const layerHashMap = filterDataByAppSettings();
+          //const layerHashMap = filterDataByAppSettings();
+          const remoteAndServiceLayersObjects = getUserLayerSelections(layersContentConfig, layerHashMap);
 
           const getErrorLayers = remoteAndServiceLayersObjects.filter((layer) => layer?.isError);
 
@@ -327,9 +349,9 @@ export class MapController {
               newRemoteLayerObject.origin = 'remote';
               newRemoteLayerObject.label = remoteLayerObject.layer.label;
               newRemoteLayerObject.metadata = remoteLayerObject.layer.metadata;
-              newRemoteLayerObject.metadata.colormap = remoteLayerObject.layer.colormap;
-              newRemoteLayerObject.metadata.inputRange = remoteLayerObject.layer.inputRange;
-              newRemoteLayerObject.metadata.outputRange = remoteLayerObject.layer.outputRange;
+              newRemoteLayerObject.metadata.colormap = remoteLayerObject?.layer?.colormap;
+              newRemoteLayerObject.metadata.inputRange = remoteLayerObject?.layer?.inputRange;
+              newRemoteLayerObject.metadata.outputRange = remoteLayerObject.layer?.outputRange;
               newRemoteLayerObject.parentID = undefined;
               newRemoteLayerObject.legendInfo = remoteLayerObject.layer.metadata.legendConfig;
               newRemoteLayerObject.dashboardURL = remoteLayerObject.dashboardURL;
@@ -344,12 +366,12 @@ export class MapController {
 
               if (remoteLayerObject.type === 'wms') {
                 newRemoteLayerObject.legendInfo = await requestWMSLayerLegendInfo(
-                  remoteLayerObject.url,
+                  remoteLayerObject.url || '',
                   remoteLayerObject.layerName || remoteLayerObject.layer
                 );
               } else {
                 //Attempt to fetch legend info from layer service
-                newRemoteLayerObject.legendInfo = await this.retrieveLegendInfo(remoteLayerObject);
+                newRemoteLayerObject.legendInfo = await this.retrieveLegendInfo(remoteLayerObject as any);
               }
 
               newRemoteLayerObject.id = remoteLayerObject.id;
@@ -357,7 +379,7 @@ export class MapController {
                 ? remoteLayerObject.label[appState.selectedLanguage]
                 : 'Untitled Layer';
               newRemoteLayerObject.group = remoteLayerObject.groupId;
-              newRemoteLayerObject.url = remoteLayerObject.url;
+              newRemoteLayerObject.url = remoteLayerObject.url || '';
               newRemoteLayerObject.type = remoteLayerObject.type;
               newRemoteLayerObject.origin = 'service';
               newRemoteLayerObject.technicalName = remoteLayerObject.technicalName;
@@ -375,6 +397,7 @@ export class MapController {
               newRemoteLayerObject.versionHeaderText = remoteLayerObject.versionHeaderText;
               newRemoteLayerObject.dashboardURL = remoteLayerObject?.dashboardURL;
               newRemoteLayerObject.popup = remoteLayerObject.popup;
+              newRemoteLayerObject.metadata = remoteLayerObject?.metadata || null;
             }
 
             remoteLayerObjects.push(newRemoteLayerObject);
@@ -429,7 +452,7 @@ export class MapController {
                 url: null,
                 group: layer.dataLayer.groupId,
               };
-            });
+            }) as any;
             allLayerObjects.push(...appendMissingProps);
           }
           store.dispatch(allAvailableLayers(allLayerObjects));
@@ -452,9 +475,11 @@ export class MapController {
               if (!activeLayer || activeLayer.loaded === true) {
                 store.dispatch(setLayersLoading(false));
               } else {
-                watchUtils.once(activeLayer, 'loaded', () => {
-                  store.dispatch(setLayersLoading(false));
-                });
+                reactiveUtils
+                  .whenOnce(() => this._mapview.loaded)
+                  .then(() => {
+                    store.dispatch(setLayersLoading(false));
+                  });
               }
             } else {
               //no report meaning we just want to know when the layers are loaded progressively so we keep updating legend component. There is likely a better way to handle this.
@@ -465,9 +490,11 @@ export class MapController {
                 if (l.loaded === true) {
                   store.dispatch(setLayersLoading(false));
                 } else {
-                  watchUtils.once(l, 'loaded', () => {
-                    store.dispatch(setLayersLoading(false));
-                  });
+                  reactiveUtils
+                    .once(() => l.loadStatus === 'loaded')
+                    .then(() => {
+                      store.dispatch(setLayersLoading(false));
+                    });
                 }
               });
             }
@@ -553,13 +580,6 @@ export class MapController {
   async changeLanguage(lang: string): Promise<void> {
     if (!this._map) return;
     const { mapviewState, appSettings } = store.getState();
-
-    const [MapView, WebMap, Portal, geometryEngine] = await loadModules([
-      'esri/views/MapView',
-      'esri/WebMap',
-      'esri/portal/Portal',
-      'esri/geometry/geometryEngine',
-    ]);
 
     //reset all active/selected features as we have no way of confirming that new webmap has said feature
     store.dispatch(setActiveFeatureIndex([0, 0]));
@@ -757,7 +777,6 @@ export class MapController {
   }
 
   async addLandsatLayer(layerConfig: LayerProps, year: string): Promise<void> {
-    const [Basemap] = await loadModules(['esri/Basemap']);
     const landsatURL = landsatBaselayerURL;
     layerConfig.type = 'webtiled';
 
@@ -767,53 +786,6 @@ export class MapController {
       baseLayers: [landsatEsriLayer],
     });
     store.dispatch(setSelectedBasemap(`landsat-${year}`));
-  }
-
-  async addPlanetTileLayer(
-    proxyURL: string,
-    planetColor: string,
-    selectedTile: string,
-    apiKey?: string
-  ): Promise<void> {
-    if (!apiKey) return;
-    const [Basemap, TileLayer, WebTileLayer, esriConfig] = await loadModules([
-      'esri/Basemap',
-      'esri/layers/TileLayer',
-      'esri/layers/WebTileLayer',
-      'esri/config',
-    ]);
-
-    const planetBasemapReferenceLayer1 = new TileLayer({
-      id: 'planet-basemap-reference-layer',
-      url: 'https://services.arcgisonline.com/arcgis/rest/services/Canvas/World_Dark_Gray_Base/MapServer',
-      visible: true,
-    });
-    const planetBasemapReferenceLayer2 = new TileLayer({
-      id: 'planet-basemap-reference-layer',
-      url: 'https://services.arcgisonline.com/arcgis/rest/services/Canvas/World_Dark_Gray_Reference/MapServer',
-      visible: true,
-    });
-
-    const planetConfig = {
-      type: 'webtiled',
-      url: `https://tiles.planet.com/basemaps/v1/planet-tiles/planet_medres_normalized_analytic_${selectedTile}_mosaic/gmap/{z}/{x}/{y}.png?proc=${planetColor}&api_key=${apiKey}`,
-      title: 'planet',
-      id: 'planet',
-    };
-
-    esriConfig.request.interceptors.push({
-      urls: 'https://tiles.globalforestwatch.org/planet/v1/planet_medres_normalized_analytic',
-    });
-
-    const planetLayer = new WebTileLayer({
-      urlTemplate: planetConfig.url,
-    });
-    const planetBase = new Basemap({
-      baseLayers: [planetBasemapReferenceLayer1, planetLayer, planetBasemapReferenceLayer2],
-    });
-    this._planetBasemap = planetBase;
-    this._map!.basemap = planetBase;
-    store.dispatch(setSelectedBasemap(planetConfig.id));
   }
 
   zoomInOrOut({ zoomIn }: ZoomParams): void {
@@ -828,7 +800,6 @@ export class MapController {
   }
 
   async attachCoordinatesWidget(domref: React.MutableRefObject<any>): Promise<void> {
-    const [CoordinateConversion] = await loadModules(['esri/widgets/CoordinateConversion']);
     new CoordinateConversion({
       view: this._mapview,
       container: domref.current,
@@ -1290,10 +1261,6 @@ export class MapController {
   }
 
   async initializeAndSetSketch(graphics = []): Promise<void> {
-    const [GraphicsLayer, SketchViewModel] = await loadModules([
-      'esri/layers/GraphicsLayer',
-      'esri/widgets/Sketch/SketchViewModel',
-    ]);
     if (this._sketchVMGraphicsLayer) {
       //let's make sure this layer is actually on the map, on lang changes sometimes we have sketchVM
       //layer instance but it is not necessarily on the map
@@ -1359,11 +1326,7 @@ export class MapController {
         color: '#722620',
         width: 3,
       },
-    };
-    const [GraphicsLayer, SketchViewModel] = await loadModules([
-      'esri/layers/GraphicsLayer',
-      'esri/widgets/Sketch/SketchViewModel',
-    ]);
+    } as any;
 
     if (!this._sketchMultipleGLayer) {
       this._sketchMultipleGLayer = new GraphicsLayer({
@@ -1469,10 +1432,6 @@ export class MapController {
   }
 
   async setActiveMeasureWidget(optionType: OptionType): Promise<void> {
-    const [AreaMeasurement2D, DistanceMeasurement2D] = await loadModules([
-      'esri/widgets/AreaMeasurement2D',
-      'esri/widgets/DistanceMeasurement2D',
-    ]);
     switch (optionType) {
       case 'area':
         this._selectedWidget = new AreaMeasurement2D({
@@ -1546,50 +1505,21 @@ export class MapController {
   updateMeasureWidgetOnClick(): void {
     const mapviewOnClick = this._mapview?.on('click', (event) => {
       event.stopPropagation();
-      this._selectedWidget?.viewModel.newMeasurement();
       mapviewOnClick?.remove();
     });
   }
 
-  generateMapPDF = async (layoutType: string): Promise<any> => {
-    const [PrintTask, PrintTemplate, PrintParameters] = await loadModules([
-      'esri/tasks/PrintTask',
-      'esri/tasks/support/PrintTemplate',
-      'esri/tasks/support/PrintParameters',
-      'esri/layers/GraphicsLayer',
-    ]);
+  getPrintButtonLabel = (layout: string) => {
+    if (layout === 'map-only') return 'MAP ONLY';
+    if (layout === 'a4-landscape') return 'LANDSCAPE';
+  };
+
+  generateMapPDF = async (layout: PrintLayoutType): Promise<any> => {
     const printServiceURL = store.getState().appSettings.printServiceUrl;
-    let printOptions: any = [];
-
-    let layout = '';
-
-    printOptions = await fetch(`${printServiceURL}/?f=json`)
-      .then((res) => res.json())
-      .then((results) => {
-        return results.parameters.filter((param: any) => param.name === 'Layout_Template');
-      });
-
-    if (layoutType === 'Landscape') {
-      layout = printOptions[0]?.defaultValue;
-    } else {
-      layout = printOptions[0]?.choiceList[0];
-    }
-
-    if (!this._printTask) {
-      this._printTask = new PrintTask({
-        url: printServiceURL,
-      });
-    }
-
+    const printWidget = MAP_CONFIG.printWidget as any;
     const template = new PrintTemplate({
-      format: 'pdf',
       layout,
-      // * NOTE - must set 'layout' as type of 'any' in order to assign
-      // * custom layout types from GFW print service URL
-      layoutOptions: {
-        scalebarUnit: 'Kilometers',
-        customTextElements: [{ title: 'GFW Mapbuilder' }, { subtitle: 'Make maps that matter' }],
-      },
+      ...printWidget,
     });
     this.toggleMaskLayer(false);
 
@@ -1598,18 +1528,16 @@ export class MapController {
       template,
     });
 
-    if (!this._printTask) return;
-
     try {
-      const res = await this._printTask.execute(params);
-
-      if (res?.url) {
+      const result = await print.execute(printServiceURL ?? '', params);
+      if (result?.url) {
         this.toggleMaskLayer(true);
-        return res;
+        return result;
+      } else {
+        return { url: null };
       }
     } catch (error) {
       console.error('error in generateMapPDF()', error);
-      return { url: null };
     }
   };
 
@@ -1689,7 +1617,6 @@ export class MapController {
       //add graphics to the layer and add graphics to the array
       let gLayer = this._map?.findLayerById('multi_poly_graphics') as __esri.GraphicsLayer;
       if (!gLayer) {
-        const [GraphicsLayer] = await loadModules(['esri/layers/GraphicsLayer']);
         gLayer = new GraphicsLayer({
           id: 'multi_poly_graphics',
         });
@@ -1713,7 +1640,6 @@ export class MapController {
 
   async initializeSearchWidget(searchRef: RefObject<any>): Promise<void> {
     const allSources = await setLayerSearchSource();
-    const [Search] = await loadModules(['esri/widgets/Search']);
 
     const searchWidget = new Search({
       view: this._mapview,
@@ -1727,7 +1653,6 @@ export class MapController {
   }
 
   async setSearchWidget(latitude: string, longitude: string): Promise<void> {
-    const [Point, Graphic] = await loadModules(['esri/geometry/Point', 'esri/Graphic']);
     this._mapview?.graphics.removeAll();
 
     const specificPoint = new Point({
@@ -1846,7 +1771,6 @@ export class MapController {
   }
 
   async setActiveBasemap(id: string): Promise<void> {
-    const [Basemap] = await loadModules(['esri/Basemap']);
     if (this._map) {
       this._map.basemap = Basemap.fromId(id);
       store.dispatch(setSelectedBasemap(id));
@@ -1861,7 +1785,6 @@ export class MapController {
   }
 
   async setWRIBasemap(id: string): Promise<void> {
-    const [WebTileLayer, Basemap] = await loadModules(['esri/layers/WebTileLayer', 'esri/Basemap']);
     if (!this._map) return;
     const basemapURL = WRIBasemapConfig[id];
     const wriLayer = new WebTileLayer({
@@ -2198,7 +2121,6 @@ export class MapController {
   }
 
   async addMapAttribution(container: RefObject<HTMLElement>): Promise<void> {
-    const [Attribution] = await loadModules(['esri/widgets/Attribution']);
     if (!container.current) return;
     new Attribution({
       view: this._mapview,
@@ -2207,7 +2129,6 @@ export class MapController {
   }
 
   async addScaleBar(container: RefObject<HTMLElement>): Promise<void> {
-    const [ScaleBar] = await loadModules(['esri/widgets/ScaleBar']);
     if (!container.current) return;
     new ScaleBar({
       view: this._mapview,
@@ -2230,12 +2151,11 @@ export class MapController {
 
   // Checks two geometries to see if they intersect. And returns intersection geometry if true
   async checkIntersection(geo1: __esri.Geometry, geo2: __esri.Geometry): Promise<boolean> {
-    const [geometryEngine] = await loadModules(['esri/geometry/geometryEngine']);
     //does it intersect?
     const intersects = (geometryEngine as __esri.geometryEngine).intersects(geo1, geo2);
 
     // if yes, what is the intersection?
-    const intersecting = (geometryEngine as __esri.geometryEngine).intersect(geo1, geo2);
+    const intersecting = (geometryEngine as __esri.geometryEngine).intersect(geo1, geo2) as any;
     if (intersects) {
       drawIntersectingGraphic(intersecting);
 
@@ -2294,8 +2214,10 @@ export class MapController {
     const { id, start, end } = params;
 
     const gladLayerConfig: any = allAvailableLayers.find((layer: any) => layer.id === id);
+
     const gladLayerOld: any = this._map!.findLayerById(id);
     const gladIndex: number = this._map!.layers.indexOf(gladLayerOld);
+
     this.removeMapLayer(id);
 
     const gladLayerNew: any = await LayerFactory(this._mapview, { ...gladLayerConfig, visible: true });
@@ -2305,6 +2227,16 @@ export class MapController {
     gladLayerNew.gfwjulianFrom = start;
     gladLayerNew.gfwjulianTo = end;
     this._map?.add(gladLayerNew, gladIndex);
+  };
+
+  takeSnapshot = async () => {
+    const scale = 3;
+    const result = await this._mapview?.takeScreenshot({
+      width: 490 * scale,
+      height: 250 * scale,
+    });
+
+    return result?.dataUrl;
   };
 }
 

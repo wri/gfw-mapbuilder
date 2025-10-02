@@ -1,5 +1,15 @@
 /* eslint-disable no-case-declarations */
-import { loadModules } from 'esri-loader';
+
+import ImageryLayer from '@arcgis/core/layers/ImageryLayer';
+import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
+import MapImageLayer from '@arcgis/core/layers/MapImageLayer';
+import WebTileLayer from '@arcgis/core/layers/WebTileLayer';
+import VectorTileLayer from '@arcgis/core/layers/VectorTileLayer';
+import MosaicRule from '@arcgis/core/layers/support/MosaicRule';
+import RasterFunction from '@arcgis/core/layers/support/RasterFunction';
+import TileLayer from '@arcgis/core/layers/TileLayer';
+import WMSLayer from '@arcgis/core/layers/WMSLayer';
+
 import { createTCL } from '../layers/TreeCoverLossLayer';
 import { createTreeCover } from '../layers/TreeCoverLayer';
 import { createGlad } from '../layers/GladLayer';
@@ -34,27 +44,6 @@ interface LayerOptions {
 }
 
 export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promise<any> {
-  const [
-    ImageryLayer,
-    FeatureLayer,
-    MapImageLayer,
-    WebTileLayer,
-    VectorTileLayer,
-    MosaicRule,
-    RasterFunction,
-    TileLayer,
-    WMSLayer,
-  ] = await loadModules([
-    'esri/layers/ImageryLayer',
-    'esri/layers/FeatureLayer',
-    'esri/layers/MapImageLayer',
-    'esri/layers/WebTileLayer',
-    'esri/layers/VectorTileLayer',
-    'esri/layers/support/MosaicRule',
-    'esri/layers/support/RasterFunction',
-    'esri/layers/TileLayer',
-    'esri/layers/WMSLayer',
-  ]);
   const { appState, mapviewState } = store.getState();
   let esriLayer;
   switch (layerConfig.type) {
@@ -81,7 +70,7 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
         id: layerConfig.id,
         visible: layerConfig.visible,
         url: layerConfig.url,
-        opacity: layerConfig.opacity,
+        opacity: layerConfig?.opacity?.combined || 1,
       });
       if (layerConfig.metadata.colormap) {
         const remapRF = new RasterFunction();
@@ -118,7 +107,6 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
         title: layerConfig.title,
         visible: layerConfig.visible,
         url: layerConfig.url,
-        searchField: layerConfig.searchField,
       });
       break;
     case 'loss':
@@ -370,20 +358,40 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
     case 'MASK':
       const { appSettings } = store.getState();
       const countryISOCode = appSettings?.iso;
-      const maskDefExp = `code_iso3 <> '${countryISOCode}'`;
-      const maskLayerOptions: LayerOptions = {
+      const maskDefExp = `ISO <> '${countryISOCode}'`;
+      /* const maskLayerOptions: LayerOptions = {
         id: layerConfig.id,
         visible: true,
         url: layerConfig.url,
         //@ts-ignore
         opacity: layerConfig.opacity,
-      };
-      if (layerConfig.layerIds) {
+      }; */
+
+      esriLayer = new FeatureLayer({
+        id: layerConfig.id,
+        definitionExpression: maskDefExp,
+        title: layerConfig.title,
+        visible: true,
+        url: layerConfig.url,
+        opacity: 0.5,
+        renderer: {
+          type: 'simple',
+          symbol: {
+            type: 'simple-fill',
+            color: 'rgba(51,51, 51, 0.5)', // Main green color with transparency
+            outline: {
+              width: 0.5,
+              color: 'rgba(51,51, 51, 0.8)', // Main green color without transparency
+            },
+          },
+        } as any,
+      });
+      /* if (layerConfig.layerIds) {
         maskLayerOptions.sublayers = layerConfig.layerIds.map((id) => {
           return { id: id, visible: true, definitionExpression: maskDefExp };
         });
-      }
-      esriLayer = new MapImageLayer(maskLayerOptions);
+      } */
+      //esriLayer = new MapImageLayer(maskLayerOptions);
       break;
     case 'Vector.Layer': //only viirs is supported at this time
       if (layerConfig.id === 'VIIRS_ACTIVE_FIRES') {
@@ -393,7 +401,7 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
           id: layerConfig.id,
           url: layerConfig.url,
           visible: layerConfig.visible,
-          opacity: layerConfig.opacity,
+          opacity: layerConfig?.opacity?.combined || 1,
         });
       }
       if (

@@ -15,16 +15,16 @@ jobs:
       - uses: actions/checkout@master
       - name: What is the version number?
         run: echo Creating test deployment for ${GITHUB_REF:11} branch.
-      - name: Use Node.js 16
+      - name: Use Node.js 20
         uses: actions/setup-node@v1
         with:
-          node-version: '16.x'
+          node-version: '20.x'
       - name: Create Build
         env:
           REACT_APP_PLANET_API_KEY: ${{ secrets.REACT_APP_PLANET_API_KEY }}
           REACT_APP_GFW_DATA_API_KEY: ${{ secrets.REACT_APP_GFW_DATA_API_KEY }}
         run: |
-          npm install
+          npm install --legacy-peer-deps
           npm run build
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
