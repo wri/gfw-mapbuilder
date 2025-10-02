@@ -1,22 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { TrashCanIcon } from '../../../../../images/trashCanIcon';
-import { useForm, Controller } from 'react-hook-form';
-import { saveAOIText } from '../../../../../../configs/translations/mygfwstatic.translations';
-import { makeStyles } from '@material-ui/core/styles';
-import clsx from 'clsx';
-import { renderModal } from '../../../../../js/store/appState/actions';
-import TextField from '@material-ui/core/TextField';
 import Checkbox from '@material-ui/core/Checkbox';
+import { makeStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
+import clsx from 'clsx';
+import React, { useEffect, useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
+import { saveAOIText } from '../../../../../../configs/translations/mygfwstatic.translations';
+import { TrashCanIcon } from '../../../../../images/trashCanIcon';
+import { renderModal } from '../../../../../js/store/appState/actions';
 import { MemoLanguagePicker } from './LanguagePicker';
 import { miniMapInit } from './MiniMap';
 
 import { registerGeometry } from '../../../../../js/helpers/geometryRegistration';
 
-import { setActiveFeatures } from '../../../../../js/store/mapview/actions';
 import { RootState } from '../../../../../js/store/index';
+import { setActiveFeatures } from '../../../../../js/store/mapview/actions';
 
 import '../../../../../css/saveAOI.scss';
 import { handleCustomColorTheme } from '../../../../../utils';
@@ -33,15 +33,14 @@ const AutocompleteWrapper = styled.div<AutocompleteWrapperProps>`
 `;
 
 const SaveAOI = (): JSX.Element => {
-  const allSteps: ReadonlyArray<string> = ['SubscribeToAlerts', 'NameYourSubscription', 'SubscriptionSaved'];
   const dispatch = useDispatch();
   const [userEmail, setUserEmail] = useState('');
   const [updateError, setUpdateError] = useState<boolean | string>(false);
   const [selectedAlerts, setSelectedAlerts] = useState<Array<string> | []>([]);
   const [subscriptionName, setSubscriptionName] = useState('');
   const [subscriptionLanguage, setSubscriptionLanguage] = useState('English');
-  const [deforestation, setDeforestationAlerts] = useState();
-  const [monthlySummary, setMonthlySummary] = useState();
+  const [deforestation, setDeforestationAlerts] = useState<boolean>(false);
+  const [monthlySummary, setMonthlySummary] = useState(false);
   const [editingMode, setEditingMode] = useState(false);
   const [tags, setTags] = useState<(string | string[])[]>([]);
   const [aoiID, setAOIID] = useState<null | string>(null);
@@ -49,10 +48,12 @@ const SaveAOI = (): JSX.Element => {
   const [deleteSuccess, setDeleteSuccess] = useState(false);
   const [language, setLanguage] = useState('en');
   const [fireAlerts, setFireAlerts] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const {
     register,
     handleSubmit,
     control,
+    setValue,
     formState: { errors },
   } = useForm();
 
@@ -68,7 +69,10 @@ const SaveAOI = (): JSX.Element => {
 
   const themeColor = handleCustomColorTheme(customColorTheme);
 
-  const getGeostoreID = (): Promise<string> => {
+  //Get Geostore ID of active feature, if it does not have one, register the geometry and get the geostore ID
+  //This is needed to save the subscription
+
+  const getGeostoreID = async (): Promise<string> => {
     if ((activeFeature.attributes as any).geostoreId) {
       return (activeFeature.attributes as any).geostoreId;
     } else {
@@ -125,6 +129,7 @@ const SaveAOI = (): JSX.Element => {
   };
 
   const onDefaultSubmit = async (data: any): Promise<void> => {
+    setIsLoading(true);
     let geostoreID: any;
     //if feature is drawn by user, it will have geostoreID already, if it is poly from a layer, it will not and we will have to register it
     if (activeFeature.attributes.geostoreId) {
@@ -171,12 +176,15 @@ const SaveAOI = (): JSX.Element => {
       .then((msg) => {
         if (msg?.errors) {
           setUpdateError(msg.errors[0].detail);
+          setIsLoading(false);
         } else {
           setUpdateSuccess(true);
+          setIsLoading(false);
         }
       })
       .catch((e) => {
         setUpdateError(e);
+        setIsLoading(false);
       });
   };
 
@@ -197,6 +205,9 @@ const SaveAOI = (): JSX.Element => {
       setTags(activeFeature.attributes.tags);
       setLanguage(activeFeature.attributes.language);
       setEditingMode(true);
+
+      setValue('email', email);
+      setValue('name', activeFeature.attributes.name);
     }
 
     //Create Mini-Map
@@ -303,7 +314,6 @@ const SaveAOI = (): JSX.Element => {
       </div>
     );
   };
-
   return (
     <div className="saveAOI-container">
       <>
@@ -385,9 +395,10 @@ const SaveAOI = (): JSX.Element => {
                       render={() => (
                         <Checkbox
                           className={classes.root}
-                          checked={Boolean(fireAlerts)}
-                          onChange={(e: any) => {
-                            setFireAlerts(e[1]);
+                          checked={fireAlerts}
+                          onChange={(e) => {
+                            const checked = e.target.checked;
+                            setFireAlerts(checked);
                           }}
                           disableRipple
                           color="default"
@@ -411,7 +422,10 @@ const SaveAOI = (): JSX.Element => {
                           checkedIcon={<span className={clsx(classes.icon, classes.checkedIcon)} />}
                           disableRipple
                           checked={Boolean(deforestation)}
-                          onChange={(e: any) => setDeforestationAlerts(e[1])}
+                          onChange={(e) => {
+                            const checked = e.target.checked;
+                            setDeforestationAlerts(checked);
+                          }}
                         />
                       )}
                     />
@@ -429,7 +443,10 @@ const SaveAOI = (): JSX.Element => {
                           checkedIcon={<span className={clsx(classes.icon, classes.checkedIcon)} />}
                           disableRipple
                           checked={Boolean(monthlySummary)}
-                          onChange={(e: any) => setMonthlySummary(e[1])}
+                          onChange={(e) => {
+                            const checked = e.target.checked;
+                            setMonthlySummary(checked);
+                          }}
                         />
                       )}
                     />
@@ -450,12 +467,14 @@ const SaveAOI = (): JSX.Element => {
                   </button>
                 )}
                 <input
+                  disabled={isLoading || !subscriptionName || !userEmail}
                   className="orange-button profile-submit"
                   style={{
                     backgroundColor: themeColor,
+                    opacity: isLoading ? 0.5 : 1,
                     marginTop: '30px',
                     width: '200px',
-                    cursor: 'pointer',
+                    cursor: isLoading ? 'not-allowed' : 'pointer',
                   }}
                   type="submit"
                   value={saveAOIText[selectedLanguage].save}
