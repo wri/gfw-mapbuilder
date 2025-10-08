@@ -6,7 +6,7 @@
   "scripts": {
     "start": "webpack-dev-server --config webpack.development.js",
     "build": "webpack --config webpack.production.js --stats verbose",
-    "lib-cms": "webpack --config webpack.production.js --stats verbose",
+    "lib-cms": "webpack --config webpack.lib-production.js --stats verbose",
     "clean": "rm -rf node_modules; rm package-lock.json",
     "log": "echo \"\\033[32mFired Script!\"",
     "cy:open": "cypress open",
@@ -112,7 +112,7 @@
     "typescript": "^4.4.4",
     "url-loader": "^3.0.0",
     "webpack": "^5.95.0",
-        "webpack-cli": "~5.1.4",
+    "webpack-cli": "~5.1.4",
     "webpack-dev-server": "^5.2.2",
     "webpack-hasjs-plugin": "^1.0.3",
     "webpack-merge": "^4.2.2"
