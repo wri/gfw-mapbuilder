@@ -197,8 +197,8 @@ export class MapController {
 
     function syncExtent(ext: __esri.Extent, mapview: __esri.MapView): any {
       const { latitude, longitude } = ext.center;
-      //store.dispatch(changeMapCenterCoordinates({ latitude, longitude }));
-      //store.dispatch(changeMapScale(mapview.scale));
+      store.dispatch(changeMapCenterCoordinates({ latitude, longitude }));
+      store.dispatch(changeMapScale(mapview.scale));
     }
 
     const throtthledUpdater = debounce(syncExtent, 1500, { trailing: true });
@@ -209,12 +209,12 @@ export class MapController {
         //default scale for map
         this._webmapBasemap = this._map?.basemap.clone();
         if (!this._mapview) return;
-        //store.dispatch(changeMapScale(this._mapview.scale));
+        store.dispatch(changeMapScale(this._mapview.scale));
         const { latitude, longitude } = this._mapview.center;
-        //store.dispatch(changeMapCenterCoordinates({ latitude, longitude }));
+        store.dispatch(changeMapCenterCoordinates({ latitude, longitude }));
         this._mapview!.watch('extent', (newExtent) => {
           if (!this._mapview) return;
-          //throtthledUpdater(newExtent, this._mapview);
+          throtthledUpdater(newExtent, this._mapview);
         });
 
         //Set layer default dates
@@ -413,7 +413,6 @@ export class MapController {
                 const id = String(l.sublayerID ? l.sublayerID : l.layerID);
                 return id === String(layerObject.id);
               });
-              //        layerObject.visible = !!urlLayer;
 
               // Only override visibility for non-webmap layers
               if (layerObject.origin !== 'webmap') {
@@ -2091,7 +2090,6 @@ export class MapController {
           // Check if sublayer is from webmap
           const sublayerObject = allLayerObjects.find((l) => l.id === sub.id && l.parentID === layer.id);
 
-          // Skip webmap sublayers
           if (sublayerObject && sublayerObject.origin === 'webmap') {
             return; // Skip - preserve webmap sublayer defaults
           }
