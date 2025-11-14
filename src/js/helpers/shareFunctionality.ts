@@ -95,8 +95,10 @@ export async function getShareableURL(props: ShareURLProps): Promise<string> {
   urlParams.push(`ty=${timeSlider[0]}%2C${timeSlider[1]}`);
 
   //Visible Layer IDS Opacity
+  //NOTE: Only include non-webmap layers (WRI custom layers) in the URL.
+  //      Webmap layers from ArcGIS Online should maintain their default state.
   const { allAvailableLayers } = mapviewState;
-  const visibleLayers = allAvailableLayers.filter((l) => l.visible);
+  const visibleLayers = allAvailableLayers.filter((l) => l.visible && l.origin !== 'webmap');
   const layerIDS: string[] = [];
   const layerOpacities: number[] = [];
   visibleLayers.forEach((l) => {
