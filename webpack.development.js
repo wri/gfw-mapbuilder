@@ -1,5 +1,6 @@
 //@ts-ignore
 
+const path = require('path');
 const merge = require('webpack-merge');
 const common = require('./webpack.common.js');
 
@@ -13,8 +14,12 @@ module.exports = merge(common, {
     splitChunks: false,
   },
   devServer: {
-    contentBase: './dist',
-    stats: 'minimal',
+    static: {
+      directory: path.resolve(__dirname, 'dist'),
+    },
+    devMiddleware: {
+      stats: 'minimal',
+    },
     open: false,
   },
 });
