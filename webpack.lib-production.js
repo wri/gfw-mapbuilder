@@ -65,7 +65,7 @@ module.exports = (env) => {
         },
         {
           test: /\.js$/,
-          include: /node_modules\/(@arcgis|@esri\/calcite-components|@zip.js)/,
+          include: /node_modules\/(@esri\/calcite-components|@zip.js)/,
           use: [
             {
               loader: 'babel-loader',

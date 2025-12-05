@@ -13,8 +13,7 @@ module.exports = merge(common, {
     splitChunks: false,
   },
   devServer: {
-    contentBase: './dist',
-    stats: 'minimal',
+    static: './dist',
     open: false,
   },
 });

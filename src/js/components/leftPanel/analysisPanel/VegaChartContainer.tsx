@@ -13,7 +13,7 @@ interface ChartProps {
   sendError?: (error: string) => void;
 }
 
-function createChartWrapperStyle(chartType?: string): object {
+function createChartWrapperStyle(chartType?: string): React.CSSProperties {
   switch (chartType) {
     case 'badge':
       return {
