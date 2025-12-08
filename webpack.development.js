@@ -14,12 +14,7 @@ module.exports = merge(common, {
     splitChunks: false,
   },
   devServer: {
-    static: {
-      directory: path.resolve(__dirname, 'dist'),
-    },
-    devMiddleware: {
-      stats: 'minimal',
-    },
+    static: './dist',
     open: false,
   },
 });
