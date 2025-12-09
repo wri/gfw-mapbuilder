@@ -413,11 +413,15 @@ export class MapController {
                 const id = String(l.sublayerID ? l.sublayerID : l.layerID);
                 return id === String(layerObject.id);
               });
-              layerObject.visible = !!urlLayer;
+
+              // Only override visibility for non-webmap layers
+              if (layerObject.origin !== 'webmap') {
+                layerObject.visible = !!urlLayer;
+              }
             });
 
-            //Sync esri map visibility
-            this.syncWebmapLayersWithURL(layerInfosFromURL);
+            //Sync esri map visibility (only for non-webmap layers)
+            this.syncWebmapLayersWithURL(layerInfosFromURL, allLayerObjects);
           }
 
           // if layers fail to load, we add them to the layer list with error message
@@ -2068,11 +2072,28 @@ export class MapController {
   }
 
   //Helper to deal with URL params and Webmap loaded layers
+  //NOTE: This function should NOT modify webmap layers from ArcGIS Online.
+  //      Only non-webmap layers (WRI layers) should be controlled via URL parameters.
+  syncWebmapLayersWithURL(layerInfosFromURL: LayerInfo[], allLayerObjects: LayerProps[]): void {
+    this._map?.layers.forEach((layer: any) => {
+      // Find the corresponding layer object to check its origin
+      const layerObject = allLayerObjects.find((l) => l.id === layer.id);
 
-  syncWebmapLayersWithURL(layerInfosFromURL: LayerInfo[]): void {
-    this._map?.layers.forEach((webmapLayer: any) => {
-      if (webmapLayer.allSublayers && webmapLayer.allSublayers.items.length > 0) {
-        webmapLayer.sublayers.items.forEach((sub: __esri.Layer) => {
+      // Skip if this is a webmap layer - they should maintain their default state from ArcGIS Online
+      if (layerObject && layerObject.origin === 'webmap') {
+        return; // Skip - let webmap layers use their ArcGIS Online defaults
+      }
+
+      // For non-webmap layers, apply URL visibility/opacity
+      if (layer.allSublayers && layer.allSublayers.items.length > 0) {
+        layer.sublayers.items.forEach((sub: __esri.Layer) => {
+          // Check if sublayer is from webmap
+          const sublayerObject = allLayerObjects.find((l) => l.id === sub.id && l.parentID === layer.id);
+
+          if (sublayerObject && sublayerObject.origin === 'webmap') {
+            return; // Skip - preserve webmap sublayer defaults
+          }
+
           const layerFromURL = layerInfosFromURL.find((l) => l.sublayerID && String(l.sublayerID) === String(sub.id));
           if (layerFromURL) {
             sub.visible = true;
@@ -2082,12 +2103,12 @@ export class MapController {
           }
         });
       } else {
-        const layerFromURL = layerInfosFromURL.find((l) => l.layerID === webmapLayer.id);
+        const layerFromURL = layerInfosFromURL.find((l) => l.layerID === layer.id);
         if (layerFromURL) {
-          webmapLayer.visible = true;
-          webmapLayer.opacity = layerFromURL.opacity;
+          layer.visible = true;
+          layer.opacity = layerFromURL.opacity;
         } else {
-          webmapLayer.visible = false;
+          layer.visible = false;
         }
       }
     });
