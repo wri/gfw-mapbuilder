@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { layerIsInScale } from '../../../../js/helpers/layerScaleCheck';
 import { allAvailableLayers as allAvailableLayersAction } from '../../../../js/store/mapview/actions';
 import GenericLayerControl from './GenericLayerControl';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 
 import { RootState } from '../../../../js/store';
 import { setOpenLayerGroup } from '../../../../js/store/appState/actions';

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { DraggableProvided, DraggableStateSnapshot } from 'react-beautiful-dnd';
+import { DraggableProvided, DraggableStateSnapshot } from '@hello-pangea/dnd';
 import Select from 'react-select';
 import LayerToggleSwitch from './LayerToggleSwitch';
 import LayerTransparencySlider from './LayerTransparencySlider';
