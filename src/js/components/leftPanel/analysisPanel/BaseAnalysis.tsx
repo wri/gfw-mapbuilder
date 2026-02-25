@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { createSelector } from 'reselect';
-import ReactTooltip from 'react-tooltip';
+import { Tooltip } from 'react-tooltip';
 import { RootState } from '../../../store';
 import { setActiveFeatures } from '../../../store/mapview/actions';
 import { setRenderPopup, setMultiPolygonSelectionMode } from '../../../store/appState/actions';
@@ -447,7 +447,10 @@ const BaseAnalysis = (): JSX.Element => {
             </>
           )}
           {!chartError && (
-            <span data-tip={'Analysis disabled for point and line features'} data-offset="{'top': -5}">
+            <span
+              data-tooltip-id="analysis-tooltip"
+              data-tooltip-content={featureIsNotAllowed ? 'Analysis disabled for point and line features' : ''}
+            >
               <button
                 disabled={selectedAnalysis === 'default' || featureIsNotAllowed}
                 style={selectedAnalysis !== 'default' ? { backgroundColor: themeColor } : {}}
@@ -471,7 +474,7 @@ const BaseAnalysis = (): JSX.Element => {
               )}
             </span>
           )}
-          <ReactTooltip effect="solid" className="tab-tooltip" disable={!featureIsNotAllowed} />
+          <Tooltip id="analysis-tooltip" className="tab-tooltip" />
           <DataTabFooter />
         </div>
       ) : (

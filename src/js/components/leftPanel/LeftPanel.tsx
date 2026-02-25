@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import ReactTooltip from 'react-tooltip';
+import { Tooltip } from 'react-tooltip';
 import { RootState } from '../../../js/store/index';
 import { selectActiveTab, toggleTabviewPanel } from '../../../js/store/appState/actions';
 import TabViewContainer from './TabViewContainer';
@@ -82,17 +82,17 @@ const Tab = (props: TabProps): React.ReactElement => {
   return (
     <>
       <button
-        data-tip={label}
-        data-offset="{'top': -5}"
+        data-tooltip-id="tab-tooltip"
+        data-tooltip-content={label}
         className={label === activeTab && tabViewVisible ? 'tab-button tab-button__active' : 'tab-button'}
         aria-label="left panel tab"
+        data-tab={label}
         onClick={handleTabClick}
       >
         <Icon width={25} height={25} fill={'#555'} className={setClassName()} />
         {documentFlashingActive && documents && documents.length && <span className="yellow-alert" />}
         {analysisFlashingActive && <span className="yellow-alert" />}
       </button>
-      <ReactTooltip effect="solid" className="tab-tooltip" />
     </>
   );
 };
@@ -153,7 +153,12 @@ const Tabs = (props: TabsProps): React.ReactElement => {
     );
   });
 
-  return <div className="tab-header-container">{tabsGroupRow}</div>;
+  return (
+    <div className="tab-header-container">
+      {tabsGroupRow}
+      <Tooltip id="tab-tooltip" className="tab-tooltip" />
+    </div>
+  );
 };
 
 const LeftPanel = (): React.ReactElement => {

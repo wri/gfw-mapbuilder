@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import ReactTooltip from 'react-tooltip';
+import { Tooltip } from 'react-tooltip';
 import { renderModal } from '../../../js/store/appState/actions';
 import { RootState } from '../../../js/store/index';
 
@@ -47,7 +47,10 @@ export const SubscribeButton = (): JSX.Element => {
 
   return (
     <>
-      <span data-tip={'Subscriptions disabled for point and line features'} data-offset="{'top': -5}">
+      <span
+        data-tooltip-id="subscribe-tooltip"
+        data-tooltip-content={subscribeDisabled ? 'Subscriptions disabled for point and line features' : ''}
+      >
         <button
           disabled={subscribeDisabled}
           style={{
@@ -60,7 +63,7 @@ export const SubscribeButton = (): JSX.Element => {
           {subscribeButtonTranslations[selectedLanguage]} <div className="subscribe-icon"></div>
         </button>
       </span>
-      <ReactTooltip effect="solid" className="tab-tooltip" disable={!subscribeDisabled} />
+      <Tooltip id="subscribe-tooltip" className="tab-tooltip" />
     </>
   );
 };
