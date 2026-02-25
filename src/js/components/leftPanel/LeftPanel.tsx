@@ -17,7 +17,7 @@ import '../../../css/leftpanel.scss';
 export interface TabProps {
   key: string;
   label: string;
-  icon: React.SFC<React.SVGProps<SVGSVGElement>>;
+  icon: React.FC<React.SVGProps<SVGSVGElement>>;
   tooltipText: string;
   activeTab: string;
   documentFlashingActive: boolean;
@@ -99,7 +99,7 @@ const Tab = (props: TabProps): React.ReactElement => {
 
 interface TabRenderObject {
   label: string;
-  icon: React.SFC<React.SVGProps<SVGSVGElement>>;
+  icon: React.FC<React.SVGProps<SVGSVGElement>>;
   tooltipText: string;
   render: boolean | undefined;
 }

@@ -2,7 +2,7 @@ import type { Readable as R, Writable as W } from 'stream-browserify';
 import { Buffer as B } from 'buffer/* ';
 declare module '*.svg' {
   import React = require('react');
-  export const ReactComponent: React.SFC<React.SVGProps<SVGSVGElement>>;
+  export const ReactComponent: React.FC<React.SVGProps<SVGSVGElement>>;
   const src: string;
   export default src;
 }
