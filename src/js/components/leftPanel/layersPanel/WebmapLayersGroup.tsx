@@ -5,7 +5,7 @@ import { RootState } from '../../../../js/store';
 import { setOpenLayerGroup } from '../../../../js/store/appState/actions';
 import GenericLayerControl from './GenericLayerControl';
 import { layerIsInScale } from '../../../../js/helpers/layerScaleCheck';
-import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
+import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd';
 import { mapController } from '../../../controllers/mapController';
 
 //Memo Selectors
@@ -26,8 +26,8 @@ const WebmapLayersGroup = (props: LayerGroupProps): React.ReactElement => {
 
   const scale = useSelector((store: RootState) => store.mapviewState.scale);
   const allAvailableLayers = useSelector((store: RootState) => store.mapviewState.allAvailableLayers);
-  const allLayersInScale = allAvailableLayers.filter(l => layerIsInScale(l, scale));
-  const layersInGroup = allLayersInScale.filter(layer => layer.group === 'webmap');
+  const allLayersInScale = allAvailableLayers.filter((l) => layerIsInScale(l, scale));
+  const layersInGroup = allLayersInScale.filter((layer) => layer.group === 'webmap');
 
   // const webmapLayers = useSelector(webmapLayerSelector);
 
@@ -50,7 +50,7 @@ const WebmapLayersGroup = (props: LayerGroupProps): React.ReactElement => {
   };
 
   const getListStyle = (isDraggingOver: boolean) => ({
-    background: isDraggingOver ? 'white' : ''
+    background: isDraggingOver ? 'white' : '',
   });
 
   function onDragEnd(result) {
@@ -61,7 +61,7 @@ const WebmapLayersGroup = (props: LayerGroupProps): React.ReactElement => {
     const oldLayerGroup = Array.from(layersInGroup);
     const [movedLayer] = oldLayerGroup.splice(result.source.index, 1);
     oldLayerGroup.splice(result.destination.index, 0, movedLayer);
-    const newOrderedArrayGroup = allAvailableLayers.filter(l => l.group !== 'webmap');
+    const newOrderedArrayGroup = allAvailableLayers.filter((l) => l.group !== 'webmap');
     const newOrderedArray = [...newOrderedArrayGroup, ...oldLayerGroup];
     dispatch(allAvailableLayersAction(newOrderedArray));
     mapController.reorderLayer(movedLayer.id, result.destination.index);

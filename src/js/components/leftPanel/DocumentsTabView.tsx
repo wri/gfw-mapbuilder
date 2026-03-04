@@ -30,7 +30,7 @@ const DocumentsTabView = (props: Props): JSX.Element => {
       activeFeatures[activeFeatureIndex[0]]?.sublayerTitle || activeFeatures[activeFeatureIndex[0]]?.layerTitle;
   }
 
-  const documentsList: React.ReactFragment[] | undefined = documents?.map((attachment: Attachment, key: number) => {
+  const documentsList: JSX.Element[] | undefined = documents?.map((attachment: Attachment, key: number) => {
     const { url, size, name } = attachment;
     return (
       <Fragment key={key}>

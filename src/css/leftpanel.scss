@@ -56,8 +56,8 @@
       }
     }
 
-    button[data-tip='documents'],
-    button[data-tip='analysis'] {
+    button[data-tab='documents'],
+    button[data-tab='analysis'] {
       .yellow-alert {
         width: 5px;
         height: 5px;
@@ -68,7 +68,7 @@
       }
     }
 
-    button[data-tip='analysis'] {
+    button[data-tab='analysis'] {
       .yellow-alert {
         position: absolute;
         top: 0.25rem;
@@ -76,7 +76,7 @@
       }
     }
 
-    button[data-tip='documents'] {
+    button[data-tab='documents'] {
       .yellow-alert {
         position: absolute;
         top: 0.25rem;
@@ -409,7 +409,7 @@
   border-left: 1px solid #aaa;
   outline: 0;
 
-  &[data-tip='menu'] {
+  &[data-tab='menu'] {
     display: none;
   }
 }
@@ -436,11 +436,9 @@
   font-weight: 400;
   font-size: 12px;
   max-width: 300px;
-  &.place-top {
-    &:after {
-      border-top-color: #fffee2 !important;
-      border-top-style: solid !important;
-    }
+  opacity: 1 !important;
+  .react-tooltip-arrow {
+    border-color: #fffee2 !important;
   }
 }
 
@@ -1428,7 +1426,7 @@
   }
 
   .tab-button {
-    &[data-tip='menu'] {
+    &[data-tab='menu'] {
       display: block;
     }
   }

@@ -1,6 +1,6 @@
 import './publicPath';
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import store from './store/index';
 import { MapBuilderMain } from '../js/MapBuilderMain';
@@ -24,20 +24,19 @@ class MapBuilder {
   element: string;
   config: object;
   builderMain: BuilderMain;
+  root: ReturnType<typeof createRoot>;
 
   constructor(params: Params) {
-    // this.config = config;
     this.element = params.el;
     this.builderMain = new MapBuilderMain(params.config);
+    const container = document.getElementById(this.element);
+    this.root = createRoot(container!);
     console.log(params);
     this.render();
   }
 
   render(): void {
-    ReactDOM.render(
-      <Provider store={store}>{this.builderMain.render()}</Provider>,
-      document.getElementById(this.element)
-    );
+    this.root.render(<Provider store={store}>{this.builderMain.render()}</Provider>);
   }
 }
 

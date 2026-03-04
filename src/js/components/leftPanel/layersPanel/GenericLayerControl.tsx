@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { DraggableProvided, DraggableStateSnapshot } from 'react-beautiful-dnd';
+import { DraggableProvided, DraggableStateSnapshot } from '@hello-pangea/dnd';
 import Select from 'react-select';
 import LayerToggleSwitch from './LayerToggleSwitch';
 import LayerTransparencySlider from './LayerTransparencySlider';
@@ -33,7 +33,7 @@ import { subYears } from 'date-fns';
 import { generateRangeDate, handleCustomColorTheme } from '../../../../utils';
 import { DATES } from '../../../../../configs/dates-config';
 import SelectProdesLayer from '../../sharedComponents/selectProdesLayer';
-import ReactTooltip from 'react-tooltip';
+import { Tooltip } from 'react-tooltip';
 import {
   errorLayerTranslationTooltip,
   errorMetadataTranslationTooltip,
@@ -527,7 +527,8 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
                 {returnLayerControl()}
                 <div className="title-wrapper" style={{ color: `${layer?.isError ? 'red' : 'normal'}` }}>
                   <span
-                    data-tip={layer?.isError ? errorLayerTranslationTooltip[selectedLanguage].text : ''}
+                    data-tooltip-id="layer-error-tooltip"
+                    data-tooltip-content={layer?.isError ? errorLayerTranslationTooltip[selectedLanguage].text : ''}
                     className="layer-label"
                     style={{ textTransform: 'capitalize' }}
                   >
@@ -543,19 +544,21 @@ const GenericLayerControl = (props: LayerControlProps): React.ReactElement => {
               aria-disabled={layer?.isError}
               className={`info-icon-container ${layer?.isError ? 'disabled' : ''}  `}
               style={{ backgroundColor: `${themeColor}` }}
-              data-tip={layer?.isError ? errorLayerTranslationTooltip[selectedLanguage].text : ''}
+              data-tooltip-id="layer-error-tooltip"
+              data-tooltip-content={layer?.isError ? errorLayerTranslationTooltip[selectedLanguage].text : ''}
               onClick={handleToggleLayerOpacityClick}
             >
               <OpacityIcon width={10} height={10} fill={'#fff'} />
             </div>
             <div
               className={`info-icon-container ${handleLayerError() ? 'disabled' : ''}  `}
-              data-tip={handleLayerError() ? errorMetadataTranslationTooltip[selectedLanguage].text : ''}
+              data-tooltip-id="layer-error-tooltip"
+              data-tooltip-content={handleLayerError() ? errorMetadataTranslationTooltip[selectedLanguage].text : ''}
               style={{ backgroundColor: `${themeColor}` }}
               onClick={handleInfoModalClick}
             >
               <InfoIcon width={10} height={10} fill={'#fff'} />
-              <ReactTooltip arrowColor="#fffce2" effect="solid" className="tab-tooltip" />
+              <Tooltip id="layer-error-tooltip" className="tab-tooltip" />
             </div>
             {layer?.dashboardURL && (
               <div
