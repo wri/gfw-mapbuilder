@@ -22,6 +22,7 @@ import resources from '../../../configs/resources';
 import { allRequiredFieldsPresent, CHECK_LOGGED_URL, getUserData } from './gfwContent/utils';
 import '../../css/index.scss';
 
+// test comment
 const App = (props: AppSettings | any): JSX.Element => {
   //Check for Report param in the URL (if that exists, we render a report view instead of our full scale application
   const reportView = checkForReportView();
