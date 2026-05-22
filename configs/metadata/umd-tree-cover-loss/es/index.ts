@@ -27,7 +27,7 @@ export const es = {
     },
     {
       label: 'Fecha del contenido',
-      value: '2001-2024',
+      value: '2001-2025',
     },
     {
       label: 'Precauciones',

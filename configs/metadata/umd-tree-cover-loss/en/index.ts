@@ -27,7 +27,7 @@ export const en = {
     },
     {
       label: 'Date of content',
-      value: '2001-2024',
+      value: '2001-2025',
     },
     {
       label: 'Cautions',

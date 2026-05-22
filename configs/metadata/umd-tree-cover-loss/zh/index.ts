@@ -27,7 +27,7 @@ export const zh = {
     },
     {
       label: '内容日期',
-      value: '2001-2024',
+      value: '2001-2025',
     },
     {
       label: '注意事项',

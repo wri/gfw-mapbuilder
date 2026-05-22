@@ -27,7 +27,7 @@ export const az = {
     },
     {
       label: 'Məzmun tarixi',
-      value: '2001-2024',
+      value: '2001-2025',
     },
     {
       label: 'Xəbərdarlıqlar',
