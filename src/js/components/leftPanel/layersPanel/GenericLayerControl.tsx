@@ -54,7 +54,13 @@ export const generateDefaultMarks = (params: any) => {
   const yearsAvailable = end - start;
 
   while (index <= end) {
-    const display = index % 8 === 0 ? 'block' : 'none';
+    // Always label the first and last year; space the rest out every 8 years.
+    const isEndpoint = index === start || index === end;
+    const isAutoLabel = index % 8 === 0;
+    // Hide an every-8 label when it sits within 2 years of an endpoint so it
+    // doesn't overlap the always-on start/end labels (e.g. 2024 next to 2025).
+    const crowdsEndpoint = isAutoLabel && !isEndpoint && (index - start <= 2 || end - index <= 2);
+    const display = isEndpoint || (isAutoLabel && !crowdsEndpoint) ? 'block' : 'none';
     newMarks[index] = {
       style: { display: yearsAvailable < 6 ? 'block' : display },
       label: index,
