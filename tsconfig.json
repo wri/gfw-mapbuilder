@@ -27,7 +27,7 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": false,
     "strictPropertyInitialization": false,
-    "types": ["arcgis-js-api", "node", "cypress"]
+    "types": ["arcgis-js-api", "node"]
   },
   "exclude": ["node_modules"],
   "include": ["custom.d.ts"]
