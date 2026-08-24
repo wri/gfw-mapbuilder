@@ -111,7 +111,6 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
       break;
     case 'loss':
       const densityValue = markValueMap[appState.leftPanel.density];
-      layerConfig.url = layerConfig.url.replace(/(tcd_)(?:[^/]+)/, `tcd_${densityValue}`);
       const yearRange = mapviewState.timeSlider;
       const tclConstructor = await createTCL();
       const tclLayer = new tclConstructor({
@@ -119,6 +118,7 @@ export async function LayerFactory(mapView: any, layerConfig: LayerProps): Promi
         title: layerConfig.title,
         visible: layerConfig.visible,
         urlTemplate: layerConfig.url,
+        threshold: densityValue,
         view: mapView,
       });
       esriLayer = tclLayer;

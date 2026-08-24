@@ -1695,6 +1695,8 @@ export class MapController {
     densityEnabledLayers.forEach((layerId: string) => {
       const layer: any = this._map?.findLayerById(layerId);
       if (layer && layer.id !== 'AG_BIOMASS' && layer.urlTemplate) {
+        //layers whose urlTemplate carries a {thresh} placeholder read the value off the layer at tile-fetch time
+        layer.threshold = value;
         layer.urlTemplate = layer.urlTemplate.replace(/(tcd_)(?:[^/]+)/, `tcd_${value}`);
         layer.refresh();
       }
