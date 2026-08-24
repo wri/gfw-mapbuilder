@@ -84,7 +84,7 @@ export const createTCL = async () => {
             imageObject.onload = () => {
               context?.drawImage(imageObject, 0, 0, width, height);
               const imageData = context?.getImageData(0, 0, width, height);
-              imageData?.data.set(this.filter(imageData.data));
+              imageData?.data.set(this.filter(imageData.data, level));
               context?.putImageData(imageData, 0, 0);
               resolve(canvas);
             };
@@ -96,8 +96,11 @@ export const createTCL = async () => {
     },
 
     // Filter Data Method
-    filter: function (data: []) {
-      const z = this.view.zoom;
+    filter: function (data: [], level: number) {
+      // Color by the tile's own level, not view.zoom — view.zoom is fractional
+      // mid-animation and intensityBank only has integer keys 1-20, so a
+      // fractional lookup missed and left raw (red/black) pixels uncolored.
+      const z = Math.min(20, Math.max(1, level));
 
       for (let i = 0; i < data.length; i += 4) {
         // Decode the rgba/pixel so I can filter on date ranges
