@@ -89,7 +89,7 @@ export default {
     },
     id: 'FOREST_CARBON_GROSS_EMISSIONS',
     type: 'forest-carbon-gross-emissions',
-    url: 'https://tiles.globalforestwatch.org/gfw_forest_carbon_gross_emissions/v20260327/tcd_{tcd}/{z}/{x}/{y}.png',
+    url: 'https://tiles.globalforestwatch.org/gfw_forest_carbon_gross_emissions/v20260327/dynamic/{z}/{x}/{y}.png?tree_cover_density_threshold={thresh}',
     technicalName: 'wri_forest_carbon_gross_emission',
     label: {
       en: 'Forest Greenhouse Gas Emissions',

@@ -89,7 +89,7 @@ export default {
     },
     id: 'FOREST_CARBON_GROSS_REMOVALS',
     type: 'forest-carbon-gross-removals',
-    url: 'https://tiles.globalforestwatch.org/gfw_forest_carbon_gross_removals/v20260327/tcd_30/{z}/{x}/{y}.png',
+    url: 'https://tiles.globalforestwatch.org/gfw_forest_carbon_gross_removals/v20260327/dynamic/{z}/{x}/{y}.png?tree_cover_density_threshold={thresh}',
     technicalName: 'wri_forest_carbon_gross_removals',
     label: {
       en: 'Forest carbon gross removals',
