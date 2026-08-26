@@ -40,8 +40,8 @@ const TreeMosaicContent = (): JSX.Element => {
 
   async function handleSliderChange(value: number): Promise<void> {
     dispatch(setCanopyDensity(value));
-    //send % value to modify the layer
-    mapController.updateDensityValue(treeMosaicDensityValue[value]);
+    //each layer resolves the index through its own supported-density map
+    mapController.updateDensityValue(value);
     mapController.updateBiodensityValue(value);
     const eventHandler = await mapController.updateTreeCoverValue(treeMosaicDensityValue[value]);
     eventHandler.remove();

@@ -104,7 +104,7 @@ export default {
     },
     id: 'FOREST_CARBON_NET_FLUX',
     type: 'forest-carbon-net-flux',
-    url: 'https://tiles.globalforestwatch.org/gfw_forest_carbon_net_flux/v20250430/tcd_{tcd}/{z}/{x}/{y}.png',
+    url: 'https://tiles.globalforestwatch.org/gfw_forest_carbon_net_flux/v20250430/dynamic/{z}/{x}/{y}.png?tree_cover_density_threshold={thresh}',
     technicalName: 'wri_forest_carbon_net_flux',
     label: {
       en: 'Forest Greenhouse Net Flux',
