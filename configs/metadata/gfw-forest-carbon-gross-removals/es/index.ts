@@ -19,7 +19,7 @@ export const es = {
     {
       label: 'Fuente',
       value:
-        'Harris, N.L., D.A. Gibbs, A. Baccini, R.A. Birdsey, S. de Bruin, M. Farina, L. Fatoyinbo, M.C. Hansen, M. Herold, R.A. Houghton, P.V. Potapov, D. Requena Suarez, R.M. Roman-Cuesta, S.S. Saatchi, C.M. Slay, S.A. Turubanova, A. Tyukavina. 2021. Global maps of twenty-first century forest carbon fluxes. Nature Climate Change. https://doi.org/10.1038/s41558-020-00976-6',
+        'Harris, N.L., D.A. Gibbs, A. Baccini, R.A. Birdsey, S. de Bruin, M. Farina, L. Fatoyinbo, M.C. Hansen, M. Herold, R.A. Houghton, P.V. Potapov, D. Requena Suarez, R.M. Roman-Cuesta, S.S. Saatchi, C.M. Slay, S.A. Turubanova, A. Tyukavina. 2021. Global maps of twenty-first century forest carbon fluxes. Nature Climate Change. https://doi.org/10.1038/s41558-020-00976-6<br /><br />Gibbs, D. A., Rose, M., Grassi, G., Melo, J., Rossi, S., Heinrich, V., &amp; Harris, N. L. 2025. Revised and updated geospatial monitoring of 21st century forest carbon fluxes. Earth System Science Data. https://essd.copernicus.org/articles/17/1217/2025/',
     },
     {
       label: 'Frecuencia de actualizaciones',
