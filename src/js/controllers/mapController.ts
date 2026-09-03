@@ -32,6 +32,11 @@ import {
 import { RefObject } from 'react';
 import store from '../store/index';
 import { LayerFactory } from '../helpers/LayerFactory';
+import { markValueMap } from '../components/mapWidgets/widgetContent/CanopyDensityContent';
+import { forestCarbonRemovalValue } from '../components/mapWidgets/widgetContent/ForestGrossRemovalContent';
+import { forestCarbonGrossEmisionValue } from '../components/mapWidgets/widgetContent/ForestCarbonGrossEmissionContent';
+import { forestCarbonNetFluxValue } from '../components/mapWidgets/widgetContent/ForesCarbonNetFlux';
+import { treeMosaicDensityValue } from '../components/mapWidgets/widgetContent/TreeMosaicContent';
 import { setLayerSearchSource } from '../helpers/mapController/searchSources';
 import { getSortedLayers } from '../helpers/mapController/layerSorting';
 import { addPointGraphic, clearGraphics, drawIntersectingGraphic, setNewGraphic } from '../helpers/MapGraphics';
@@ -103,6 +108,22 @@ export type PrintLayoutType =
   | 'tabloid-ansi-b-landscape'
   | 'tabloid-ansi-b-portrait'
   | undefined;
+
+//Every canopy density slider writes the same index to appState.leftPanel.density, but each
+//dataset publishes its own set of supported densities. The index has to be resolved through the
+//map belonging to the layer being updated - the tile API rejects an unsupported value with a 422
+//(e.g. the carbon datasets accept only 30, 50 and 75).
+const densityValueMapByLayer: Record<string, Record<number, number>> = {
+  TREE_COVER_LOSS: markValueMap,
+  TREE_COVER: markValueMap,
+  TREES_MOSAIC_LANDSCAPES: treeMosaicDensityValue,
+  FOREST_CARBON_GROSS_REMOVALS: forestCarbonRemovalValue,
+  FOREST_CARBON_GROSS_EMISSIONS: forestCarbonGrossEmisionValue,
+  FOREST_CARBON_NET_FLUX: forestCarbonNetFluxValue,
+};
+
+//Density every dataset supports, used when the selected index falls outside a layer's own map
+const DEFAULT_CANOPY_DENSITY = 30;
 
 export class MapController {
   _map: __esri.Map | undefined;
@@ -1691,10 +1712,19 @@ export class MapController {
     store.dispatch(renderModal(''));
   }
 
-  updateDensityValue(value: number): void {
+  /**
+   * Re-renders every canopy-density layer at the newly selected density.
+   * @param densityIndex - slider index shared by all density pickers (appState.leftPanel.density),
+   * NOT a percentage - each layer resolves it through its own supported-density map
+   */
+  updateDensityValue(densityIndex: number): void {
     densityEnabledLayers.forEach((layerId: string) => {
       const layer: any = this._map?.findLayerById(layerId);
       if (layer && layer.id !== 'AG_BIOMASS' && layer.urlTemplate) {
+        const densityValueMap = densityValueMapByLayer[layerId] || markValueMap;
+        const value = densityValueMap[densityIndex] || DEFAULT_CANOPY_DENSITY;
+        //layers whose urlTemplate carries a {thresh} placeholder read the value off the layer at tile-fetch time
+        layer.threshold = value;
         layer.urlTemplate = layer.urlTemplate.replace(/(tcd_)(?:[^/]+)/, `tcd_${value}`);
         layer.refresh();
       }

@@ -1,7 +1,7 @@
 export const es = {
   title: 'Pérdida de cobertura arbórea',
   subtitle: '(anual, 30m, global, Hansen/UMD/Google/USGS/NASA)',
-  download_data: 'https://storage.googleapis.com/earthenginepartners-hansen/GFC-023-v1.12/download.html',
+  download_data: 'https://storage.googleapis.com/earthenginepartners-hansen/GFC-024-v1.12/download.html',
   learn_more: 'http://science.sciencemag.org/content/342/6160/850',
   content: [
     {
@@ -27,7 +27,7 @@ export const es = {
     },
     {
       label: 'Fecha del contenido',
-      value: '2001-2024',
+      value: '2001-2025',
     },
     {
       label: 'Precauciones',
@@ -42,7 +42,7 @@ export const es = {
   overview: {
     label: 'Descripción',
     value:
-      'En este conjunto de datos, "cobertura arbórea" se define como toda vegetación de más de 5 metros de altura, y puede tratarse de bosques naturales o plantaciones dentro de una amplia gama de densidades. "Pérdida" indica la retirada o mortalidad de cobertura arbórea y puede ser debida a una variedad de factores, incluyendo la recolección mecánica, incendios, enfermedades o daños por tormentas. Como tal, la "pérdida" no equivale a la deforestación.\n\nDebido a la variación en la metodología empleada en la investigación y en la fecha de los contenidos, los conjuntos de datos relativos a cobertura, pérdida y ganancia arbórea no se pueden comparar con precisión entre sí. Del mismo modo, la pérdida "neta" no se puede calcular restando las cantidades relativas a la ganancia arbórea de las pérdidas de cobertura arbórea, y la actual cobertura arbórea (posterior a 2000) no se puede determinar restando las cantidades relativas a la pérdida anual de cobertura arbórea de la cobertura arbórea del año 2000.\n\nLos datos de 2011-2024 se elaboraron utilizando una metodología actualizada. Las comparaciones entre los datos originales de 2001-2010 y la actualización de 2011-2024 deben realizarse con precaución.\n\nEn la publicación original, los autores evaluaron la prevalencia general de falsos positivos (errores de comisión) en estos datos en un 13%, y la prevalencia de falsos negativos (errores de omisión) en un 12%, aunque la precisión varía por bioma y, por lo tanto, puede ser mayor o menor en cualquier ubicación específica. El modelo a menudo omite disturbios en paisajes de pequeños propietarios, resultando en una menor precisión de los datos en África subsahariana, donde este tipo de disturbio es más común. Los autores tienen un 75 por ciento de confianza de que la pérdida ocurrió dentro del año indicado, y un 97 por ciento de confianza de que ocurrió dentro de un año antes o después. Los usuarios de los datos pueden suavizar tal incertidumbre examinando el promedio a lo largo de varios años. Lee nuestra serie de blogs sobre la precisión de estos datos para obtener más información.',
+      'En este conjunto de datos, "cobertura arbórea" se define como toda vegetación de más de 5 metros de altura, y puede tratarse de bosques naturales o plantaciones dentro de una amplia gama de densidades. "Pérdida" indica la retirada o mortalidad de cobertura arbórea y puede ser debida a una variedad de factores, incluyendo la recolección mecánica, incendios, enfermedades o daños por tormentas. Como tal, la "pérdida" no equivale a la deforestación.\n\nDebido a la variación en la metodología empleada en la investigación y en la fecha de los contenidos, los conjuntos de datos relativos a cobertura, pérdida y ganancia arbórea no se pueden comparar con precisión entre sí. Del mismo modo, la pérdida "neta" no se puede calcular restando las cantidades relativas a la ganancia arbórea de las pérdidas de cobertura arbórea, y la actual cobertura arbórea (posterior a 2000) no se puede determinar restando las cantidades relativas a la pérdida anual de cobertura arbórea de la cobertura arbórea del año 2000.\n\nLos datos de 2011-2025 se elaboraron utilizando una metodología actualizada. Las comparaciones entre los datos originales de 2001-2010 y la actualización de 2011-2025 deben realizarse con precaución.\n\nEn la publicación original, los autores evaluaron la prevalencia general de falsos positivos (errores de comisión) en estos datos en un 13%, y la prevalencia de falsos negativos (errores de omisión) en un 12%, aunque la precisión varía por bioma y, por lo tanto, puede ser mayor o menor en cualquier ubicación específica. El modelo a menudo omite disturbios en paisajes de pequeños propietarios, resultando en una menor precisión de los datos en África subsahariana, donde este tipo de disturbio es más común. Los autores tienen un 75 por ciento de confianza de que la pérdida ocurrió dentro del año indicado, y un 97 por ciento de confianza de que ocurrió dentro de un año antes o después. Los usuarios de los datos pueden suavizar tal incertidumbre examinando el promedio a lo largo de varios años. Lee nuestra serie de blogs sobre la precisión de estos datos para obtener más información.',
   },
   citation: {
     label: 'Citación',

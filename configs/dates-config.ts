@@ -1,6 +1,6 @@
 export const DATES = {
   TREE_COVER_LOSS: {
     min: 2001,
-    max: 2024,
+    max: 2025,
   },
 };
