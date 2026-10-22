@@ -10,7 +10,6 @@ import { RootState } from '../../../js/store/index';
 import { headerContent } from '../../../../configs/translations/header.translations';
 
 import '../../../css/header.scss';
-import Banner from '../banner/Banner';
 
 const appSettingsSelector = createSelector(
   (state: RootState) => state.appSettings,
@@ -60,8 +59,6 @@ const Header: FunctionComponent = () => {
 
   const aboutLinkUrl = useSelector((store: RootState) => store.appSettings.aboutLinkUrl);
 
-  const appSettings = useSelector((state: any) => state.appSettings);
-
   const target = navLinksInNewTab ? '_blank' : '_self';
   const appTitle = selectedLanguage === language ? title : alternativeLanguageTitle;
   const appSubtitle = selectedLanguage === language ? subtitle : alternativeLanguageSubtitle;
@@ -74,8 +71,6 @@ const Header: FunctionComponent = () => {
   return (
     <>
       <div className="header-container" data-cy="header">
-        {/* {appSettings.treeMosaicLandscapes && <Banner />} */}
-        <Banner />
         <div className="header-spacer">
           <div className="title-container">
             {logoUrl && logoLinkUrl && (
